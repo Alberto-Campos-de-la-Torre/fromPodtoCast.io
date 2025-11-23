@@ -8,8 +8,11 @@ openai-whisper>=20231117
 
 # Speaker Diarization
 pyannote.audio>=3.1.0
-torch>=2.0.0
-torchaudio>=2.0.0
+
+# PyTorch - Versiones flexibles para compatibilidad
+# Nota: Si ya tienes torch instalado, estas líneas se omitirán
+# torch>=2.0.0,<2.9.0  # Compatible con moshi 0.2.11 (requiere <2.8)
+# torchaudio>=2.0.0,<2.9.0
 
 # Utilidades
 tqdm>=4.66.0
@@ -17,4 +20,10 @@ numpy>=1.24.0
 
 # Opcional: para procesamiento de audio avanzado
 ffmpeg-python>=0.2.0
+
+# Nota sobre dependencias:
+# - Si tienes moshi instalado, torch debe ser <2.8.0
+# - Si tienes torchvision 0.24.0+cu130, torch debe ser 2.9.0
+# - Considera usar un entorno virtual separado para fromPodtoCast
+#   o ajustar las versiones según tu entorno principal
 
