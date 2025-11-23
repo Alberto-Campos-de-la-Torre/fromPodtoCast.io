@@ -54,6 +54,14 @@ class AudioSegmenter:
         audio, sr = librosa.load(input_path, sr=None)
         duration = len(audio) / sr
         
+        # Si el audio es más corto que la duración mínima, crear un solo segmento
+        if duration < self.min_duration:
+            print(f"   ⚠️  Audio muy corto ({duration:.2f}s < {self.min_duration}s), creando un solo segmento")
+            output_path, start, end = self._save_segment_from_array(
+                audio, sr, output_dir, base_name, 0
+            )
+            return [(output_path, 0.0, duration)]
+        
         # Cargar con pydub para segmentación inteligente
         audio_segment = AudioSegment.from_file(input_path)
         
@@ -144,6 +152,19 @@ class AudioSegmenter:
         duration = len(audio_segment) / 1000.0
         return (output_path, 0.0, duration)
     
+    def _save_segment_from_array(self, audio: np.ndarray, sr: int, output_dir: str,
+                                base_name: str, segment_idx: int) -> Tuple[str, float, float]:
+        """
+        Guarda un segmento de audio desde un array numpy.
+        
+        Returns:
+            Tupla (ruta_archivo, inicio, fin) en segundos
+        """
+        output_path = os.path.join(output_dir, f"{base_name}_segment_{segment_idx:04d}.wav")
+        duration = len(audio) / sr
+        sf.write(output_path, audio, sr)
+        return (output_path, 0.0, duration)
+    
     def _fixed_segmentation(self, audio: np.ndarray, sr: int, output_dir: str, 
                            base_name: str) -> List[Tuple[str, float, float]]:
         """
@@ -154,6 +175,13 @@ class AudioSegmenter:
         duration = len(audio) / sr
         segment_idx = 0
         current_start = 0.0
+        
+        # Si el audio completo es más corto que min_duration, crear un solo segmento
+        if duration < self.min_duration:
+            output_path, start, end = self._save_segment_from_array(
+                audio, sr, output_dir, base_name, segment_idx
+            )
+            return [(output_path, 0.0, duration)]
         
         while current_start < duration:
             # Calcular el final del segmento
@@ -176,6 +204,21 @@ class AudioSegmenter:
             
             # Avanzar al siguiente segmento
             current_start = segment_end
+        
+        # Si quedó un segmento final más corto que min_duration pero mayor que 0,
+        # agregarlo al último segmento si existe, o crear uno nuevo si es el único
+        if current_start < duration and len(segments) > 0:
+            # Agregar el resto al último segmento
+            last_seg_path, last_start, last_end = segments[-1]
+            remaining_duration = duration - last_end
+            if remaining_duration > 0:
+                # Recargar y extender el último segmento
+                last_audio, _ = librosa.load(last_seg_path, sr=sr)
+                remaining_start = int(last_end * sr)
+                remaining_audio = audio[remaining_start:]
+                extended_audio = np.concatenate([last_audio, remaining_audio])
+                sf.write(last_seg_path, extended_audio, sr)
+                segments[-1] = (last_seg_path, last_start, duration)
         
         return segments
 
