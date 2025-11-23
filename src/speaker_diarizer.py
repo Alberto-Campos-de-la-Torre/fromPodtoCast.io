@@ -6,8 +6,17 @@ from pathlib import Path
 from typing import List, Dict, Optional
 import torch
 import torchaudio
-from pyannote.audio import Pipeline
 import numpy as np
+
+# Importación opcional de pyannote.audio
+try:
+    from pyannote.audio import Pipeline
+    PYANNOTE_AVAILABLE = True
+except ImportError as e:
+    PYANNOTE_AVAILABLE = False
+    Pipeline = None
+    print(f"Advertencia: pyannote.audio no está disponible: {e}")
+    print("La diarización avanzada no estará disponible, se usará método simple.")
 
 
 class SpeakerDiarizer:
@@ -30,6 +39,11 @@ class SpeakerDiarizer:
         self.hf_token = hf_token
         
         # Cargar pipeline de diarización
+        if not PYANNOTE_AVAILABLE:
+            print("pyannote.audio no está disponible, usando método simple de diarización.")
+            self.pipeline = None
+            return
+        
         print("Cargando pipeline de diarización...")
         try:
             if hf_token:

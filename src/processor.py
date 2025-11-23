@@ -55,6 +55,7 @@ class PodcastProcessor:
                 )
             except Exception as e:
                 print(f"Advertencia: No se pudo inicializar diarizador: {e}")
+                print("Continuando sin diarización avanzada...")
                 self.diarizer = None
         else:
             self.diarizer = None
