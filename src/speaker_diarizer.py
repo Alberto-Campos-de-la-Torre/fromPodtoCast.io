@@ -11,12 +11,12 @@ import numpy as np
 # Importación opcional de pyannote.audio
 try:
     from pyannote.audio import Pipeline
+    from pyannote.core import Segment
     PYANNOTE_AVAILABLE = True
 except ImportError as e:
     PYANNOTE_AVAILABLE = False
     Pipeline = None
-    print(f"Advertencia: pyannote.audio no está disponible: {e}")
-    print("La diarización avanzada no estará disponible, se usará método simple.")
+    Segment = None
 
 
 class SpeakerDiarizer:
@@ -40,27 +40,46 @@ class SpeakerDiarizer:
         
         # Cargar pipeline de diarización
         if not PYANNOTE_AVAILABLE:
-            print("pyannote.audio no está disponible, usando método simple de diarización.")
+            print("⚠️  pyannote.audio no está disponible, usando método simple de diarización.")
             self.pipeline = None
             return
         
-        print("Cargando pipeline de diarización...")
+        print("🔄 Cargando pipeline de diarización de pyannote.audio...")
         try:
+            # Intentar cargar el modelo de diarización
+            # Nota: Requiere aceptar términos en https://huggingface.co/pyannote/speaker-diarization-3.1
+            model_name = "pyannote/speaker-diarization-3.1"
+            
             if hf_token:
+                print(f"   Usando token de Hugging Face para {model_name}")
                 self.pipeline = Pipeline.from_pretrained(
-                    "pyannote/speaker-diarization-3.1",
+                    model_name,
                     use_auth_token=hf_token
                 )
             else:
                 # Intentar cargar sin token (puede fallar si el modelo es privado)
-                self.pipeline = Pipeline.from_pretrained(
-                    "pyannote/speaker-diarization-3.1"
-                )
-            self.pipeline.to(torch.device(self.device))
-            print("Pipeline de diarización cargado exitosamente.")
+                print(f"   Intentando cargar {model_name} sin token...")
+                try:
+                    self.pipeline = Pipeline.from_pretrained(model_name)
+                except Exception as token_error:
+                    print(f"   ⚠️  Error: {token_error}")
+                    print("   💡 Necesitas un token de Hugging Face para usar este modelo.")
+                    print("   💡 Obtén uno en: https://huggingface.co/settings/tokens")
+                    print("   💡 Y acepta los términos en: https://huggingface.co/pyannote/speaker-diarization-3.1")
+                    raise token_error
+            
+            # Mover pipeline al dispositivo correcto
+            if self.device == "cuda" and torch.cuda.is_available():
+                self.pipeline = self.pipeline.to(torch.device(self.device))
+                print(f"   ✓ Pipeline cargado en {self.device}")
+            else:
+                self.pipeline = self.pipeline.to(torch.device("cpu"))
+                print(f"   ✓ Pipeline cargado en CPU")
+            
+            print("✅ Pipeline de diarización cargado exitosamente.")
         except Exception as e:
-            print(f"Error cargando pipeline de diarización: {e}")
-            print("Usando método alternativo basado en energía...")
+            print(f"❌ Error cargando pipeline de diarización: {e}")
+            print("   Usando método alternativo basado en energía...")
             self.pipeline = None
     
     def diarize(self, audio_path: str, min_speakers: Optional[int] = None,
@@ -134,40 +153,52 @@ class SpeakerDiarizer:
         return segments
     
     def assign_speaker_to_segment(self, segment_path: str, 
-                                  diarization_result: List[Dict]) -> str:
+                                  diarization_result: List[Dict],
+                                  segment_start: float = 0.0,
+                                  segment_end: Optional[float] = None) -> str:
         """
         Asigna un speaker_id a un segmento de audio basado en resultados de diarización.
         
         Args:
             segment_path: Ruta al segmento de audio
             diarization_result: Resultado de diarización del audio completo
+            segment_start: Tiempo de inicio del segmento en el audio original (segundos)
+            segment_end: Tiempo de fin del segmento en el audio original (segundos)
         
         Returns:
             ID del hablante asignado
         """
-        # Cargar información del segmento
-        waveform, sample_rate = torchaudio.load(segment_path)
-        segment_duration = len(waveform[0]) / sample_rate
-        
-        # Obtener timestamp del nombre del archivo si está disponible
-        # (asumiendo que el nombre contiene información de tiempo)
-        # Por ahora, usar el speaker más común en el rango temporal del segmento
-        
         if not diarization_result:
             return "SPEAKER_00"
         
-        # Encontrar el speaker que más tiempo ocupa en el segmento
-        # (simplificado: usar el primer speaker encontrado)
-        # En producción, calcular el overlap temporal real
+        # Si no se proporciona segment_end, calcularlo desde el archivo
+        if segment_end is None:
+            try:
+                waveform, sample_rate = torchaudio.load(segment_path)
+                segment_duration = len(waveform[0]) / sample_rate
+                segment_end = segment_start + segment_duration
+            except Exception:
+                segment_end = segment_start + 15.0  # Asumir 15 segundos por defecto
         
-        speaker_counts = {}
+        # Encontrar el speaker que más tiempo ocupa en el rango del segmento
+        speaker_overlap = {}
+        
         for seg in diarization_result:
+            seg_start = seg.get('start', 0.0)
+            seg_end = seg.get('end', 0.0)
             speaker = seg.get('speaker', 'SPEAKER_00')
-            speaker_counts[speaker] = speaker_counts.get(speaker, 0) + seg.get('duration', 0)
+            
+            # Calcular overlap entre el segmento y el resultado de diarización
+            overlap_start = max(segment_start, seg_start)
+            overlap_end = min(segment_end, seg_end)
+            
+            if overlap_start < overlap_end:
+                overlap_duration = overlap_end - overlap_start
+                speaker_overlap[speaker] = speaker_overlap.get(speaker, 0.0) + overlap_duration
         
-        # Retornar el speaker más común
-        if speaker_counts:
-            most_common_speaker = max(speaker_counts, key=speaker_counts.get)
+        # Retornar el speaker con mayor overlap
+        if speaker_overlap:
+            most_common_speaker = max(speaker_overlap, key=speaker_overlap.get)
             return most_common_speaker
         
         return "SPEAKER_00"

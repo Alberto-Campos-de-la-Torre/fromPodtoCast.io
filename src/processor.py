@@ -156,7 +156,9 @@ class PodcastProcessor:
             if self.diarizer and diarization_result:
                 try:
                     speaker_label = self.diarizer.assign_speaker_to_segment(
-                        norm_path, diarization_result
+                        norm_path, diarization_result,
+                        segment_start=start,
+                        segment_end=end
                     )
                     speaker_id = self.diarizer.get_speaker_id(speaker_label)
                 except Exception as e:
