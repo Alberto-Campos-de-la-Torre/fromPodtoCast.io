@@ -47,15 +47,20 @@ class PodcastProcessor:
         
         # Diarizador opcional (puede requerir token de HF)
         hf_token = config.get('hf_token', None)
-        if hf_token or config.get('use_diarization', False):
+        use_diarization = config.get('use_diarization', False)
+        
+        if use_diarization or hf_token:
             try:
                 self.diarizer = SpeakerDiarizer(
                     hf_token=hf_token,
                     device=config.get('device', None)
                 )
+                if self.diarizer.pipeline is None:
+                    print("⚠️  Diarización configurada pero pyannote.audio no disponible")
+                    print("   Usando método simple de diarización")
             except Exception as e:
-                print(f"Advertencia: No se pudo inicializar diarizador: {e}")
-                print("Continuando sin diarización avanzada...")
+                print(f"⚠️  Advertencia: No se pudo inicializar diarizador: {e}")
+                print("   Continuando sin diarización avanzada...")
                 self.diarizer = None
         else:
             self.diarizer = None
