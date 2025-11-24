@@ -7,6 +7,10 @@ from typing import List, Dict, Optional
 import torch
 import torchaudio
 import numpy as np
+import warnings
+
+# Suprimir warnings de deprecación de torchaudio
+warnings.filterwarnings('ignore', category=UserWarning, module='torchaudio')
 
 # Importación opcional de pyannote.audio
 try:
@@ -118,8 +122,15 @@ class SpeakerDiarizer:
         Asigna diferentes speaker_ids basados en cambios de energía y volumen.
         """
         try:
-            # Cargar audio
-            waveform, sample_rate = torchaudio.load(audio_path)
+            # Cargar audio usando la nueva API de TorchCodec si está disponible
+            try:
+                # Intentar usar torchaudio.load_with_torchcodec (nueva API)
+                waveform, sample_rate = torchaudio.load_with_torchcodec(audio_path)
+            except (AttributeError, TypeError):
+                # Fallback a la API antigua si la nueva no está disponible
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore")
+                    waveform, sample_rate = torchaudio.load(audio_path)
             
             # Convertir a mono si es estéreo
             if waveform.shape[0] > 1:
