@@ -125,32 +125,91 @@ class SpeakerDiarizer:
     def _simple_diarization(self, audio_path: str) -> List[Dict]:
         """
         Método alternativo simple de diarización basado en energía.
-        Asigna un speaker_id único por segmento (útil cuando no hay acceso a pyannote).
+        Asigna diferentes speaker_ids basados en cambios de energía y volumen.
         """
-        # Cargar audio
-        waveform, sample_rate = torchaudio.load(audio_path)
-        
-        # Convertir a mono si es estéreo
-        if waveform.shape[0] > 1:
-            waveform = torch.mean(waveform, dim=0, keepdim=True)
-        
-        # Calcular energía en ventanas
-        window_size = int(sample_rate * 0.5)  # 0.5 segundos
-        energy = []
-        for i in range(0, waveform.shape[1], window_size):
-            window = waveform[0, i:i+window_size]
-            energy.append(torch.mean(window**2).item())
-        
-        # Asignar speaker_id basado en cambios de energía (simplificado)
-        # En producción, usar pyannote o similar
-        segments = [{
-            'start': 0.0,
-            'end': len(waveform[0]) / sample_rate,
-            'speaker': 'SPEAKER_00',
-            'duration': len(waveform[0]) / sample_rate
-        }]
-        
-        return segments
+        try:
+            # Cargar audio
+            waveform, sample_rate = torchaudio.load(audio_path)
+            
+            # Convertir a mono si es estéreo
+            if waveform.shape[0] > 1:
+                waveform = torch.mean(waveform, dim=0, keepdim=True)
+            
+            duration = len(waveform[0]) / sample_rate
+            
+            # Calcular energía en ventanas de 2 segundos
+            window_size = int(sample_rate * 2.0)  # 2 segundos
+            energy = []
+            timestamps = []
+            
+            for i in range(0, waveform.shape[1], window_size):
+                window = waveform[0, i:i+window_size]
+                energy_value = torch.mean(window**2).item()
+                energy.append(energy_value)
+                timestamps.append(i / sample_rate)
+            
+            if len(energy) == 0:
+                # Si no hay energía calculada, retornar un solo segmento
+                return [{
+                    'start': 0.0,
+                    'end': duration,
+                    'speaker': 'SPEAKER_00',
+                    'duration': duration
+                }]
+            
+            # Calcular umbral de energía (mediana)
+            energy_array = np.array(energy)
+            energy_threshold = np.median(energy_array)
+            
+            # Identificar cambios significativos de energía (posibles cambios de hablante)
+            speaker_changes = []
+            current_speaker = 0
+            
+            for i, e in enumerate(energy):
+                if i == 0:
+                    speaker_changes.append((timestamps[i], current_speaker))
+                else:
+                    # Si hay un cambio significativo de energía, cambiar de speaker
+                    energy_diff = abs(e - energy[i-1])
+                    if energy_diff > energy_threshold * 0.5:  # Cambio significativo
+                        current_speaker = (current_speaker + 1) % 3  # Máximo 3 speakers
+                    speaker_changes.append((timestamps[i], current_speaker))
+            
+            # Crear segmentos de diarización
+            segments = []
+            for i in range(len(speaker_changes)):
+                start_time = speaker_changes[i][0]
+                speaker_id = speaker_changes[i][1]
+                
+                if i < len(speaker_changes) - 1:
+                    end_time = speaker_changes[i+1][0]
+                else:
+                    end_time = duration
+                
+                segments.append({
+                    'start': start_time,
+                    'end': end_time,
+                    'speaker': f'SPEAKER_{speaker_id:02d}',
+                    'duration': end_time - start_time
+                })
+            
+            return segments
+            
+        except Exception as e:
+            print(f"   ⚠️  Error en diarización simple: {e}")
+            # Retornar un solo segmento como fallback
+            try:
+                waveform, sample_rate = torchaudio.load(audio_path)
+                duration = len(waveform[0]) / sample_rate if waveform.shape[0] > 0 else 0.0
+            except:
+                duration = 0.0
+            
+            return [{
+                'start': 0.0,
+                'end': duration,
+                'speaker': 'SPEAKER_00',
+                'duration': duration
+            }]
     
     def assign_speaker_to_segment(self, segment_path: str, 
                                   diarization_result: List[Dict],

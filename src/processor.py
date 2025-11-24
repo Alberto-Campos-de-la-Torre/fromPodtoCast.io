@@ -50,20 +50,21 @@ class PodcastProcessor:
         hf_token = config.get('hf_token', None)
         use_diarization = config.get('use_diarization', False)
         
-        if use_diarization or hf_token:
-            try:
-                self.diarizer = SpeakerDiarizer(
-                    hf_token=hf_token,
-                    device=config.get('device', None)
-                )
-                if self.diarizer.pipeline is None:
+        # Intentar inicializar diarizador siempre (usará método simple si pyannote no está disponible)
+        try:
+            self.diarizer = SpeakerDiarizer(
+                hf_token=hf_token,
+                device=config.get('device', None)
+            )
+            if self.diarizer.pipeline is None:
+                if use_diarization:
                     print("⚠️  Diarización configurada pero pyannote.audio no disponible")
                     print("   Usando método simple de diarización")
-            except Exception as e:
-                print(f"⚠️  Advertencia: No se pudo inicializar diarizador: {e}")
-                print("   Continuando sin diarización avanzada...")
-                self.diarizer = None
-        else:
+                else:
+                    print("ℹ️  Diarización disponible (método simple). Configura 'use_diarization: true' para habilitar.")
+        except Exception as e:
+            print(f"⚠️  Advertencia: No se pudo inicializar diarizador: {e}")
+            print("   Continuando sin diarización...")
             self.diarizer = None
     
     def process_podcast(self, input_audio_path: str, output_dir: str, 
@@ -119,9 +120,9 @@ class PodcastProcessor:
         
         print(f"   ✓ Normalizados {len(normalized_segments)} segmentos\n")
         
-        # Paso 3: Diarización del audio original (si está habilitado)
+        # Paso 3: Diarización del audio original
         diarization_result = None
-        if self.diarizer and self.diarizer.pipeline is not None:
+        if self.diarizer:
             print("3. Realizando diarización de hablantes...")
             try:
                 diarization_result = self.diarizer.diarize(input_audio_path)
@@ -137,7 +138,7 @@ class PodcastProcessor:
                 traceback.print_exc()
                 print()
         else:
-            print("3. Diarización de hablantes (saltada - no configurada o no disponible)\n")
+            print("3. Diarización de hablantes (saltada - no disponible)\n")
         
         # Paso 4: Transcribir segmentos normalizados
         print("4. Transcribiendo segmentos...")
