@@ -200,7 +200,12 @@ class SpeakerDiarizer:
             print(f"   ⚠️  Error en diarización simple: {e}")
             # Retornar un solo segmento como fallback
             try:
-                waveform, sample_rate = torchaudio.load(audio_path)
+                try:
+                    waveform, sample_rate = torchaudio.load_with_torchcodec(audio_path)
+                except (AttributeError, TypeError):
+                    with warnings.catch_warnings():
+                        warnings.simplefilter("ignore")
+                        waveform, sample_rate = torchaudio.load(audio_path)
                 duration = len(waveform[0]) / sample_rate if waveform.shape[0] > 0 else 0.0
             except:
                 duration = 0.0
