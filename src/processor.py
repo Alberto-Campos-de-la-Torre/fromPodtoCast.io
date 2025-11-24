@@ -3,6 +3,7 @@ Script principal que orquesta todo el proceso de preparación de datos para TTS.
 """
 import os
 import json
+import re
 from pathlib import Path
 from typing import List, Dict, Optional
 from tqdm import tqdm
