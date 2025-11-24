@@ -45,7 +45,7 @@ def download_video(url: str, output_dir: str, audio_only: bool = True,
     
     Args:
         url: URL del video
-        output_dir: Directorio donde guardar el archivo
+        output_dir: Directorio donde guardar el archivo (se crea automáticamente si no existe)
         audio_only: Si True, solo descarga el audio
         audio_format: Formato de audio (wav, mp3, m4a, etc.)
         audio_quality: Calidad de audio (best, worst, o formato específico)
@@ -53,7 +53,11 @@ def download_video(url: str, output_dir: str, audio_only: bool = True,
     Returns:
         Diccionario con información del archivo descargado
     """
-    Path(output_dir).mkdir(parents=True, exist_ok=True)
+    # Asegurar que el directorio existe
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
+    
+    print(f"📁 Guardando en: {output_path.absolute()}")
     
     # Construir comando yt-dlp
     cmd = ['yt-dlp']
@@ -66,9 +70,9 @@ def download_video(url: str, output_dir: str, audio_only: bool = True,
         ])
     
     # Configuración de salida
-    output_template = os.path.join(output_dir, '%(title)s.%(ext)s')
-    # Limpiar caracteres problemáticos del nombre
-    output_template = output_template.replace(' ', '_').replace('/', '_')
+    # Limpiar caracteres problemáticos del nombre de archivo
+    output_template = str(output_path / '%(title)s.%(ext)s')
+    # Reemplazar caracteres problemáticos en el template (yt-dlp manejará el título)
     cmd.extend(['-o', output_template])
     
     # Obtener información del video sin descargar
@@ -89,22 +93,31 @@ def download_video(url: str, output_dir: str, audio_only: bool = True,
         subprocess.run(download_cmd, check=True)
         
         # Encontrar el archivo descargado
-        title_safe = video_info.get('title', 'video').replace(' ', '_').replace('/', '_')
+        # yt-dlp puede cambiar el formato, buscar por extensión esperada primero
+        title_safe = video_info.get('title', 'video')
         downloaded_file = None
         
-        for ext in [audio_format, 'mp3', 'm4a', 'webm', 'opus']:
-            potential_file = os.path.join(output_dir, f"{title_safe}.{ext}")
-            if os.path.exists(potential_file):
-                downloaded_file = potential_file
+        # Buscar archivos con el título (yt-dlp puede haber limpiado caracteres)
+        for ext in [audio_format, 'mp3', 'm4a', 'webm', 'opus', 'ogg']:
+            # Buscar archivos que contengan parte del título
+            pattern = f"*{title_safe[:30]}*.{ext}"
+            files = list(output_path.glob(pattern))
+            if files:
+                downloaded_file = str(files[0])
                 break
         
         if not downloaded_file:
             # Buscar el archivo más reciente en el directorio
-            files = list(Path(output_dir).glob(f"*.{audio_format}"))
+            files = list(output_path.glob(f"*.{audio_format}"))
             if not files:
-                files = list(Path(output_dir).glob("*.*"))
+                # Buscar cualquier archivo de audio
+                for ext in ['mp3', 'm4a', 'webm', 'opus', 'ogg', 'wav']:
+                    files = list(output_path.glob(f"*.{ext}"))
+                    if files:
+                        break
             if files:
-                downloaded_file = str(max(files, key=os.path.getctime))
+                # Obtener el archivo más reciente
+                downloaded_file = str(max(files, key=lambda p: p.stat().st_mtime))
         
         if downloaded_file:
             file_size = os.path.getsize(downloaded_file) / (1024 * 1024)  # MB
@@ -155,6 +168,10 @@ def download_batch(urls: list, output_dir: str, **kwargs) -> list:
 
 
 def main():
+    # Obtener ruta absoluta del directorio del proyecto
+    project_root = Path(__file__).parent.parent
+    default_output = str(project_root / 'data' / 'input')
+    
     parser = argparse.ArgumentParser(
         description='Descarga videos desde URLs y extrae el audio para procesamiento'
     )
@@ -166,8 +183,8 @@ def main():
     parser.add_argument(
         '-o', '--output',
         type=str,
-        default='./data/input',
-        help='Directorio donde guardar los archivos (default: ./data/input)'
+        default=default_output,
+        help=f'Directorio donde guardar los archivos (default: {default_output})'
     )
     parser.add_argument(
         '--format',
@@ -241,7 +258,12 @@ def main():
         for result in failed:
             print(f"   - {result['url']}: {result.get('error', 'Unknown error')}")
     
+    # Mostrar ruta absoluta del directorio de salida
+    output_abs = Path(args.output).absolute()
+    print(f"\n📁 Archivos guardados en: {output_abs}")
     print("\n💡 Próximo paso: Procesar los archivos con:")
+    print(f"   python3 main.py {output_abs} -o ./data/output")
+    print(f"   O simplemente:")
     print(f"   python3 main.py {args.output} -o ./data/output")
 
 

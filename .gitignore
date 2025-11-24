@@ -26,6 +26,30 @@ env/
 ENV/
 .venv
 
+# Archivos de audio (cualquier ubicación, excepto en venv que ya está ignorado)
+*.wav
+*.mp3
+*.m4a
+*.opus
+*.webm
+*.ogg
+*.flac
+*.aac
+*.wma
+*.mka
+
+# Archivos de video
+*.mp4
+*.avi
+*.mkv
+*.mov
+*.wmv
+*.flv
+
+# Archivos temporales de audio/video
+*_segment_*
+._*
+
 # IDE
 .vscode/
 .idea/
@@ -33,13 +57,38 @@ ENV/
 *.swo
 *~
 
-# Datos
+# Datos y archivos de audio
 data/input/*
 data/output/*
 !data/input/.gitkeep
 !data/output/.gitkeep
 data/segments/
 data/normalized/
+
+# Archivos de audio (cualquier ubicación)
+*.wav
+*.mp3
+*.m4a
+*.opus
+*.webm
+*.ogg
+*.flac
+*.aac
+*.wma
+*.mka
+
+# Archivos de video
+*.mp4
+*.avi
+*.mkv
+*.mov
+*.wmv
+*.flv
+*.webm
+
+# Archivos temporales de audio
+*_segment_*.wav
+*_segment_*.mp3
 
 # Configuración sensible
 config/config.json
