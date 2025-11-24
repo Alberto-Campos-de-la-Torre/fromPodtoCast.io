@@ -165,7 +165,8 @@ class AudioSegmenter:
         Returns:
             Tupla (ruta_archivo, inicio, fin) en segundos
         """
-        output_path = os.path.join(output_dir, f"{base_name}_segment_{segment_idx:04d}.wav")
+        # Formato escalable: seg_0000.wav, seg_0001.wav, etc.
+        output_path = os.path.join(output_dir, f"seg_{segment_idx:04d}.wav")
         
         # Convertir a numpy array y normalizar
         audio_array = np.array(audio_segment.get_array_of_samples())
@@ -194,7 +195,8 @@ class AudioSegmenter:
         Returns:
             Tupla (ruta_archivo, inicio, fin) en segundos
         """
-        output_path = os.path.join(output_dir, f"{base_name}_segment_{segment_idx:04d}.wav")
+        # Formato escalable: seg_0000.wav, seg_0001.wav, etc.
+        output_path = os.path.join(output_dir, f"seg_{segment_idx:04d}.wav")
         duration = len(audio) / sr
         sf.write(output_path, audio, sr)
         return (output_path, 0.0, duration)
@@ -230,7 +232,7 @@ class AudioSegmenter:
                 segment_audio = audio[start_sample:end_sample]
                 
                 # Guardar segmento
-                output_path = os.path.join(output_dir, f"{base_name}_segment_{segment_idx:04d}.wav")
+                output_path = os.path.join(output_dir, f"seg_{segment_idx:04d}.wav")
                 sf.write(output_path, segment_audio, sr)
                 
                 segments.append((output_path, current_start, segment_end))

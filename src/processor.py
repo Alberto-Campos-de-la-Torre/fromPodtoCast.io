@@ -79,14 +79,19 @@ class PodcastProcessor:
             Lista de diccionarios con metadatos de los segmentos procesados
         """
         # Crear estructura de directorios
+        # Usar un ID único basado en el nombre del archivo (sin caracteres especiales)
         podcast_name = podcast_id or Path(input_audio_path).stem
-        segments_dir = os.path.join(output_dir, 'segments', podcast_name)
-        normalized_dir = os.path.join(output_dir, 'normalized', podcast_name)
+        # Crear ID limpio para el directorio (solo alfanuméricos y guiones)
+        podcast_id_clean = re.sub(r'[^a-zA-Z0-9_-]', '_', podcast_name)[:50]  # Limitar longitud
+        
+        segments_dir = os.path.join(output_dir, 'segments', podcast_id_clean)
+        normalized_dir = os.path.join(output_dir, 'normalized', podcast_id_clean)
         Path(segments_dir).mkdir(parents=True, exist_ok=True)
         Path(normalized_dir).mkdir(parents=True, exist_ok=True)
         
         print(f"\n{'='*60}")
         print(f"Procesando podcast: {Path(input_audio_path).name}")
+        print(f"ID del podcast: {podcast_id_clean}")
         print(f"{'='*60}\n")
         
         # Paso 1: Segmentar audio
@@ -94,7 +99,7 @@ class PodcastProcessor:
         segments = self.segmenter.segment_audio(
             input_audio_path, 
             segments_dir,
-            base_name=podcast_name
+            base_name=""  # Ya no usamos el nombre en los archivos
         )
         print(f"   ✓ Generados {len(segments)} segmentos\n")
         
@@ -208,7 +213,8 @@ class PodcastProcessor:
                 'end': float(end),
                 'duration': float(end - start),
                 'language': transcription.get('language', 'unknown'),
-                'podcast_id': podcast_name
+                'podcast_id': podcast_id_clean,
+                'segment_id': f"seg_{i:04d}"
             }
             
             # Solo agregar si tiene transcripción válida
