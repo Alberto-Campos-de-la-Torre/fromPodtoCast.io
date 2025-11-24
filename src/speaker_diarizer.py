@@ -239,7 +239,12 @@ class SpeakerDiarizer:
         # Si no se proporciona segment_end, calcularlo desde el archivo
         if segment_end is None:
             try:
-                waveform, sample_rate = torchaudio.load(segment_path)
+                try:
+                    waveform, sample_rate = torchaudio.load_with_torchcodec(segment_path)
+                except (AttributeError, TypeError):
+                    with warnings.catch_warnings():
+                        warnings.simplefilter("ignore")
+                        waveform, sample_rate = torchaudio.load(segment_path)
                 segment_duration = len(waveform[0]) / sample_rate
                 segment_end = segment_start + segment_duration
             except Exception:
