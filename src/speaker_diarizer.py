@@ -44,42 +44,32 @@ class SpeakerDiarizer:
             self.pipeline = None
             return
         
-        print("🔄 Cargando pipeline de diarización de pyannote.audio...")
-        try:
-            # Intentar cargar el modelo de diarización
-            # Nota: Requiere aceptar términos en https://huggingface.co/pyannote/speaker-diarization-3.1
-            model_name = "pyannote/speaker-diarization-3.1"
-            
-            if hf_token:
+        # Intentar cargar pyannote solo si hay token o está explícitamente solicitado
+        if hf_token:
+            print("🔄 Cargando pipeline de diarización de pyannote.audio...")
+            try:
+                model_name = "pyannote/speaker-diarization-3.1"
                 print(f"   Usando token de Hugging Face para {model_name}")
                 self.pipeline = Pipeline.from_pretrained(
                     model_name,
                     use_auth_token=hf_token
                 )
-            else:
-                # Intentar cargar sin token (puede fallar si el modelo es privado)
-                print(f"   Intentando cargar {model_name} sin token...")
-                try:
-                    self.pipeline = Pipeline.from_pretrained(model_name)
-                except Exception as token_error:
-                    print(f"   ⚠️  Error: {token_error}")
-                    print("   💡 Necesitas un token de Hugging Face para usar este modelo.")
-                    print("   💡 Obtén uno en: https://huggingface.co/settings/tokens")
-                    print("   💡 Y acepta los términos en: https://huggingface.co/pyannote/speaker-diarization-3.1")
-                    raise token_error
-            
-            # Mover pipeline al dispositivo correcto
-            if self.device == "cuda" and torch.cuda.is_available():
-                self.pipeline = self.pipeline.to(torch.device(self.device))
-                print(f"   ✓ Pipeline cargado en {self.device}")
-            else:
-                self.pipeline = self.pipeline.to(torch.device("cpu"))
-                print(f"   ✓ Pipeline cargado en CPU")
-            
-            print("✅ Pipeline de diarización cargado exitosamente.")
-        except Exception as e:
-            print(f"❌ Error cargando pipeline de diarización: {e}")
-            print("   Usando método alternativo basado en energía...")
+                
+                # Mover pipeline al dispositivo correcto
+                if self.device == "cuda" and torch.cuda.is_available():
+                    self.pipeline = self.pipeline.to(torch.device(self.device))
+                    print(f"   ✓ Pipeline cargado en {self.device}")
+                else:
+                    self.pipeline = self.pipeline.to(torch.device("cpu"))
+                    print(f"   ✓ Pipeline cargado en CPU")
+                
+                print("✅ Pipeline de diarización cargado exitosamente.")
+            except Exception as e:
+                print(f"⚠️  Error cargando pipeline de pyannote: {e}")
+                print("   Usando método simple de diarización basado en energía...")
+                self.pipeline = None
+        else:
+            # Sin token, usar método simple directamente (sin intentar cargar pyannote)
             self.pipeline = None
     
     def diarize(self, audio_path: str, min_speakers: Optional[int] = None,
