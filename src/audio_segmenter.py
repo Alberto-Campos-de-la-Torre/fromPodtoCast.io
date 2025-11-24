@@ -111,7 +111,23 @@ class AudioSegmenter:
         # Guardar el último chunk si cumple con la duración mínima
         if len(current_chunk) > 0:
             current_duration = len(current_chunk) / 1000.0
-            if current_duration >= self.min_duration:
+            # Si el último chunk excede el máximo, dividirlo
+            if current_duration > self.max_duration:
+                # Dividir en segmentos de tamaño máximo
+                remaining = current_chunk
+                while len(remaining) > 0:
+                    segment_duration = min(self.max_duration * 1000, len(remaining))
+                    segment_chunk = remaining[:int(segment_duration)]
+                    remaining = remaining[int(segment_duration):]
+                    
+                    seg_duration = len(segment_chunk) / 1000.0
+                    if seg_duration >= self.min_duration:
+                        output_path, start, end = self._save_segment(
+                            segment_chunk, output_dir, base_name, segment_idx, sr
+                        )
+                        segments.append((output_path, start, end))
+                        segment_idx += 1
+            elif current_duration >= self.min_duration:
                 output_path, start, end = self._save_segment(
                     current_chunk, output_dir, base_name, segment_idx, sr
                 )
@@ -121,7 +137,25 @@ class AudioSegmenter:
         if len(segments) == 0:
             segments = self._fixed_segmentation(audio, sr, output_dir, base_name)
         
-        return segments
+        # Verificar que ningún segmento exceda el máximo
+        final_segments = []
+        cumulative_time = 0.0
+        for seg_path, start, end in segments:
+            duration = end - start
+            if duration > self.max_duration:
+                print(f"   ⚠️  Segmento {Path(seg_path).name} excede máximo ({duration:.2f}s > {self.max_duration}s), dividiendo...")
+                # Recargar y dividir el segmento
+                seg_audio, seg_sr = librosa.load(seg_path, sr=sr)
+                sub_segments = self._fixed_segmentation(seg_audio, seg_sr, output_dir, base_name)
+                # Ajustar timestamps
+                for sub_path, sub_start, sub_end in sub_segments:
+                    final_segments.append((sub_path, cumulative_time + sub_start, cumulative_time + sub_end))
+                cumulative_time += duration
+            else:
+                final_segments.append((seg_path, cumulative_time, cumulative_time + duration))
+                cumulative_time += duration
+        
+        return final_segments
     
     def _save_segment(self, audio_segment: AudioSegment, output_dir: str, 
                      base_name: str, segment_idx: int, sample_rate: int) -> Tuple[str, float, float]:

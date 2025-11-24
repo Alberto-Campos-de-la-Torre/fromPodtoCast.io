@@ -110,13 +110,23 @@ class PodcastProcessor:
         
         # Paso 3: Diarización del audio original (si está habilitado)
         diarization_result = None
-        if self.diarizer:
+        if self.diarizer and self.diarizer.pipeline is not None:
             print("3. Realizando diarización de hablantes...")
             try:
                 diarization_result = self.diarizer.diarize(input_audio_path)
-                print(f"   ✓ Identificados {len(set(s['speaker'] for s in diarization_result))} hablantes\n")
+                if diarization_result:
+                    unique_speakers = len(set(s.get('speaker', 'SPEAKER_00') for s in diarization_result))
+                    print(f"   ✓ Identificados {unique_speakers} hablantes")
+                    print(f"   ✓ Generados {len(diarization_result)} segmentos de diarización\n")
+                else:
+                    print("   ⚠️  Diarización no generó resultados\n")
             except Exception as e:
-                print(f"   ✗ Error en diarización: {e}\n")
+                print(f"   ✗ Error en diarización: {e}")
+                import traceback
+                traceback.print_exc()
+                print()
+        else:
+            print("3. Diarización de hablantes (saltada - no configurada o no disponible)\n")
         
         # Paso 4: Transcribir segmentos normalizados
         print("4. Transcribiendo segmentos...")
@@ -153,7 +163,7 @@ class PodcastProcessor:
             speaker_id = 0
             speaker_label = "SPEAKER_00"
             
-            if self.diarizer and diarization_result:
+            if self.diarizer and diarization_result and len(diarization_result) > 0:
                 try:
                     speaker_label = self.diarizer.assign_speaker_to_segment(
                         norm_path, diarization_result,
@@ -162,7 +172,26 @@ class PodcastProcessor:
                     )
                     speaker_id = self.diarizer.get_speaker_id(speaker_label)
                 except Exception as e:
-                    print(f"   Advertencia: Error asignando speaker: {e}")
+                    print(f"   ⚠️  Advertencia: Error asignando speaker para {Path(norm_path).name}: {e}")
+                    # Usar método alternativo: buscar speaker más cercano temporalmente
+                    try:
+                        # Encontrar el segmento de diarización que más se solapa con este segmento
+                        best_speaker = "SPEAKER_00"
+                        max_overlap = 0.0
+                        for diar_seg in diarization_result:
+                            diar_start = diar_seg.get('start', 0.0)
+                            diar_end = diar_seg.get('end', 0.0)
+                            overlap_start = max(start, diar_start)
+                            overlap_end = min(end, diar_end)
+                            if overlap_start < overlap_end:
+                                overlap = overlap_end - overlap_start
+                                if overlap > max_overlap:
+                                    max_overlap = overlap
+                                    best_speaker = diar_seg.get('speaker', 'SPEAKER_00')
+                        speaker_label = best_speaker
+                        speaker_id = self.diarizer.get_speaker_id(speaker_label)
+                    except:
+                        pass
             
             # Crear entrada de metadata
             entry = {
