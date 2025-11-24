@@ -50,49 +50,63 @@ class AudioSegmenter:
         if base_name is None:
             base_name = Path(input_path).stem
         
-        # Cargar audio con librosa para obtener información
-        # Usar backend='soundfile' explícitamente y manejar errores
-        try:
-            audio, sr = librosa.load(input_path, sr=None, mono=True)
-        except Exception as e:
-            print(f"   ✗ Error cargando audio con librosa: {e}")
-            print(f"   Intentando con pydub directamente...")
-            # Intentar cargar solo con pydub
-            audio_segment = AudioSegment.from_file(input_path)
-            # Convertir a numpy array
-            audio_array = np.array(audio_segment.get_array_of_samples())
-            if audio_segment.channels == 2:
-                audio_array = audio_array.reshape((-1, 2)).mean(axis=1)
-            # Normalizar según sample width
-            if audio_segment.sample_width == 1:
-                audio = audio_array.astype(np.float32) / 128.0 - 1.0
-            elif audio_segment.sample_width == 2:
-                audio = audio_array.astype(np.float32) / 32768.0
-            elif audio_segment.sample_width == 4:
-                audio = audio_array.astype(np.float32) / 2147483648.0
-            else:
-                audio = audio_array.astype(np.float32)
-            sr = audio_segment.frame_rate
+        # Cargar audio - usar pydub primero para archivos grandes (mejor manejo de memoria)
+        audio = None
+        audio_segment = None
+        sr = None
+        duration = 0.0
         
-        duration = len(audio) / sr
+        try:
+            # Intentar primero con pydub (mejor para archivos grandes)
+            print(f"   Cargando audio (puede tardar para archivos grandes)...")
+            audio_segment = AudioSegment.from_file(input_path)
+            sr = audio_segment.frame_rate
+            duration = len(audio_segment) / 1000.0  # pydub usa milisegundos
+            print(f"   ✓ Audio cargado con pydub: {duration:.2f}s, {sr}Hz")
+        except Exception as e1:
+            print(f"   ⚠️  Error cargando con pydub: {e1}")
+            print(f"   Intentando con librosa...")
+            try:
+                # Fallback a librosa
+                audio, sr = librosa.load(input_path, sr=None, mono=True)
+                duration = len(audio) / sr
+                print(f"   ✓ Audio cargado con librosa: {duration:.2f}s, {sr}Hz")
+            except Exception as e2:
+                print(f"   ✗ Error cargando audio con ambos métodos")
+                raise Exception(f"No se pudo cargar el archivo de audio. Pydub: {e1}, Librosa: {e2}")
         
         # Si el audio es más corto que la duración mínima, crear un solo segmento
         if duration < self.min_duration:
             print(f"   ⚠️  Audio muy corto ({duration:.2f}s < {self.min_duration}s), creando un solo segmento")
-            if audio is not None:
+            if audio_segment is not None:
+                # Tenemos audio_segment de pydub
+                output_path, start, end = self._save_segment(
+                    audio_segment, output_dir, base_name, 0, sr
+                )
+            elif audio is not None:
                 # Tenemos audio de librosa
                 output_path, start, end = self._save_segment_from_array(
                     audio, sr, output_dir, base_name, 0
                 )
             else:
-                # Tenemos audio_segment de pydub
-                output_path, start, end = self._save_segment(
-                    audio_segment, output_dir, base_name, 0, sr
-                )
+                raise Exception("No se pudo cargar el audio")
             return [(output_path, 0.0, duration)]
         
-        # Si tenemos audio_segment de pydub, usarlo directamente para segmentación
-        # Si no, convertir audio de librosa a AudioSegment o usar segmentación fija
+        # Si no tenemos audio_segment pero sí audio de librosa, convertir
+        if audio_segment is None and audio is not None:
+            print(f"   Convirtiendo audio de librosa a formato pydub para segmentación...")
+            # Normalizar a int16 para pydub
+            audio_int16 = (audio * 32767).astype(np.int16)
+            audio_segment = AudioSegment(
+                audio_int16.tobytes(),
+                frame_rate=sr,
+                sample_width=2,
+                channels=1
+            )
+        
+        # Verificar que tenemos audio_segment
+        if audio_segment is None:
+            raise Exception("No se pudo obtener audio_segment para segmentación")
         
         # Intentar segmentar por silencios primero
         chunks = split_on_silence(
