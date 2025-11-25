@@ -4,6 +4,7 @@ Script principal que orquesta todo el proceso de preparación de datos para TTS.
 import os
 import json
 import re
+from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Optional
 from tqdm import tqdm
@@ -12,6 +13,7 @@ from audio_segmenter import AudioSegmenter
 from audio_normalizer import AudioNormalizer
 from transcriber import AudioTranscriber
 from speaker_diarizer import SpeakerDiarizer
+from segment_reviewer import SegmentReviewer
 
 
 class PodcastProcessor:
@@ -61,6 +63,19 @@ class PodcastProcessor:
             print(f"⚠️  Advertencia: No se pudo inicializar diarizador: {e}")
             print("   Continuando sin diarización...")
             self.diarizer = None
+        
+        # Inicializar revisor de segmentos (segunda etapa)
+        use_segment_review = config.get('use_segment_review', True)
+        if use_segment_review:
+            self.segment_reviewer = SegmentReviewer(
+                diarizer=self.diarizer,
+                min_segment_duration=config.get('review_min_duration', 5.0),
+                max_speakers_per_segment=config.get('review_max_speakers', 2),
+                transcriber=self.transcriber,
+                retranscribe_split=config.get('review_retranscribe', False)
+            )
+        else:
+            self.segment_reviewer = None
     
     def process_podcast(self, input_audio_path: str, output_dir: str, 
                        podcast_id: Optional[str] = None) -> List[Dict]:
@@ -91,6 +106,25 @@ class PodcastProcessor:
         print(f"ID del podcast: {podcast_id_clean}")
         print(f"{'='*60}\n")
         
+        metrics = {
+            'podcast_id': podcast_id_clean,
+            'input_audio': os.path.abspath(input_audio_path),
+            'timestamp': datetime.utcnow().isoformat(),
+            'segments': {},
+            'diarization': {
+                'enabled': bool(self.diarizer),
+                'unique_speakers': 0,
+                'segments': 0,
+                'status': 'skipped'
+            },
+            'second_stage': {
+                'enabled': bool(self.segment_reviewer),
+                'applied': False,
+                'segments_before': 0,
+                'segments_after': 0
+            }
+        }
+        
         # Paso 1: Segmentar audio
         print("1. Segmentando audio...")
         segments = self.segmenter.segment_audio(
@@ -99,6 +133,7 @@ class PodcastProcessor:
             base_name=""  # Ya no usamos el nombre en los archivos
         )
         print(f"   ✓ Generados {len(segments)} segmentos\n")
+        metrics['segments']['raw'] = len(segments)
         
         # Paso 2: Normalizar segmentos
         print("2. Normalizando segmentos...")
@@ -114,6 +149,7 @@ class PodcastProcessor:
                 print(f"   ✗ Error normalizando {segment_name}: {e}")
         
         print(f"   ✓ Normalizados {len(normalized_segments)} segmentos\n")
+        metrics['segments']['normalized'] = len(normalized_segments)
         
         # Paso 3: Diarización del audio original
         diarization_result = None
@@ -125,15 +161,24 @@ class PodcastProcessor:
                     unique_speakers = len(set(s.get('speaker', 'SPEAKER_00') for s in diarization_result))
                     print(f"   ✓ Identificados {unique_speakers} hablantes")
                     print(f"   ✓ Generados {len(diarization_result)} segmentos de diarización\n")
+                    metrics['diarization'] = {
+                        'enabled': True,
+                        'unique_speakers': unique_speakers,
+                        'segments': len(diarization_result),
+                        'status': 'success'
+                    }
                 else:
                     print("   ⚠️  Diarización no generó resultados\n")
+                    metrics['diarization']['status'] = 'empty_result'
             except Exception as e:
                 print(f"   ✗ Error en diarización: {e}")
                 import traceback
                 traceback.print_exc()
                 print()
+                metrics['diarization']['status'] = 'error'
         else:
             print("3. Diarización de hablantes (saltada - no disponible)\n")
+            metrics['diarization']['status'] = 'disabled'
         
         # Paso 4: Transcribir segmentos normalizados
         print("4. Transcribiendo segmentos...")
@@ -158,6 +203,7 @@ class PodcastProcessor:
                 })
         
         print(f"   ✓ Transcritos {len(transcriptions)} segmentos\n")
+        metrics['segments']['transcribed'] = len(transcriptions)
         
         # Paso 5: Asignar speakers y generar metadatos finales
         print("5. Generando metadatos finales...")
@@ -219,6 +265,43 @@ class PodcastProcessor:
                 metadata.append(entry)
         
         print(f"   ✓ Generados {len(metadata)} registros de metadata\n")
+        metrics['segments']['metadata_before_review'] = len(metadata)
+        metrics['second_stage']['segments_before'] = len(metadata)
+        
+        # Paso 6: Segunda etapa - Revisión de segmentos (opcional)
+        if self.segment_reviewer:
+            print("6. Segunda etapa: Revisando segmentos para detectar múltiples hablantes...")
+            try:
+                metadata = self.segment_reviewer.review_segments(
+                    metadata,
+                    normalized_dir,
+                    normalized_dir,  # Guardar segmentos divididos en el mismo directorio
+                    diarization_result=diarization_result
+                )
+                print(f"   ✓ Revisión completada: {len(metadata)} segmentos finales\n")
+                metrics['second_stage']['applied'] = True
+                metrics['second_stage']['segments_after'] = len(metadata)
+            except Exception as e:
+                print(f"   ✗ Error en revisión de segmentos: {e}")
+                import traceback
+                traceback.print_exc()
+                print("   Continuando con segmentos originales...\n")
+                metrics['second_stage']['segments_after'] = metrics['second_stage']['segments_before']
+        else:
+            print("6. Segunda etapa de revisión (saltada - deshabilitada)\n")
+            metrics['second_stage']['segments_after'] = metrics['second_stage']['segments_before']
+            metrics['second_stage']['applied'] = False
+        
+        # Guardar metadata específica del podcast
+        podcast_metadata_path = self._save_podcast_metadata(metadata, output_dir, podcast_id_clean)
+        metrics['outputs'] = {
+            'metadata_path': podcast_metadata_path
+        }
+        metrics['segments']['metadata_after_review'] = len(metadata)
+        
+        # Guardar log de métricas
+        metrics_path = self._write_podcast_metrics(metrics, output_dir, podcast_id_clean)
+        metrics['outputs']['metrics_log'] = metrics_path
         
         return metadata
     
@@ -263,4 +346,28 @@ class PodcastProcessor:
         print(f"✓ Metadata guardado en: {output_path}")
         print(f"  Total de registros: {len(metadata)}")
         print(f"{'='*60}\n")
+
+    def _save_podcast_metadata(self, metadata: List[Dict], output_dir: str, podcast_id: str) -> str:
+        """Guarda metadata específica de un podcast."""
+        metadata_dir = os.path.join(output_dir, 'metadata')
+        Path(metadata_dir).mkdir(parents=True, exist_ok=True)
+        podcast_metadata_path = os.path.join(metadata_dir, f"{podcast_id}.json")
+        
+        with open(podcast_metadata_path, 'w', encoding='utf-8') as f:
+            json.dump(metadata, f, indent=2, ensure_ascii=False)
+        
+        print(f"   ✓ Metadata del podcast guardada en: {podcast_metadata_path}")
+        return podcast_metadata_path
+
+    def _write_podcast_metrics(self, metrics: Dict, output_dir: str, podcast_id: str) -> str:
+        """Guarda un log con métricas del procesamiento del podcast."""
+        logs_dir = os.path.join(output_dir, 'logs')
+        Path(logs_dir).mkdir(parents=True, exist_ok=True)
+        metrics_path = os.path.join(logs_dir, f"{podcast_id}.log")
+        
+        with open(metrics_path, 'w', encoding='utf-8') as f:
+            json.dump(metrics, f, indent=2, ensure_ascii=False)
+        
+        print(f"   ✓ Log de métricas guardado en: {metrics_path}")
+        return metrics_path
 

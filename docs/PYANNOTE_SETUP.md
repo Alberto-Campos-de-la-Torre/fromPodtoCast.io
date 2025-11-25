@@ -140,3 +140,7 @@ pip install torch torchvision --upgrade
 - [Documentación oficial](https://github.com/pyannote/pyannote-audio#installation)
 - [Modelos en Hugging Face](https://huggingface.co/pyannote)
 
+
+
+
+

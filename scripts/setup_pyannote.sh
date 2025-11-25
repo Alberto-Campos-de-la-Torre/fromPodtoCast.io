@@ -55,3 +55,7 @@ echo "O exportar como variable de entorno:"
 echo "   export HUGGINGFACE_TOKEN=tu_token_aqui"
 echo ""
 
+
+
+
+
