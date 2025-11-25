@@ -72,9 +72,11 @@ def test_basic_voice_bank(tmp_path: Path):
     assert len(manager.voice_entries) == 2, f"Expected 2 entries, got {len(manager.voice_entries)}"
     log(f"Total speakers en banco: {len(manager.voice_entries)}", "SUCCESS")
 
-    # Test 6: Verificar persistencia
+    # Test 6: Verificar persistencia (el JSON se guarda como lista)
     with open(bank_path, "r", encoding="utf-8") as f:
         data = json.load(f)
+    # data es una lista de entries
+    assert isinstance(data, list), f"Expected list, got {type(data)}"
     assert len(data) == 2, f"Expected 2 entries in file, got {len(data)}"
     log("Persistencia verificada correctamente", "SUCCESS")
 
@@ -172,7 +174,9 @@ def test_with_real_audio(audio_path: str, hf_token: str, threshold: float = 0.85
         log(f"  Entries persistidos: {len(persisted_data)}", "INFO")
         
         # Verificar que se pueden cargar los embeddings
-        for spk_id, entry in persisted_data.items():
+        # El voice_bank.json se guarda como lista de entries
+        for entry in persisted_data:
+            spk_id = entry.get('speaker_id', 'unknown')
             emb = np.array(entry.get('embedding', []), dtype=np.float32)
             norm = np.linalg.norm(emb)
             log(f"  {spk_id}: embedding dim={len(emb)}, norm={norm:.4f}", "DEBUG")

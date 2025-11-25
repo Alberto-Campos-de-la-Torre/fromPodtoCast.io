@@ -121,13 +121,29 @@ class SpeakerDiarizer:
             
             # Convertir resultado a formato estándar
             segments = []
-            for turn, _, speaker in diarization.itertracks(yield_label=True):
-                segments.append({
-                    'start': turn.start,
-                    'end': turn.end,
-                    'speaker': speaker,
-                    'duration': turn.end - turn.start
-                })
+            
+            # pyannote 3.x puede devolver diferentes tipos de objetos
+            annotation = None
+            
+            if hasattr(diarization, 'speaker_diarization'):
+                # DiarizeOutput object (pyannote 3.x) - acceder a la anotación directamente
+                annotation = diarization.speaker_diarization
+            elif hasattr(diarization, 'itertracks'):
+                # Annotation object (pyannote < 3.x o algunos casos)
+                annotation = diarization
+            
+            if annotation is not None and hasattr(annotation, 'itertracks'):
+                for turn, _, speaker in annotation.itertracks(yield_label=True):
+                    segments.append({
+                        'start': turn.start,
+                        'end': turn.end,
+                        'speaker': speaker,
+                        'duration': turn.end - turn.start
+                    })
+            
+            if not segments:
+                print("   ⚠️  pyannote no devolvió segmentos, usando método simple")
+                return self._simple_diarization(audio_path)
             
             segments = self._maybe_assign_global_ids(audio_path, segments)
             return segments
@@ -334,7 +350,9 @@ class SpeakerDiarizer:
                 "pyannote/embedding",
                 token=self.hf_token
             )
-            self.embedding_inference = Inference(model, window="whole", device=self.device)
+            # pyannote 3.x requiere torch.device en lugar de string
+            device = torch.device(self.device) if isinstance(self.device, str) else self.device
+            self.embedding_inference = Inference(model, window="whole", device=device)
             print("   ✓ Modelo de embeddings cargado para voice bank.")
         except Exception as e:
             print(f"⚠️  No se pudo cargar pyannote/embedding: {e}")
@@ -383,23 +401,53 @@ class SpeakerDiarizer:
         """Calcula embedding promedio para los segmentos de un hablante."""
         if not self.embedding_inference:
             return None
+        
         embeddings = []
+        
+        # Cargar audio completo una vez
+        try:
+            try:
+                waveform, sample_rate = torchaudio.load_with_torchcodec(audio_path)
+            except (AttributeError, TypeError):
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore")
+                    waveform, sample_rate = torchaudio.load(audio_path)
+        except Exception as e:
+            print(f"   ⚠️  Error cargando audio para embeddings: {e}")
+            return None
+        
         for seg in speaker_segments:
             start = float(seg.get('start', 0.0))
             end = float(seg.get('end', start))
             if end <= start:
                 continue
+            
             try:
-                pa_segment = Segment(start, end)
-                emb = self.embedding_inference(
-                    {"uri": Path(audio_path).stem, "audio": audio_path},
-                    segment=pa_segment
-                )
+                # Extraer segmento del waveform
+                start_sample = int(start * sample_rate)
+                end_sample = int(end * sample_rate)
+                segment_waveform = waveform[:, start_sample:end_sample]
+                
+                # Guardar segmento temporal
+                import tempfile
+                with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as tmp_file:
+                    tmp_path = tmp_file.name
+                
+                torchaudio.save(tmp_path, segment_waveform, sample_rate)
+                
+                # Extraer embedding del segmento
+                emb = self.embedding_inference({'uri': Path(tmp_path).stem, 'audio': tmp_path})
                 embeddings.append(np.array(emb, dtype=np.float32))
-            except Exception:
+                
+                # Limpiar archivo temporal
+                os.remove(tmp_path)
+                
+            except Exception as e:
                 continue
+        
         if not embeddings:
             return None
+        
         mean_emb = np.mean(embeddings, axis=0)
         norm = np.linalg.norm(mean_emb)
         if norm == 0:
