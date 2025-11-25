@@ -8,14 +8,27 @@ import sys
 import os
 import shutil
 import time
+import re
+import threading
 from pathlib import Path
 import subprocess
 import json
 from datetime import datetime
+from typing import Optional, Tuple
 
 # Agregar src al path si es necesario
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root / 'src'))
+
+# Colores ANSI para terminal
+class Colors:
+    RESET = '\033[0m'
+    RED = '\033[91m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    BLUE = '\033[94m'
+    CYAN = '\033[96m'
+    BOLD = '\033[1m'
 
 
 def log_status(message: str, level: str = "INFO"):
@@ -26,9 +39,21 @@ def log_status(message: str, level: str = "INFO"):
         "SUCCESS": "✅",
         "WARNING": "⚠️ ",
         "ERROR": "❌",
-        "DEBUG": "🔍"
+        "DEBUG": "🔍",
+        "PROGRESS": "📥"
     }.get(level, "ℹ️ ")
-    print(f"[{timestamp}] {prefix} {message}")
+    
+    # Colores para terminal
+    color = {
+        "INFO": Colors.CYAN,
+        "SUCCESS": Colors.GREEN,
+        "WARNING": Colors.YELLOW,
+        "ERROR": Colors.RED,
+        "DEBUG": Colors.BLUE,
+        "PROGRESS": Colors.CYAN
+    }.get(level, "")
+    
+    print(f"{color}[{timestamp}] {prefix} {message}{Colors.RESET}")
 
 
 def log_error(message: str, error: Exception = None):
@@ -37,9 +62,138 @@ def log_error(message: str, error: Exception = None):
     if error:
         log_status(f"   Detalle: {str(error)}", "DEBUG")
         if hasattr(error, 'stderr') and error.stderr:
-            log_status(f"   stderr: {error.stderr.decode() if isinstance(error.stderr, bytes) else error.stderr}", "DEBUG")
+            stderr_content = error.stderr.decode() if isinstance(error.stderr, bytes) else error.stderr
+            # Mostrar las primeras líneas del error
+            for line in stderr_content.split('\n')[:5]:
+                if line.strip():
+                    log_status(f"   stderr: {line.strip()}", "DEBUG")
         if hasattr(error, 'stdout') and error.stdout:
-            log_status(f"   stdout: {error.stdout.decode() if isinstance(error.stdout, bytes) else error.stdout}", "DEBUG")
+            stdout_content = error.stdout.decode() if isinstance(error.stdout, bytes) else error.stdout
+            for line in stdout_content.split('\n')[:5]:
+                if line.strip():
+                    log_status(f"   stdout: {line.strip()}", "DEBUG")
+
+
+def validate_audio_file(file_path: str) -> Tuple[bool, str, Optional[float]]:
+    """
+    Valida un archivo de audio descargado.
+    
+    Returns:
+        Tuple[bool, str, Optional[float]]: (es_valido, mensaje, duracion_segundos)
+    """
+    if not os.path.exists(file_path):
+        return False, "Archivo no existe", None
+    
+    file_size = os.path.getsize(file_path)
+    if file_size < 1000:  # Menos de 1KB
+        return False, f"Archivo demasiado pequeño ({file_size} bytes)", None
+    
+    # Verificar con ffprobe
+    try:
+        result = subprocess.run(
+            ['ffprobe', '-v', 'error', '-show_entries', 
+             'format=duration,size,bit_rate', '-show_entries',
+             'stream=codec_name,sample_rate,channels',
+             '-of', 'json', file_path],
+            capture_output=True, text=True, timeout=30
+        )
+        
+        if result.returncode != 0:
+            return False, f"ffprobe error: {result.stderr[:100]}", None
+        
+        info = json.loads(result.stdout)
+        
+        # Extraer información
+        format_info = info.get('format', {})
+        duration = float(format_info.get('duration', 0))
+        
+        streams = info.get('streams', [])
+        audio_stream = None
+        for stream in streams:
+            if stream.get('codec_name'):
+                audio_stream = stream
+                break
+        
+        if duration < 1:
+            return False, "Duración menor a 1 segundo", duration
+        
+        # Verificar integridad (detectar corrupción)
+        check_result = subprocess.run(
+            ['ffmpeg', '-v', 'error', '-i', file_path, '-f', 'null', '-'],
+            capture_output=True, text=True, timeout=120
+        )
+        
+        if 'Invalid data' in check_result.stderr or 'corrupt' in check_result.stderr.lower():
+            return False, "Audio contiene datos corruptos", duration
+        
+        # Audio válido
+        codec = audio_stream.get('codec_name', 'unknown') if audio_stream else 'unknown'
+        sample_rate = audio_stream.get('sample_rate', 'unknown') if audio_stream else 'unknown'
+        channels = audio_stream.get('channels', 'unknown') if audio_stream else 'unknown'
+        
+        return True, f"OK (codec={codec}, sr={sample_rate}Hz, ch={channels}, dur={duration:.1f}s)", duration
+        
+    except subprocess.TimeoutExpired:
+        return False, "Timeout validando audio", None
+    except json.JSONDecodeError:
+        return False, "Error parseando información de audio", None
+    except Exception as e:
+        return False, f"Error: {str(e)}", None
+
+
+def repair_audio_file(input_path: str, output_path: Optional[str] = None) -> Tuple[bool, str]:
+    """
+    Intenta reparar un archivo de audio corrupto.
+    
+    Returns:
+        Tuple[bool, str]: (exitoso, mensaje_o_ruta)
+    """
+    if output_path is None:
+        base, ext = os.path.splitext(input_path)
+        output_path = f"{base}_repaired{ext}"
+    
+    log_status(f"Intentando reparar audio...", "INFO")
+    
+    try:
+        # Usar pipe stdout para preservar salida incluso con errores
+        with open(output_path, 'wb') as out_file:
+            process = subprocess.Popen(
+                ['ffmpeg', '-y',
+                 '-err_detect', 'ignore_err',
+                 '-i', input_path,
+                 '-vn',
+                 '-ar', '16000',
+                 '-ac', '1',
+                 '-f', 'wav',
+                 '-'],
+                stdout=out_file,
+                stderr=subprocess.PIPE,
+                text=False
+            )
+            
+            _, stderr = process.communicate(timeout=600)
+        
+        # Verificar resultado
+        if os.path.exists(output_path) and os.path.getsize(output_path) > 10000:
+            is_valid, msg, duration = validate_audio_file(output_path)
+            if is_valid:
+                log_status(f"Audio reparado exitosamente: {msg}", "SUCCESS")
+                return True, output_path
+            else:
+                os.remove(output_path)
+                return False, f"Reparación falló: {msg}"
+        else:
+            if os.path.exists(output_path):
+                os.remove(output_path)
+            return False, "No se pudo crear archivo reparado"
+            
+    except Exception as e:
+        if os.path.exists(output_path):
+            try:
+                os.remove(output_path)
+            except:
+                pass
+        return False, f"Error reparando: {str(e)}"
 
 
 def check_ytdlp():
@@ -151,6 +305,95 @@ def install_ytdlp():
     except Exception as e:
         log_error("Error inesperado instalando yt-dlp", e)
         return False
+
+
+def update_ytdlp():
+    """Actualiza yt-dlp a la última versión."""
+    log_status("Actualizando yt-dlp...", "INFO")
+    try:
+        result = subprocess.run(
+            [sys.executable, '-m', 'pip', 'install', '--upgrade', 'yt-dlp'], 
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=300
+        )
+        log_status("yt-dlp actualizado correctamente", "SUCCESS")
+        
+        # Verificar nueva versión
+        check_result = subprocess.run(
+            ['yt-dlp', '--version'],
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+        if check_result.returncode == 0:
+            log_status(f"Nueva versión: {check_result.stdout.strip()}", "INFO")
+        return True
+    except Exception as e:
+        log_error("Error actualizando yt-dlp", e)
+        return False
+
+
+def validate_existing_files(directory: str) -> list:
+    """Valida todos los archivos de audio en un directorio."""
+    log_status(f"Validando archivos en: {directory}", "INFO")
+    
+    path = Path(directory)
+    if not path.exists():
+        log_error(f"Directorio no existe: {directory}")
+        return []
+    
+    results = []
+    audio_extensions = ['.wav', '.mp3', '.m4a', '.opus', '.webm', '.ogg', '.flac']
+    
+    audio_files = []
+    for ext in audio_extensions:
+        audio_files.extend(path.glob(f"*{ext}"))
+    
+    if not audio_files:
+        log_status("No se encontraron archivos de audio", "WARNING")
+        return []
+    
+    log_status(f"Encontrados {len(audio_files)} archivos de audio", "INFO")
+    
+    for audio_file in sorted(audio_files):
+        log_status(f"Validando: {audio_file.name}", "INFO")
+        is_valid, msg, duration = validate_audio_file(str(audio_file))
+        
+        result = {
+            'file': str(audio_file),
+            'valid': is_valid,
+            'message': msg,
+            'duration': duration
+        }
+        
+        if is_valid:
+            log_status(f"   ✓ {msg}", "SUCCESS")
+        else:
+            log_status(f"   ✗ {msg}", "ERROR")
+            
+            # Ofrecer reparación
+            log_status("   Intentando reparar...", "INFO")
+            success, repair_msg = repair_audio_file(str(audio_file))
+            
+            if success:
+                # Reemplazar con reparado
+                repaired_path = repair_msg
+                backup_path = str(audio_file) + ".bak"
+                os.rename(str(audio_file), backup_path)
+                os.rename(repaired_path, str(audio_file))
+                os.remove(backup_path)
+                
+                result['repaired'] = True
+                log_status(f"   ✓ Archivo reparado exitosamente", "SUCCESS")
+            else:
+                result['repair_failed'] = True
+                log_status(f"   ✗ No se pudo reparar: {repair_msg}", "ERROR")
+        
+        results.append(result)
+    
+    return results
 
 
 def download_video(url: str, output_dir: str, audio_only: bool = True,
@@ -328,34 +571,87 @@ def download_video(url: str, output_dir: str, audio_only: bool = True,
     
     # Descargar
     log_status("Iniciando descarga...", "INFO")
-    download_cmd = cmd + [clean_url]  # Usar URL limpia
+    
+    # Agregar opción de progreso para yt-dlp
+    download_cmd = cmd + ['--newline', '--progress', clean_url]  # Usar URL limpia con progreso
     
     # Guardar timestamp antes de la descarga
     files_before = set(output_path.glob("*"))
     start_time = time.time()
     
     try:
-        # Ejecutar descarga con timeout (2 horas para videos muy largos)
+        # Ejecutar descarga con monitoreo de progreso en tiempo real
         process = subprocess.Popen(
             download_cmd,
             stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True
+            stderr=subprocess.STDOUT,  # Combinar stdout y stderr
+            text=True,
+            bufsize=1,
+            universal_newlines=True
         )
         
-        # Monitorear progreso (simplificado)
-        log_status("Descarga en progreso... (esto puede tardar varios minutos)", "INFO")
+        log_status("Descarga en progreso...", "PROGRESS")
         
-        stdout, stderr = process.communicate(timeout=7200)  # 2 horas máximo
+        last_progress = ""
+        download_errors = []
+        
+        # Leer salida línea por línea para mostrar progreso
+        for line in iter(process.stdout.readline, ''):
+            line = line.strip()
+            if not line:
+                continue
+            
+            # Detectar progreso de descarga
+            if '[download]' in line:
+                # Extraer porcentaje si está disponible
+                match = re.search(r'(\d+\.?\d*)%', line)
+                if match:
+                    progress = match.group(1)
+                    if progress != last_progress:
+                        # Mostrar cada 10% o cambio significativo
+                        try:
+                            pct = float(progress)
+                            if pct % 10 < 1 or pct > 99:
+                                log_status(f"   Progreso: {progress}% - {line[11:80]}...", "PROGRESS")
+                        except:
+                            pass
+                        last_progress = progress
+                elif 'Destination' in line:
+                    log_status(f"   {line}", "INFO")
+                elif 'has already been downloaded' in line:
+                    log_status(f"   {line}", "WARNING")
+            
+            # Detectar extracción de audio
+            elif '[ExtractAudio]' in line:
+                log_status(f"   Extrayendo audio: {line[14:60]}...", "INFO")
+            
+            # Detectar conversión
+            elif 'Converting' in line or 'ffmpeg' in line.lower():
+                log_status(f"   Convirtiendo: {line[:60]}...", "INFO")
+            
+            # Detectar errores
+            elif 'ERROR' in line or 'error' in line.lower():
+                download_errors.append(line)
+                log_status(f"   ⚠️ {line}", "WARNING")
+            
+            # Detectar advertencias importantes
+            elif 'WARNING' in line:
+                log_status(f"   {line}", "WARNING")
+        
+        process.wait(timeout=7200)  # 2 horas máximo
         
         if process.returncode != 0:
             log_error(f"Error en descarga (código {process.returncode})")
-            if stderr:
-                log_status(f"   Error: {stderr[:500]}", "DEBUG")
-            return {'success': False, 'url': url, 'error': f'Download failed: {stderr[:200] if stderr else "Unknown error"}'}
+            if download_errors:
+                for err in download_errors[:3]:
+                    log_status(f"   {err}", "ERROR")
+            return {'success': False, 'url': url, 'error': f'Download failed with code {process.returncode}'}
         
         elapsed_time = time.time() - start_time
         log_status(f"Descarga completada en {elapsed_time:.1f} segundos", "SUCCESS")
+        
+        if download_errors:
+            log_status(f"   Advertencia: Se encontraron {len(download_errors)} errores menores durante la descarga", "WARNING")
         
     except subprocess.TimeoutExpired:
         process.kill()
@@ -403,22 +699,70 @@ def download_video(url: str, output_dir: str, audio_only: bool = True,
     if downloaded_file and os.path.exists(downloaded_file):
         try:
             file_size = os.path.getsize(downloaded_file) / (1024 * 1024)  # MB
-            log_status(f"Descarga completada exitosamente", "SUCCESS")
-            log_status(f"   Archivo: {Path(downloaded_file).name}", "INFO")
+            log_status(f"Archivo descargado: {Path(downloaded_file).name}", "SUCCESS")
             log_status(f"   Tamaño: {file_size:.2f} MB", "INFO")
-            log_status(f"   Ruta completa: {downloaded_file}", "INFO")
             
-            return {
-                'success': True,
-                'url': url,
-                'title': video_info.get('title', ''),
-                'file_path': downloaded_file,
-                'duration': duration,
-                'size_mb': file_size
-            }
+            # Validar integridad del audio
+            log_status("Validando integridad del audio...", "INFO")
+            is_valid, validation_msg, actual_duration = validate_audio_file(downloaded_file)
+            
+            if is_valid:
+                log_status(f"   Validación: {validation_msg}", "SUCCESS")
+                
+                return {
+                    'success': True,
+                    'url': url,
+                    'title': video_info.get('title', ''),
+                    'file_path': downloaded_file,
+                    'duration': actual_duration or duration,
+                    'size_mb': file_size,
+                    'validated': True
+                }
+            else:
+                log_status(f"   Validación falló: {validation_msg}", "WARNING")
+                
+                # Intentar reparar
+                success, repair_result = repair_audio_file(downloaded_file)
+                
+                if success:
+                    # Reemplazar archivo original con el reparado
+                    repaired_path = repair_result
+                    os.replace(repaired_path, downloaded_file)
+                    
+                    # Re-validar
+                    is_valid, validation_msg, actual_duration = validate_audio_file(downloaded_file)
+                    file_size = os.path.getsize(downloaded_file) / (1024 * 1024)
+                    
+                    log_status(f"   Audio reparado: {validation_msg}", "SUCCESS")
+                    
+                    return {
+                        'success': True,
+                        'url': url,
+                        'title': video_info.get('title', ''),
+                        'file_path': downloaded_file,
+                        'duration': actual_duration or duration,
+                        'size_mb': file_size,
+                        'validated': True,
+                        'repaired': True
+                    }
+                else:
+                    log_status(f"   No se pudo reparar: {repair_result}", "ERROR")
+                    log_status(f"   El archivo puede tener problemas pero se conserva", "WARNING")
+                    
+                    return {
+                        'success': True,  # Descarga exitosa pero archivo con problemas
+                        'url': url,
+                        'title': video_info.get('title', ''),
+                        'file_path': downloaded_file,
+                        'duration': duration,
+                        'size_mb': file_size,
+                        'validated': False,
+                        'validation_error': validation_msg
+                    }
+                    
         except Exception as e:
-            log_error("Error obteniendo información del archivo descargado", e)
-            return {'success': False, 'url': url, 'error': f'Error reading file: {str(e)}'}
+            log_error("Error procesando archivo descargado", e)
+            return {'success': False, 'url': url, 'error': f'Error processing file: {str(e)}'}
     else:
         log_error("Archivo descargado pero no encontrado en el directorio")
         log_status(f"   Directorio: {output_path}", "DEBUG")
@@ -491,15 +835,58 @@ def main():
         action='store_true',
         help='Instalar yt-dlp si no está disponible'
     )
+    parser.add_argument(
+        '--update-ytdlp',
+        action='store_true',
+        help='Actualizar yt-dlp a la última versión'
+    )
+    parser.add_argument(
+        '--validate-only',
+        action='store_true',
+        help='Solo validar archivos existentes sin descargar'
+    )
+    parser.add_argument(
+        '--verbose', '-v',
+        action='store_true',
+        help='Mostrar información detallada de depuración'
+    )
     
     args = parser.parse_args()
+    
+    # Configurar nivel de verbosidad global
+    global VERBOSE
+    VERBOSE = args.verbose
     
     log_status("="*60, "INFO")
     log_status("Iniciando proceso de descarga", "INFO")
     log_status("="*60, "INFO")
     
+    # Modo de solo validación
+    if args.validate_only:
+        log_status("Modo: Solo validación de archivos existentes", "INFO")
+        results = validate_existing_files(args.output)
+        
+        valid_count = sum(1 for r in results if r['valid'])
+        repaired_count = sum(1 for r in results if r.get('repaired'))
+        failed_count = sum(1 for r in results if not r['valid'] and not r.get('repaired'))
+        
+        log_status("="*60, "INFO")
+        log_status("Resumen de validación:", "INFO")
+        log_status(f"   Válidos: {valid_count}", "SUCCESS" if valid_count else "INFO")
+        if repaired_count:
+            log_status(f"   Reparados: {repaired_count}", "WARNING")
+        if failed_count:
+            log_status(f"   Con errores: {failed_count}", "ERROR")
+        log_status("="*60, "INFO")
+        sys.exit(0 if failed_count == 0 else 1)
+    
     # Verificar yt-dlp
     ytdlp_available, version = check_ytdlp()
+    
+    # Actualizar yt-dlp si se solicita
+    if args.update_ytdlp and ytdlp_available:
+        update_ytdlp()
+        ytdlp_available, version = check_ytdlp()
     
     if not ytdlp_available:
         if args.install_ytdlp:
@@ -550,12 +937,26 @@ def main():
         log_status("", "INFO")
         log_status("Archivos descargados exitosamente:", "SUCCESS")
         for result in successful:
-            log_status(f"   ✓ {Path(result['file_path']).name}", "SUCCESS")
+            status_icon = "✓"
+            if result.get('repaired'):
+                status_icon = "🔧"  # Reparado
+            elif not result.get('validated', True):
+                status_icon = "⚠️"  # Con problemas
+            
+            log_status(f"   {status_icon} {Path(result['file_path']).name}", "SUCCESS")
             log_status(f"     Ruta: {result['file_path']}", "INFO")
             if 'size_mb' in result:
                 log_status(f"     Tamaño: {result['size_mb']:.2f} MB", "INFO")
             if 'duration' in result and result['duration']:
                 log_status(f"     Duración: {result['duration'] / 60:.2f} minutos", "INFO")
+            
+            # Mostrar estado de validación
+            if result.get('repaired'):
+                log_status(f"     Estado: Reparado automáticamente", "WARNING")
+            elif result.get('validated'):
+                log_status(f"     Estado: Validado ✓", "SUCCESS")
+            elif 'validation_error' in result:
+                log_status(f"     Estado: Requiere atención - {result['validation_error']}", "WARNING")
     
     if failed:
         log_status("", "INFO")
