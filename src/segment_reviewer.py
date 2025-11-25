@@ -281,17 +281,18 @@ class SegmentReviewer:
             end_sample = int(end_time * sr)
             segment_audio = audio[start_sample:end_sample]
             
-            # Guardar nuevo segmento
+            # Obtener ID de speaker para el nombre del archivo
+            speaker_id = self.diarizer.get_speaker_id(speaker_label) if self.diarizer else 0
+            speaker_clean = speaker_label.replace('/', '_').replace('\\', '_')
+            
+            # Guardar nuevo segmento con speaker en el nombre
             new_segment_path = os.path.join(
                 output_dir,
-                f"seg_{segment_idx:04d}.wav"
+                f"seg_{segment_idx:04d}_{speaker_clean}.wav"
             )
             
             try:
                 sf.write(new_segment_path, segment_audio, sr)
-                
-                # Crear metadatos del nuevo segmento
-                speaker_id = self.diarizer.get_speaker_id(speaker_label)
                 
                 # Transcribir el nuevo segmento si está habilitado
                 segment_text = ''
@@ -322,7 +323,7 @@ class SegmentReviewer:
                     'duration': float(seg_duration),
                     'language': segment_language,
                     'podcast_id': podcast_id,
-                    'segment_id': f"seg_{segment_idx:04d}",
+                    'segment_id': f"seg_{segment_idx:04d}_{speaker_clean}",
                     'original_segment_id': segment_meta.get('segment_id', 'unknown'),
                     'split_from': Path(segment_path).name
                 }

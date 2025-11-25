@@ -2,6 +2,7 @@
 Módulo para identificar y etiquetar diferentes narradores (speakers) en audio.
 """
 import os
+import re
 from pathlib import Path
 from typing import List, Dict, Optional, Tuple
 import torch
@@ -11,6 +12,13 @@ import warnings
 
 # Suprimir warnings de deprecación de torchaudio
 warnings.filterwarnings('ignore', category=UserWarning, module='torchaudio')
+warnings.filterwarnings('ignore', category=UserWarning, module='pyannote')
+warnings.filterwarnings('ignore', category=UserWarning, module='lightning')
+
+# Habilitar TF32 para mejor rendimiento en GPUs Ampere+ (suprime el warning)
+if torch.cuda.is_available():
+    torch.backends.cuda.matmul.allow_tf32 = True
+    torch.backends.cudnn.allow_tf32 = True
 
 # Importación opcional de pyannote.audio
 try:
@@ -392,11 +400,22 @@ class SpeakerDiarizer:
                     assignments[local_label] = new_id
                     created += 1
         
+        # Aplicar asignaciones y crear fallback para speakers sin global ID
         if assignments:
             for seg in segments:
                 original_label = seg['speaker']
                 seg['speaker_local'] = original_label
-                seg['speaker'] = assignments.get(original_label, original_label)
+                if original_label in assignments:
+                    seg['speaker'] = assignments[original_label]
+                else:
+                    # Crear ID simplificado para speakers sin embedding válido
+                    # Extraer número del label local
+                    match = re.search(r'(\d+)', original_label)
+                    if match:
+                        num = int(match.group(1))
+                        seg['speaker'] = f"SPK_{num:02d}"
+                    else:
+                        seg['speaker'] = original_label
         
         if matched or created:
             print(f"   Voice bank: {matched} hablantes reutilizados, {created} nuevos.")
@@ -410,24 +429,48 @@ class SpeakerDiarizer:
             return None
         
         embeddings = []
+        MIN_SEGMENT_FOR_EMBEDDING = 2.0  # Mínimo 2 segundos para extraer embedding confiable
         
         # Cargar audio completo una vez
         try:
-            try:
-                waveform, sample_rate = torchaudio.load_with_torchcodec(audio_path)
-            except (AttributeError, TypeError):
-                with warnings.catch_warnings():
-                    warnings.simplefilter("ignore")
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                try:
+                    waveform, sample_rate = torchaudio.load_with_torchcodec(audio_path)
+                except (AttributeError, TypeError):
                     waveform, sample_rate = torchaudio.load(audio_path)
         except Exception as e:
             print(f"   ⚠️  Error cargando audio para embeddings: {e}")
             return None
         
+        # Filtrar segmentos muy cortos y ordenar por duración (más largos primero)
+        valid_segments = []
         for seg in speaker_segments:
             start = float(seg.get('start', 0.0))
             end = float(seg.get('end', start))
-            if end <= start:
-                continue
+            duration = end - start
+            if duration >= MIN_SEGMENT_FOR_EMBEDDING:
+                valid_segments.append((seg, duration))
+        
+        # Ordenar por duración descendente y tomar máximo 5 segmentos más largos
+        valid_segments.sort(key=lambda x: x[1], reverse=True)
+        valid_segments = valid_segments[:5]
+        
+        if not valid_segments:
+            # Si no hay segmentos largos, intentar con todos los disponibles
+            for seg in speaker_segments:
+                start = float(seg.get('start', 0.0))
+                end = float(seg.get('end', start))
+                if end - start >= 1.0:  # Mínimo 1 segundo
+                    valid_segments.append((seg, end - start))
+        
+        if not valid_segments:
+            return None
+        
+        import tempfile
+        for seg, duration in valid_segments:
+            start = float(seg.get('start', 0.0))
+            end = float(seg.get('end', start))
             
             try:
                 # Extraer segmento del waveform
@@ -435,16 +478,26 @@ class SpeakerDiarizer:
                 end_sample = int(end * sample_rate)
                 segment_waveform = waveform[:, start_sample:end_sample]
                 
+                # Verificar que el segmento tiene contenido
+                if segment_waveform.numel() < sample_rate:  # Menos de 1 segundo
+                    continue
+                
                 # Guardar segmento temporal
-                import tempfile
                 with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as tmp_file:
                     tmp_path = tmp_file.name
                 
-                torchaudio.save(tmp_path, segment_waveform, sample_rate)
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore")
+                    torchaudio.save(tmp_path, segment_waveform, sample_rate)
                 
-                # Extraer embedding del segmento
-                emb = self.embedding_inference({'uri': Path(tmp_path).stem, 'audio': tmp_path})
-                embeddings.append(np.array(emb, dtype=np.float32))
+                    # Extraer embedding del segmento
+                    emb = self.embedding_inference({'uri': Path(tmp_path).stem, 'audio': tmp_path})
+                
+                emb_array = np.array(emb, dtype=np.float32)
+                
+                # Validar embedding extraído
+                if not np.any(np.isnan(emb_array)) and not np.any(np.isinf(emb_array)):
+                    embeddings.append(emb_array)
                 
                 # Limpiar archivo temporal
                 os.remove(tmp_path)
@@ -455,10 +508,17 @@ class SpeakerDiarizer:
         if not embeddings:
             return None
         
+        # Calcular embedding promedio
         mean_emb = np.mean(embeddings, axis=0)
-        norm = np.linalg.norm(mean_emb)
-        if norm == 0:
+        
+        # Validar resultado
+        if np.any(np.isnan(mean_emb)) or np.any(np.isinf(mean_emb)):
             return None
+        
+        norm = np.linalg.norm(mean_emb)
+        if norm == 0 or np.isnan(norm):
+            return None
+        
         return mean_emb / norm
 
     def get_voice_bank_stats(self) -> Dict:

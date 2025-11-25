@@ -6,7 +6,7 @@ import json
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Tuple
 from tqdm import tqdm
 
 from audio_segmenter import AudioSegmenter
@@ -334,12 +334,24 @@ class PodcastProcessor:
             metrics['second_stage']['segments_after'] = metrics['second_stage']['segments_before']
             metrics['second_stage']['applied'] = False
         
+        # Paso 7: Limpieza y renombrado de segmentos
+        print("7. Limpiando y estandarizando nombres de segmentos...")
+        metadata, cleanup_stats = self._cleanup_segments(metadata, normalized_dir)
+        print(f"   ✓ Segmentos finales: {len(metadata)}")
+        if cleanup_stats['removed'] > 0:
+            print(f"   ✓ Eliminados {cleanup_stats['removed']} segmentos sin speaker válido")
+        if cleanup_stats['renamed'] > 0:
+            print(f"   ✓ Renombrados {cleanup_stats['renamed']} segmentos\n")
+        else:
+            print()
+        
         # Guardar metadata específica del podcast
         podcast_metadata_path = self._save_podcast_metadata(metadata, output_dir, podcast_id_clean)
         metrics['outputs'] = {
             'metadata_path': podcast_metadata_path
         }
         metrics['segments']['metadata_after_review'] = len(metadata)
+        metrics['cleanup'] = cleanup_stats
         
         # Guardar log de métricas
         metrics_path = self._write_podcast_metrics(metrics, output_dir, podcast_id_clean)
@@ -409,6 +421,93 @@ class PodcastProcessor:
         
         with open(metrics_path, 'w', encoding='utf-8') as f:
             json.dump(metrics, f, indent=2, ensure_ascii=False)
+    
+    def _cleanup_segments(self, metadata: List[Dict], normalized_dir: str) -> Tuple[List[Dict], Dict]:
+        """
+        Limpia y estandariza los segmentos:
+        - Elimina segmentos sin speaker válido
+        - Renombra archivos con formato consistente: seg_XXXX_SPK_YY.wav
+        
+        Returns:
+            Tuple (metadata_limpia, estadísticas)
+        """
+        stats = {'removed': 0, 'renamed': 0, 'kept': 0}
+        cleaned_metadata = []
+        
+        for i, entry in enumerate(metadata):
+            speaker_label = entry.get('speaker_label', '')
+            old_path = entry.get('path', '')
+            
+            # Verificar que el archivo existe
+            if not os.path.exists(old_path):
+                stats['removed'] += 1
+                continue
+            
+            # Verificar que tiene speaker válido
+            if not speaker_label or speaker_label == 'SPEAKER_00':
+                # Intentar obtener speaker del nombre del archivo
+                filename = Path(old_path).stem
+                match = re.search(r'SPEAKER_(?:GLOBAL_)?(\d+)|SPK_(\d+)', filename)
+                if match:
+                    num = match.group(1) or match.group(2)
+                    speaker_label = f"SPK_{int(num):02d}"
+                else:
+                    # Sin speaker válido, eliminar
+                    try:
+                        os.remove(old_path)
+                    except:
+                        pass
+                    stats['removed'] += 1
+                    continue
+            
+            # Simplificar speaker label
+            simplified_label = self._simplify_speaker_label(speaker_label)
+            
+            # Generar nuevo nombre de archivo
+            new_filename = f"seg_{i:04d}_{simplified_label}.wav"
+            new_path = os.path.join(normalized_dir, new_filename)
+            
+            # Renombrar si es diferente
+            if old_path != new_path:
+                try:
+                    if os.path.exists(new_path):
+                        os.remove(new_path)
+                    os.rename(old_path, new_path)
+                    stats['renamed'] += 1
+                except Exception as e:
+                    # Si falla el renombrado, mantener el original
+                    new_path = old_path
+            
+            # Actualizar metadata
+            entry['path'] = new_path
+            entry['speaker_label'] = simplified_label
+            entry['segment_id'] = f"seg_{i:04d}_{simplified_label}"
+            
+            cleaned_metadata.append(entry)
+            stats['kept'] += 1
+        
+        return cleaned_metadata, stats
+    
+    def _simplify_speaker_label(self, label: str) -> str:
+        """Simplifica el label del speaker a formato SPK_XX."""
+        # Si ya está en formato SPK_XX, mantenerlo
+        if re.match(r'^SPK_\d{2}$', label):
+            return label
+        
+        # Extraer número de SPEAKER_GLOBAL_XXX o SPEAKER_XX
+        match = re.search(r'SPEAKER_(?:GLOBAL_)?(\d+)', label)
+        if match:
+            num = int(match.group(1))
+            return f"SPK_{num:02d}"
+        
+        # Extraer cualquier número
+        match = re.search(r'(\d+)', label)
+        if match:
+            num = int(match.group(1))
+            return f"SPK_{num:02d}"
+        
+        # Fallback
+        return "SPK_00"
         
         print(f"   ✓ Log de métricas guardado en: {metrics_path}")
         return metrics_path
