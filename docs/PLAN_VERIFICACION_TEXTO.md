@@ -438,20 +438,16 @@ Audio → Diarización → Segmentación → Normalización
 ## ❓ Decisiones Pendientes
 
 1. **¿Usar LLM para corrección?**
-   - Sí → Mayor precisión, costo/latencia
-   - No → Solo reglas automáticas
+   - Sí, pero primero hay que utilizar la version de reglas simples→ Mayor precisión, costo/latencia
 
 2. **¿Revisión humana?**
    - Interfaz para revisar casos flaggeados
-   - O confiar en automático
 
 3. **¿Normalizar números?**
    - "5" → "cinco" (mejor para TTS)
-   - O mantener dígitos
 
 4. **¿Eliminar muletillas?**
-   - "eh...", "este..." → eliminar
-   - O mantener para naturalidad
+   - mantener para naturalidad
 
 ---
 

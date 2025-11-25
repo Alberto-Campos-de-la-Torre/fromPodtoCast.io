@@ -15,6 +15,7 @@ from transcriber import AudioTranscriber
 from speaker_diarizer import SpeakerDiarizer
 from segment_reviewer import SegmentReviewer
 from voice_bank import VoiceBankManager
+from text_preprocessor import TextPreprocessor
 
 
 class PodcastProcessor:
@@ -97,6 +98,19 @@ class PodcastProcessor:
             )
         else:
             self.segment_reviewer = None
+        
+        # Inicializar pre-procesador de texto
+        text_config = config.get('text_preprocessing', {})
+        if text_config.get('enabled', True):
+            self.text_preprocessor = TextPreprocessor(
+                glosario_path=text_config.get('glosario_path'),
+                fix_punctuation=text_config.get('fix_punctuation', True),
+                normalize_numbers=text_config.get('normalize_numbers', True),
+                fix_spacing=text_config.get('fix_spacing', True),
+                fix_capitalization=text_config.get('fix_capitalization', True)
+            )
+        else:
+            self.text_preprocessor = None
     
     def process_podcast(self, input_audio_path: str, output_dir: str, 
                        podcast_id: Optional[str] = None) -> List[Dict]:
@@ -262,6 +276,35 @@ class PodcastProcessor:
         
         print(f"   ✓ Transcritos {len(transcriptions)} segmentos\n")
         metrics['segments']['transcribed'] = len(transcriptions)
+        
+        # Paso 4.5: Pre-procesamiento de texto
+        if self.text_preprocessor:
+            print("4.5. Pre-procesando transcripciones...")
+            preprocessed_count = 0
+            for trans in transcriptions:
+                if trans.get('text'):
+                    original = trans['text']
+                    corrected, changes = self.text_preprocessor.preprocess(original)
+                    trans['text'] = corrected
+                    if changes:
+                        trans['text_original'] = original
+                        trans['text_changes'] = changes
+                        preprocessed_count += 1
+            
+            preprocess_stats = self.text_preprocessor.get_stats()
+            print(f"   ✓ Pre-procesados {preprocessed_count} textos")
+            print(f"   ✓ Correcciones: puntuación={preprocess_stats.get('punctuation_fixed', 0)}, "
+                  f"números={preprocess_stats.get('numbers_normalized', 0)}, "
+                  f"glosario={preprocess_stats.get('glosario_applied', 0)}\n")
+            
+            metrics['text_preprocessing'] = {
+                'enabled': True,
+                'processed': preprocess_stats.get('processed', 0),
+                'corrected': preprocessed_count,
+                'stats': preprocess_stats
+            }
+        else:
+            metrics['text_preprocessing'] = {'enabled': False}
         
         # Paso 5: Generar metadatos finales
         print("5. Generando metadatos finales...")
