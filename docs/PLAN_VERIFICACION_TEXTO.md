@@ -435,23 +435,36 @@ Audio → Diarización → Segmentación → Normalización
 
 ---
 
-## ❓ Decisiones Pendientes
+## ✅ Decisiones Tomadas
 
 1. **¿Usar LLM para corrección?**
-   - Sí, pero primero hay que utilizar la version de reglas simples→ Mayor precisión, costo/latencia
+   - ✅ Sí, pero primero usar la versión de reglas simples (Fase 1 implementada)
 
 2. **¿Revisión humana?**
-   - Interfaz para revisar casos flaggeados
+   - ✅ Interfaz para revisar casos flaggeados (pendiente)
 
 3. **¿Normalizar números?**
-   - "5" → "cinco" (mejor para TTS)
+   - ✅ "5" → "cinco" (mejor para TTS)
 
 4. **¿Eliminar muletillas?**
-   - mantener para naturalidad
+   - ✅ Mantener para naturalidad
 
 ---
 
-## 📅 Fecha de Creación
+## 📊 Estado de Implementación
 
-Noviembre 2025
+| Fase | Componente | Estado |
+|------|-----------|--------|
+| 1 | TextPreprocessor | ✅ Implementado |
+| 2 | LLMTextCorrector | ⏳ Pendiente |
+| 3 | Glosario de términos | ✅ Implementado |
+| 4 | TextValidator | ⏳ Pendiente |
+| 5 | TTSExporter (multi-formato) | ⏳ Pendiente |
+
+---
+
+## 📅 Historial
+
+- **Noviembre 2025**: Creación del plan
+- **Noviembre 2025**: Fase 1 implementada (TextPreprocessor)
 
