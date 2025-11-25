@@ -13,14 +13,20 @@ import os
 import argparse
 import tempfile
 import json
+import subprocess
+import shutil
 import numpy as np
 from pathlib import Path
 from datetime import datetime
+from typing import Optional, Tuple
 
 # Agregar src al path
 sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
 
 from voice_bank import VoiceBankManager
+
+# Variable global para archivos temporales a limpiar
+_temp_audio_files = []
 
 
 def log(msg: str, level: str = "INFO"):
@@ -28,6 +34,149 @@ def log(msg: str, level: str = "INFO"):
     ts = datetime.now().strftime("%H:%M:%S")
     icons = {"INFO": "ℹ️", "SUCCESS": "✅", "ERROR": "❌", "WARNING": "⚠️", "DEBUG": "🔍"}
     print(f"[{ts}] {icons.get(level, 'ℹ️')} {msg}")
+
+
+def validate_and_fix_audio(audio_path: str, tmp_dir: Optional[str] = None) -> Tuple[str, bool]:
+    """
+    Valida un archivo de audio y crea una copia limpia si está corrupto.
+    
+    Args:
+        audio_path: Ruta al archivo de audio original
+        tmp_dir: Directorio temporal para guardar el audio limpio
+        
+    Returns:
+        Tuple[str, bool]: (ruta al audio válido, True si se creó copia temporal)
+    """
+    global _temp_audio_files
+    
+    log(f"Validando integridad del audio: {Path(audio_path).name}", "INFO")
+    
+    # Verificar que ffmpeg está disponible
+    if not shutil.which('ffmpeg'):
+        log("ffmpeg no encontrado, usando audio original", "WARNING")
+        return audio_path, False
+    
+    # Verificar integridad del audio con ffprobe
+    try:
+        result = subprocess.run(
+            ['ffprobe', '-v', 'error', '-show_entries', 'format=duration',
+             '-of', 'default=noprint_wrappers=1:nokey=1', audio_path],
+            capture_output=True, text=True, timeout=30
+        )
+        
+        if result.returncode != 0 or not result.stdout.strip():
+            log("Audio parece corrupto o inválido, intentando reparar...", "WARNING")
+            needs_repair = True
+        else:
+            duration = float(result.stdout.strip())
+            log(f"Duración detectada: {duration:.2f}s", "INFO")
+            
+            # Verificar también errores de decodificación
+            check_result = subprocess.run(
+                ['ffmpeg', '-v', 'error', '-i', audio_path, '-f', 'null', '-'],
+                capture_output=True, text=True, timeout=120
+            )
+            
+            if 'Invalid data' in check_result.stderr or 'corrupt' in check_result.stderr.lower():
+                log("Se detectaron datos corruptos en el audio", "WARNING")
+                needs_repair = True
+            else:
+                log("Audio válido, no requiere reparación", "SUCCESS")
+                needs_repair = False
+                
+    except subprocess.TimeoutExpired:
+        log("Timeout validando audio, intentando reparar...", "WARNING")
+        needs_repair = True
+    except Exception as e:
+        log(f"Error validando audio: {e}", "WARNING")
+        needs_repair = True
+    
+    if not needs_repair:
+        return audio_path, False
+    
+    # Crear copia limpia del audio
+    log("Creando copia limpia del audio con ffmpeg...", "INFO")
+    
+    if tmp_dir is None:
+        tmp_dir = tempfile.gettempdir()
+    
+    # Generar nombre único para el archivo temporal
+    timestamp = datetime.now().strftime("%H%M%S")
+    clean_path = os.path.join(tmp_dir, f"clean_{timestamp}.wav")
+    
+    try:
+        # Usar ffmpeg con pipe stdout para preservar salida incluso con errores
+        # Esto evita que ffmpeg elimine el archivo de salida en caso de error
+        with open(clean_path, 'wb') as out_file:
+            process = subprocess.Popen(
+                ['ffmpeg', '-y',
+                 '-err_detect', 'ignore_err',  # Ignorar errores de detección
+                 '-i', audio_path,
+                 '-vn',  # Sin video
+                 '-ar', '16000',  # Sample rate
+                 '-ac', '1',  # Mono
+                 '-f', 'wav',  # Formato de salida
+                 '-'],  # Salida a stdout
+                stdout=out_file,
+                stderr=subprocess.PIPE,
+                text=False
+            )
+            
+            # Esperar a que termine con timeout
+            try:
+                _, stderr = process.communicate(timeout=600)
+            except subprocess.TimeoutExpired:
+                process.kill()
+                log("Timeout creando audio limpio", "WARNING")
+                if os.path.exists(clean_path):
+                    os.remove(clean_path)
+                return audio_path, False
+        
+        # Verificar que el archivo se creó correctamente
+        if os.path.exists(clean_path):
+            file_size = os.path.getsize(clean_path)
+            if file_size > 10000:  # Al menos 10KB
+                # Verificar duración del audio limpio
+                duration_result = subprocess.run(
+                    ['ffprobe', '-v', 'error', '-show_entries', 'format=duration',
+                     '-of', 'default=noprint_wrappers=1:nokey=1', clean_path],
+                    capture_output=True, text=True, timeout=30
+                )
+                
+                if duration_result.stdout.strip():
+                    clean_duration = float(duration_result.stdout.strip())
+                    if clean_duration > 10.0:  # Al menos 10 segundos
+                        log(f"Audio limpio creado: {clean_duration:.2f}s ({file_size/1024/1024:.1f}MB)", "SUCCESS")
+                        _temp_audio_files.append(clean_path)
+                        return clean_path, True
+        
+        # Si llegamos aquí, algo falló
+        if os.path.exists(clean_path):
+            os.remove(clean_path)
+        log("No se pudo crear audio limpio válido, usando original", "WARNING")
+        return audio_path, False
+        
+    except Exception as e:
+        log(f"Error creando audio limpio: {e}", "WARNING")
+        if os.path.exists(clean_path):
+            try:
+                os.remove(clean_path)
+            except:
+                pass
+        return audio_path, False
+
+
+def cleanup_temp_audio():
+    """Limpia archivos de audio temporales creados durante el test."""
+    global _temp_audio_files
+    for path in _temp_audio_files:
+        try:
+            if os.path.exists(path):
+                os.remove(path)
+                log(f"Archivo temporal eliminado: {Path(path).name}", "DEBUG")
+        except Exception:
+            pass
+    _temp_audio_files = []
 
 
 def test_basic_voice_bank(tmp_path: Path):
@@ -101,6 +250,11 @@ def test_with_real_audio(audio_path: str, hf_token: str, threshold: float = 0.85
         log(f"Archivo no encontrado: {audio_path}", "ERROR")
         return False
     
+    # Validar y reparar audio si está corrupto
+    working_audio_path, was_repaired = validate_and_fix_audio(audio_path)
+    if was_repaired:
+        log(f"Usando audio reparado: {Path(working_audio_path).name}", "INFO")
+    
     # Importar dependencias de audio
     try:
         from speaker_diarizer import SpeakerDiarizer, PYANNOTE_AVAILABLE
@@ -138,7 +292,7 @@ def test_with_real_audio(audio_path: str, hf_token: str, threshold: float = 0.85
         
         # Realizar diarización
         log("Realizando diarización del audio...", "INFO")
-        segments = diarizer.diarize(audio_path)
+        segments = diarizer.diarize(working_audio_path)
         
         if not segments:
             log("No se detectaron segmentos de hablantes", "WARNING")
@@ -198,6 +352,11 @@ def test_voice_bank_reuse(audio_path: str, hf_token: str, threshold: float = 0.8
         log(f"Archivo no encontrado: {audio_path}", "ERROR")
         return False
     
+    # Validar y reparar audio si está corrupto
+    working_audio_path, was_repaired = validate_and_fix_audio(audio_path)
+    if was_repaired:
+        log(f"Usando audio reparado: {Path(working_audio_path).name}", "INFO")
+    
     try:
         from speaker_diarizer import SpeakerDiarizer, PYANNOTE_AVAILABLE
     except ImportError as e:
@@ -219,8 +378,8 @@ def test_voice_bank_reuse(audio_path: str, hf_token: str, threshold: float = 0.8
             id_generator=lambda n: f"GLOBAL_SPK_{n:03d}"
         )
         
-        diarizer1 = SpeakerDiarizer(hf_token=hf_token, voice_bank=manager1)
-        segments1 = diarizer1.diarize(audio_path)
+        diarizer1 = SpeakerDiarizer(hf_token=hf_token, voice_bank_manager=manager1)
+        segments1 = diarizer1.diarize(working_audio_path)
         stats1 = diarizer1.get_voice_bank_stats()
         
         speakers_1 = set(seg.get('speaker') for seg in segments1)
@@ -238,8 +397,8 @@ def test_voice_bank_reuse(audio_path: str, hf_token: str, threshold: float = 0.8
         # Verificar que se cargaron los speakers anteriores
         log(f"Speakers cargados del banco: {len(manager2.voice_entries)}", "INFO")
         
-        diarizer2 = SpeakerDiarizer(hf_token=hf_token, voice_bank=manager2)
-        segments2 = diarizer2.diarize(audio_path)
+        diarizer2 = SpeakerDiarizer(hf_token=hf_token, voice_bank_manager=manager2)
+        segments2 = diarizer2.diarize(working_audio_path)
         stats2 = diarizer2.get_voice_bank_stats()
         
         speakers_2 = set(seg.get('speaker') for seg in segments2)
@@ -394,6 +553,9 @@ Ejemplos:
             log("Para test con audio real, configura hf_token en config.json:", "INFO")
             log("  python tests/test_voice_bank.py <audio_file>", "INFO")
     
+    # Limpiar archivos temporales
+    cleanup_temp_audio()
+    
     print()
     print("=" * 60)
     print("✅ Todos los tests completados exitosamente")
@@ -401,4 +563,8 @@ Ejemplos:
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    finally:
+        # Asegurar limpieza incluso si hay errores
+        cleanup_temp_audio()
