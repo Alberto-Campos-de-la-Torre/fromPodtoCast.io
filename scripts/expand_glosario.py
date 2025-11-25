@@ -432,54 +432,255 @@ class GlosarioExpander:
         
         return added
     
-    def expand_from_web(self, query: str, category: str = 'general'):
+    def expand_from_web(self, query: str, category: str = 'general', debug: bool = False):
         """
         Busca términos en la web para expandir el glosario.
         
         Args:
             query: Búsqueda a realizar
             category: Categoría de los términos
+            debug: Si True, muestra información de depuración
         """
         if self.verbose:
             print(f"\n🌐 Buscando: {query}...")
         
-        try:
-            # Usar DuckDuckGo HTML (no requiere API key)
-            encoded_query = urllib.parse.quote(query)
-            url = f"https://html.duckduckgo.com/html/?q={encoded_query}"
-            
-            headers = {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-            }
-            
-            request = urllib.request.Request(url, headers=headers)
-            
-            with urllib.request.urlopen(request, context=ssl_context, timeout=10) as response:
-                html = response.read().decode('utf-8')
-            
-            # Extraer términos del HTML (simplificado)
-            # Buscar palabras capitalizadas que podrían ser marcas/nombres
-            pattern = r'\b([A-Z][a-zA-Z]+(?:\s+[A-Z][a-zA-Z]+)?)\b'
+        results = {
+            'success': False,
+            'error': None,
+            'terms_found': 0,
+            'source': None
+        }
+        
+        # Intentar múltiples fuentes (Wikipedia primero, es más confiable)
+        sources = [
+            ('Wikipedia ES', self._search_wikipedia_es),
+            ('DuckDuckGo', self._search_duckduckgo),
+        ]
+        
+        all_terms = []
+        
+        for source_name, search_func in sources:
+            try:
+                if debug and self.verbose:
+                    print(f"   Intentando {source_name}...")
+                
+                terms = search_func(query, debug)
+                
+                if terms:
+                    added = 0
+                    for term in terms:
+                        # Crear corrección: versión lowercase -> versión correcta
+                        term_lower = term.lower()
+                        
+                        # Solo añadir si no es exactamente igual (tiene mayúsculas)
+                        if term_lower != term:
+                            if self._add_correction(term_lower, term, category):
+                                added += 1
+                                if debug and self.verbose:
+                                    print(f"      + {term_lower} → {term}")
+                        
+                        # También añadir variantes sin acentos comunes
+                        term_no_accent = self._remove_accents(term_lower)
+                        if term_no_accent != term_lower:
+                            if self._add_correction(term_no_accent, term, category):
+                                added += 1
+                    
+                    if added > 0:
+                        results['success'] = True
+                        results['terms_found'] = added
+                        results['source'] = source_name
+                        
+                        if self.verbose:
+                            print(f"   ✓ [{source_name}] Encontrados {added} términos nuevos")
+                        
+                        return added
+                    elif debug and self.verbose:
+                        print(f"   ℹ️ [{source_name}] {len(terms)} resultados pero ninguno nuevo")
+                    
+            except Exception as e:
+                results['error'] = str(e)
+                if debug and self.verbose:
+                    print(f"   ⚠️ [{source_name}] Error: {e}")
+                    import traceback
+                    traceback.print_exc()
+                continue
+        
+        # Si ninguna fuente funcionó
+        if self.verbose:
+            if results['error']:
+                print(f"   ⚠️ No se encontraron términos. Último error: {results['error']}")
+            else:
+                print(f"   ⚠️ No se encontraron términos relevantes para: {query}")
+        
+        return 0
+    
+    def _search_duckduckgo(self, query: str, debug: bool = False) -> List[str]:
+        """Busca en DuckDuckGo HTML."""
+        encoded_query = urllib.parse.quote(query)
+        url = f"https://html.duckduckgo.com/html/?q={encoded_query}"
+        
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Language': 'es-MX,es;q=0.9,en;q=0.8',
+        }
+        
+        request = urllib.request.Request(url, headers=headers)
+        
+        with urllib.request.urlopen(request, context=ssl_context, timeout=15) as response:
+            html = response.read().decode('utf-8', errors='ignore')
+        
+        if debug:
+            print(f"      Respuesta: {len(html)} bytes")
+        
+        # Extraer términos de los resultados
+        terms = self._extract_terms_from_html(html, debug)
+        return terms
+    
+    def _search_wikipedia_es(self, query: str, debug: bool = False) -> List[str]:
+        """Busca en Wikipedia en español."""
+        # Construir URL con parámetros correctamente codificados
+        base_url = "https://es.wikipedia.org/w/api.php"
+        params = {
+            'action': 'opensearch',
+            'search': query,
+            'limit': '15',
+            'format': 'json'
+        }
+        query_string = urllib.parse.urlencode(params)
+        url = f"{base_url}?{query_string}"
+        
+        headers = {
+            'User-Agent': 'GlosarioExpander/1.0 (fromPodtoCast project; contact@example.com)',
+        }
+        
+        if debug:
+            print(f"      URL: {url[:80]}...")
+        
+        request = urllib.request.Request(url, headers=headers)
+        
+        with urllib.request.urlopen(request, context=ssl_context, timeout=15) as response:
+            data = json.loads(response.read().decode('utf-8'))
+        
+        if debug:
+            print(f"      Resultados Wikipedia: {len(data[1]) if len(data) > 1 else 0}")
+            if len(data) > 1 and data[1]:
+                print(f"      Muestra: {data[1][:5]}")
+        
+        # data[1] contiene los títulos de los artículos
+        if len(data) > 1 and data[1]:
+            valid_terms = []
+            for title in data[1]:
+                if self._is_valid_wikipedia_term(title):
+                    valid_terms.append(title)
+            return valid_terms
+        
+        return []
+    
+    def _extract_terms_from_html(self, html: str, debug: bool = False) -> List[str]:
+        """Extrae términos relevantes del HTML."""
+        terms = set()
+        
+        # Patrones para extraer términos
+        patterns = [
+            # Marcas y nombres propios (palabras capitalizadas)
+            r'\b([A-Z][a-zA-Z]{2,}(?:\s+[A-Z][a-zA-Z]+)?)\b',
+            # Términos en negrita o enlaces
+            r'<b>([^<]+)</b>',
+            r'<a[^>]*>([^<]+)</a>',
+            # Títulos de resultados
+            r'class="result__title"[^>]*>([^<]+)<',
+            r'class="result__snippet"[^>]*>([^<]+)<',
+        ]
+        
+        for pattern in patterns:
             matches = re.findall(pattern, html)
-            
-            # Filtrar y añadir términos únicos
-            seen = set()
-            added = 0
-            for term in matches:
-                if len(term) >= 3 and term.lower() not in seen:
-                    seen.add(term.lower())
-                    if self._add_correction(term.lower(), term, category):
-                        added += 1
-            
-            if self.verbose:
-                print(f"   ✓ Encontrados {added} términos nuevos")
-            
-            return added
-            
-        except Exception as e:
-            if self.verbose:
-                print(f"   ⚠️ Error en búsqueda web: {e}")
-            return 0
+            for match in matches:
+                # Limpiar el término
+                term = match.strip()
+                term = re.sub(r'<[^>]+>', '', term)  # Remover HTML tags
+                term = re.sub(r'\s+', ' ', term)  # Normalizar espacios
+                
+                # Filtrar términos válidos
+                if self._is_valid_term(term):
+                    terms.add(term)
+        
+        if debug:
+            print(f"      Términos extraídos: {len(terms)}")
+            if terms:
+                sample = list(terms)[:5]
+                print(f"      Muestra: {sample}")
+        
+        return list(terms)
+    
+    def _is_valid_term(self, term: str, from_wikipedia: bool = False) -> bool:
+        """Verifica si un término es válido para el glosario."""
+        if not term or len(term) < 3 or len(term) > 50:
+            return False
+        
+        # Ignorar términos comunes en inglés/español que no son marcas
+        ignore_words = {
+            'the', 'and', 'for', 'are', 'but', 'not', 'you', 'all',
+            'can', 'had', 'her', 'was', 'one', 'our', 'out', 'has',
+            'los', 'las', 'del', 'que', 'por', 'con', 'una', 'son',
+            'para', 'como', 'pero', 'esta', 'este', 'esto', 'puede',
+            'Search', 'Results', 'Page', 'Home', 'About', 'Contact',
+            'Privacy', 'Terms', 'Help', 'More', 'Next', 'Previous',
+            'Code', 'DDG', 'This', 'Transitional', 'UTF', 'DOCTYPE',
+            'HTML', 'Lite', 'Get',
+        }
+        
+        if term.lower() in ignore_words or term in ignore_words:
+            return False
+        
+        # Si viene de Wikipedia, es más confiable - aceptar más términos
+        if from_wikipedia:
+            # Solo ignorar si es un término de navegación
+            nav_terms = {'desambiguación', 'anexo', 'categoría', 'wikipedia'}
+            if any(nav in term.lower() for nav in nav_terms):
+                return False
+            return len(term) >= 3 and any(c.isalpha() for c in term)
+        
+        # Para otras fuentes, debe tener mayúscula
+        if not any(c.isupper() for c in term):
+            return False
+        
+        # Ignorar si es solo números o símbolos
+        if not any(c.isalpha() for c in term):
+            return False
+        
+        return True
+    
+    def _is_valid_wikipedia_term(self, term: str) -> bool:
+        """Verifica si un término de Wikipedia es válido."""
+        if not term or len(term) < 3 or len(term) > 60:
+            return False
+        
+        # Ignorar páginas de desambiguación, anexos, etc.
+        skip_patterns = [
+            'desambiguación', 'anexo:', 'categoría:', 
+            'wikipedia:', 'plantilla:', 'archivo:'
+        ]
+        
+        term_lower = term.lower()
+        for pattern in skip_patterns:
+            if pattern in term_lower:
+                return False
+        
+        return True
+    
+    def _remove_accents(self, text: str) -> str:
+        """Remueve acentos de un texto."""
+        replacements = {
+            'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u',
+            'ä': 'a', 'ë': 'e', 'ï': 'i', 'ö': 'o', 'ü': 'u',
+            'à': 'a', 'è': 'e', 'ì': 'i', 'ò': 'o', 'ù': 'u',
+            'ñ': 'n',
+        }
+        result = text
+        for accented, plain in replacements.items():
+            result = result.replace(accented, plain)
+        return result
     
     def expand_all(self):
         """Ejecuta todas las expansiones disponibles."""
@@ -505,25 +706,47 @@ class GlosarioExpander:
         
         return self.stats
     
-    def search_and_expand(self, queries: List[str]):
+    def search_and_expand(self, queries: List[str], debug: bool = False):
         """
         Realiza búsquedas web y expande el glosario.
         
         Args:
             queries: Lista de búsquedas a realizar
+            debug: Si True, muestra información de depuración
         """
         print("=" * 60)
         print("🌐 Expandiendo glosario mediante búsquedas web")
         print("=" * 60)
         
+        if debug:
+            print("   [DEBUG MODE ACTIVADO]")
+        
         total = 0
-        for query in queries:
-            total += self.expand_from_web(query)
-            time.sleep(1)  # Rate limiting
+        successful = 0
+        failed = 0
+        
+        for i, query in enumerate(queries, 1):
+            print(f"\n[{i}/{len(queries)}] ", end="")
+            result = self.expand_from_web(query, debug=debug)
+            
+            if result > 0:
+                total += result
+                successful += 1
+            else:
+                failed += 1
+            
+            # Rate limiting entre búsquedas
+            if i < len(queries):
+                time.sleep(2)
         
         self._save_glosario()
         
-        print(f"\n✅ Búsquedas completadas. Términos añadidos: {total}")
+        print("\n" + "=" * 60)
+        print(f"✅ Búsquedas completadas")
+        print(f"   Exitosas: {successful}/{len(queries)}")
+        print(f"   Fallidas: {failed}/{len(queries)}")
+        print(f"   Términos añadidos: {total}")
+        print("=" * 60)
         
         return total
 
@@ -576,6 +799,11 @@ def main():
         action='store_true',
         help='Modo silencioso'
     )
+    parser.add_argument(
+        '--debug', '-d',
+        action='store_true',
+        help='Modo debug - muestra información detallada de búsquedas'
+    )
     
     args = parser.parse_args()
     
@@ -597,7 +825,7 @@ def main():
         if args.slang:
             expander.expand_mexican_slang()
         if args.search:
-            expander.search_and_expand(args.search)
+            expander.search_and_expand(args.search, debug=args.debug)
         
         expander._save_glosario()
     
