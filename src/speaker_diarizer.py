@@ -71,7 +71,7 @@ class SpeakerDiarizer:
                 print(f"   Usando token de Hugging Face para {model_name}")
                 self.pipeline = Pipeline.from_pretrained(
                     model_name,
-                    use_auth_token=hf_token
+                    token=hf_token
                 )
                 
                 # Mover pipeline al dispositivo correcto
@@ -332,7 +332,7 @@ class SpeakerDiarizer:
         try:
             model = Model.from_pretrained(
                 "pyannote/embedding",
-                use_auth_token=self.hf_token
+                token=self.hf_token
             )
             self.embedding_inference = Inference(model, window="whole", device=self.device)
             print("   ✓ Modelo de embeddings cargado para voice bank.")
