@@ -248,6 +248,30 @@ def check_ffmpeg():
         return False
 
 
+def check_nodejs():
+    """Verifica si Node.js está instalado (recomendado para YouTube)."""
+    try:
+        result = subprocess.run(
+            ['node', '--version'], 
+            capture_output=True, 
+            text=True, 
+            timeout=5
+        )
+        if result.returncode == 0:
+            log_status(f"Node.js encontrado: {result.stdout.strip()}", "SUCCESS")
+            return True
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        pass
+    except Exception:
+        pass
+    
+    # Node.js no encontrado - solo advertir, no es crítico
+    log_status("Node.js no encontrado (recomendado para mejor extracción de YouTube)", "WARNING")
+    log_status("   Instala con: sudo apt-get install nodejs", "INFO")
+    log_status("   Se usará cliente Android/Web como alternativa", "INFO")
+    return False
+
+
 def check_disk_space(path: Path, min_gb: float = 1.0):
     """Verifica que haya suficiente espacio en disco."""
     try:
@@ -445,6 +469,9 @@ def download_video(url: str, output_dir: str, audio_only: bool = True,
         '--file-access-retries', '3',  # Reintentar acceso a archivos
         '--extractor-retries', '3',  # Reintentar extractores
         '--no-check-certificate',  # En algunos casos ayuda con conexiones lentas
+        # Opciones para YouTube sin JavaScript runtime
+        '--extractor-args', 'youtube:player_client=android,web',
+        '--no-warnings',  # Suprimir warnings de formatos faltantes
     ])
     
     if audio_only:
@@ -905,6 +932,9 @@ def main():
             sys.exit(1)
     else:
         log_status(f"yt-dlp {version} disponible y listo", "SUCCESS")
+    
+    # Verificar Node.js (recomendado pero no requerido)
+    check_nodejs()
     
     # Verificar URLs
     log_status(f"URLs a procesar: {len(args.urls)}", "INFO")
