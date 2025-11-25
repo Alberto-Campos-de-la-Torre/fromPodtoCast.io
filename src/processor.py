@@ -283,7 +283,6 @@ class PodcastProcessor:
                     speaker_id = self.diarizer.get_speaker_id(speaker_label)
                 except:
                     # Extraer número del label si es posible
-                    import re
                     match = re.search(r'(\d+)', speaker_label)
                     if match:
                         speaker_id = int(match.group(1))
