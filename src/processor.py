@@ -150,36 +150,12 @@ class PodcastProcessor:
             }
         }
         
-        # Paso 1: Segmentar audio
-        print("1. Segmentando audio...")
-        segments = self.segmenter.segment_audio(
-            input_audio_path, 
-            segments_dir,
-            base_name=""  # Ya no usamos el nombre en los archivos
-        )
-        print(f"   ✓ Generados {len(segments)} segmentos\n")
-        metrics['segments']['raw'] = len(segments)
-        
-        # Paso 2: Normalizar segmentos
-        print("2. Normalizando segmentos...")
-        normalized_segments = []
-        for segment_path, start, end in tqdm(segments, desc="   Normalizando"):
-            segment_name = Path(segment_path).name
-            normalized_path = os.path.join(normalized_dir, segment_name)
-            
-            try:
-                self.normalizer.normalize_audio(segment_path, normalized_path)
-                normalized_segments.append((normalized_path, start, end))
-            except Exception as e:
-                print(f"   ✗ Error normalizando {segment_name}: {e}")
-        
-        print(f"   ✓ Normalizados {len(normalized_segments)} segmentos\n")
-        metrics['segments']['normalized'] = len(normalized_segments)
-        
-        # Paso 3: Diarización del audio original
+        # Paso 1: Diarización del audio original (antes de segmentar)
         diarization_result = None
+        use_diarization_segmentation = self.config.get('segment_by_diarization', True)
+        
         if self.diarizer:
-            print("3. Realizando diarización de hablantes...")
+            print("1. Realizando diarización de hablantes...")
             try:
                 diarization_result = self.diarizer.diarize(input_audio_path)
                 if diarization_result:
@@ -195,15 +171,66 @@ class PodcastProcessor:
                 else:
                     print("   ⚠️  Diarización no generó resultados\n")
                     metrics['diarization']['status'] = 'empty_result'
+                    use_diarization_segmentation = False
             except Exception as e:
                 print(f"   ✗ Error en diarización: {e}")
                 import traceback
                 traceback.print_exc()
                 print()
                 metrics['diarization']['status'] = 'error'
+                use_diarization_segmentation = False
         else:
-            print("3. Diarización de hablantes (saltada - no disponible)\n")
+            print("1. Diarización de hablantes (saltada - no disponible)\n")
             metrics['diarization']['status'] = 'disabled'
+            use_diarization_segmentation = False
+        
+        # Paso 2: Segmentar audio (por diarización o por silencios)
+        if use_diarization_segmentation and diarization_result:
+            print("2. Segmentando audio por segmentos de habla...")
+            segments = self.segmenter.segment_by_diarization(
+                input_audio_path,
+                segments_dir,
+                diarization_result,
+                base_name=""
+            )
+            # Los segmentos incluyen speaker: (path, start, end, speaker)
+            print(f"   ✓ Generados {len(segments)} segmentos basados en diarización\n")
+            metrics['segments']['raw'] = len(segments)
+            metrics['segments']['method'] = 'diarization'
+        else:
+            print("2. Segmentando audio por detección de silencios...")
+            raw_segments = self.segmenter.segment_audio(
+                input_audio_path, 
+                segments_dir,
+                base_name=""
+            )
+            # Convertir a formato con speaker: (path, start, end, speaker)
+            segments = [(path, start, end, 'SPEAKER_00') for path, start, end in raw_segments]
+            print(f"   ✓ Generados {len(segments)} segmentos\n")
+            metrics['segments']['raw'] = len(segments)
+            metrics['segments']['method'] = 'silence'
+        
+        # Paso 3: Normalizar segmentos
+        print("3. Normalizando segmentos...")
+        normalized_segments = []
+        for segment_tuple in tqdm(segments, desc="   Normalizando"):
+            if len(segment_tuple) == 4:
+                segment_path, start, end, speaker = segment_tuple
+            else:
+                segment_path, start, end = segment_tuple
+                speaker = 'SPEAKER_00'
+            
+            segment_name = Path(segment_path).name
+            normalized_path = os.path.join(normalized_dir, segment_name)
+            
+            try:
+                self.normalizer.normalize_audio(segment_path, normalized_path)
+                normalized_segments.append((normalized_path, start, end, speaker))
+            except Exception as e:
+                print(f"   ✗ Error normalizando {segment_name}: {e}")
+        
+        print(f"   ✓ Normalizados {len(normalized_segments)} segmentos\n")
+        metrics['segments']['normalized'] = len(normalized_segments)
         
         # Actualizar métricas del voice bank si corresponde
         if self.diarizer and getattr(self.diarizer, 'voice_bank_stats', None):
@@ -213,7 +240,7 @@ class PodcastProcessor:
         # Paso 4: Transcribir segmentos normalizados
         print("4. Transcribiendo segmentos...")
         transcriptions = []
-        segment_files = [path for path, _, _ in normalized_segments]
+        segment_files = [seg[0] for seg in normalized_segments]  # Extraer solo paths
         
         for i, segment_path in enumerate(tqdm(segment_files, desc="   Transcribiendo")):
             try:
@@ -235,46 +262,31 @@ class PodcastProcessor:
         print(f"   ✓ Transcritos {len(transcriptions)} segmentos\n")
         metrics['segments']['transcribed'] = len(transcriptions)
         
-        # Paso 5: Asignar speakers y generar metadatos finales
+        # Paso 5: Generar metadatos finales
         print("5. Generando metadatos finales...")
         metadata = []
         
-        for i, (norm_path, start, end) in enumerate(normalized_segments):
+        for i, segment_tuple in enumerate(normalized_segments):
+            # Extraer información del segmento
+            if len(segment_tuple) == 4:
+                norm_path, start, end, speaker_label = segment_tuple
+            else:
+                norm_path, start, end = segment_tuple
+                speaker_label = 'SPEAKER_00'
+            
             transcription = transcriptions[i] if i < len(transcriptions) else {'text': '', 'language': 'unknown'}
             
-            # Asignar speaker_id
+            # Obtener speaker_id numérico
             speaker_id = 0
-            speaker_label = "SPEAKER_00"
-            
-            if self.diarizer and diarization_result and len(diarization_result) > 0:
+            if self.diarizer:
                 try:
-                    speaker_label = self.diarizer.assign_speaker_to_segment(
-                        norm_path, diarization_result,
-                        segment_start=start,
-                        segment_end=end
-                    )
                     speaker_id = self.diarizer.get_speaker_id(speaker_label)
-                except Exception as e:
-                    print(f"   ⚠️  Advertencia: Error asignando speaker para {Path(norm_path).name}: {e}")
-                    # Usar método alternativo: buscar speaker más cercano temporalmente
-                    try:
-                        # Encontrar el segmento de diarización que más se solapa con este segmento
-                        best_speaker = "SPEAKER_00"
-                        max_overlap = 0.0
-                        for diar_seg in diarization_result:
-                            diar_start = diar_seg.get('start', 0.0)
-                            diar_end = diar_seg.get('end', 0.0)
-                            overlap_start = max(start, diar_start)
-                            overlap_end = min(end, diar_end)
-                            if overlap_start < overlap_end:
-                                overlap = overlap_end - overlap_start
-                                if overlap > max_overlap:
-                                    max_overlap = overlap
-                                    best_speaker = diar_seg.get('speaker', 'SPEAKER_00')
-                        speaker_label = best_speaker
-                        speaker_id = self.diarizer.get_speaker_id(speaker_label)
-                    except:
-                        pass
+                except:
+                    # Extraer número del label si es posible
+                    import re
+                    match = re.search(r'(\d+)', speaker_label)
+                    if match:
+                        speaker_id = int(match.group(1))
             
             # Crear entrada de metadata
             entry = {

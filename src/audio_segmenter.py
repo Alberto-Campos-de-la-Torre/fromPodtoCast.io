@@ -1,9 +1,12 @@
 """
 Módulo para segmentar archivos de audio de podcast en fragmentos de 10-15 segundos.
+Soporta segmentación por silencios o por resultados de diarización.
 """
 import os
+import subprocess
+import tempfile
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Tuple, Dict, Optional
 import librosa
 import soundfile as sf
 import numpy as np
@@ -300,4 +303,286 @@ class AudioSegmenter:
                 segments[-1] = (last_seg_path, last_start, duration)
         
         return segments
+    
+    def segment_by_diarization(self, input_path: str, output_dir: str,
+                               diarization_segments: List[Dict],
+                               base_name: str = None) -> List[Tuple[str, float, float, str]]:
+        """
+        Segmenta audio basándose en resultados de diarización de hablantes.
+        
+        Args:
+            input_path: Ruta al archivo de audio de entrada
+            output_dir: Directorio donde guardar los segmentos
+            diarization_segments: Lista de segmentos de diarización con 'start', 'end', 'speaker'
+            base_name: Nombre base para los archivos de salida (opcional)
+        
+        Returns:
+            Lista de tuplas (ruta_segmento, inicio, fin, speaker_id)
+        """
+        Path(output_dir).mkdir(parents=True, exist_ok=True)
+        
+        if base_name is None:
+            base_name = Path(input_path).stem
+        
+        # Validar y reparar audio si es necesario
+        working_path = self._validate_and_prepare_audio(input_path)
+        
+        # Cargar audio
+        print(f"   Cargando audio para segmentación por diarización...")
+        try:
+            audio, sr = librosa.load(working_path, sr=None, mono=True)
+            duration = len(audio) / sr
+            print(f"   ✓ Audio cargado: {duration:.2f}s, {sr}Hz")
+        except Exception as e:
+            raise Exception(f"No se pudo cargar el audio: {e}")
+        
+        if not diarization_segments:
+            print("   ⚠️  Sin segmentos de diarización, usando segmentación por silencios")
+            return self.segment_audio(input_path, output_dir, base_name)
+        
+        # Ordenar segmentos por tiempo de inicio
+        sorted_segments = sorted(diarization_segments, key=lambda x: x.get('start', 0))
+        
+        # Procesar segmentos de diarización
+        result_segments = []
+        segment_idx = 0
+        stats = {'kept': 0, 'discarded_short': 0, 'split': 0}
+        
+        print(f"   Procesando {len(sorted_segments)} segmentos de diarización...")
+        
+        for diar_seg in sorted_segments:
+            start = float(diar_seg.get('start', 0))
+            end = float(diar_seg.get('end', start))
+            speaker = diar_seg.get('speaker', 'SPEAKER_00')
+            seg_duration = end - start
+            
+            # Validar timestamps
+            if start < 0:
+                start = 0
+            if end > duration:
+                end = duration
+            if end <= start:
+                continue
+            
+            seg_duration = end - start
+            
+            # Descartar segmentos muy cortos
+            if seg_duration < self.min_duration:
+                stats['discarded_short'] += 1
+                continue
+            
+            # Dividir segmentos muy largos
+            if seg_duration > self.max_duration:
+                sub_segments = self._split_long_segment(
+                    audio, sr, start, end, speaker, output_dir, segment_idx
+                )
+                for sub_seg in sub_segments:
+                    result_segments.append(sub_seg)
+                    segment_idx += 1
+                stats['split'] += 1
+            else:
+                # Guardar segmento normal
+                seg_path = self._save_diarization_segment(
+                    audio, sr, start, end, speaker, output_dir, segment_idx
+                )
+                if seg_path:
+                    result_segments.append((seg_path, start, end, speaker))
+                    segment_idx += 1
+                    stats['kept'] += 1
+        
+        # Mostrar estadísticas
+        print(f"   ✓ Segmentación completada:")
+        print(f"     - Segmentos guardados: {stats['kept']}")
+        print(f"     - Segmentos divididos: {stats['split']}")
+        print(f"     - Descartados (< {self.min_duration}s): {stats['discarded_short']}")
+        print(f"     - Total final: {len(result_segments)}")
+        
+        # Limpiar audio temporal si se creó
+        if working_path != input_path and os.path.exists(working_path):
+            try:
+                os.remove(working_path)
+            except:
+                pass
+        
+        return result_segments
+    
+    def _validate_and_prepare_audio(self, audio_path: str) -> str:
+        """
+        Valida un archivo de audio y crea una copia limpia si está corrupto.
+        
+        Returns:
+            Ruta al audio válido (original o reparado)
+        """
+        import shutil
+        
+        if not shutil.which('ffprobe') or not shutil.which('ffmpeg'):
+            return audio_path
+        
+        # Verificar integridad con ffmpeg
+        try:
+            result = subprocess.run(
+                ['ffmpeg', '-v', 'error', '-i', audio_path, '-f', 'null', '-'],
+                capture_output=True, text=True, timeout=120
+            )
+            
+            if 'Invalid data' in result.stderr or 'corrupt' in result.stderr.lower():
+                print(f"   ⚠️  Audio corrupto detectado, reparando...")
+                return self._repair_audio(audio_path)
+            
+            return audio_path
+            
+        except subprocess.TimeoutExpired:
+            print(f"   ⚠️  Timeout validando audio, intentando reparar...")
+            return self._repair_audio(audio_path)
+        except Exception:
+            return audio_path
+    
+    def _repair_audio(self, audio_path: str) -> str:
+        """Repara un archivo de audio corrupto."""
+        try:
+            # Crear archivo temporal
+            tmp_path = tempfile.mktemp(suffix='.wav')
+            
+            with open(tmp_path, 'wb') as out_file:
+                process = subprocess.Popen(
+                    ['ffmpeg', '-y', '-err_detect', 'ignore_err',
+                     '-i', audio_path, '-vn', '-ar', '22050', '-ac', '1',
+                     '-f', 'wav', '-'],
+                    stdout=out_file, stderr=subprocess.PIPE
+                )
+                process.communicate(timeout=600)
+            
+            if os.path.exists(tmp_path) and os.path.getsize(tmp_path) > 10000:
+                print(f"   ✓ Audio reparado exitosamente")
+                return tmp_path
+            
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
+            return audio_path
+            
+        except Exception as e:
+            print(f"   ⚠️  Error reparando audio: {e}")
+            return audio_path
+    
+    def _save_diarization_segment(self, audio: np.ndarray, sr: int,
+                                   start: float, end: float, speaker: str,
+                                   output_dir: str, segment_idx: int) -> Optional[str]:
+        """
+        Guarda un segmento de audio basado en diarización.
+        
+        Returns:
+            Ruta al archivo guardado o None si falló
+        """
+        try:
+            start_sample = int(start * sr)
+            end_sample = int(end * sr)
+            
+            # Validar índices
+            start_sample = max(0, start_sample)
+            end_sample = min(len(audio), end_sample)
+            
+            if end_sample <= start_sample:
+                return None
+            
+            segment_audio = audio[start_sample:end_sample]
+            
+            # Nombre del archivo: seg_XXXX_SPEAKER.wav
+            # Limpiamos el nombre del speaker para evitar caracteres problemáticos
+            speaker_clean = speaker.replace('/', '_').replace('\\', '_')
+            output_path = os.path.join(output_dir, f"seg_{segment_idx:04d}_{speaker_clean}.wav")
+            
+            sf.write(output_path, segment_audio, sr)
+            return output_path
+            
+        except Exception as e:
+            print(f"   ⚠️  Error guardando segmento {segment_idx}: {e}")
+            return None
+    
+    def _split_long_segment(self, audio: np.ndarray, sr: int,
+                            start: float, end: float, speaker: str,
+                            output_dir: str, start_idx: int) -> List[Tuple[str, float, float, str]]:
+        """
+        Divide un segmento largo en sub-segmentos de tamaño máximo.
+        Intenta cortar en puntos de baja energía (silencios naturales).
+        
+        Returns:
+            Lista de tuplas (path, start, end, speaker)
+        """
+        seg_duration = end - start
+        result = []
+        current_start = start
+        sub_idx = 0
+        
+        while current_start < end:
+            # Calcular fin del sub-segmento
+            sub_end = min(current_start + self.max_duration, end)
+            sub_duration = sub_end - current_start
+            
+            # Solo guardar si cumple duración mínima
+            if sub_duration >= self.min_duration:
+                # Intentar ajustar el corte a un punto de baja energía
+                if sub_end < end:
+                    sub_end = self._find_best_cut_point(
+                        audio, sr, current_start, sub_end,
+                        search_window=1.0  # Buscar en ±1 segundo
+                    )
+                
+                seg_path = self._save_diarization_segment(
+                    audio, sr, current_start, sub_end, speaker,
+                    output_dir, start_idx + sub_idx
+                )
+                
+                if seg_path:
+                    result.append((seg_path, current_start, sub_end, speaker))
+                    sub_idx += 1
+            
+            current_start = sub_end
+        
+        return result
+    
+    def _find_best_cut_point(self, audio: np.ndarray, sr: int,
+                             start: float, target_end: float,
+                             search_window: float = 1.0) -> float:
+        """
+        Encuentra el mejor punto de corte cerca de target_end basándose en energía.
+        
+        Returns:
+            Tiempo óptimo de corte
+        """
+        # Definir ventana de búsqueda
+        search_start = max(start + self.min_duration, target_end - search_window)
+        search_end = min(target_end + search_window, len(audio) / sr)
+        
+        if search_end <= search_start:
+            return target_end
+        
+        # Extraer audio de la ventana de búsqueda
+        start_sample = int(search_start * sr)
+        end_sample = int(search_end * sr)
+        search_audio = audio[start_sample:end_sample]
+        
+        if len(search_audio) == 0:
+            return target_end
+        
+        # Calcular energía en ventanas pequeñas (50ms)
+        window_samples = int(0.05 * sr)
+        energies = []
+        
+        for i in range(0, len(search_audio) - window_samples, window_samples // 2):
+            window = search_audio[i:i + window_samples]
+            energy = np.sqrt(np.mean(window ** 2))
+            energies.append((i, energy))
+        
+        if not energies:
+            return target_end
+        
+        # Encontrar el punto de mínima energía
+        min_energy_idx = min(energies, key=lambda x: x[1])[0]
+        best_cut = search_start + (min_energy_idx / sr)
+        
+        # Asegurar que el corte produce segmentos válidos
+        if best_cut - start < self.min_duration:
+            return target_end
+        
+        return best_cut
 
