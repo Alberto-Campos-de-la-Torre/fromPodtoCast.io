@@ -10,10 +10,18 @@ import torchaudio
 import numpy as np
 import warnings
 
-# Suprimir warnings de deprecación de torchaudio
+# Suprimir warnings de deprecación y migración
 warnings.filterwarnings('ignore', category=UserWarning, module='torchaudio')
 warnings.filterwarnings('ignore', category=UserWarning, module='pyannote')
 warnings.filterwarnings('ignore', category=UserWarning, module='lightning')
+warnings.filterwarnings('ignore', message='.*Lightning automatically upgraded.*')
+warnings.filterwarnings('ignore', message='.*Found keys that are not in the model.*')
+
+# Suprimir logs de Lightning
+import logging
+logging.getLogger('lightning').setLevel(logging.ERROR)
+logging.getLogger('lightning.pytorch').setLevel(logging.ERROR)
+logging.getLogger('pytorch_lightning').setLevel(logging.ERROR)
 
 # Habilitar TF32 para mejor rendimiento en GPUs Ampere+ (suprime el warning)
 if torch.cuda.is_available():
