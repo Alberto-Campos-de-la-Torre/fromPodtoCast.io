@@ -3,7 +3,7 @@ Módulo para identificar y etiquetar diferentes narradores (speakers) en audio.
 """
 import os
 from pathlib import Path
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Tuple
 import torch
 import torchaudio
 import numpy as np
@@ -14,25 +14,33 @@ warnings.filterwarnings('ignore', category=UserWarning, module='torchaudio')
 
 # Importación opcional de pyannote.audio
 try:
-    from pyannote.audio import Pipeline
+    from pyannote.audio import Pipeline, Model, Inference
     from pyannote.core import Segment
     PYANNOTE_AVAILABLE = True
-except ImportError as e:
+    PYANNOTE_EMBED_AVAILABLE = True
+except ImportError:
     PYANNOTE_AVAILABLE = False
+    PYANNOTE_EMBED_AVAILABLE = False
     Pipeline = None
+    Model = None
+    Inference = None
     Segment = None
+
+from voice_bank import VoiceBankManager
 
 
 class SpeakerDiarizer:
     """Clase para realizar diarización de hablantes."""
     
-    def __init__(self, hf_token: Optional[str] = None, device: Optional[str] = None):
+    def __init__(self, hf_token: Optional[str] = None, device: Optional[str] = None,
+                 voice_bank_manager: Optional[VoiceBankManager] = None):
         """
         Inicializa el diarizador de hablantes.
         
         Args:
             hf_token: Token de Hugging Face (necesario para modelos privados)
             device: Dispositivo a usar ('cuda', 'cpu', o None para auto-detectar)
+            voice_bank_manager: Manejador del banco global de voces
         """
         # Detectar dispositivo
         if device is None:
@@ -41,6 +49,13 @@ class SpeakerDiarizer:
             self.device = device
         
         self.hf_token = hf_token
+        self.voice_bank_manager = voice_bank_manager
+        self.embedding_inference: Optional[Inference] = None
+        self.voice_bank_stats = {
+            'enabled': bool(voice_bank_manager),
+            'matched': 0,
+            'created': 0
+        }
         
         # Cargar pipeline de diarización
         if not PYANNOTE_AVAILABLE:
@@ -72,9 +87,12 @@ class SpeakerDiarizer:
                 print(f"⚠️  Error cargando pipeline de pyannote: {e}")
                 print("   Usando método simple de diarización basado en energía...")
                 self.pipeline = None
+
         else:
             # Sin token, usar método simple directamente (sin intentar cargar pyannote)
             self.pipeline = None
+
+        self._init_embedding_model()
     
     def diarize(self, audio_path: str, min_speakers: Optional[int] = None,
                 max_speakers: Optional[int] = None) -> List[Dict]:
@@ -111,6 +129,7 @@ class SpeakerDiarizer:
                     'duration': turn.end - turn.start
                 })
             
+            segments = self._maybe_assign_global_ids(audio_path, segments)
             return segments
         except Exception as e:
             print(f"Error en diarización con pyannote: {e}")
@@ -292,4 +311,107 @@ class SpeakerDiarizer:
                 return hash(speaker_label) % 1000
         except:
             return 0
+
+    # ------------------------------------------------------------------ #
+    # Voice bank helpers
+    # ------------------------------------------------------------------ #
+    def _init_embedding_model(self):
+        """Inicializa el modelo de embeddings si hay banco de voces."""
+        if not self.voice_bank_manager:
+            return
+        if not PYANNOTE_EMBED_AVAILABLE or Model is None or Inference is None:
+            print("⚠️  pyannote/embedding no disponible, voice bank deshabilitado.")
+            self.voice_bank_manager = None
+            self.voice_bank_stats['enabled'] = False
+            return
+        if not self.hf_token:
+            print("⚠️  Voice bank requiere hf_token para cargar pyannote/embedding.")
+            self.voice_bank_manager = None
+            self.voice_bank_stats['enabled'] = False
+            return
+        try:
+            model = Model.from_pretrained(
+                "pyannote/embedding",
+                use_auth_token=self.hf_token
+            )
+            self.embedding_inference = Inference(model, window="whole", device=self.device)
+            print("   ✓ Modelo de embeddings cargado para voice bank.")
+        except Exception as e:
+            print(f"⚠️  No se pudo cargar pyannote/embedding: {e}")
+            self.voice_bank_manager = None
+            self.voice_bank_stats['enabled'] = False
+
+    def _maybe_assign_global_ids(self, audio_path: str, segments: List[Dict]) -> List[Dict]:
+        """Asigna IDs globales mediante el banco de voces."""
+        if not self.voice_bank_manager or not self.embedding_inference or Segment is None:
+            return segments
+        
+        speaker_groups: Dict[str, List[Dict]] = {}
+        for seg in segments:
+            speaker_groups.setdefault(seg['speaker'], []).append(seg)
+        
+        assignments: Dict[str, str] = {}
+        matched = created = 0
+        
+        for local_label, segs in speaker_groups.items():
+            embedding = self._compute_embedding(audio_path, segs)
+            if embedding is None:
+                continue
+            best_id, score = self.voice_bank_manager.find_best_match(embedding)
+            if best_id:
+                self.voice_bank_manager.update_speaker(best_id, embedding)
+                assignments[local_label] = best_id
+                matched += 1
+            else:
+                new_id = self.voice_bank_manager.add_speaker(embedding)
+                assignments[local_label] = new_id
+                created += 1
+        
+        if assignments:
+            for seg in segments:
+                original_label = seg['speaker']
+                seg['speaker_local'] = original_label
+                seg['speaker'] = assignments.get(original_label, original_label)
+        
+        if matched or created:
+            print(f"   Voice bank: {matched} hablantes reutilizados, {created} nuevos.")
+        self.voice_bank_stats['matched'] = matched
+        self.voice_bank_stats['created'] = created
+        return segments
+
+    def _compute_embedding(self, audio_path: str, speaker_segments: List[Dict]) -> Optional[np.ndarray]:
+        """Calcula embedding promedio para los segmentos de un hablante."""
+        if not self.embedding_inference:
+            return None
+        embeddings = []
+        for seg in speaker_segments:
+            start = float(seg.get('start', 0.0))
+            end = float(seg.get('end', start))
+            if end <= start:
+                continue
+            try:
+                pa_segment = Segment(start, end)
+                emb = self.embedding_inference(
+                    {"uri": Path(audio_path).stem, "audio": audio_path},
+                    segment=pa_segment
+                )
+                embeddings.append(np.array(emb, dtype=np.float32))
+            except Exception:
+                continue
+        if not embeddings:
+            return None
+        mean_emb = np.mean(embeddings, axis=0)
+        norm = np.linalg.norm(mean_emb)
+        if norm == 0:
+            return None
+        return mean_emb / norm
+
+    def get_voice_bank_stats(self) -> Dict:
+        """
+        Retorna estadísticas del voice bank para el último audio procesado.
+        
+        Returns:
+            Dict con 'enabled', 'matched' y 'created'
+        """
+        return self.voice_bank_stats.copy()
 

@@ -8,6 +8,7 @@ Solución para crear archivos de entrenamiento para modelos de TTS (Text-to-Spee
 - **Normalización de audio**: Normaliza bitrate, sample rate y niveles de audio (LUFS) para consistencia
 - **Transcripción automática**: Utiliza Whisper para transcribir audio a texto
 - **Diarización de hablantes**: Identifica y etiqueta diferentes narradores (opcional, requiere token de Hugging Face)
+- **Voice Bank global**: Reutiliza embeddings de hablantes conocidos para asignar IDs consistentes en múltiples podcasts
 - **Generación de metadata**: Crea archivos JSON compatibles con formatos de entrenamiento TTS
 
 ## Requisitos
@@ -54,11 +55,14 @@ Edita el archivo `config/config.json` para ajustar los parámetros:
   "device": null,                 // Dispositivo (null = auto, "cuda" o "cpu")
   "language": null,                // Idioma (null = auto-detectar)
   "use_diarization": false,       // Habilitar diarización de hablantes
-  "hf_token": null                 // Token de Hugging Face (necesario para diarización)
+  "hf_token": null,               // Token de Hugging Face (necesario para diarización)
+  "use_voice_bank": true,         // Reutilizar voces conocidas mediante embeddings
+  "voice_bank_path": "./data/output/voice_bank.json", // Ubicación del banco global
+  "voice_match_threshold": 0.85   // Umbral de similitud coseno para reutilizar IDs
 }
 ```
 
-### Configuración de Diarización (Opcional)
+### Configuración de Diarización y Voice Bank (Opcional)
 
 Para usar la diarización de hablantes, necesitas:
 
@@ -71,9 +75,13 @@ Para usar la diarización de hablantes, necesitas:
 ```json
 {
   "use_diarization": true,
-  "hf_token": "tu_token_aqui"
+  "hf_token": "tu_token_aqui",
+  "use_voice_bank": true,
+  "voice_match_threshold": 0.85
 }
 ```
+
+> Consulta `docs/VOICE_BANK.md` para entender el flujo interno de embeddings y el formato de `voice_bank.json`.
 
 ## Uso
 

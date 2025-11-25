@@ -14,6 +14,7 @@ from audio_normalizer import AudioNormalizer
 from transcriber import AudioTranscriber
 from speaker_diarizer import SpeakerDiarizer
 from segment_reviewer import SegmentReviewer
+from voice_bank import VoiceBankManager
 
 
 class PodcastProcessor:
@@ -27,6 +28,7 @@ class PodcastProcessor:
             config: Diccionario con configuración del procesador
         """
         self.config = config
+        self.voice_bank_manager = None
         
         # Inicializar componentes
         self.segmenter = AudioSegmenter(
@@ -48,6 +50,23 @@ class PodcastProcessor:
             language=config.get('language', None)
         )
         
+        # Banco de voces (opcional)
+        use_voice_bank = config.get('use_voice_bank', False)
+        if use_voice_bank:
+            voice_bank_path = config.get('voice_bank_path', './data/output/voice_bank.json')
+            voice_match_threshold = config.get('voice_match_threshold', 0.85)
+            try:
+                self.voice_bank_manager = VoiceBankManager(
+                    bank_path=voice_bank_path,
+                    match_threshold=voice_match_threshold
+                )
+            except Exception as e:
+                print(f"⚠️  No se pudo inicializar VoiceBank ({voice_bank_path}): {e}")
+                self.voice_bank_manager = None
+                use_voice_bank = False
+        else:
+            print("Voice bank deshabilitado (use_voice_bank=false).")
+        
         # Diarizador opcional (puede requerir token de HF)
         hf_token = config.get('hf_token', None)
         use_diarization = config.get('use_diarization', False)
@@ -56,7 +75,8 @@ class PodcastProcessor:
         try:
             self.diarizer = SpeakerDiarizer(
                 hf_token=hf_token if (use_diarization or hf_token) else None,
-                device=config.get('device', None)
+                device=config.get('device', None),
+                voice_bank_manager=self.voice_bank_manager if use_voice_bank else None
             )
             # El diarizador siempre está disponible (método simple por defecto)
         except Exception as e:
@@ -116,6 +136,11 @@ class PodcastProcessor:
                 'unique_speakers': 0,
                 'segments': 0,
                 'status': 'skipped'
+            },
+            'voice_bank': {
+                'enabled': bool(self.voice_bank_manager),
+                'matched': 0,
+                'created': 0
             },
             'second_stage': {
                 'enabled': bool(self.segment_reviewer),
@@ -179,6 +204,11 @@ class PodcastProcessor:
         else:
             print("3. Diarización de hablantes (saltada - no disponible)\n")
             metrics['diarization']['status'] = 'disabled'
+        
+        # Actualizar métricas del voice bank si corresponde
+        if self.diarizer and getattr(self.diarizer, 'voice_bank_stats', None):
+            vb_stats = self.diarizer.voice_bank_stats
+            metrics['voice_bank'].update(vb_stats)
         
         # Paso 4: Transcribir segmentos normalizados
         print("4. Transcribiendo segmentos...")
