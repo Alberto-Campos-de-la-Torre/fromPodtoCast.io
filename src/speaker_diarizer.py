@@ -375,6 +375,12 @@ class SpeakerDiarizer:
             embedding = self._compute_embedding(audio_path, segs)
             if embedding is None:
                 continue
+            
+            # Validar embedding antes de procesar
+            if np.any(np.isnan(embedding)) or np.any(np.isinf(embedding)):
+                print(f"   ⚠️  Embedding inválido para {local_label}, saltando...")
+                continue
+            
             best_id, score = self.voice_bank_manager.find_best_match(embedding)
             if best_id:
                 self.voice_bank_manager.update_speaker(best_id, embedding)
@@ -382,8 +388,9 @@ class SpeakerDiarizer:
                 matched += 1
             else:
                 new_id = self.voice_bank_manager.add_speaker(embedding)
-                assignments[local_label] = new_id
-                created += 1
+                if new_id:  # add_speaker puede retornar None si el embedding es inválido
+                    assignments[local_label] = new_id
+                    created += 1
         
         if assignments:
             for seg in segments:

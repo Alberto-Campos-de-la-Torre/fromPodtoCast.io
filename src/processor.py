@@ -90,9 +90,10 @@ class PodcastProcessor:
             self.segment_reviewer = SegmentReviewer(
                 diarizer=self.diarizer,
                 min_segment_duration=config.get('review_min_duration', 5.0),
-                max_speakers_per_segment=config.get('review_max_speakers', 2),
+                max_speakers_per_segment=config.get('review_max_speakers', 1),
                 transcriber=self.transcriber,
-                retranscribe_split=config.get('review_retranscribe', False)
+                retranscribe_split=config.get('review_retranscribe', False),
+                min_speaker_purity=config.get('review_min_speaker_purity', 0.8)
             )
         else:
             self.segment_reviewer = None

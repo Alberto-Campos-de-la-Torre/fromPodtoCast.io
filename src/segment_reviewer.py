@@ -20,7 +20,8 @@ class SegmentReviewer:
                  min_segment_duration: float = 5.0,
                  max_speakers_per_segment: int = 2,
                  transcriber: Optional[object] = None,
-                 retranscribe_split: bool = False):
+                 retranscribe_split: bool = False,
+                 min_speaker_purity: float = 0.8):
         """
         Inicializa el revisor de segmentos.
         
@@ -30,12 +31,14 @@ class SegmentReviewer:
             max_speakers_per_segment: Número máximo de hablantes permitidos por segmento (default: 2)
             transcriber: Instancia de AudioTranscriber para re-transcribir segmentos divididos (opcional)
             retranscribe_split: Si True, re-transcribe automáticamente los segmentos divididos (default: False)
+            min_speaker_purity: Ratio mínimo de dominancia del speaker principal (default: 0.8 = 80%)
         """
         self.diarizer = diarizer
         self.min_segment_duration = min_segment_duration
         self.max_speakers_per_segment = max_speakers_per_segment
         self.transcriber = transcriber
         self.retranscribe_split = retranscribe_split
+        self.min_speaker_purity = min_speaker_purity
     
     def review_segments(self, metadata: List[Dict], 
                        normalized_dir: str,
@@ -67,6 +70,7 @@ class SegmentReviewer:
         print(f"Revisando {len(metadata)} segmentos...")
         print(f"  - Duración mínima: {self.min_segment_duration}s")
         print(f"  - Máximo hablantes por segmento: {self.max_speakers_per_segment}")
+        print(f"  - Pureza mínima del speaker: {self.min_speaker_purity:.0%}")
         
         global_diarization_available = bool(diarization_result)
         diarization_ready = self._is_diarization_ready()
@@ -194,9 +198,12 @@ class SegmentReviewer:
                 segment_meta, segment_path, 0.0, duration, base_segment_idx, podcast_id
             )]
         
-        # Contar hablantes únicos
+        # Contar hablantes únicos y calcular pureza
         unique_speakers = set(seg.get('speaker', 'SPEAKER_00') for seg in diarization_segments)
         num_speakers = len(unique_speakers)
+        
+        # Calcular pureza del speaker dominante
+        dominant_speaker, purity_ratio = self._calculate_speaker_purity(diarization_segments)
         
         # Si hay más hablantes de los permitidos, dividir el segmento
         if num_speakers > self.max_speakers_per_segment:
@@ -206,16 +213,27 @@ class SegmentReviewer:
                 segment_meta, segment_path, audio, sr, diarization_segments,
                 output_dir, podcast_id, base_segment_idx, segment_start_absolute
             )
-        else:
-            # Si tiene 2 o menos hablantes, mantener el segmento pero actualizar speaker
-            speaker_label = self._get_dominant_speaker(diarization_segments)
-            speaker_id = self.diarizer.get_speaker_id(speaker_label) if self.diarizer else segment_meta.get('speaker', 0)
-            
-            segment_meta_copy = segment_meta.copy()
-            segment_meta_copy['speaker'] = speaker_id
-            segment_meta_copy['speaker_label'] = speaker_label
-            
-            return [segment_meta_copy]
+        
+        # Verificar pureza del speaker - si está por debajo del umbral, descartar
+        if purity_ratio < self.min_speaker_purity:
+            print(f"   ✗ Segmento {Path(segment_path).name} descartado (pureza {purity_ratio:.1%} < {self.min_speaker_purity:.1%})")
+            # Eliminar archivo si no pasa el filtro de pureza
+            if os.path.exists(segment_path):
+                try:
+                    os.remove(segment_path)
+                except:
+                    pass
+            return []
+        
+        # Si tiene 2 o menos hablantes y pasa el filtro de pureza, mantener el segmento
+        speaker_id = self.diarizer.get_speaker_id(dominant_speaker) if self.diarizer else segment_meta.get('speaker', 0)
+        
+        segment_meta_copy = segment_meta.copy()
+        segment_meta_copy['speaker'] = speaker_id
+        segment_meta_copy['speaker_label'] = dominant_speaker
+        segment_meta_copy['speaker_purity'] = round(purity_ratio, 3)
+        
+        return [segment_meta_copy]
     
     def _split_segment_by_speakers(self, segment_meta: Dict,
                                    segment_path: str,
@@ -346,6 +364,44 @@ class SegmentReviewer:
         if speaker_duration:
             return max(speaker_duration, key=speaker_duration.get)
         return 'SPEAKER_00'
+    
+    def _calculate_speaker_purity(self, diarization_result: List[Dict]) -> Tuple[str, float]:
+        """
+        Calcula el ratio de pureza del speaker dominante.
+        
+        La pureza es el ratio entre el tiempo del speaker dominante y el tiempo total.
+        Un valor de 1.0 significa que solo hay un speaker.
+        Un valor de 0.5 significa que dos speakers hablan por igual tiempo.
+        
+        Args:
+            diarization_result: Resultado de diarización
+        
+        Returns:
+            Tupla (speaker_dominante, ratio_pureza)
+        """
+        if not diarization_result:
+            return 'SPEAKER_00', 1.0
+        
+        speaker_duration = {}
+        total_duration = 0.0
+        
+        for seg in diarization_result:
+            speaker = seg.get('speaker', 'SPEAKER_00')
+            duration = seg.get('duration', seg.get('end', 0) - seg.get('start', 0))
+            speaker_duration[speaker] = speaker_duration.get(speaker, 0.0) + duration
+            total_duration += duration
+        
+        if total_duration == 0 or not speaker_duration:
+            return 'SPEAKER_00', 1.0
+        
+        # Encontrar speaker dominante
+        dominant_speaker = max(speaker_duration, key=speaker_duration.get)
+        dominant_duration = speaker_duration[dominant_speaker]
+        
+        # Calcular ratio de pureza
+        purity_ratio = dominant_duration / total_duration
+        
+        return dominant_speaker, purity_ratio
     
     def _create_segment_metadata(self, original_meta: Dict,
                                 segment_path: str,
