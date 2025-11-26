@@ -22,10 +22,20 @@ import sys
 import subprocess
 import hashlib
 import re
+import select
 from pathlib import Path
 from datetime import datetime, timedelta
 from typing import List, Dict, Optional, Tuple
 import time
+
+# Para barras de progreso
+try:
+    from tqdm import tqdm
+    TQDM_AVAILABLE = True
+except ImportError:
+    TQDM_AVAILABLE = False
+    def tqdm(iterable, **kwargs):
+        return iterable
 
 # Para gráficas
 try:
@@ -384,19 +394,25 @@ def download_audio(url: str, output_dir: str, video_title: str) -> Tuple[bool, s
         return False, str(e)
 
 
-def process_audio(audio_path: str, output_dir: str, config_path: str) -> Tuple[bool, str]:
+def process_audio(audio_path: str, output_dir: str, config_path: str, 
+                  show_progress: bool = True) -> Tuple[bool, str]:
     """
     Procesa un audio con el pipeline principal (main.py).
+    Muestra el progreso en tiempo real incluyendo barras de tqdm.
     
     Returns:
         Tuple (éxito, mensaje)
     """
     main_script = PROJECT_ROOT / 'main.py'
     
-    log(f"Procesando: {Path(audio_path).name}", "PROCESS")
+    print()  # Línea vacía antes del procesamiento
+    print(f"{Colors.BOLD}{Colors.CYAN}{'='*60}{Colors.RESET}")
+    print(f"{Colors.BOLD}Procesando: {Path(audio_path).name}{Colors.RESET}")
+    print(f"{Colors.CYAN}{'='*60}{Colors.RESET}")
     
     cmd = [
         sys.executable,
+        '-u',  # Unbuffered output para ver progreso en tiempo real
         str(main_script),
         audio_path,
         '-o', output_dir,
@@ -404,70 +420,74 @@ def process_audio(audio_path: str, output_dir: str, config_path: str) -> Tuple[b
     ]
     
     try:
-        # Sin timeout - el procesamiento puede tardar lo que necesite
-        result = subprocess.run(
-            cmd,
-            capture_output=True,
-            text=True
-        )
+        # Ejecutar mostrando salida en tiempo real
+        if show_progress:
+            process = subprocess.Popen(
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                bufsize=1,
+                universal_newlines=True
+            )
+            
+            output_lines = []
+            num_segments = None
+            
+            # Leer y mostrar salida en tiempo real
+            for line in iter(process.stdout.readline, ''):
+                if line:
+                    output_lines.append(line)
+                    
+                    # Mostrar línea (filtrar algunas muy verbosas)
+                    line_stripped = line.strip()
+                    
+                    # Buscar segmentos generados
+                    match = re.search(r'Segmentos generados: (\d+)', line)
+                    if match:
+                        num_segments = match.group(1)
+                    
+                    # Buscar metadata generada
+                    match = re.search(r'Generados (\d+) registros de metadata', line)
+                    if match:
+                        num_segments = match.group(1)
+                    
+                    # Siempre mostrar la línea
+                    print(line, end='', flush=True)
+            
+            process.wait()
+            returncode = process.returncode
+            stdout_text = ''.join(output_lines)
+        else:
+            # Modo silencioso
+            result = subprocess.run(cmd, capture_output=True, text=True)
+            returncode = result.returncode
+            stdout_text = result.stdout
+            
+            # Buscar segmentos
+            match = re.search(r'Segmentos generados: (\d+)', stdout_text)
+            if match:
+                num_segments = match.group(1)
+            else:
+                match = re.search(r'Generados (\d+) registros de metadata', stdout_text)
+                num_segments = match.group(1) if match else None
         
-        # Filtrar warnings y barras de progreso que no son errores reales
-        stderr_filtered = result.stderr or ""
-        warnings_to_ignore = [
-            "Lightning automatically upgraded",
-            "upgrade_checkpoint",
-            "UserWarning",
-            "FutureWarning",
-            "DeprecationWarning",
-            "Normalizando:",
-            "Transcribiendo:",
-            "Corrigiendo con LLM:",
-            "it/s]",
-            "it/s",
-            "[00:",
-            "██",
-            "▊",
-            "━",
-            "100%",
-            "%|",
-        ]
+        print(f"{Colors.CYAN}{'='*60}{Colors.RESET}")
         
-        is_real_error = False
-        if result.returncode != 0:
-            # Verificar si el stderr contiene errores reales o solo warnings
-            stderr_lines = stderr_filtered.split('\n')
-            real_errors = []
-            for line in stderr_lines:
-                if line.strip() and not any(w in line for w in warnings_to_ignore):
-                    real_errors.append(line)
-            is_real_error = len(real_errors) > 0
-        
-        # Buscar segmentos generados en stdout
-        segments_match = re.search(r'Segmentos generados: (\d+)', result.stdout)
-        num_segments = segments_match.group(1) if segments_match else None
-        
-        # Si hay segmentos generados, es éxito aunque haya warnings
+        # Evaluar resultado
         if num_segments:
-            log(f"   ✓ Procesado: {num_segments} segmentos generados", "SUCCESS")
+            print(f"{Colors.GREEN}✓ Procesado: {num_segments} segmentos generados{Colors.RESET}")
             return True, f"{num_segments} segmentos"
         
-        # Si returncode es 0, es éxito
-        if result.returncode == 0:
-            log(f"   ✓ Procesado correctamente", "SUCCESS")
+        if returncode == 0:
+            print(f"{Colors.GREEN}✓ Procesado correctamente{Colors.RESET}")
             return True, "OK"
         
-        # Si solo hay warnings pero no errores reales, intentar continuar
-        if not is_real_error:
-            log(f"   ⚠️ Warnings ignorados, continuando...", "WARNING")
-            return True, "OK (con warnings)"
-        
-        # Error real
-        error_msg = '\n'.join(real_errors[:3]) if real_errors else "Error desconocido"
-        log(f"   Error en procesamiento: {error_msg[:150]}", "ERROR")
-        return False, error_msg
+        print(f"{Colors.RED}✗ Error en procesamiento (código: {returncode}){Colors.RESET}")
+        return False, f"Exit code: {returncode}"
             
     except Exception as e:
-        log(f"   Error: {e}", "ERROR")
+        print(f"{Colors.RED}✗ Error: {e}{Colors.RESET}")
         return False, str(e)
 
 
@@ -509,6 +529,16 @@ def run_pipeline(config: Dict, registry: Dict, registry_path: str,
     config_path = str(PROJECT_ROOT / 'config' / 'config.json')
     
     Path(input_dir).mkdir(parents=True, exist_ok=True)
+    
+    # Header del pipeline
+    print()
+    print(f"{Colors.BOLD}{Colors.MAGENTA}{'═'*60}{Colors.RESET}")
+    print(f"{Colors.BOLD}{Colors.MAGENTA}  🎙️  fromPodtoCast - Auto Pipeline{Colors.RESET}")
+    print(f"{Colors.BOLD}{Colors.MAGENTA}{'═'*60}{Colors.RESET}")
+    print(f"  📁 Destino: {data_path}")
+    print(f"  🎯 Videos a procesar: {max_total_videos}")
+    print(f"  ⏱️  Inicio: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"{Colors.MAGENTA}{'─'*60}{Colors.RESET}")
     
     categories = config.get('categories', [])
     
@@ -584,22 +614,36 @@ def run_pipeline(config: Dict, registry: Dict, registry_path: str,
                 log(f"   [DRY-RUN] {v.get('title', '')[:60]} ({v.get('duration_string', '')})", "INFO")
             continue
         
-        # Procesar videos (respetando límite total)
-        for video in unique_videos:
-            # Verificar si alcanzamos el límite total
-            total_processed = stats['downloaded'] + stats['processed']
-            if total_processed >= max_total_videos:
-                log(f"\n🛑 Límite de {max_total_videos} videos alcanzado", "WARNING")
-                stats['end_time'] = time.time()
-                return stats
-            
+        # Procesar videos con barra de progreso (respetando límite total)
+        remaining_quota = max_total_videos - (stats['downloaded'] + stats['processed'])
+        videos_to_process = unique_videos[:remaining_quota] if remaining_quota > 0 else []
+        
+        if TQDM_AVAILABLE and videos_to_process:
+            print(f"\n{Colors.BOLD}📊 Progreso de categoría: {cat_name}{Colors.RESET}")
+            video_iterator = tqdm(
+                videos_to_process,
+                desc=f"   Procesando",
+                unit="video",
+                ncols=80,
+                bar_format='{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}]'
+            )
+        else:
+            video_iterator = videos_to_process
+        
+        for idx, video in enumerate(video_iterator):
             video_id = video['id']
             title = video.get('title', 'Sin título')
             video_duration = video.get('duration', 0)
             
-            log(f"\n--- Procesando: {title[:60]} ---", "INFO")
-            log(f"    Canal: {video.get('channel', 'Desconocido')}", "INFO")
-            log(f"    Duración: {video.get('duration_string', 'N/A')}", "INFO")
+            # Actualizar descripción de barra de progreso
+            if TQDM_AVAILABLE and hasattr(video_iterator, 'set_description'):
+                video_iterator.set_description(f"   [{idx+1}/{len(videos_to_process)}] {title[:30]}")
+            
+            print()
+            print(f"{Colors.BOLD}{'─'*60}{Colors.RESET}")
+            print(f"{Colors.BOLD}📹 Video {idx+1}/{len(videos_to_process)}: {title[:55]}{Colors.RESET}")
+            print(f"   📺 Canal: {video.get('channel', 'Desconocido')}")
+            print(f"   ⏱️  Duración: {video.get('duration_string', 'N/A')}")
             
             video_start_time = time.time()
             
@@ -988,33 +1032,46 @@ def print_summary(stats: Dict, data_path: str = None):
     total_audio = stats.get('total_audio_duration', 0)
     useful_audio = stats.get('useful_audio_duration', 0)
     
-    print(f"\n{'='*60}")
-    print(f"{Colors.BOLD}📊 RESUMEN DE EJECUCIÓN{Colors.RESET}")
-    print(f"{'='*60}")
-    print(f"   Búsquedas realizadas: {stats['searched']}")
-    print(f"   Videos encontrados:   {stats['found']}")
-    print(f"   Videos saltados:      {stats['skipped']}")
-    print(f"   {Colors.GREEN}Descargados:           {stats['downloaded']}{Colors.RESET}")
-    print(f"   {Colors.GREEN}Procesados:            {stats['processed']}{Colors.RESET}")
-    print(f"   {Colors.RED}Fallidos:              {stats['failed']}{Colors.RESET}")
+    print()
+    print(f"{Colors.BOLD}{Colors.MAGENTA}{'═'*60}{Colors.RESET}")
+    print(f"{Colors.BOLD}{Colors.MAGENTA}  📊 RESUMEN DE EJECUCIÓN{Colors.RESET}")
+    print(f"{Colors.BOLD}{Colors.MAGENTA}{'═'*60}{Colors.RESET}")
     
-    print(f"\n{Colors.CYAN}⏱️  TIEMPOS:{Colors.RESET}")
-    print(f"   Audio total descargado: {format_duration(total_audio)}")
-    print(f"   Audio útil procesado:   {format_duration(useful_audio)}")
-    print(f"   Tiempo de ejecución:    {format_duration(total_time)}")
+    # Estadísticas de videos
+    print(f"\n{Colors.BOLD}📹 VIDEOS:{Colors.RESET}")
+    print(f"   ├─ Búsquedas realizadas: {stats['searched']}")
+    print(f"   ├─ Encontrados:          {stats['found']}")
+    print(f"   ├─ Saltados:             {stats['skipped']}")
+    print(f"   ├─ {Colors.GREEN}Descargados:          {stats['downloaded']}{Colors.RESET}")
+    print(f"   ├─ {Colors.GREEN}Procesados:           {stats['processed']}{Colors.RESET}")
+    print(f"   └─ {Colors.RED}Fallidos:             {stats['failed']}{Colors.RESET}")
+    
+    # Tiempos y eficiencia
+    print(f"\n{Colors.BOLD}⏱️  TIEMPOS:{Colors.RESET}")
+    print(f"   ├─ Audio descargado:     {format_duration(total_audio)}")
+    print(f"   ├─ Audio útil:           {format_duration(useful_audio)}")
+    print(f"   └─ Tiempo total:         {format_duration(total_time)}")
     
     if total_audio > 0:
         efficiency = (useful_audio / total_audio) * 100
-        print(f"   Eficiencia:             {efficiency:.1f}%")
+        eff_color = Colors.GREEN if efficiency > 50 else (Colors.YELLOW if efficiency > 25 else Colors.RED)
+        print(f"\n{Colors.BOLD}📈 EFICIENCIA:{Colors.RESET}")
+        print(f"   └─ {eff_color}{efficiency:.1f}% de audio útil{Colors.RESET}")
+    
+    # Velocidad de procesamiento
+    if stats['processed'] > 0 and total_time > 0:
+        videos_per_hour = (stats['processed'] / total_time) * 3600
+        print(f"\n{Colors.BOLD}🚀 RENDIMIENTO:{Colors.RESET}")
+        print(f"   └─ {videos_per_hour:.1f} videos/hora")
     
     if stats['errors']:
-        print(f"\n{Colors.YELLOW}Errores:{Colors.RESET}")
-        for err in stats['errors'][:10]:
-            print(f"   - {err}")
-        if len(stats['errors']) > 10:
-            print(f"   ... y {len(stats['errors']) - 10} errores más")
+        print(f"\n{Colors.BOLD}{Colors.YELLOW}⚠️  ERRORES:{Colors.RESET}")
+        for err in stats['errors'][:5]:
+            print(f"   └─ {err}")
+        if len(stats['errors']) > 5:
+            print(f"   └─ ... y {len(stats['errors']) - 5} errores más")
     
-    print(f"{'='*60}\n")
+    print(f"\n{Colors.MAGENTA}{'═'*60}{Colors.RESET}")
     
     # Generar gráfica si hay datos y ruta
     if data_path and stats.get('video_details'):
