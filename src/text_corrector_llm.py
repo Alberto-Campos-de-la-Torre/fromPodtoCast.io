@@ -613,14 +613,25 @@ Responde SOLO con el JSON."""
             response = re.sub(r'^```\s*', '', response)
             response = re.sub(r'\s*```$', '', response)
             
+            # Limpiar caracteres de control problemáticos
+            response = response.replace('\n', ' ').replace('\r', ' ').replace('\t', ' ')
+            
             # Extraer array JSON
             json_match = re.search(r'\[[\s\S]*\]', response)
             if json_match:
                 response = json_match.group(0)
             
             # Intentar reparar JSON
-            response = self._repair_truncated_json(response)
-            data = json.loads(response)
+            response = self._repair_batch_json(response)
+            
+            try:
+                data = json.loads(response)
+            except json.JSONDecodeError:
+                # Fallback: extraer objetos individuales
+                results = self._extract_individual_objects(response, original_texts)
+                if results:
+                    return results
+                raise
             
             if isinstance(data, list):
                 for i, item in enumerate(data):
@@ -642,16 +653,96 @@ Responde SOLO con el JSON."""
             
         except json.JSONDecodeError as e:
             self.logger.warning(f"Error parseando batch JSON: {e}")
-            # Intentar extraer respuestas individuales
+            # Intentar extraer respuestas individuales con regex
             results = self._extract_batch_from_malformed(response, original_texts)
         
         except Exception as e:
             self.logger.warning(f"Error procesando batch: {e}")
+            results = self._extract_batch_from_malformed(response, original_texts)
         
         # Rellenar faltantes
         while len(results) < len(original_texts):
             idx = len(results)
             results.append((original_texts[idx], {'error': 'missing_result'}))
+        
+        return results
+    
+    def _repair_batch_json(self, json_str: str) -> str:
+        """Repara JSON de batch con errores comunes."""
+        # Eliminar espacios extra
+        json_str = re.sub(r'\s+', ' ', json_str).strip()
+        
+        # Arreglar comas faltantes entre objetos: }{ -> },{
+        json_str = re.sub(r'\}\s*\{', '},{', json_str)
+        
+        # Arreglar comas faltantes después de valores: "valor"{ -> "valor",{
+        json_str = re.sub(r'"\s*\{', '",{', json_str)
+        json_str = re.sub(r'\]\s*\{', '],{', json_str)
+        json_str = re.sub(r'(\d)\s*\{', r'\1,{', json_str)
+        
+        # Arreglar comillas dobles dentro de strings (escapar)
+        # Buscar strings y escapar comillas internas
+        def escape_inner_quotes(match):
+            content = match.group(1)
+            # No escapar si ya está escapado
+            content = re.sub(r'(?<!\\)"', '\\"', content)
+            return f'"{content}"'
+        
+        # Arreglar arrays de cambios mal formados
+        json_str = re.sub(r'\[\s*,', '[', json_str)
+        json_str = re.sub(r',\s*\]', ']', json_str)
+        json_str = re.sub(r',\s*,', ',', json_str)
+        
+        # Asegurar que termine correctamente
+        json_str = json_str.rstrip()
+        
+        # Contar y balancear brackets
+        open_brackets = json_str.count('[')
+        close_brackets = json_str.count(']')
+        if open_brackets > close_brackets:
+            json_str += ']' * (open_brackets - close_brackets)
+        
+        # Contar y balancear braces
+        open_braces = json_str.count('{')
+        close_braces = json_str.count('}')
+        if open_braces > close_braces:
+            json_str += '}' * (open_braces - close_braces)
+        
+        return json_str
+    
+    def _extract_individual_objects(
+        self, response: str, original_texts: List[str]
+    ) -> List[Tuple[str, Dict]]:
+        """Extrae objetos JSON individuales del response."""
+        results = []
+        
+        # Buscar todos los objetos JSON individuales
+        object_pattern = r'\{[^{}]*"texto_corregido"[^{}]*\}'
+        matches = re.findall(object_pattern, response)
+        
+        for i, obj_str in enumerate(matches):
+            if i >= len(original_texts):
+                break
+            
+            try:
+                # Intentar parsear cada objeto
+                obj = json.loads(obj_str)
+                texto = obj.get('texto_corregido', original_texts[i])
+                cambios = obj.get('cambios', [])
+                confianza = float(obj.get('confianza', 0.5))
+                
+                results.append((texto, {
+                    'cambios': cambios if isinstance(cambios, list) else [],
+                    'confianza': max(0.0, min(1.0, confianza))
+                }))
+            except:
+                # Si falla, extraer con regex
+                text_match = re.search(r'"texto_corregido"\s*:\s*"([^"]*)"', obj_str)
+                if text_match:
+                    results.append((text_match.group(1), {
+                        'cambios': ['object_extraction'],
+                        'confianza': 0.5
+                    }))
         
         return results
     
@@ -661,16 +752,35 @@ Responde SOLO con el JSON."""
         """Intenta extraer resultados de un batch malformado."""
         results = []
         
-        # Buscar todos los texto_corregido
-        pattern = r'"texto_corregido"\s*:\s*"((?:[^"\\]|\\.)*)"'
-        matches = re.findall(pattern, response)
+        # Método 1: Buscar objetos JSON completos
+        results = self._extract_individual_objects(response, original_texts)
+        if len(results) >= len(original_texts):
+            return results
         
-        for i, match in enumerate(matches):
-            if i >= len(original_texts):
-                break
-            texto = match.replace('\\"', '"').replace('\\n', ' ').strip()
-            results.append((texto, {'cambios': ['batch_extraction'], 'confianza': 0.5}))
+        # Método 2: Buscar solo texto_corregido con regex más flexible
+        patterns = [
+            r'"texto_corregido"\s*:\s*"((?:[^"\\]|\\.)*)"',  # Estándar
+            r'"texto_corregido"\s*:\s*"([^"]*)"',            # Simple
+            r'texto_corregido["\s:]+([^",}\]]+)',            # Sin comillas
+        ]
         
+        for pattern in patterns:
+            matches = re.findall(pattern, response)
+            if len(matches) >= len(original_texts):
+                results = []
+                for i, match in enumerate(matches):
+                    if i >= len(original_texts):
+                        break
+                    texto = match.replace('\\"', '"').replace('\\n', ' ').strip()
+                    if texto:
+                        results.append((texto, {
+                            'cambios': ['regex_extraction'],
+                            'confianza': 0.4
+                        }))
+                if len(results) >= len(original_texts):
+                    return results
+        
+        # Método 3: Usar los textos que ya tengamos
         return results
     
     def _repair_truncated_json(self, json_str: str) -> str:
