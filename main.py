@@ -130,11 +130,29 @@ def resume_llm_correction(metadata_path: str, config: dict, output_path: str = N
     import time
     start_time = time.time()
     
-    corrected_entries = llm_corrector.correct_parallel(
-        segments_to_process,
-        text_field='text',
-        min_confidence=min_confidence
-    )
+    total_batches = (len(segments_to_process) + batch_size - 1) // batch_size
+    
+    print(f"   🚀 Iniciando corrección ({total_batches} batches)...\n")
+    
+    with tqdm(total=len(segments_to_process), desc="   Corrigiendo con LLM", unit="seg") as pbar:
+        processed_count = [0]  # Usar lista para mutabilidad en closure
+        
+        def update_progress(batch_done, total):
+            increment = min(batch_size, len(segments_to_process) - processed_count[0])
+            pbar.update(increment)
+            processed_count[0] += increment
+        
+        corrected_entries = llm_corrector.correct_parallel(
+            segments_to_process,
+            text_field='text',
+            min_confidence=min_confidence,
+            progress_callback=update_progress
+        )
+        
+        # Completar barra si quedó incompleta
+        remaining = len(segments_to_process) - pbar.n
+        if remaining > 0:
+            pbar.update(remaining)
     
     elapsed = time.time() - start_time
     
