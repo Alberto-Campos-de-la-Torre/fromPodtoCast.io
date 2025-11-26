@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fromPodtoCast - Pipeline de Datos para TTS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a25;
+            --accent-primary: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --accent-tertiary: #ec4899;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: #2d2d3a;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+            --gradient-2: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Background Effects */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            filter: blur(150px);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-glow-1 {
+            top: -200px;
+            right: -200px;
+            background: var(--accent-primary);
+        }
+
+        .bg-glow-2 {
+            bottom: -200px;
+            left: -200px;
+            background: var(--accent-tertiary);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            color: var(--accent-primary);
+            margin-bottom: 2rem;
+        }
+
+        .hero-badge::before {
+            content: '🎙️';
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            max-width: 900px;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card);
+            border-color: var(--accent-primary);
+        }
+
+        /* Section Styles */
+        section {
+            padding: 6rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Purpose Section */
+        #proposito {
+            background: var(--bg-secondary);
+        }
+
+        .purpose-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .purpose-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .purpose-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-4px);
+        }
+
+        .purpose-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .purpose-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .purpose-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Flow Section */
+        .flow-container {
+            position: relative;
+        }
+
+        .flow-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--gradient-1);
+            transform: translateX(-50%);
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .flow-step:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .flow-step:nth-child(even) .flow-content {
+            text-align: right;
+        }
+
+        .flow-number {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 3px solid var(--accent-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+
+        .flow-content {
+            width: calc(50% - 60px);
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+        }
+
+        .flow-content h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .flow-step:nth-child(even) .flow-content h3 {
+            justify-content: flex-end;
+        }
+
+        .flow-content p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .flow-tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--accent-primary);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.75rem;
+        }
+
+        /* Features Section */
+        #funcionalidades {
+            background: var(--bg-secondary);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent-secondary);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            background: rgba(139, 92, 246, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .feature-content h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-content p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 3rem;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .code-block .comment {
+            color: var(--text-muted);
+        }
+
+        .code-block .command {
+            color: var(--success);
+        }
+
+        .code-block .flag {
+            color: var(--accent-primary);
+        }
+
+        /* Roadmap Section */
+        .roadmap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .roadmap-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .roadmap-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .roadmap-card.completed::before {
+            background: var(--success);
+        }
+
+        .roadmap-card.in-progress::before {
+            background: var(--warning);
+        }
+
+        .roadmap-card.planned::before {
+            background: var(--accent-primary);
+        }
+
+        .roadmap-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .roadmap-card.completed .roadmap-status {
+            color: var(--success);
+        }
+
+        .roadmap-card.in-progress .roadmap-status {
+            color: var(--warning);
+        }
+
+        .roadmap-card.planned .roadmap-status {
+            color: var(--accent-primary);
+        }
+
+        .roadmap-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .roadmap-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .roadmap-items {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .roadmap-items li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .roadmap-items li::before {
+            content: '→';
+            color: var(--accent-primary);
+        }
+
+        /* Stats Section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-secondary);
+            padding: 4rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-primary);
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .flow-line {
+                left: 30px;
+            }
+
+            .flow-step,
+            .flow-step:nth-child(even) {
+                flex-direction: column;
+                padding-left: 80px;
+            }
+
+            .flow-number {
+                left: 30px;
+            }
+
+            .flow-content,
+            .flow-step:nth-child(even) .flow-content {
+                width: 100%;
+                text-align: left;
+            }
+
+            .flow-step:nth-child(even) .flow-content h3 {
+                justify-content: flex-start;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <nav>
+        <div class="logo">fromPodtoCast</div>
+        <ul class="nav-links">
+            <li><a href="#proposito">Propósito</a></li>
+            <li><a href="#flujo">Flujo</a></li>
+            <li><a href="#funcionalidades">Funcionalidades</a></li>
+            <li><a href="#roadmap">Roadmap</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <span class="hero-badge">Pipeline Automatizado de Audio</span>
+        <h1>De Podcasts a <span>Datos de Entrenamiento</span> para TTS</h1>
+        <p>Sistema completo para crear datasets de alta calidad para modelos Text-to-Speech, desde la búsqueda automática hasta la verificación con IA.</p>
+        <div class="hero-buttons">
+            <a href="#flujo" class="btn btn-primary">
+                <span>Ver Pipeline</span>
+                <span>→</span>
+            </a>
+            <a href="https://github.com" class="btn btn-secondary">
+                <span>📦</span>
+                <span>Ver en GitHub</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Purpose Section -->
+    <section id="proposito">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Propósito</span>
+                <h2 class="section-title">¿Por qué fromPodtoCast?</h2>
+                <p class="section-desc">Automatizamos la creación de datos de entrenamiento para modelos TTS de última generación.</p>
+            </div>
+            
+            <div class="purpose-grid">
+                <div class="purpose-card">
+                    <div class="purpose-icon">🎯</div>
+                    <h3>Problema</h3>
+                    <p>Crear datasets para entrenar modelos TTS requiere miles de horas de audio segmentado, transcrito y verificado manualmente.</p>
+                </div>
+                <div class="purpose-card">
+                    <div class="purpose-icon">⚡</div>
+                    <h3>Solución</h3>
+                    <p>Pipeline automatizado que busca, descarga, procesa y verifica podcasts, generando datos listos para entrenamiento.</p>
+                </div>
+                <div class="purpose-card">
+                    <div class="purpose-icon">🎙️</div>
+                    <h3>Resultado</h3>
+                    <p>Datasets de alta calidad con múltiples hablantes identificados, transcripciones verificadas y audio normalizado.</p>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Videos Procesables</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">7</div>
+                    <div class="stat-label">Etapas del Pipeline</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">22K</div>
+                    <div class="stat-label">Hz Sample Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">5-15s</div>
+                    <div class="stat-label">Segmentos Óptimos</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Flow Section -->
+    <section id="flujo">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Pipeline</span>
+                <h2 class="section-title">Flujo de Procesamiento</h2>
+                <p class="section-desc">Cada audio pasa por 7 etapas automatizadas para garantizar la máxima calidad.</p>
+            </div>
+
+            <div class="flow-container">
+                <div class="flow-line"></div>
+                
+                <div class="flow-step">
+                    <div class="flow-number">1</div>
+                    <div class="flow-content">
+                        <h3>🔍 Búsqueda Automática</h3>
+                        <p>El sistema busca podcasts en YouTube según categorías configurables: negocios, tecnología, medicina, etc.</p>
+                        <span class="flow-tag">yt-dlp</span>
+                    </div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-number">2</div>
+                    <div class="flow-content">
+                        <h3>📥 Descarga y Conversión</h3>
+                        <p>Descarga automática del audio y conversión a formato WAV optimizado para procesamiento.</p>
+                        <span class="flow-tag">ffmpeg</span>
+                    </div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-number">3</div>
+                    <div class="flow-content">
+                        <h3>👥 Diarización</h3>
+                        <p>Identificación automática de diferentes hablantes usando pyannote.audio con Voice Bank global.</p>
+                        <span class="flow-tag">pyannote</span>
+                    </div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-number">4</div>
+                    <div class="flow-content">
+                        <h3>✂️ Segmentación</h3>
+                        <p>División del audio en clips de 5-15 segundos, respetando pausas naturales y cambios de hablante.</p>
+                        <span class="flow-tag">librosa</span>
+                    </div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-number">5</div>
+                    <div class="flow-content">
+                        <h3>🎚️ Normalización</h3>
+                        <p>Ajuste de sample rate (22050 Hz), niveles LUFS (-23.0) y formato mono PCM 16-bit.</p>
+                        <span class="flow-tag">pyloudnorm</span>
+                    </div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-number">6</div>
+                    <div class="flow-content">
+                        <h3>📝 Transcripción</h3>
+                        <p>Conversión de audio a texto usando Whisper con detección automática de idioma.</p>
+                        <span class="flow-tag">whisper</span>
+                    </div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-number">7</div>
+                    <div class="flow-content">
+                        <h3>✅ Verificación LLM</h3>
+                        <p>Corrección y verificación del texto usando modelos de lenguaje (Ollama/Qwen) para máxima precisión.</p>
+                        <span class="flow-tag">ollama</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="funcionalidades">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Funcionalidades</span>
+                <h2 class="section-title">Características Principales</h2>
+                <p class="section-desc">Todo lo que necesitas para crear datasets de entrenamiento profesionales.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <div class="feature-content">
+                        <h4>Auto Pipeline</h4>
+                        <p>Búsqueda, descarga y procesamiento completamente automático con un solo comando.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <div class="feature-content">
+                        <h4>Retry Automático</h4>
+                        <p>Sistema de reintentos para videos fallidos sin reprocesar los exitosos.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🎭</div>
+                    <div class="feature-content">
+                        <h4>Voice Bank Global</h4>
+                        <p>Identificación consistente de hablantes entre múltiples podcasts.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-content">
+                        <h4>Reportes Visuales</h4>
+                        <p>Gráficas automáticas de procesamiento, eficiencia y estadísticas.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <div class="feature-content">
+                        <h4>Corrección con IA</h4>
+                        <p>Verificación y corrección de transcripciones usando LLMs locales.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📁</div>
+                    <div class="feature-content">
+                        <h4>Metadata Completa</h4>
+                        <p>Formato JSON compatible con Sesame1b, Kyutai TTS y otros modelos.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔧</div>
+                    <div class="feature-content">
+                        <h4>Configurable</h4>
+                        <p>Categorías de búsqueda, duración de segmentos y parámetros ajustables.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">💾</div>
+                    <div class="feature-content">
+                        <h4>Sin Duplicados</h4>
+                        <p>Registro de videos procesados para evitar reprocesamiento innecesario.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-block">
+                <pre><span class="comment"># Búsqueda, descarga y procesamiento automático</span>
+<span class="command">python</span> scripts/auto_pipeline.py <span class="flag">--videos</span> 20
+
+<span class="comment"># Solo ver qué se descargaría (dry-run)</span>
+<span class="command">python</span> scripts/auto_pipeline.py <span class="flag">--dry-run</span> <span class="flag">--videos</span> 10
+
+<span class="comment"># Reprocesar videos fallidos</span>
+<span class="command">python</span> scripts/auto_pipeline.py <span class="flag">--retry-failed</span>
+
+<span class="comment"># Procesar solo una categoría específica</span>
+<span class="command">python</span> scripts/auto_pipeline.py <span class="flag">--category</span> podcasts_medicina <span class="flag">--videos</span> 5</pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section id="roadmap">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Roadmap</span>
+                <h2 class="section-title">Desarrollo Futuro</h2>
+                <p class="section-desc">Próximas funcionalidades y mejoras planificadas.</p>
+            </div>
+
+            <div class="roadmap-grid">
+                <div class="roadmap-card completed">
+                    <div class="roadmap-status">
+                        <span>✓</span> Completado
+                    </div>
+                    <h4>Pipeline Base</h4>
+                    <p>Funcionalidad core del sistema.</p>
+                    <ul class="roadmap-items">
+                        <li>Búsqueda automática en YouTube</li>
+                        <li>Descarga y conversión de audio</li>
+                        <li>Diarización de hablantes</li>
+                        <li>Transcripción con Whisper</li>
+                        <li>Corrección con LLM</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-card completed">
+                    <div class="roadmap-status">
+                        <span>✓</span> Completado
+                    </div>
+                    <h4>Gestión de Errores</h4>
+                    <p>Sistema robusto de recuperación.</p>
+                    <ul class="roadmap-items">
+                        <li>Retry de videos fallidos</li>
+                        <li>Registro de procesados</li>
+                        <li>Filtrado de warnings</li>
+                        <li>Reportes visuales</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-card in-progress">
+                    <div class="roadmap-status">
+                        <span>⟳</span> En Progreso
+                    </div>
+                    <h4>Optimizaciones</h4>
+                    <p>Mejoras de rendimiento y calidad.</p>
+                    <ul class="roadmap-items">
+                        <li>Procesamiento paralelo</li>
+                        <li>Caché de embeddings</li>
+                        <li>Batch processing para LLM</li>
+                        <li>GPU optimization</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-card planned">
+                    <div class="roadmap-status">
+                        <span>◯</span> Planificado
+                    </div>
+                    <h4>Interfaz Web</h4>
+                    <p>Dashboard para monitoreo.</p>
+                    <ul class="roadmap-items">
+                        <li>Panel de control visual</li>
+                        <li>Monitoreo en tiempo real</li>
+                        <li>Gestión de categorías</li>
+                        <li>Estadísticas interactivas</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-card planned">
+                    <div class="roadmap-status">
+                        <span>◯</span> Planificado
+                    </div>
+                    <h4>Más Fuentes</h4>
+                    <p>Expandir fuentes de audio.</p>
+                    <ul class="roadmap-items">
+                        <li>Spotify Podcasts</li>
+                        <li>Apple Podcasts</li>
+                        <li>Archivos locales batch</li>
+                        <li>APIs de podcast</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-card planned">
+                    <div class="roadmap-status">
+                        <span>◯</span> Planificado
+                    </div>
+                    <h4>Calidad Avanzada</h4>
+                    <p>Mejoras en la calidad del output.</p>
+                    <ul class="roadmap-items">
+                        <li>Detección de ruido</li>
+                        <li>Filtrado de música</li>
+                        <li>Emociones en metadata</li>
+                        <li>Quality scoring</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="#proposito">Propósito</a>
+            <a href="#flujo">Pipeline</a>
+            <a href="#funcionalidades">Funcionalidades</a>
+            <a href="#roadmap">Roadmap</a>
+            <a href="https://github.com">GitHub</a>
+        </div>
+        <p class="footer-text">
+            fromPodtoCast © 2025 — Pipeline de Datos para Modelos TTS
+        </p>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Animate on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.purpose-card, .feature-card, .roadmap-card, .flow-step').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
+

@@ -411,7 +411,7 @@ def process_audio(audio_path: str, output_dir: str, config_path: str) -> Tuple[b
             text=True
         )
         
-        # Filtrar warnings conocidos que no son errores reales
+        # Filtrar warnings y barras de progreso que no son errores reales
         stderr_filtered = result.stderr or ""
         warnings_to_ignore = [
             "Lightning automatically upgraded",
@@ -419,6 +419,17 @@ def process_audio(audio_path: str, output_dir: str, config_path: str) -> Tuple[b
             "UserWarning",
             "FutureWarning",
             "DeprecationWarning",
+            "Normalizando:",
+            "Transcribiendo:",
+            "Corrigiendo con LLM:",
+            "it/s]",
+            "it/s",
+            "[00:",
+            "██",
+            "▊",
+            "━",
+            "100%",
+            "%|",
         ]
         
         is_real_error = False
