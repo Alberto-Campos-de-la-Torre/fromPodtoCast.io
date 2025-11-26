@@ -71,7 +71,10 @@ Responde ÚNICAMENTE con un JSON válido con esta estructura exacta:
 IMPORTANTE: 
 - Responde SOLO con el JSON, sin explicaciones adicionales
 - Si el texto está correcto, devuelve el mismo texto con cambios vacío
-- No inventes contenido, solo corrige lo existente"""
+- No inventes contenido, solo corrige lo existente
+- NO uses saltos de línea dentro del texto_corregido
+- Escapa las comillas dentro del texto con \\"
+- Mantén el JSON en UNA SOLA respuesta corta"""
 
     def __init__(
         self,
@@ -273,10 +276,18 @@ Recuerda: Responde SOLO con el JSON estructurado."""
             # Limpiar respuesta
             response = response.strip()
             
+            # Eliminar bloques de código markdown si existen
+            response = re.sub(r'^```json\s*', '', response)
+            response = re.sub(r'^```\s*', '', response)
+            response = re.sub(r'\s*```$', '', response)
+            
             # Intentar extraer JSON si hay texto adicional
             json_match = re.search(r'\{[\s\S]*\}', response)
             if json_match:
                 response = json_match.group(0)
+            
+            # Intentar reparar JSON truncado (string sin cerrar)
+            response = self._repair_truncated_json(response)
             
             # Parsear JSON
             data = json.loads(response)
@@ -299,24 +310,86 @@ Recuerda: Responde SOLO con el JSON estructurado."""
             self.logger.warning(f"Error parseando JSON: {e}")
             
             # Intentar extraer texto corregido de respuesta malformada
-            if '"texto_corregido"' in response:
-                match = re.search(
-                    r'"texto_corregido"\s*:\s*"([^"]*)"',
-                    response
-                )
-                if match:
-                    return {
-                        'success': True,
-                        'texto_corregido': match.group(1),
-                        'cambios': ['extracción_parcial'],
-                        'confianza': 0.5
-                    }
+            extracted = self._extract_text_from_malformed(response, original_text)
+            if extracted:
+                return extracted
             
-            return {'success': False, 'error': str(e)}
+            # Si todo falla, devolver el texto original
+            return {
+                'success': True,
+                'texto_corregido': original_text,
+                'cambios': ['json_parse_error'],
+                'confianza': 0.3
+            }
         
         except Exception as e:
             self.logger.warning(f"Error procesando respuesta: {e}")
-            return {'success': False, 'error': str(e)}
+            return {
+                'success': True,
+                'texto_corregido': original_text,
+                'cambios': ['processing_error'],
+                'confianza': 0.3
+            }
+    
+    def _repair_truncated_json(self, json_str: str) -> str:
+        """Intenta reparar JSON truncado (strings sin cerrar, etc.)."""
+        # Contar comillas
+        quote_count = json_str.count('"') - json_str.count('\\"')
+        
+        # Si hay número impar de comillas, el string está truncado
+        if quote_count % 2 != 0:
+            # Buscar el último string sin cerrar y cerrarlo
+            # Añadir comilla de cierre antes del final
+            json_str = json_str.rstrip()
+            if not json_str.endswith('"'):
+                json_str += '"'
+        
+        # Asegurarse de que termine con }
+        json_str = json_str.rstrip()
+        if not json_str.endswith('}'):
+            # Contar llaves abiertas vs cerradas
+            open_braces = json_str.count('{')
+            close_braces = json_str.count('}')
+            missing = open_braces - close_braces
+            
+            # Cerrar arrays abiertos primero
+            open_brackets = json_str.count('[')
+            close_brackets = json_str.count(']')
+            missing_brackets = open_brackets - close_brackets
+            json_str += ']' * missing_brackets
+            
+            # Luego cerrar objetos
+            json_str += '}' * missing
+        
+        return json_str
+    
+    def _extract_text_from_malformed(self, response: str, original: str) -> Optional[Dict]:
+        """Extrae el texto corregido de una respuesta JSON malformada."""
+        # Método 1: Buscar texto_corregido con regex flexible
+        patterns = [
+            r'"texto_corregido"\s*:\s*"((?:[^"\\]|\\.)*)"',  # Standard
+            r'"texto_corregido"\s*:\s*"(.*?)(?:"|$)',        # Truncado
+            r'texto_corregido["\s:]+([^"]+)',                # Sin comillas
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, response, re.DOTALL)
+            if match:
+                texto = match.group(1)
+                # Limpiar escapes
+                texto = texto.replace('\\"', '"')
+                texto = texto.replace('\\n', ' ')
+                texto = texto.strip()
+                
+                if texto and len(texto) > 5:  # Texto válido
+                    return {
+                        'success': True,
+                        'texto_corregido': texto,
+                        'cambios': ['extracción_parcial'],
+                        'confianza': 0.5
+                    }
+        
+        return None
     
     def correct_batch(
         self,
