@@ -6,6 +6,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
+from tqdm import tqdm
 
 # Agregar src al path
 sys.path.insert(0, str(Path(__file__).parent / 'src'))
@@ -19,6 +20,150 @@ def load_config(config_path: str) -> dict:
         return json.load(f)
 
 
+def load_metadata(metadata_path: str) -> list:
+    """Carga metadata existente desde un archivo JSON."""
+    with open(metadata_path, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
+
+def save_metadata(metadata: list, output_path: str):
+    """Guarda metadata en un archivo JSON."""
+    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+    with open(output_path, 'w', encoding='utf-8') as f:
+        json.dump(metadata, f, indent=2, ensure_ascii=False)
+
+
+def resume_llm_correction(metadata_path: str, config: dict, output_path: str = None):
+    """
+    Retoma solo la fase de corrección con LLM sobre metadata existente.
+    
+    Args:
+        metadata_path: Ruta al archivo de metadata existente
+        config: Configuración del procesador
+        output_path: Ruta de salida (por defecto sobrescribe el original)
+    """
+    from text_corrector_llm import TextCorrectorLLM
+    from text_preprocessor import TextPreprocessor
+    
+    print(f"\n{'='*60}")
+    print("  RETOMANDO FASE 4.6: Corrección con LLM")
+    print(f"{'='*60}\n")
+    
+    # Cargar metadata existente
+    print(f"📂 Cargando metadata desde: {metadata_path}")
+    metadata = load_metadata(metadata_path)
+    print(f"   ✓ Cargados {len(metadata)} segmentos\n")
+    
+    # Inicializar componentes
+    llm_config = config.get('llm_correction', {})
+    text_config = config.get('text_preprocessing', {})
+    
+    if not llm_config.get('enabled', False):
+        print("⚠️  LLM correction está deshabilitado en config.json")
+        print("   Habilítalo con: llm_correction.enabled = true")
+        sys.exit(1)
+    
+    # Inicializar pre-procesador (opcional, para aplicar antes del LLM)
+    text_preprocessor = None
+    if text_config.get('enabled', True):
+        text_preprocessor = TextPreprocessor(
+            glosario_path=text_config.get('glosario_path'),
+            fix_punctuation=text_config.get('fix_punctuation', True),
+            normalize_numbers=text_config.get('normalize_numbers', True),
+            fix_spacing=text_config.get('fix_spacing', True),
+            fix_capitalization=text_config.get('fix_capitalization', True)
+        )
+    
+    # Inicializar corrector LLM
+    try:
+        llm_corrector = TextCorrectorLLM(
+            ollama_host=llm_config.get('ollama_host', 'http://192.168.1.81:11434'),
+            model=llm_config.get('model', 'qwen3:8b'),
+            glosario_path=text_config.get('glosario_path'),
+            timeout=llm_config.get('timeout', 60),
+            max_retries=llm_config.get('max_retries', 3)
+        )
+        min_confidence = llm_config.get('min_confidence', 0.7)
+        print(f"✓ Corrector LLM inicializado ({llm_config.get('model', 'qwen3:8b')})")
+    except Exception as e:
+        print(f"❌ Error inicializando corrector LLM: {e}")
+        sys.exit(1)
+    
+    # Filtrar segmentos que ya tienen corrección LLM (opcional)
+    skip_already_corrected = True
+    segments_to_process = []
+    already_corrected = 0
+    
+    for entry in metadata:
+        if skip_already_corrected and 'llm_correction' in entry:
+            already_corrected += 1
+        else:
+            segments_to_process.append(entry)
+    
+    if already_corrected > 0:
+        print(f"   ⏭️  Saltando {already_corrected} segmentos ya corregidos")
+    
+    print(f"   📝 Procesando {len(segments_to_process)} segmentos\n")
+    
+    # Procesar segmentos
+    llm_corrected_count = 0
+    llm_failed_count = 0
+    preprocess_count = 0
+    
+    for entry in tqdm(segments_to_process, desc="Corrigiendo con LLM"):
+        text = entry.get('text', '')
+        if not text:
+            continue
+        
+        original_text = text
+        
+        # Paso 1: Pre-procesamiento con reglas (si no se hizo antes)
+        if text_preprocessor and 'text_changes' not in entry:
+            corrected, changes = text_preprocessor.preprocess(text)
+            if changes:
+                entry['text_original'] = original_text
+                entry['text_changes'] = changes
+                text = corrected
+                preprocess_count += 1
+        
+        # Paso 2: Corrección con LLM
+        corrected, meta = llm_corrector.correct(text)
+        
+        confianza = meta.get('confianza', 0)
+        if confianza >= min_confidence:
+            entry['text'] = corrected
+            if corrected != text:
+                entry['llm_correction'] = {
+                    'original': entry.get('text_original', original_text),
+                    'cambios': meta.get('cambios', []),
+                    'confianza': confianza
+                }
+                llm_corrected_count += 1
+        elif 'error' in meta:
+            llm_failed_count += 1
+    
+    # Estadísticas
+    llm_stats = llm_corrector.get_stats()
+    
+    print(f"\n{'='*60}")
+    print("  RESULTADOS")
+    print(f"{'='*60}")
+    print(f"  📊 Total segmentos:     {len(metadata)}")
+    print(f"  ✅ Corregidos con LLM:  {llm_corrected_count}")
+    print(f"  📝 Pre-procesados:      {preprocess_count}")
+    print(f"  ⏭️  Ya corregidos:       {already_corrected}")
+    print(f"  ❌ Fallidos:            {llm_failed_count}")
+    print(f"  📈 Confianza promedio:  {llm_stats.get('avg_confidence', 0):.2f}")
+    print(f"{'='*60}\n")
+    
+    # Guardar metadata actualizada
+    output = output_path or metadata_path
+    save_metadata(metadata, output)
+    print(f"✓ Metadata guardada en: {output}")
+    
+    return metadata
+
+
 def main():
     parser = argparse.ArgumentParser(
         description='Procesa podcasts para generar datos de entrenamiento TTS'
@@ -26,7 +171,7 @@ def main():
     parser.add_argument(
         'input',
         type=str,
-        help='Ruta al archivo de audio o directorio con archivos de podcast'
+        help='Ruta al archivo de audio, directorio, o archivo de metadata (con --resume-llm)'
     )
     parser.add_argument(
         '-o', '--output',
@@ -46,6 +191,16 @@ def main():
         default='./data/output/metadata.json',
         help='Ruta donde guardar el archivo JSON de metadata (default: ./data/output/metadata.json)'
     )
+    parser.add_argument(
+        '--resume-llm',
+        action='store_true',
+        help='Retomar solo la fase 4.6 (corrección LLM) sobre metadata existente'
+    )
+    parser.add_argument(
+        '--reprocess-all',
+        action='store_true',
+        help='Con --resume-llm: reprocesar todos los segmentos, incluso los ya corregidos'
+    )
     
     args = parser.parse_args()
     
@@ -59,7 +214,35 @@ def main():
         print("Usando configuración por defecto...")
         config = {}
     
-    # Inicializar procesador
+    # Modo: Retomar solo corrección LLM
+    if args.resume_llm:
+        input_path = Path(args.input)
+        
+        # Determinar archivo de metadata
+        if input_path.suffix == '.json':
+            metadata_path = str(input_path)
+        else:
+            # Buscar metadata del podcast
+            import re
+            podcast_name = input_path.stem if input_path.is_file() else input_path.name
+            podcast_id_clean = re.sub(r'[^a-zA-Z0-9_-]', '_', podcast_name)[:50]
+            metadata_path = f"{args.output}/metadata/{podcast_id_clean}.json"
+        
+        if not Path(metadata_path).exists():
+            print(f"❌ Error: No se encontró metadata en: {metadata_path}")
+            print("   Primero procesa el podcast completo o especifica la ruta al JSON.")
+            sys.exit(1)
+        
+        # Determinar salida
+        output_path = args.metadata if args.metadata != './data/output/metadata.json' else None
+        
+        metadata = resume_llm_correction(metadata_path, config, output_path)
+        
+        print(f"\n✓ Corrección LLM completada!")
+        print(f"  Segmentos procesados: {len(metadata)}")
+        return
+    
+    # Modo normal: Procesar podcast completo
     processor = PodcastProcessor(config)
     
     # Determinar archivos a procesar
@@ -102,4 +285,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
