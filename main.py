@@ -74,17 +74,23 @@ def resume_llm_correction(metadata_path: str, config: dict, output_path: str = N
             fix_capitalization=text_config.get('fix_capitalization', True)
         )
     
-    # Inicializar corrector LLM
+    # Inicializar corrector LLM con optimizaciones
     try:
         llm_corrector = TextCorrectorLLM(
             ollama_host=llm_config.get('ollama_host', 'http://192.168.1.81:11434'),
             model=llm_config.get('model', 'qwen3:8b'),
             glosario_path=text_config.get('glosario_path'),
-            timeout=llm_config.get('timeout', 60),
-            max_retries=llm_config.get('max_retries', 3)
+            timeout=llm_config.get('timeout', 90),
+            max_retries=llm_config.get('max_retries', 2),
+            batch_size=llm_config.get('batch_size', 3),
+            parallel_workers=llm_config.get('parallel_workers', 2),
+            smart_filter=llm_config.get('smart_filter', True)
         )
         min_confidence = llm_config.get('min_confidence', 0.7)
+        batch_size = llm_config.get('batch_size', 3)
+        workers = llm_config.get('parallel_workers', 2)
         print(f"✓ Corrector LLM inicializado ({llm_config.get('model', 'qwen3:8b')})")
+        print(f"  Optimizaciones: batch={batch_size}, workers={workers}, smart_filter=ON")
     except Exception as e:
         print(f"❌ Error inicializando corrector LLM: {e}")
         sys.exit(1)
@@ -93,54 +99,57 @@ def resume_llm_correction(metadata_path: str, config: dict, output_path: str = N
     skip_already_corrected = True
     segments_to_process = []
     already_corrected = 0
+    indices_to_process = []
     
-    for entry in metadata:
+    for i, entry in enumerate(metadata):
         if skip_already_corrected and 'llm_correction' in entry:
             already_corrected += 1
         else:
             segments_to_process.append(entry)
+            indices_to_process.append(i)
     
     if already_corrected > 0:
         print(f"   ⏭️  Saltando {already_corrected} segmentos ya corregidos")
     
     print(f"   📝 Procesando {len(segments_to_process)} segmentos\n")
     
-    # Procesar segmentos
-    llm_corrected_count = 0
-    llm_failed_count = 0
+    # Pre-procesamiento con reglas (si no se hizo antes)
     preprocess_count = 0
+    if text_preprocessor:
+        for entry in segments_to_process:
+            text = entry.get('text', '')
+            if text and 'text_changes' not in entry:
+                corrected, changes = text_preprocessor.preprocess(text)
+                if changes:
+                    entry['text_original'] = text
+                    entry['text_changes'] = changes
+                    entry['text'] = corrected
+                    preprocess_count += 1
     
-    for entry in tqdm(segments_to_process, desc="Corrigiendo con LLM"):
-        text = entry.get('text', '')
-        if not text:
-            continue
+    # Procesar con LLM en paralelo y batches
+    import time
+    start_time = time.time()
+    
+    corrected_entries = llm_corrector.correct_parallel(
+        segments_to_process,
+        text_field='text',
+        min_confidence=min_confidence
+    )
+    
+    elapsed = time.time() - start_time
+    
+    # Aplicar correcciones al metadata original
+    llm_corrected_count = 0
+    llm_skipped_count = 0
+    
+    for j, corrected_entry in enumerate(corrected_entries):
+        orig_idx = indices_to_process[j]
+        metadata[orig_idx] = corrected_entry
         
-        original_text = text
-        
-        # Paso 1: Pre-procesamiento con reglas (si no se hizo antes)
-        if text_preprocessor and 'text_changes' not in entry:
-            corrected, changes = text_preprocessor.preprocess(text)
-            if changes:
-                entry['text_original'] = original_text
-                entry['text_changes'] = changes
-                text = corrected
-                preprocess_count += 1
-        
-        # Paso 2: Corrección con LLM
-        corrected, meta = llm_corrector.correct(text)
-        
-        confianza = meta.get('confianza', 0)
-        if confianza >= min_confidence:
-            entry['text'] = corrected
-            if corrected != text:
-                entry['llm_correction'] = {
-                    'original': entry.get('text_original', original_text),
-                    'cambios': meta.get('cambios', []),
-                    'confianza': confianza
-                }
-                llm_corrected_count += 1
-        elif 'error' in meta:
-            llm_failed_count += 1
+        if 'llm_correction' in corrected_entry:
+            llm_corrected_count += 1
+        elif corrected_entry.get('llm_skipped'):
+            llm_skipped_count += 1
     
     # Estadísticas
     llm_stats = llm_corrector.get_stats()
@@ -150,10 +159,13 @@ def resume_llm_correction(metadata_path: str, config: dict, output_path: str = N
     print(f"{'='*60}")
     print(f"  📊 Total segmentos:     {len(metadata)}")
     print(f"  ✅ Corregidos con LLM:  {llm_corrected_count}")
+    print(f"  ⏭️  Saltados (sin errores): {llm_skipped_count}")
     print(f"  📝 Pre-procesados:      {preprocess_count}")
     print(f"  ⏭️  Ya corregidos:       {already_corrected}")
-    print(f"  ❌ Fallidos:            {llm_failed_count}")
+    print(f"  ❌ Fallidos:            {llm_stats.get('failed', 0)}")
     print(f"  📈 Confianza promedio:  {llm_stats.get('avg_confidence', 0):.2f}")
+    print(f"  ⏱️  Tiempo total:        {elapsed:.1f}s")
+    print(f"  📦 Llamadas batch:      {llm_stats.get('batch_calls', 0)}")
     print(f"{'='*60}\n")
     
     # Guardar metadata actualizada
