@@ -862,7 +862,7 @@
                     <div class="feature-icon">🧠</div>
                     <div class="feature-content">
                         <h4>Corrección con IA</h4>
-                        <p>Verificación y corrección de transcripciones usando LLMs locales.</p>
+                        <p>Verificación y corrección de transcripciones usando LLMs locales (Ollama/Qwen).</p>
                     </div>
                 </div>
 
@@ -871,6 +871,30 @@
                     <div class="feature-content">
                         <h4>Diccionarios de Corrección</h4>
                         <p>Corrección automática de errores comunes de transcripción usando diccionarios personalizables.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📦</div>
+                    <div class="feature-content">
+                        <h4>Batch Processing</h4>
+                        <p>Procesa múltiples textos en una sola llamada al LLM. Reduce 80% las llamadas HTTP.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">💾</div>
+                    <div class="feature-content">
+                        <h4>Caché de Correcciones</h4>
+                        <p>Almacena correcciones en disco para evitar reprocesar textos idénticos entre sesiones.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">✅</div>
+                    <div class="feature-content">
+                        <h4>Validación Pydantic</h4>
+                        <p>Schemas tipados que garantizan estructura correcta en respuestas LLM y metadata.</p>
                     </div>
                 </div>
 
@@ -954,17 +978,17 @@
                     </ul>
                 </div>
 
-                <div class="roadmap-card in-progress">
+                <div class="roadmap-card completed">
                     <div class="roadmap-status">
-                        <span>⟳</span> En Progreso
+                        <span>✓</span> Completado
                     </div>
-                    <h4>Optimizaciones</h4>
-                    <p>Mejoras de rendimiento y calidad.</p>
+                    <h4>Optimizaciones LLM</h4>
+                    <p>Mejoras de rendimiento implementadas.</p>
                     <ul class="roadmap-items">
-                        <li>Procesamiento paralelo</li>
-                        <li>Caché de embeddings</li>
-                        <li>Batch processing para LLM</li>
-                        <li>GPU optimization</li>
+                        <li>Batch processing (5 textos/llamada)</li>
+                        <li>Caché persistente de correcciones</li>
+                        <li>Procesamiento paralelo (ThreadPool)</li>
+                        <li>Validación Pydantic</li>
                     </ul>
                 </div>
 

@@ -1,12 +1,19 @@
 """
 Script principal que orquesta todo el proceso de preparación de datos para TTS.
+
+Optimizado con:
+- Procesamiento por lotes para corrección LLM
+- Caché de correcciones
+- Paralelización opcional
 """
 import os
 import json
 import re
+import time
 from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Optional, Tuple
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 
 from audio_segmenter import AudioSegmenter
@@ -17,6 +24,7 @@ from segment_reviewer import SegmentReviewer
 from voice_bank import VoiceBankManager
 from text_preprocessor import TextPreprocessor
 from text_corrector_llm import TextCorrectorLLM
+from correction_cache import BatchCorrectionCache, get_global_cache
 
 
 class PodcastProcessor:
@@ -113,20 +121,49 @@ class PodcastProcessor:
         else:
             self.text_preprocessor = None
         
-        # Inicializar corrector LLM (opcional)
+        # Inicializar corrector LLM (opcional) con optimizaciones
         llm_config = config.get('llm_correction', {})
         self.llm_corrector = None
+        self.llm_cache = None
+        self.llm_use_batch = llm_config.get('use_batch', True)
+        self.llm_batch_size = llm_config.get('batch_size', 5)
+        self.llm_use_parallel = llm_config.get('use_parallel', False)
+        self.llm_max_workers = llm_config.get('max_workers', 2)
+        
         if llm_config.get('enabled', False):
             try:
+                # Inicializar caché si está habilitado
+                cache_enabled = llm_config.get('enable_cache', True)
+                cache_file = llm_config.get('cache_file')
+                
+                if cache_enabled:
+                    if not cache_file:
+                        cache_file = os.path.join(
+                            config.get('output_dir', './data/output'),
+                            'llm_cache.json'
+                        )
+                    self.llm_cache = BatchCorrectionCache(
+                        cache_file=cache_file,
+                        max_entries=llm_config.get('cache_max_entries', 10000),
+                        expire_days=llm_config.get('cache_expire_days', 30)
+                    )
+                
                 self.llm_corrector = TextCorrectorLLM(
                     ollama_host=llm_config.get('ollama_host', 'http://192.168.1.81:11434'),
                     model=llm_config.get('model', 'qwen3:8b'),
                     glosario_path=text_config.get('glosario_path'),
-                    timeout=llm_config.get('timeout', 60),
-                    max_retries=llm_config.get('max_retries', 3)
+                    timeout=llm_config.get('timeout', 120),
+                    max_retries=llm_config.get('max_retries', 3),
+                    batch_size=self.llm_batch_size,
+                    enable_cache=cache_enabled,
+                    cache_file=cache_file,
+                    max_workers=self.llm_max_workers
                 )
                 self.llm_min_confidence = llm_config.get('min_confidence', 0.7)
-                print(f"✓ Corrector LLM inicializado ({llm_config.get('model', 'qwen3:8b')})")
+                
+                mode = "batch" if self.llm_use_batch else ("paralelo" if self.llm_use_parallel else "secuencial")
+                cache_status = f", caché={'ON' if cache_enabled else 'OFF'}"
+                print(f"✓ Corrector LLM inicializado ({llm_config.get('model', 'qwen3:8b')}, modo={mode}{cache_status})")
             except Exception as e:
                 print(f"⚠️  No se pudo inicializar corrector LLM: {e}")
                 self.llm_corrector = None
@@ -335,20 +372,55 @@ class PodcastProcessor:
         else:
             metrics['text_preprocessing'] = {'enabled': False}
         
-        # Paso 4.6: Corrección con LLM (opcional)
+        # Paso 4.6: Corrección con LLM (opcional) - OPTIMIZADO
         if self.llm_corrector:
+            llm_start_time = time.time()
             print("4.6. Corrigiendo transcripciones con LLM...")
+            
+            # Extraer textos válidos con sus índices
+            valid_indices = []
+            texts_to_correct = []
+            for i, trans in enumerate(transcriptions):
+                if trans.get('text', '').strip():
+                    valid_indices.append(i)
+                    texts_to_correct.append(trans['text'])
+            
             llm_corrected_count = 0
             llm_failed_count = 0
+            cache_hits = 0
             
-            for i, trans in enumerate(tqdm(transcriptions, desc="   Corrigiendo con LLM")):
-                if trans.get('text'):
+            if texts_to_correct:
+                # Usar procesamiento por lotes optimizado
+                if self.llm_use_batch:
+                    print(f"   Modo: batch (tamaño={self.llm_batch_size})")
+                    corrections = self.llm_corrector.correct_batch_optimized(
+                        texts_to_correct,
+                        batch_size=self.llm_batch_size
+                    )
+                elif self.llm_use_parallel:
+                    print(f"   Modo: paralelo (workers={self.llm_max_workers})")
+                    corrections = self.llm_corrector.correct_parallel(
+                        texts_to_correct,
+                        max_workers=self.llm_max_workers
+                    )
+                else:
+                    print("   Modo: secuencial")
+                    corrections = []
+                    for text in tqdm(texts_to_correct, desc="   Corrigiendo"):
+                        corrections.append(self.llm_corrector.correct(text))
+                
+                # Aplicar correcciones
+                for idx, (original_idx, (corrected, meta)) in enumerate(zip(valid_indices, corrections)):
+                    trans = transcriptions[original_idx]
                     original = trans['text']
-                    corrected, meta = self.llm_corrector.correct(original)
+                    
+                    # Verificar si vino del caché
+                    if meta.get('from_cache'):
+                        cache_hits += 1
                     
                     # Solo aplicar si la confianza es suficiente
                     confianza = meta.get('confianza', 0)
-                    if confianza >= self.llm_min_confidence:
+                    if 'error' not in meta and confianza >= self.llm_min_confidence:
                         trans['text'] = corrected
                         if corrected != original:
                             trans['llm_correction'] = {
@@ -360,9 +432,16 @@ class PodcastProcessor:
                     elif 'error' in meta:
                         llm_failed_count += 1
             
+            llm_elapsed = time.time() - llm_start_time
             llm_stats = self.llm_corrector.get_stats()
+            
             print(f"   ✓ Corregidos {llm_corrected_count} textos con LLM")
             print(f"   ✓ Confianza promedio: {llm_stats.get('avg_confidence', 0):.2f}")
+            print(f"   ✓ Tiempo: {llm_elapsed:.1f}s ({len(texts_to_correct)/max(llm_elapsed, 0.1):.1f} textos/s)")
+            if cache_hits > 0:
+                print(f"   ✓ Caché hits: {cache_hits}")
+            if llm_stats.get('batch_calls', 0) > 0:
+                print(f"   ✓ Llamadas batch: {llm_stats.get('batch_calls', 0)}")
             if llm_failed_count > 0:
                 print(f"   ⚠️  Fallaron {llm_failed_count} correcciones\n")
             else:
@@ -374,7 +453,11 @@ class PodcastProcessor:
                 'corrected': llm_corrected_count,
                 'failed': llm_failed_count,
                 'avg_confidence': llm_stats.get('avg_confidence', 0),
-                'total_changes': llm_stats.get('total_changes', 0)
+                'total_changes': llm_stats.get('total_changes', 0),
+                'cache_hits': cache_hits,
+                'batch_calls': llm_stats.get('batch_calls', 0),
+                'processing_time': round(llm_elapsed, 2),
+                'mode': 'batch' if self.llm_use_batch else ('parallel' if self.llm_use_parallel else 'sequential')
             }
         else:
             metrics['llm_correction'] = {'enabled': False}

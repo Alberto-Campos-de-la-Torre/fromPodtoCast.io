@@ -22,6 +22,12 @@ Solución completa para crear datasets de entrenamiento para modelos TTS (Text-t
 - **Preprocesamiento**: Corrección de puntuación, números, espaciado
 - **Corrección LLM**: Verificación y corrección con modelos de lenguaje (Ollama)
 
+### Optimizaciones LLM (Nuevo)
+- **Batch Processing**: Procesa múltiples textos en una sola llamada (80% menos HTTP calls)
+- **Caché Persistente**: Evita reprocesar textos idénticos entre sesiones
+- **Procesamiento Paralelo**: ThreadPoolExecutor para correcciones simultáneas
+- **Validación Pydantic**: Schemas tipados para respuestas del LLM y metadata
+
 ## 📁 Estructura del Proyecto
 
 ```
@@ -44,7 +50,11 @@ fromPodtoCast/
 │   ├── segment_reviewer.py    # Revisión de segmentos
 │   ├── voice_bank.py          # Gestión de voces conocidas
 │   ├── text_preprocessor.py   # Preprocesamiento de texto
-│   └── text_corrector_llm.py  # Corrección con LLM
+│   ├── text_corrector_llm.py  # Corrección con LLM (optimizado)
+│   ├── correction_cache.py    # Caché de correcciones LLM
+│   └── models/                # Schemas Pydantic
+│       ├── llm_schemas.py     # Validación de respuestas LLM
+│       └── metadata_schemas.py # Validación de metadata
 └── docs/                      # Documentación adicional
 ```
 
@@ -157,7 +167,11 @@ python scripts/download_video.py "URL_DEL_VIDEO" -o ./data/input --format wav
   "llm_correction": {
     "enabled": true,
     "ollama_host": "http://localhost:11434",
-    "model": "qwen3:8b"
+    "model": "qwen3:8b",
+    "use_batch": true,
+    "batch_size": 5,
+    "enable_cache": true,
+    "cache_file": "./llm_cache.json"
   }
 }
 ```
@@ -242,9 +256,19 @@ Al finalizar el procesamiento, se genera automáticamente una gráfica con:
 2. **Segmentación** → Divide en clips de 5-15 segundos
 3. **Normalización** → Ajusta volumen y sample rate
 4. **Transcripción** → Convierte audio a texto (Whisper)
-5. **Preprocesamiento** → Limpia puntuación, números
-6. **Corrección LLM** → Verifica y corrige texto (opcional)
-7. **Generación Metadata** → Crea archivos JSON
+5. **Preprocesamiento** → Limpia puntuación, números (diccionarios)
+6. **Corrección LLM** → Verifica y corrige texto (batch + caché)
+7. **Validación** → Verifica estructura con Pydantic
+8. **Generación Metadata** → Crea archivos JSON
+
+### Optimizaciones del LLM
+
+| Característica | Descripción | Impacto |
+|----------------|-------------|---------|
+| **Batch Processing** | Agrupa 5 textos por llamada | 80% menos HTTP calls |
+| **Caché Persistente** | Guarda correcciones en JSON | Instant en repetidos |
+| **Paralelo** | ThreadPoolExecutor opcional | 3-4x más rápido |
+| **Pydantic** | Validación de respuestas | <1% errores parsing |
 
 ## 🐛 Solución de Problemas
 

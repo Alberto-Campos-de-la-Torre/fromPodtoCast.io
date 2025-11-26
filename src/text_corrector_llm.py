@@ -1,13 +1,35 @@
 """
 Módulo para corrección avanzada de transcripciones usando LLM local (Ollama).
 Utiliza el modelo qwen3:8b para correcciones contextuales de alta calidad.
+
+Optimizado con:
+- Procesamiento por lotes (batching)
+- Validación Pydantic
+- Caché de correcciones
+- Paralelización opcional
 """
 import json
 import re
+import hashlib
 import requests
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Any
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import logging
+from datetime import datetime
+
+try:
+    from pydantic import ValidationError
+    from .models.llm_schemas import (
+        LLMCorrectionResponse,
+        LLMCorrectionBatchResponse,
+        LLMCorrectionBatchItem,
+        LLMCorrectionMetadata,
+        CacheEntry
+    )
+    PYDANTIC_AVAILABLE = True
+except ImportError:
+    PYDANTIC_AVAILABLE = False
 
 
 class TextCorrectorLLM:
@@ -19,9 +41,11 @@ class TextCorrectorLLM:
     - Preservación de regionalismos y expresiones coloquiales
     - Puntuación y acentuación correcta
     - Formato de salida estructurado JSON
+    - Procesamiento por lotes optimizado
+    - Caché de correcciones
     """
     
-    # Master prompt para el modelo
+    # Master prompt para el modelo (individual)
     SYSTEM_PROMPT = """Eres un experto corrector de transcripciones de audio en español mexicano.
 
 ## TU TAREA
@@ -73,13 +97,57 @@ IMPORTANTE:
 - Si el texto está correcto, devuelve el mismo texto con cambios vacío
 - No inventes contenido, solo corrige lo existente"""
 
+    # Prompt para batch processing
+    BATCH_SYSTEM_PROMPT = """Eres un experto corrector de transcripciones de audio en español mexicano.
+
+## TU TAREA
+Corregir MÚLTIPLES transcripciones de podcasts manteniendo:
+1. La naturalidad del habla oral
+2. Los regionalismos mexicanos (NO los corrijas)
+3. El estilo y tono del hablante original
+
+## REGLAS DE CORRECCIÓN
+
+### DEBES CORREGIR:
+- Errores ortográficos (tildes, letras)
+- Puntuación faltante o incorrecta (¿?, ¡!, comas, puntos)
+- Mayúsculas incorrectas
+- Marcas y nombres: YouTube, TikTok, Instagram, ChatGPT, etc.
+- Acrónimos: IA, SEO, API, URL, etc.
+
+### NO DEBES CORREGIR:
+- Regionalismos mexicanos: güey, chido, neta, órale, etc.
+- Muletillas naturales
+- Expresiones coloquiales
+
+## GLOSARIO
+{glosario_context}
+
+## FORMATO DE RESPUESTA
+Responde ÚNICAMENTE con un JSON válido con esta estructura:
+{{
+  "correcciones": [
+    {{"id": 0, "texto_corregido": "texto1", "cambios": ["cambio1"], "confianza": 0.95}},
+    {{"id": 1, "texto_corregido": "texto2", "cambios": [], "confianza": 0.98}}
+  ]
+}}
+
+IMPORTANTE:
+- Responde SOLO el JSON, sin texto adicional
+- Mantén el mismo orden de IDs que los textos de entrada
+- Si un texto está correcto, devuélvelo igual con cambios vacío"""
+
     def __init__(
         self,
         ollama_host: str = "http://192.168.1.81:11434",
         model: str = "qwen3:8b",
         glosario_path: Optional[str] = None,
-        timeout: int = 60,
-        max_retries: int = 3
+        timeout: int = 120,
+        max_retries: int = 3,
+        batch_size: int = 5,
+        enable_cache: bool = True,
+        cache_file: Optional[str] = None,
+        max_workers: int = 2
     ):
         """
         Inicializa el corrector LLM.
@@ -90,24 +158,40 @@ IMPORTANTE:
             glosario_path: Ruta al archivo de glosario JSON
             timeout: Timeout para requests en segundos
             max_retries: Número máximo de reintentos
+            batch_size: Tamaño del lote para procesamiento batch
+            enable_cache: Habilitar caché de correcciones
+            cache_file: Ruta al archivo de caché
+            max_workers: Workers para paralelización
         """
         self.ollama_host = ollama_host.rstrip('/')
         self.model = model
         self.timeout = timeout
         self.max_retries = max_retries
+        self.batch_size = batch_size
+        self.max_workers = max_workers
         self.logger = logging.getLogger(__name__)
         
         # Cargar glosario
         self.glosario = self._load_glosario(glosario_path)
         self.glosario_context = self._format_glosario_context()
         
-        # Estadísticas
+        # Cache
+        self.enable_cache = enable_cache
+        self.cache: Dict[str, Dict] = {}
+        self.cache_file = cache_file
+        if enable_cache and cache_file:
+            self._load_cache()
+        
+        # Estadísticas extendidas
         self.stats = {
             'processed': 0,
             'corrected': 0,
             'failed': 0,
             'avg_confidence': 0.0,
-            'total_changes': 0
+            'total_changes': 0,
+            'cache_hits': 0,
+            'batch_calls': 0,
+            'individual_calls': 0
         }
         
         # Verificar conexión
@@ -156,7 +240,6 @@ IMPORTANTE:
                 models = response.json().get('models', [])
                 model_names = [m.get('name', '') for m in models]
                 
-                # Verificar si el modelo está disponible
                 if not any(self.model in name for name in model_names):
                     self.logger.warning(
                         f"⚠️  Modelo {self.model} no encontrado. "
@@ -171,6 +254,59 @@ IMPORTANTE:
         
         return False
     
+    # ==================== CACHE ====================
+    
+    def _get_text_hash(self, text: str) -> str:
+        """Genera un hash único para el texto."""
+        return hashlib.md5(text.strip().lower().encode()).hexdigest()
+    
+    def _load_cache(self) -> None:
+        """Carga el caché desde archivo."""
+        if self.cache_file and Path(self.cache_file).exists():
+            try:
+                with open(self.cache_file, 'r', encoding='utf-8') as f:
+                    self.cache = json.load(f)
+                self.logger.info(f"✓ Caché cargado: {len(self.cache)} entradas")
+            except Exception as e:
+                self.logger.warning(f"Error cargando caché: {e}")
+                self.cache = {}
+    
+    def _save_cache(self) -> None:
+        """Guarda el caché a archivo."""
+        if self.cache_file:
+            try:
+                with open(self.cache_file, 'w', encoding='utf-8') as f:
+                    json.dump(self.cache, f, ensure_ascii=False, indent=2)
+            except Exception as e:
+                self.logger.warning(f"Error guardando caché: {e}")
+    
+    def _get_from_cache(self, text: str) -> Optional[Dict]:
+        """Busca un texto en el caché."""
+        if not self.enable_cache:
+            return None
+        
+        text_hash = self._get_text_hash(text)
+        if text_hash in self.cache:
+            self.stats['cache_hits'] += 1
+            entry = self.cache[text_hash]
+            entry['hits'] = entry.get('hits', 0) + 1
+            return entry.get('response')
+        return None
+    
+    def _add_to_cache(self, text: str, response: Dict) -> None:
+        """Agrega una respuesta al caché."""
+        if not self.enable_cache:
+            return
+        
+        text_hash = self._get_text_hash(text)
+        self.cache[text_hash] = {
+            'response': response,
+            'created_at': datetime.now().isoformat(),
+            'hits': 0
+        }
+    
+    # ==================== CORRECCIÓN INDIVIDUAL ====================
+    
     def correct(self, text: str) -> Tuple[str, Dict]:
         """
         Corrige un texto usando el LLM.
@@ -184,7 +320,13 @@ IMPORTANTE:
         if not text or not text.strip():
             return text, {'error': 'texto_vacío'}
         
+        # Verificar caché primero
+        cached = self._get_from_cache(text)
+        if cached:
+            return cached.get('texto_corregido', text), cached
+        
         self.stats['processed'] += 1
+        self.stats['individual_calls'] += 1
         
         # Construir prompt con contexto del glosario
         system_prompt = self.SYSTEM_PROMPT.format(
@@ -216,12 +358,21 @@ Recuerda: Responde SOLO con el JSON estructurado."""
                             (self.stats['avg_confidence'] * (n - 1) + conf) / n
                         )
                         
-                        return result['texto_corregido'], {
+                        metadata = {
                             'cambios': result.get('cambios', []),
                             'confianza': conf,
                             'modelo': self.model,
                             'intentos': attempt + 1
                         }
+                        
+                        # Guardar en caché
+                        cache_response = {
+                            'texto_corregido': result['texto_corregido'],
+                            **metadata
+                        }
+                        self._add_to_cache(text, cache_response)
+                        
+                        return result['texto_corregido'], metadata
                 
             except Exception as e:
                 self.logger.warning(
@@ -233,7 +384,252 @@ Recuerda: Responde SOLO con el JSON estructurado."""
         self.stats['failed'] += 1
         return text, {'error': 'max_retries_exceeded', 'original': True}
     
-    def _call_ollama(self, system_prompt: str, user_prompt: str) -> Optional[str]:
+    # ==================== PROCESAMIENTO POR LOTES ====================
+    
+    def correct_batch_optimized(
+        self,
+        texts: List[str],
+        batch_size: Optional[int] = None
+    ) -> List[Tuple[str, Dict]]:
+        """
+        Corrige múltiples textos en lotes optimizados.
+        Reduce llamadas HTTP agrupando textos.
+        
+        Args:
+            texts: Lista de textos a corregir
+            batch_size: Tamaño del lote (usa self.batch_size si no se especifica)
+            
+        Returns:
+            Lista de tuplas (texto_corregido, metadata) en el mismo orden
+        """
+        if not texts:
+            return []
+        
+        batch_size = batch_size or self.batch_size
+        results: List[Tuple[str, Dict]] = [None] * len(texts)  # type: ignore
+        uncached_indices: List[int] = []
+        uncached_texts: List[str] = []
+        
+        # Primero verificar caché para todos
+        for i, text in enumerate(texts):
+            if not text or not text.strip():
+                results[i] = (text, {'error': 'texto_vacío'})
+                continue
+            
+            cached = self._get_from_cache(text)
+            if cached:
+                results[i] = (cached.get('texto_corregido', text), cached)
+            else:
+                uncached_indices.append(i)
+                uncached_texts.append(text)
+        
+        # Procesar textos no cacheados en batches
+        if uncached_texts:
+            self.logger.info(
+                f"Procesando {len(uncached_texts)} textos en batches de {batch_size} "
+                f"({self.stats['cache_hits']} desde caché)"
+            )
+            
+            for batch_start in range(0, len(uncached_texts), batch_size):
+                batch_end = min(batch_start + batch_size, len(uncached_texts))
+                batch_texts = uncached_texts[batch_start:batch_end]
+                batch_indices = uncached_indices[batch_start:batch_end]
+                
+                batch_results = self._process_batch(batch_texts)
+                
+                for idx, (original_idx, result) in enumerate(zip(batch_indices, batch_results)):
+                    results[original_idx] = result
+                    
+                    # Guardar en caché si fue exitoso
+                    if 'error' not in result[1]:
+                        self._add_to_cache(
+                            batch_texts[idx],
+                            {'texto_corregido': result[0], **result[1]}
+                        )
+        
+        # Guardar caché al final
+        if self.enable_cache:
+            self._save_cache()
+        
+        return results
+    
+    def _process_batch(self, texts: List[str]) -> List[Tuple[str, Dict]]:
+        """
+        Procesa un batch de textos en una sola llamada al LLM.
+        
+        Args:
+            texts: Lista de textos (máximo batch_size)
+            
+        Returns:
+            Lista de (texto_corregido, metadata)
+        """
+        self.stats['batch_calls'] += 1
+        
+        system_prompt = self.BATCH_SYSTEM_PROMPT.format(
+            glosario_context=self.glosario_context
+        )
+        
+        # Construir prompt con textos numerados
+        texts_formatted = "\n".join(
+            f'{i}. "{text}"' for i, text in enumerate(texts)
+        )
+        
+        user_prompt = f"""Corrige las siguientes {len(texts)} transcripciones:
+
+{texts_formatted}
+
+Responde con el JSON que contiene las correcciones para TODOS los textos."""
+
+        # Intentar con reintentos
+        for attempt in range(self.max_retries):
+            try:
+                response = self._call_ollama(
+                    system_prompt, 
+                    user_prompt,
+                    timeout=self.timeout * 2  # Más tiempo para batches
+                )
+                
+                if response:
+                    batch_result = self._parse_batch_response(response, texts)
+                    
+                    if batch_result:
+                        # Actualizar estadísticas
+                        for _, meta in batch_result:
+                            if 'error' not in meta:
+                                self.stats['processed'] += 1
+                                self.stats['corrected'] += 1
+                                self.stats['total_changes'] += len(meta.get('cambios', []))
+                                
+                                conf = meta.get('confianza', 0.5)
+                                n = self.stats['corrected']
+                                self.stats['avg_confidence'] = (
+                                    (self.stats['avg_confidence'] * (n - 1) + conf) / n
+                                )
+                        
+                        return batch_result
+                        
+            except Exception as e:
+                self.logger.warning(
+                    f"Batch intento {attempt + 1}/{self.max_retries} falló: {e}"
+                )
+                continue
+        
+        # Fallback: procesar individualmente
+        self.logger.warning("Batch falló, procesando individualmente...")
+        return [self.correct(text) for text in texts]
+    
+    def _parse_batch_response(
+        self, 
+        response: str, 
+        original_texts: List[str]
+    ) -> Optional[List[Tuple[str, Dict]]]:
+        """Parsea la respuesta de un batch."""
+        try:
+            response = response.strip()
+            
+            # Extraer JSON
+            json_match = re.search(r'\{[\s\S]*\}', response)
+            if json_match:
+                response = json_match.group(0)
+            
+            data = json.loads(response)
+            
+            # Validar con Pydantic si está disponible
+            if PYDANTIC_AVAILABLE:
+                try:
+                    validated = LLMCorrectionBatchResponse(**data)
+                    correcciones = [
+                        (c.texto_corregido, {
+                            'cambios': c.cambios,
+                            'confianza': c.confianza,
+                            'modelo': self.model,
+                            'batch': True
+                        })
+                        for c in validated.correcciones
+                    ]
+                    return correcciones
+                except ValidationError as e:
+                    self.logger.warning(f"Validación Pydantic falló: {e}")
+            
+            # Fallback sin Pydantic
+            correcciones_raw = data.get('correcciones', [])
+            results = []
+            
+            for i, text in enumerate(original_texts):
+                # Buscar corrección correspondiente
+                corr = next(
+                    (c for c in correcciones_raw if c.get('id') == i),
+                    None
+                )
+                
+                if corr:
+                    results.append((
+                        corr.get('texto_corregido', text),
+                        {
+                            'cambios': corr.get('cambios', []),
+                            'confianza': max(0.0, min(1.0, float(corr.get('confianza', 0.5)))),
+                            'modelo': self.model,
+                            'batch': True
+                        }
+                    ))
+                else:
+                    # No se encontró corrección para este índice
+                    results.append((text, {'error': 'missing_in_batch'}))
+            
+            return results
+            
+        except json.JSONDecodeError as e:
+            self.logger.warning(f"Error parseando batch JSON: {e}")
+            return None
+        except Exception as e:
+            self.logger.warning(f"Error procesando batch: {e}")
+            return None
+    
+    # ==================== PROCESAMIENTO PARALELO ====================
+    
+    def correct_parallel(
+        self,
+        texts: List[str],
+        max_workers: Optional[int] = None
+    ) -> List[Tuple[str, Dict]]:
+        """
+        Corrige textos en paralelo usando ThreadPoolExecutor.
+        Útil cuando el batch processing no es viable.
+        
+        Args:
+            texts: Lista de textos
+            max_workers: Número de workers paralelos
+            
+        Returns:
+            Lista de (texto_corregido, metadata)
+        """
+        max_workers = max_workers or self.max_workers
+        results: List[Optional[Tuple[str, Dict]]] = [None] * len(texts)
+        
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            future_to_idx = {
+                executor.submit(self.correct, text): i
+                for i, text in enumerate(texts)
+            }
+            
+            for future in as_completed(future_to_idx):
+                idx = future_to_idx[future]
+                try:
+                    results[idx] = future.result()
+                except Exception as e:
+                    self.logger.error(f"Error en paralelo idx {idx}: {e}")
+                    results[idx] = (texts[idx], {'error': str(e)})
+        
+        return results  # type: ignore
+    
+    # ==================== UTILIDADES ====================
+    
+    def _call_ollama(
+        self, 
+        system_prompt: str, 
+        user_prompt: str,
+        timeout: Optional[int] = None
+    ) -> Optional[str]:
         """Llama a la API de Ollama."""
         try:
             response = requests.post(
@@ -244,12 +640,12 @@ Recuerda: Responde SOLO con el JSON estructurado."""
                     "system": system_prompt,
                     "stream": False,
                     "options": {
-                        "temperature": 0.3,  # Baja para consistencia
+                        "temperature": 0.3,
                         "top_p": 0.9,
-                        "num_predict": 1024,
+                        "num_predict": 2048,  # Más tokens para batches
                     }
                 },
-                timeout=self.timeout
+                timeout=timeout or self.timeout
             )
             
             if response.status_code == 200:
@@ -270,22 +666,32 @@ Recuerda: Responde SOLO con el JSON estructurado."""
     def _parse_response(self, response: str, original_text: str) -> Dict:
         """Parsea la respuesta JSON del LLM."""
         try:
-            # Limpiar respuesta
             response = response.strip()
             
-            # Intentar extraer JSON si hay texto adicional
+            # Extraer JSON
             json_match = re.search(r'\{[\s\S]*\}', response)
             if json_match:
                 response = json_match.group(0)
             
-            # Parsear JSON
             data = json.loads(response)
             
+            # Validar con Pydantic si está disponible
+            if PYDANTIC_AVAILABLE:
+                try:
+                    validated = LLMCorrectionResponse(**data)
+                    return {
+                        'success': True,
+                        'texto_corregido': validated.texto_corregido,
+                        'cambios': validated.cambios,
+                        'confianza': validated.confianza
+                    }
+                except ValidationError as e:
+                    self.logger.debug(f"Validación Pydantic falló, usando fallback: {e}")
+            
+            # Fallback sin Pydantic
             texto = data.get('texto_corregido', original_text)
             cambios = data.get('cambios', [])
             confianza = float(data.get('confianza', 0.5))
-            
-            # Validar confianza
             confianza = max(0.0, min(1.0, confianza))
             
             return {
@@ -298,7 +704,7 @@ Recuerda: Responde SOLO con el JSON estructurado."""
         except json.JSONDecodeError as e:
             self.logger.warning(f"Error parseando JSON: {e}")
             
-            # Intentar extraer texto corregido de respuesta malformada
+            # Intentar extraer texto de respuesta malformada
             if '"texto_corregido"' in response:
                 match = re.search(
                     r'"texto_corregido"\s*:\s*"([^"]*)"',
@@ -322,47 +728,57 @@ Recuerda: Responde SOLO con el JSON estructurado."""
         self,
         entries: List[Dict],
         text_field: str = 'text',
-        min_confidence: float = 0.7
+        min_confidence: float = 0.7,
+        use_batch_api: bool = True
     ) -> List[Dict]:
         """
-        Corrige un lote de entradas.
+        Corrige un lote de entradas (wrapper de alto nivel).
         
         Args:
             entries: Lista de diccionarios con campo de texto
             text_field: Nombre del campo que contiene el texto
             min_confidence: Confianza mínima para aceptar corrección
+            use_batch_api: Usar API de batch optimizada
             
         Returns:
             Lista de entradas con texto corregido
         """
-        processed = []
+        if not entries:
+            return []
         
-        for i, entry in enumerate(entries):
-            if text_field not in entry:
-                processed.append(entry)
-                continue
-            
-            original = entry[text_field]
-            corrected, metadata = self.correct(original)
-            
+        # Extraer textos
+        texts = [e.get(text_field, '') for e in entries]
+        
+        # Procesar
+        if use_batch_api:
+            corrections = self.correct_batch_optimized(texts)
+        else:
+            corrections = [self.correct(t) for t in texts]
+        
+        # Aplicar correcciones
+        processed = []
+        for entry, (corrected, metadata) in zip(entries, corrections):
             new_entry = entry.copy()
             
-            # Solo aplicar si la confianza es suficiente
-            if metadata.get('confianza', 0) >= min_confidence:
-                new_entry[text_field] = corrected
+            if 'error' not in metadata:
+                confianza = metadata.get('confianza', 0)
                 
-                if corrected != original:
-                    new_entry['text_original'] = original
-                    new_entry['llm_correction'] = metadata
+                if confianza >= min_confidence:
+                    original = entry.get(text_field, '')
+                    new_entry[text_field] = corrected
+                    
+                    if corrected != original:
+                        new_entry['text_original'] = original
+                        new_entry['llm_correction'] = {
+                            'cambios': metadata.get('cambios', []),
+                            'confianza': confianza
+                        }
+                else:
+                    new_entry['llm_low_confidence'] = confianza
             else:
-                # Mantener original pero marcar
-                new_entry['llm_low_confidence'] = metadata.get('confianza', 0)
+                new_entry['llm_error'] = metadata.get('error')
             
             processed.append(new_entry)
-            
-            # Log de progreso
-            if (i + 1) % 10 == 0:
-                self.logger.info(f"Procesados {i + 1}/{len(entries)} segmentos")
         
         return processed
     
@@ -377,7 +793,10 @@ Recuerda: Responde SOLO con el JSON estructurado."""
             'corrected': 0,
             'failed': 0,
             'avg_confidence': 0.0,
-            'total_changes': 0
+            'total_changes': 0,
+            'cache_hits': 0,
+            'batch_calls': 0,
+            'individual_calls': 0
         }
 
 
@@ -386,7 +805,6 @@ def test_connection(host: str = "http://192.168.1.81:11434", model: str = "qwen3
     print(f"🔌 Probando conexión a {host}...")
     
     try:
-        # Verificar servidor
         response = requests.get(f"{host}/api/tags", timeout=10)
         if response.status_code != 200:
             print(f"❌ Error: servidor no responde correctamente")
@@ -396,32 +814,44 @@ def test_connection(host: str = "http://192.168.1.81:11434", model: str = "qwen3
         print(f"✓ Servidor Ollama disponible")
         print(f"  Modelos: {[m.get('name') for m in models]}")
         
-        # Verificar modelo
         model_available = any(model in m.get('name', '') for m in models)
         if not model_available:
             print(f"⚠️  Modelo {model} no encontrado")
-            print(f"   Puedes instalarlo con: ollama pull {model}")
             return False
         
         print(f"✓ Modelo {model} disponible")
         
-        # Prueba rápida
-        print(f"\n📝 Probando corrección...")
-        corrector = TextCorrectorLLM(host, model)
+        # Prueba de corrección individual
+        print(f"\n📝 Probando corrección individual...")
+        corrector = TextCorrectorLLM(host, model, enable_cache=False)
         
-        test_text = "que es el marketing digital y por que es importante para las empresas"
+        test_text = "que es el marketing digital y por que es importante"
         corrected, meta = corrector.correct(test_text)
         
         print(f"  Original:  {test_text}")
         print(f"  Corregido: {corrected}")
         print(f"  Confianza: {meta.get('confianza', 'N/A')}")
-        print(f"  Cambios:   {meta.get('cambios', [])}")
+        
+        # Prueba de batch
+        print(f"\n📦 Probando corrección en batch...")
+        test_texts = [
+            "como se hace un podcast exitoso",
+            "por que la ia esta cambiando todo",
+            "donde puedo aprender mas sobre seo"
+        ]
+        
+        batch_results = corrector.correct_batch_optimized(test_texts)
+        for i, (original, (corrected, meta)) in enumerate(zip(test_texts, batch_results)):
+            print(f"\n  [{i}] Original:  {original}")
+            print(f"      Corregido: {corrected}")
+            print(f"      Confianza: {meta.get('confianza', 'N/A')}")
+        
+        print(f"\n📊 Estadísticas: {corrector.get_stats()}")
         
         return True
         
     except requests.exceptions.ConnectionError:
         print(f"❌ No se puede conectar a {host}")
-        print("   Verifica que Ollama esté corriendo en esa dirección")
         return False
     except Exception as e:
         print(f"❌ Error: {e}")
@@ -431,18 +861,16 @@ def test_connection(host: str = "http://192.168.1.81:11434", model: str = "qwen3
 if __name__ == '__main__':
     import sys
     
-    # Configurar logging
     logging.basicConfig(
         level=logging.INFO,
         format='%(asctime)s - %(levelname)s - %(message)s'
     )
     
-    # Argumentos opcionales
     host = sys.argv[1] if len(sys.argv) > 1 else "http://192.168.1.81:11434"
     model = sys.argv[2] if len(sys.argv) > 2 else "qwen3:8b"
     
     print("=" * 60)
-    print("  TEST: Text Corrector LLM (Ollama)")
+    print("  TEST: Text Corrector LLM (Ollama) - Optimizado")
     print("=" * 60)
     print()
     
@@ -451,4 +879,3 @@ if __name__ == '__main__':
     else:
         print("\n❌ Algunas pruebas fallaron")
         sys.exit(1)
-
