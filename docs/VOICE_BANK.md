@@ -47,3 +47,4 @@ En el log por podcast (`data/output/logs/<id>.log`) se registran:
 - El método simple de diarización (fallback sin pyannote) no genera embeddings; en ese caso el banco tampoco se usa.
 
 
+

@@ -16,6 +16,7 @@ from speaker_diarizer import SpeakerDiarizer
 from segment_reviewer import SegmentReviewer
 from voice_bank import VoiceBankManager
 from text_preprocessor import TextPreprocessor
+from text_corrector_llm import TextCorrectorLLM
 
 
 class PodcastProcessor:
@@ -111,6 +112,24 @@ class PodcastProcessor:
             )
         else:
             self.text_preprocessor = None
+        
+        # Inicializar corrector LLM (opcional)
+        llm_config = config.get('llm_correction', {})
+        self.llm_corrector = None
+        if llm_config.get('enabled', False):
+            try:
+                self.llm_corrector = TextCorrectorLLM(
+                    ollama_host=llm_config.get('ollama_host', 'http://192.168.1.81:11434'),
+                    model=llm_config.get('model', 'qwen3:8b'),
+                    glosario_path=text_config.get('glosario_path'),
+                    timeout=llm_config.get('timeout', 60),
+                    max_retries=llm_config.get('max_retries', 3)
+                )
+                self.llm_min_confidence = llm_config.get('min_confidence', 0.7)
+                print(f"✓ Corrector LLM inicializado ({llm_config.get('model', 'qwen3:8b')})")
+            except Exception as e:
+                print(f"⚠️  No se pudo inicializar corrector LLM: {e}")
+                self.llm_corrector = None
     
     def process_podcast(self, input_audio_path: str, output_dir: str, 
                        podcast_id: Optional[str] = None) -> List[Dict]:
@@ -306,6 +325,50 @@ class PodcastProcessor:
         else:
             metrics['text_preprocessing'] = {'enabled': False}
         
+        # Paso 4.6: Corrección con LLM (opcional)
+        if self.llm_corrector:
+            print("4.6. Corrigiendo transcripciones con LLM...")
+            llm_corrected_count = 0
+            llm_failed_count = 0
+            
+            for i, trans in enumerate(tqdm(transcriptions, desc="   Corrigiendo con LLM")):
+                if trans.get('text'):
+                    original = trans['text']
+                    corrected, meta = self.llm_corrector.correct(original)
+                    
+                    # Solo aplicar si la confianza es suficiente
+                    confianza = meta.get('confianza', 0)
+                    if confianza >= self.llm_min_confidence:
+                        trans['text'] = corrected
+                        if corrected != original:
+                            trans['llm_correction'] = {
+                                'original': original if 'text_original' not in trans else trans.get('text_original'),
+                                'cambios': meta.get('cambios', []),
+                                'confianza': confianza
+                            }
+                            llm_corrected_count += 1
+                    elif 'error' in meta:
+                        llm_failed_count += 1
+            
+            llm_stats = self.llm_corrector.get_stats()
+            print(f"   ✓ Corregidos {llm_corrected_count} textos con LLM")
+            print(f"   ✓ Confianza promedio: {llm_stats.get('avg_confidence', 0):.2f}")
+            if llm_failed_count > 0:
+                print(f"   ⚠️  Fallaron {llm_failed_count} correcciones\n")
+            else:
+                print()
+            
+            metrics['llm_correction'] = {
+                'enabled': True,
+                'model': self.llm_corrector.model,
+                'corrected': llm_corrected_count,
+                'failed': llm_failed_count,
+                'avg_confidence': llm_stats.get('avg_confidence', 0),
+                'total_changes': llm_stats.get('total_changes', 0)
+            }
+        else:
+            metrics['llm_correction'] = {'enabled': False}
+        
         # Paso 5: Generar metadatos finales
         print("5. Generando metadatos finales...")
         metadata = []
@@ -464,6 +527,9 @@ class PodcastProcessor:
         
         with open(metrics_path, 'w', encoding='utf-8') as f:
             json.dump(metrics, f, indent=2, ensure_ascii=False)
+        
+        print(f"   ✓ Log de métricas guardado en: {metrics_path}")
+        return metrics_path
     
     def _cleanup_segments(self, metadata: List[Dict], normalized_dir: str) -> Tuple[List[Dict], Dict]:
         """
@@ -551,7 +617,4 @@ class PodcastProcessor:
         
         # Fallback
         return "SPK_00"
-        
-        print(f"   ✓ Log de métricas guardado en: {metrics_path}")
-        return metrics_path
 

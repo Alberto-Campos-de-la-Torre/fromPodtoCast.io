@@ -121,42 +121,79 @@ class TextPreprocessor:
 
 ---
 
-### **Fase 2: Corrección con LLM** (Opcional)
+### **Fase 2: Corrección con LLM** ✅ IMPLEMENTADA
 
 **Archivo:** `src/text_corrector_llm.py`
 
-```python
-class LLMTextCorrector:
-    """Corrección usando modelo de lenguaje local o API."""
-    
-    def __init__(self, model: str = "local", glosario_path: str = None):
-        self.model = model  # "local" (Ollama), "openai", "anthropic"
-        self.glosario = self._load_glosario(glosario_path)
-    
-    def correct(self, text: str, audio_context: dict) -> str:
-        prompt = f"""Corrige errores de transcripción en español.
-        
-        Texto original: {text}
-        Contexto: Podcast sobre {audio_context.get('topic', 'desconocido')}
-        
-        Glosario de términos correctos:
-        {self.glosario}
-        
-        Reglas:
-        1. Mantener el significado original
-        2. Corregir solo errores obvios
-        3. Respetar regionalismos mexicanos
-        4. NO parafrasear
-        
-        Texto corregido:"""
-        
-        return self._call_llm(prompt)
+**Configuración en `config.json`:**
+```json
+{
+  "llm_correction": {
+    "enabled": true,
+    "ollama_host": "http://192.168.1.81:11434",
+    "model": "qwen3:8b",
+    "min_confidence": 0.7,
+    "timeout": 60,
+    "max_retries": 3
+  }
+}
 ```
 
-**Opciones de modelo:**
-- **Local**: Ollama con Llama3/Mistral (sin costo)
-- **API**: OpenAI GPT-4o-mini / Claude Haiku (bajo costo)
-- **Híbrido**: Local para bulk, API para casos difíciles
+```python
+class TextCorrectorLLM:
+    """
+    Corrector de texto usando LLM local via Ollama.
+    
+    Características:
+    - Master prompt especializado en español mexicano
+    - Glosario de términos como contexto del prompt
+    - Respuesta estructurada en JSON
+    - Preservación de regionalismos mexicanos
+    - Reintentos automáticos ante fallos
+    """
+    
+    SYSTEM_PROMPT = """Eres un experto corrector de transcripciones de audio en español mexicano.
+    
+    ## REGLAS DE CORRECCIÓN
+    
+    ### DEBES CORREGIR:
+    - Errores ortográficos (tildes, letras)
+    - Puntuación faltante o incorrecta (¿?, ¡!, comas, puntos)
+    - Mayúsculas incorrectas
+    - Marcas y nombres: YouTube, TikTok, ChatGPT, etc.
+    
+    ### NO DEBES CORREGIR (MANTENER TAL CUAL):
+    - Regionalismos mexicanos: güey, chido, neta, órale, etc.
+    - Muletillas naturales
+    - Expresiones coloquiales
+    
+    ## FORMATO DE RESPUESTA
+    Responde ÚNICAMENTE con JSON:
+    {
+      "texto_corregido": "...",
+      "cambios": ["cambio1", "cambio2"],
+      "confianza": 0.95
+    }
+    """
+    
+    def __init__(self, ollama_host: str, model: str, glosario_path: str):
+        self.ollama_host = ollama_host
+        self.model = model
+        self.glosario = self._load_glosario(glosario_path)
+    
+    def correct(self, text: str) -> Tuple[str, Dict]:
+        """Corrige texto usando LLM, retorna (texto_corregido, metadata)"""
+        ...
+```
+
+**Modelo utilizado:** Qwen3 8B via Ollama (local, sin costo)
+
+**Flujo de corrección:**
+1. Carga glosario como contexto para el prompt
+2. Envía texto al LLM con master prompt especializado
+3. Parsea respuesta JSON estructurada
+4. Valida confianza mínima (0.7 por defecto)
+5. Retorna texto corregido + metadata de cambios
 
 ---
 

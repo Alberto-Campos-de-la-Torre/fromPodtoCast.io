@@ -583,3 +583,4 @@ if __name__ == '__main__':
     
     print("Estadísticas:", preprocessor.get_stats())
 
+
