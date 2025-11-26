@@ -113,7 +113,7 @@ class PodcastProcessor:
         else:
             self.text_preprocessor = None
         
-        # Inicializar corrector LLM (opcional) con optimizaciones
+        # Inicializar corrector LLM (opcional)
         llm_config = config.get('llm_correction', {})
         self.llm_corrector = None
         if llm_config.get('enabled', False):
@@ -122,17 +122,11 @@ class PodcastProcessor:
                     ollama_host=llm_config.get('ollama_host', 'http://192.168.1.81:11434'),
                     model=llm_config.get('model', 'qwen3:8b'),
                     glosario_path=text_config.get('glosario_path'),
-                    timeout=llm_config.get('timeout', 90),
-                    max_retries=llm_config.get('max_retries', 2),
-                    batch_size=llm_config.get('batch_size', 3),
-                    parallel_workers=llm_config.get('parallel_workers', 2),
-                    smart_filter=llm_config.get('smart_filter', True)
+                    timeout=llm_config.get('timeout', 60),
+                    max_retries=llm_config.get('max_retries', 3)
                 )
                 self.llm_min_confidence = llm_config.get('min_confidence', 0.7)
-                batch_size = llm_config.get('batch_size', 3)
-                workers = llm_config.get('parallel_workers', 2)
                 print(f"✓ Corrector LLM inicializado ({llm_config.get('model', 'qwen3:8b')})")
-                print(f"  Optimizaciones: batch={batch_size}, workers={workers}, smart_filter=ON")
             except Exception as e:
                 print(f"⚠️  No se pudo inicializar corrector LLM: {e}")
                 self.llm_corrector = None
@@ -250,7 +244,7 @@ class PodcastProcessor:
             metrics['segments']['raw'] = len(segments)
             metrics['segments']['method'] = 'silence'
         
-        # Paso 3: Normalizar segmentos
+        # Paso 3: Normalizar segmentos (y eliminar segmentos temporales)
         print("3. Normalizando segmentos...")
         normalized_segments = []
         for segment_tuple in tqdm(segments, desc="   Normalizando"):
@@ -266,8 +260,18 @@ class PodcastProcessor:
             try:
                 self.normalizer.normalize_audio(segment_path, normalized_path)
                 normalized_segments.append((normalized_path, start, end, speaker))
+                # Eliminar segmento temporal después de normalizar
+                if os.path.exists(segment_path) and segment_path != normalized_path:
+                    os.remove(segment_path)
             except Exception as e:
                 print(f"   ✗ Error normalizando {segment_name}: {e}")
+        
+        # Limpiar directorio de segmentos temporales si está vacío
+        try:
+            if os.path.exists(segments_dir) and not os.listdir(segments_dir):
+                os.rmdir(segments_dir)
+        except Exception:
+            pass
         
         print(f"   ✓ Normalizados {len(normalized_segments)} segmentos\n")
         metrics['segments']['normalized'] = len(normalized_segments)
@@ -331,65 +335,46 @@ class PodcastProcessor:
         else:
             metrics['text_preprocessing'] = {'enabled': False}
         
-        # Paso 4.6: Corrección con LLM (opcional) - OPTIMIZADO con batch y paralelo
+        # Paso 4.6: Corrección con LLM (opcional)
         if self.llm_corrector:
-            print("4.6. Corrigiendo transcripciones con LLM (optimizado)...")
-            
-            # Usar método paralelo con batches
-            import time
-            start_time = time.time()
-            
-            def progress_callback(processed, total):
-                pass  # tqdm maneja el progreso
-            
-            # Crear lista de entradas para el corrector
-            entries_for_llm = []
-            for trans in transcriptions:
-                entry = {'text': trans.get('text', '')}
-                if 'text_original' in trans:
-                    entry['text_original'] = trans['text_original']
-                entries_for_llm.append(entry)
-            
-            # Procesar en paralelo con batches
-            with tqdm(total=len(entries_for_llm), desc="   Corrigiendo con LLM") as pbar:
-                corrected_entries = self.llm_corrector.correct_parallel(
-                    entries_for_llm,
-                    text_field='text',
-                    min_confidence=self.llm_min_confidence,
-                    progress_callback=lambda p, t: pbar.update(self.llm_corrector.batch_size)
-                )
-                pbar.update(pbar.total - pbar.n)  # Completar barra
-            
-            # Aplicar correcciones a transcriptions
+            print("4.6. Corrigiendo transcripciones con LLM...")
             llm_corrected_count = 0
-            llm_skipped_count = 0
+            llm_failed_count = 0
             
-            for i, corrected_entry in enumerate(corrected_entries):
-                if i < len(transcriptions):
-                    if 'llm_correction' in corrected_entry:
-                        transcriptions[i]['text'] = corrected_entry['text']
-                        transcriptions[i]['llm_correction'] = corrected_entry['llm_correction']
-                        llm_corrected_count += 1
-                    elif corrected_entry.get('llm_skipped'):
-                        llm_skipped_count += 1
+            for i, trans in enumerate(tqdm(transcriptions, desc="   Corrigiendo con LLM")):
+                if trans.get('text'):
+                    original = trans['text']
+                    corrected, meta = self.llm_corrector.correct(original)
+                    
+                    # Solo aplicar si la confianza es suficiente
+                    confianza = meta.get('confianza', 0)
+                    if confianza >= self.llm_min_confidence:
+                        trans['text'] = corrected
+                        if corrected != original:
+                            trans['llm_correction'] = {
+                                'original': original if 'text_original' not in trans else trans.get('text_original'),
+                                'cambios': meta.get('cambios', []),
+                                'confianza': confianza
+                            }
+                            llm_corrected_count += 1
+                    elif 'error' in meta:
+                        llm_failed_count += 1
             
-            elapsed = time.time() - start_time
             llm_stats = self.llm_corrector.get_stats()
-            
             print(f"   ✓ Corregidos {llm_corrected_count} textos con LLM")
-            print(f"   ⏭️  Saltados {llm_skipped_count} (sin errores detectados)")
-            print(f"   ⏱️  Tiempo: {elapsed:.1f}s (batch_calls: {llm_stats.get('batch_calls', 0)})")
-            print(f"   📈 Confianza promedio: {llm_stats.get('avg_confidence', 0):.2f}\n")
+            print(f"   ✓ Confianza promedio: {llm_stats.get('avg_confidence', 0):.2f}")
+            if llm_failed_count > 0:
+                print(f"   ⚠️  Fallaron {llm_failed_count} correcciones\n")
+            else:
+                print()
             
             metrics['llm_correction'] = {
                 'enabled': True,
                 'model': self.llm_corrector.model,
                 'corrected': llm_corrected_count,
-                'skipped': llm_skipped_count,
-                'failed': llm_stats.get('failed', 0),
-                'batch_calls': llm_stats.get('batch_calls', 0),
-                'time_seconds': round(elapsed, 1),
-                'avg_confidence': llm_stats.get('avg_confidence', 0)
+                'failed': llm_failed_count,
+                'avg_confidence': llm_stats.get('avg_confidence', 0),
+                'total_changes': llm_stats.get('total_changes', 0)
             }
         else:
             metrics['llm_correction'] = {'enabled': False}

@@ -1,0 +1,76 @@
+{
+  "search_settings": {
+    "max_results_per_query": 5,
+    "min_duration_minutes": 10,
+    "max_duration_minutes": 180,
+    "preferred_languages": ["es", "en"],
+    "sort_by": "relevance",
+    "upload_date_filter": "year"
+  },
+  "categories": [
+    {
+      "name": "podcasts_negocios",
+      "enabled": true,
+      "queries": [
+        "podcast emprendimiento español",
+        "podcast negocios latinoamerica",
+        "podcast marketing digital español",
+        "podcast startups español",
+        "podcast finanzas personales español"
+      ],
+      "exclude_keywords": ["shorts", "reacción", "meme"]
+    },
+    {
+      "name": "podcasts_tecnologia",
+      "enabled": true,
+      "queries": [
+        "podcast tecnología español",
+        "podcast inteligencia artificial español",
+        "podcast programación español",
+        "podcast ciberseguridad español"
+      ],
+      "exclude_keywords": ["tutorial", "curso"]
+    },
+    {
+      "name": "entrevistas",
+      "enabled": true,
+      "queries": [
+        "entrevista podcast español largo",
+        "charla emprendedores español",
+        "conversaciones profundas podcast"
+      ],
+      "exclude_keywords": ["corto", "resumen", "clip"]
+    },
+    {
+      "name": "podcasts_educacion",
+      "enabled": false,
+      "queries": [
+        "podcast educación español",
+        "podcast ciencia español",
+        "podcast historia español"
+      ],
+      "exclude_keywords": []
+    },
+    {
+      "name": "podcasts_medicina",
+      "enabled": true,
+      "queries": [
+        "podcast medicina español",
+        "podcast salud español",
+        "podcast médico español entrevista",
+        "podcast nutrición español",
+        "podcast psicología español",
+        "podcast neurociencia español",
+        "podcast doctores español"
+      ],
+      "exclude_keywords": ["remedios caseros", "milagro", "cura", "shorts"]
+    }
+  ],
+  "channels_whitelist": [
+    
+  ],
+  "channels_blacklist": [
+    
+  ]
+}
+

@@ -821,9 +821,8 @@ def download_batch(urls: list, output_dir: str, **kwargs) -> list:
 
 
 def main():
-    # Obtener ruta absoluta del directorio del proyecto
-    project_root = Path(__file__).parent.parent
-    default_output = str(project_root / 'data' / 'input')
+    # Ruta base para datos de voz
+    default_output = '/media/ttech-main/42A4266DA426639F/Base de Datos - Voz/input'
     
     parser = argparse.ArgumentParser(
         description='Descarga videos desde URLs y extrae el audio para procesamiento'

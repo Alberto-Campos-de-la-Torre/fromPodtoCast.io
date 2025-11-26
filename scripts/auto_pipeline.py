@@ -1,0 +1,1170 @@
+#!/usr/bin/env python3
+"""
+Auto Pipeline - Sistema automático de búsqueda, descarga y procesamiento de podcasts.
+
+Flujo:
+1. Busca videos en YouTube según categorías configuradas
+2. Filtra por duración, idioma y criterios de exclusión
+3. Descarga el audio de videos no procesados anteriormente
+4. Procesa cada audio con el pipeline completo (diarización, transcripción, etc.)
+5. Registra videos procesados para evitar duplicados
+
+Uso:
+    python scripts/auto_pipeline.py                    # Ejecutar con config por defecto
+    python scripts/auto_pipeline.py --dry-run          # Solo mostrar qué se descargaría
+    python scripts/auto_pipeline.py --category podcasts_negocios  # Solo una categoría
+    python scripts/auto_pipeline.py --limit 3          # Máximo 3 videos por categoría
+"""
+import argparse
+import json
+import os
+import sys
+import subprocess
+import hashlib
+import re
+from pathlib import Path
+from datetime import datetime, timedelta
+from typing import List, Dict, Optional, Tuple
+import time
+
+# Para gráficas
+try:
+    import matplotlib.pyplot as plt
+    import matplotlib.patches as mpatches
+    MATPLOTLIB_AVAILABLE = True
+except ImportError:
+    MATPLOTLIB_AVAILABLE = False
+
+# Configuración de paths
+PROJECT_ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(PROJECT_ROOT / 'src'))
+
+# Ruta base para datos
+DEFAULT_DATA_PATH = '/media/ttech-main/42A4266DA426639F/Base de Datos - Voz'
+
+# Colores ANSI
+class Colors:
+    RESET = '\033[0m'
+    RED = '\033[91m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    BLUE = '\033[94m'
+    MAGENTA = '\033[95m'
+    CYAN = '\033[96m'
+    BOLD = '\033[1m'
+
+
+def log(message: str, level: str = "INFO"):
+    """Log con timestamp y colores."""
+    timestamp = datetime.now().strftime("%H:%M:%S")
+    icons = {
+        "INFO": ("ℹ️ ", Colors.CYAN),
+        "SUCCESS": ("✅", Colors.GREEN),
+        "WARNING": ("⚠️ ", Colors.YELLOW),
+        "ERROR": ("❌", Colors.RED),
+        "SEARCH": ("🔍", Colors.BLUE),
+        "DOWNLOAD": ("📥", Colors.MAGENTA),
+        "PROCESS": ("⚙️ ", Colors.CYAN),
+        "SKIP": ("⏭️ ", Colors.YELLOW),
+    }
+    icon, color = icons.get(level, ("", ""))
+    print(f"{color}[{timestamp}] {icon} {message}{Colors.RESET}")
+
+
+def load_config(config_path: str) -> Dict:
+    """Carga configuración de búsqueda."""
+    with open(config_path, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
+
+def load_processed_registry(registry_path: str) -> Dict:
+    """Carga registro de videos ya procesados."""
+    if os.path.exists(registry_path):
+        with open(registry_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    return {"processed": {}, "failed": {}, "skipped": {}}
+
+
+def save_processed_registry(registry: Dict, registry_path: str):
+    """Guarda registro de videos procesados."""
+    Path(registry_path).parent.mkdir(parents=True, exist_ok=True)
+    with open(registry_path, 'w', encoding='utf-8') as f:
+        json.dump(registry, f, indent=2, ensure_ascii=False)
+
+
+def get_video_id(url: str) -> Optional[str]:
+    """Extrae el ID del video de una URL de YouTube."""
+    patterns = [
+        r'(?:v=|/v/|youtu\.be/)([a-zA-Z0-9_-]{11})',
+        r'(?:embed/)([a-zA-Z0-9_-]{11})',
+        r'^([a-zA-Z0-9_-]{11})$'
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, url)
+        if match:
+            return match.group(1)
+    return None
+
+
+def search_youtube(query: str, max_results: int = 5, 
+                   min_duration: int = 600, max_duration: int = 10800,
+                   upload_date: str = None) -> List[Dict]:
+    """
+    Busca videos en YouTube usando yt-dlp.
+    
+    Args:
+        query: Término de búsqueda
+        max_results: Número máximo de resultados
+        min_duration: Duración mínima en segundos
+        max_duration: Duración máxima en segundos
+        upload_date: Filtro de fecha (today, week, month, year)
+    
+    Returns:
+        Lista de diccionarios con información de videos
+    """
+    log(f"Buscando: '{query}'", "SEARCH")
+    
+    # Construir comando yt-dlp para búsqueda
+    cmd = [
+        'yt-dlp',
+        f'ytsearch{max_results * 3}:{query}',  # Buscar más para filtrar después
+        '--dump-json',
+        '--flat-playlist',
+        '--no-warnings',
+        '--ignore-errors',
+    ]
+    
+    try:
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=120
+        )
+        
+        videos = []
+        for line in result.stdout.strip().split('\n'):
+            if not line:
+                continue
+            try:
+                video = json.loads(line)
+                videos.append(video)
+            except json.JSONDecodeError:
+                continue
+        
+        # Ahora obtener información detallada de cada video
+        detailed_videos = []
+        for video in videos[:max_results * 2]:  # Limitar para no hacer demasiadas requests
+            video_id = video.get('id') or video.get('url', '').split('=')[-1]
+            if not video_id:
+                continue
+            
+            # Obtener duración real
+            try:
+                detail_cmd = [
+                    'yt-dlp',
+                    f'https://www.youtube.com/watch?v={video_id}',
+                    '--dump-json',
+                    '--no-download',
+                    '--no-warnings',
+                ]
+                detail_result = subprocess.run(
+                    detail_cmd,
+                    capture_output=True,
+                    text=True,
+                    timeout=30
+                )
+                if detail_result.returncode == 0:
+                    detail = json.loads(detail_result.stdout)
+                    duration = detail.get('duration', 0)
+                    
+                    # Filtrar por duración
+                    if duration and min_duration <= duration <= max_duration:
+                        detailed_videos.append({
+                            'id': video_id,
+                            'url': f'https://www.youtube.com/watch?v={video_id}',
+                            'title': detail.get('title', 'Sin título'),
+                            'duration': duration,
+                            'duration_string': detail.get('duration_string', ''),
+                            'channel': detail.get('channel', 'Desconocido'),
+                            'upload_date': detail.get('upload_date', ''),
+                            'view_count': detail.get('view_count', 0),
+                            'description': detail.get('description', '')[:500],
+                        })
+                        
+                        if len(detailed_videos) >= max_results:
+                            break
+            except (subprocess.TimeoutExpired, json.JSONDecodeError):
+                continue
+        
+        log(f"   Encontrados {len(detailed_videos)} videos válidos", "INFO")
+        return detailed_videos
+        
+    except subprocess.TimeoutExpired:
+        log(f"   Timeout buscando '{query}'", "WARNING")
+        return []
+    except Exception as e:
+        log(f"   Error buscando: {e}", "ERROR")
+        return []
+
+
+def should_exclude(video: Dict, exclude_keywords: List[str], 
+                   blacklist_channels: List[str]) -> Tuple[bool, str]:
+    """
+    Verifica si un video debe ser excluido.
+    
+    Returns:
+        Tuple (excluir, razón)
+    """
+    title = video.get('title', '').lower()
+    channel = video.get('channel', '').lower()
+    
+    # Verificar keywords de exclusión
+    for keyword in exclude_keywords:
+        if keyword.lower() in title:
+            return True, f"Keyword excluido: '{keyword}'"
+    
+    # Verificar canales en blacklist
+    for blocked in blacklist_channels:
+        if blocked.lower() in channel:
+            return True, f"Canal en blacklist: '{blocked}'"
+    
+    return False, ""
+
+
+def convert_to_wav(input_path: str, output_path: str) -> bool:
+    """Convierte un archivo de video/audio a WAV usando ffmpeg."""
+    try:
+        # Copiar a /tmp para evitar problemas con snap ffmpeg y NTFS
+        import shutil
+        tmp_input = f"/tmp/convert_input_{os.getpid()}.mp4"
+        tmp_output = f"/tmp/convert_output_{os.getpid()}.wav"
+        
+        shutil.copy2(input_path, tmp_input)
+        
+        # Usar /usr/bin/ffmpeg para evitar snap
+        ffmpeg_path = '/usr/bin/ffmpeg' if os.path.exists('/usr/bin/ffmpeg') else 'ffmpeg'
+        
+        cmd = [
+            ffmpeg_path, '-y', '-i', tmp_input,
+            '-vn',  # Sin video
+            '-acodec', 'pcm_s16le',  # Códec WAV estándar
+            '-ar', '22050',  # Sample rate
+            '-ac', '1',  # Mono
+            tmp_output
+        ]
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=1800)
+        
+        if result.returncode == 0 and os.path.exists(tmp_output):
+            shutil.move(tmp_output, output_path)
+            os.remove(tmp_input)
+            return True
+        
+        # Limpiar temporales
+        for f in [tmp_input, tmp_output]:
+            if os.path.exists(f):
+                os.remove(f)
+        return False
+    except Exception as e:
+        log(f"   Error en conversión: {e}", "ERROR")
+        return False
+
+
+def download_audio(url: str, output_dir: str, video_title: str) -> Tuple[bool, str]:
+    """
+    Descarga el audio de un video usando el script download_video.py.
+    
+    Returns:
+        Tuple (éxito, ruta_archivo o mensaje_error)
+    """
+    download_script = PROJECT_ROOT / 'scripts' / 'download_video.py'
+    
+    # Guardar archivos existentes antes de descargar
+    existing_files = set(Path(output_dir).glob('*'))
+    
+    cmd = [
+        sys.executable,
+        str(download_script),
+        url,
+        '-o', output_dir,
+        '--format', 'wav'
+    ]
+    
+    log(f"Descargando: {video_title[:60]}...", "DOWNLOAD")
+    
+    try:
+        # Ejecutar descarga mostrando output en tiempo real
+        process = subprocess.Popen(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            bufsize=1
+        )
+        
+        # Leer output para mostrar progreso
+        output_lines = []
+        for line in iter(process.stdout.readline, ''):
+            line = line.strip()
+            if line:
+                output_lines.append(line)
+                # Mostrar progreso de descarga
+                if 'Progreso:' in line or '✓' in line or '✅' in line:
+                    log(f"   {line[:70]}", "INFO")
+                elif 'ERROR' in line or '❌' in line:
+                    log(f"   {line[:70]}", "ERROR")
+        
+        process.wait(timeout=3600)  # 1 hora máximo
+        
+        # Buscar archivos nuevos (cualquier formato)
+        all_extensions = ['*.wav', '*.mp3', '*.m4a', '*.opus', '*.webm', '*.ogg', '*.mp4', '*.mkv', '*.webm']
+        new_files = set()
+        for ext in all_extensions:
+            new_files.update(Path(output_dir).glob(ext))
+        
+        new_files = new_files - existing_files
+        
+        # Buscar archivo de audio primero
+        audio_extensions = ['.wav', '.mp3', '.m4a', '.opus', '.ogg']
+        for f in new_files:
+            if f.suffix.lower() in audio_extensions:
+                log(f"   ✓ Descargado: {f.name}", "SUCCESS")
+                return True, str(f)
+        
+        # Si solo hay video (mp4/mkv), convertir a WAV
+        video_extensions = ['.mp4', '.mkv', '.webm']
+        for f in new_files:
+            if f.suffix.lower() in video_extensions:
+                log(f"   📹 Video descargado: {f.name}", "INFO")
+                log(f"   🔄 Convirtiendo a WAV...", "INFO")
+                
+                wav_path = f.with_suffix('.wav')
+                if convert_to_wav(str(f), str(wav_path)):
+                    # Eliminar video original
+                    try:
+                        f.unlink()
+                    except:
+                        pass
+                    log(f"   ✓ Convertido: {wav_path.name}", "SUCCESS")
+                    return True, str(wav_path)
+                else:
+                    log(f"   ⚠️ Error en conversión, usando video directamente", "WARNING")
+                    return True, str(f)
+        
+        # Si no hay archivos nuevos, buscar por timestamp reciente
+        for ext in all_extensions:
+            for f in Path(output_dir).glob(ext):
+                if (datetime.now().timestamp() - f.stat().st_mtime) < 600:
+                    # Si es video, convertir
+                    if f.suffix.lower() in video_extensions:
+                        wav_path = f.with_suffix('.wav')
+                        if convert_to_wav(str(f), str(wav_path)):
+                            try:
+                                f.unlink()
+                            except:
+                                pass
+                            log(f"   ✓ Convertido: {wav_path.name}", "SUCCESS")
+                            return True, str(wav_path)
+                    log(f"   ✓ Encontrado: {f.name}", "SUCCESS")
+                    return True, str(f)
+        
+        # Debug: listar archivos en el directorio
+        all_files = list(Path(output_dir).iterdir())
+        log(f"   Archivos en directorio ({len(all_files)}): {[f.name for f in all_files[:5]]}", "WARNING")
+        
+        log("   Archivo no encontrado después de descarga", "WARNING")
+        return False, "Archivo no encontrado"
+            
+    except subprocess.TimeoutExpired:
+        process.kill()
+        log("   Timeout en descarga (1 hora)", "ERROR")
+        return False, "Timeout"
+    except Exception as e:
+        log(f"   Error: {e}", "ERROR")
+        return False, str(e)
+
+
+def process_audio(audio_path: str, output_dir: str, config_path: str) -> Tuple[bool, str]:
+    """
+    Procesa un audio con el pipeline principal (main.py).
+    
+    Returns:
+        Tuple (éxito, mensaje)
+    """
+    main_script = PROJECT_ROOT / 'main.py'
+    
+    log(f"Procesando: {Path(audio_path).name}", "PROCESS")
+    
+    cmd = [
+        sys.executable,
+        str(main_script),
+        audio_path,
+        '-o', output_dir,
+        '-c', config_path
+    ]
+    
+    try:
+        # Sin timeout - el procesamiento puede tardar lo que necesite
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True
+        )
+        
+        # Filtrar warnings conocidos que no son errores reales
+        stderr_filtered = result.stderr or ""
+        warnings_to_ignore = [
+            "Lightning automatically upgraded",
+            "upgrade_checkpoint",
+            "UserWarning",
+            "FutureWarning",
+            "DeprecationWarning",
+        ]
+        
+        is_real_error = False
+        if result.returncode != 0:
+            # Verificar si el stderr contiene errores reales o solo warnings
+            stderr_lines = stderr_filtered.split('\n')
+            real_errors = []
+            for line in stderr_lines:
+                if line.strip() and not any(w in line for w in warnings_to_ignore):
+                    real_errors.append(line)
+            is_real_error = len(real_errors) > 0
+        
+        # Buscar segmentos generados en stdout
+        segments_match = re.search(r'Segmentos generados: (\d+)', result.stdout)
+        num_segments = segments_match.group(1) if segments_match else None
+        
+        # Si hay segmentos generados, es éxito aunque haya warnings
+        if num_segments:
+            log(f"   ✓ Procesado: {num_segments} segmentos generados", "SUCCESS")
+            return True, f"{num_segments} segmentos"
+        
+        # Si returncode es 0, es éxito
+        if result.returncode == 0:
+            log(f"   ✓ Procesado correctamente", "SUCCESS")
+            return True, "OK"
+        
+        # Si solo hay warnings pero no errores reales, intentar continuar
+        if not is_real_error:
+            log(f"   ⚠️ Warnings ignorados, continuando...", "WARNING")
+            return True, "OK (con warnings)"
+        
+        # Error real
+        error_msg = '\n'.join(real_errors[:3]) if real_errors else "Error desconocido"
+        log(f"   Error en procesamiento: {error_msg[:150]}", "ERROR")
+        return False, error_msg
+            
+    except Exception as e:
+        log(f"   Error: {e}", "ERROR")
+        return False, str(e)
+
+
+def run_pipeline(config: Dict, registry: Dict, registry_path: str,
+                 data_path: str, category_filter: str = None,
+                 limit_per_category: int = None, dry_run: bool = False,
+                 process_only: bool = False, max_total_videos: int = 10) -> Dict:
+    """
+    Ejecuta el pipeline completo de búsqueda, descarga y procesamiento.
+    
+    Returns:
+        Estadísticas de la ejecución
+    """
+    stats = {
+        'searched': 0,
+        'found': 0,
+        'downloaded': 0,
+        'processed': 0,
+        'skipped': 0,
+        'failed': 0,
+        'errors': [],
+        # Métricas de tiempo
+        'start_time': time.time(),
+        'total_audio_duration': 0,  # Duración total de audio descargado (segundos)
+        'useful_audio_duration': 0,  # Audio útil procesado (segmentos)
+        'processing_times': [],  # Lista de tiempos de procesamiento por video
+        'video_details': []  # Detalles por video para la gráfica
+    }
+    
+    search_settings = config.get('search_settings', {})
+    max_results = limit_per_category or search_settings.get('max_results_per_query', 5)
+    min_duration = search_settings.get('min_duration_minutes', 10) * 60
+    max_duration = search_settings.get('max_duration_minutes', 180) * 60
+    upload_filter = search_settings.get('upload_date_filter', 'year')
+    
+    channels_blacklist = config.get('channels_blacklist', [])
+    
+    input_dir = os.path.join(data_path, 'input')
+    config_path = str(PROJECT_ROOT / 'config' / 'config.json')
+    
+    Path(input_dir).mkdir(parents=True, exist_ok=True)
+    
+    categories = config.get('categories', [])
+    
+    for category in categories:
+        cat_name = category.get('name', 'unknown')
+        
+        # Filtrar por categoría si se especificó
+        if category_filter and cat_name != category_filter:
+            continue
+        
+        if not category.get('enabled', True):
+            log(f"Categoría '{cat_name}' deshabilitada, saltando...", "SKIP")
+            continue
+        
+        log(f"\n{'='*60}", "INFO")
+        log(f"Categoría: {cat_name}", "INFO")
+        log(f"{'='*60}", "INFO")
+        
+        queries = category.get('queries', [])
+        exclude_keywords = category.get('exclude_keywords', [])
+        
+        category_videos = []
+        
+        for query in queries:
+            stats['searched'] += 1
+            
+            videos = search_youtube(
+                query,
+                max_results=max_results,
+                min_duration=min_duration,
+                max_duration=max_duration,
+                upload_date=upload_filter
+            )
+            
+            for video in videos:
+                video_id = video.get('id')
+                
+                # Verificar si ya fue procesado
+                if video_id in registry.get('processed', {}):
+                    log(f"   Ya procesado: {video.get('title', '')[:50]}", "SKIP")
+                    stats['skipped'] += 1
+                    continue
+                
+                if video_id in registry.get('failed', {}):
+                    log(f"   Falló anteriormente: {video.get('title', '')[:50]}", "SKIP")
+                    stats['skipped'] += 1
+                    continue
+                
+                # Verificar exclusiones
+                should_skip, reason = should_exclude(
+                    video, exclude_keywords, channels_blacklist
+                )
+                if should_skip:
+                    log(f"   Excluido ({reason}): {video.get('title', '')[:50]}", "SKIP")
+                    stats['skipped'] += 1
+                    continue
+                
+                category_videos.append(video)
+                stats['found'] += 1
+        
+        # Eliminar duplicados
+        seen_ids = set()
+        unique_videos = []
+        for v in category_videos:
+            if v['id'] not in seen_ids:
+                seen_ids.add(v['id'])
+                unique_videos.append(v)
+        
+        log(f"\nVideos a procesar en '{cat_name}': {len(unique_videos)}", "INFO")
+        
+        if dry_run:
+            for v in unique_videos:
+                log(f"   [DRY-RUN] {v.get('title', '')[:60]} ({v.get('duration_string', '')})", "INFO")
+            continue
+        
+        # Procesar videos (respetando límite total)
+        for video in unique_videos:
+            # Verificar si alcanzamos el límite total
+            total_processed = stats['downloaded'] + stats['processed']
+            if total_processed >= max_total_videos:
+                log(f"\n🛑 Límite de {max_total_videos} videos alcanzado", "WARNING")
+                stats['end_time'] = time.time()
+                return stats
+            
+            video_id = video['id']
+            title = video.get('title', 'Sin título')
+            video_duration = video.get('duration', 0)
+            
+            log(f"\n--- Procesando: {title[:60]} ---", "INFO")
+            log(f"    Canal: {video.get('channel', 'Desconocido')}", "INFO")
+            log(f"    Duración: {video.get('duration_string', 'N/A')}", "INFO")
+            
+            video_start_time = time.time()
+            
+            # Paso 1: Descargar
+            success, result = download_audio(video['url'], input_dir, title)
+            
+            if not success:
+                registry.setdefault('failed', {})[video_id] = {
+                    'title': title,
+                    'error': result,
+                    'timestamp': datetime.now().isoformat(),
+                    'stage': 'download'
+                }
+                save_processed_registry(registry, registry_path)
+                stats['failed'] += 1
+                stats['errors'].append(f"Download: {title[:40]} - {result}")
+                continue
+            
+            audio_path = result
+            stats['downloaded'] += 1
+            stats['total_audio_duration'] += video_duration
+            
+            if process_only:
+                log("   Modo download-only, saltando procesamiento", "INFO")
+                registry.setdefault('processed', {})[video_id] = {
+                    'title': title,
+                    'audio_path': audio_path,
+                    'timestamp': datetime.now().isoformat(),
+                    'stage': 'downloaded'
+                }
+                save_processed_registry(registry, registry_path)
+                # Registrar métricas del video
+                video_end_time = time.time()
+                stats['video_details'].append({
+                    'title': title[:40],
+                    'audio_duration': video_duration,
+                    'useful_duration': 0,
+                    'processing_time': video_end_time - video_start_time,
+                    'category': cat_name
+                })
+                continue
+            
+            # Paso 2: Procesar con pipeline
+            success, result = process_audio(audio_path, data_path, config_path)
+            
+            video_end_time = time.time()
+            processing_time = video_end_time - video_start_time
+            
+            if not success:
+                registry.setdefault('failed', {})[video_id] = {
+                    'title': title,
+                    'audio_path': audio_path,
+                    'error': result,
+                    'timestamp': datetime.now().isoformat(),
+                    'stage': 'processing'
+                }
+                save_processed_registry(registry, registry_path)
+                stats['failed'] += 1
+                stats['errors'].append(f"Process: {title[:40]} - {result}")
+                continue
+            
+            # Extraer número de segmentos del resultado
+            num_segments = 0
+            if result and 'segmentos' in result:
+                try:
+                    num_segments = int(result.split()[0])
+                except:
+                    pass
+            
+            # Estimar audio útil (asumiendo ~12s por segmento promedio)
+            useful_duration = num_segments * 12
+            stats['useful_audio_duration'] += useful_duration
+            stats['processing_times'].append(processing_time)
+            
+            # Registrar métricas detalladas del video
+            stats['video_details'].append({
+                'title': title[:40],
+                'audio_duration': video_duration,
+                'useful_duration': useful_duration,
+                'processing_time': processing_time,
+                'segments': num_segments,
+                'category': cat_name
+            })
+            
+            # Éxito completo
+            registry.setdefault('processed', {})[video_id] = {
+                'title': title,
+                'channel': video.get('channel', ''),
+                'duration': video_duration,
+                'audio_path': audio_path,
+                'segments': result,
+                'timestamp': datetime.now().isoformat(),
+                'category': cat_name
+            }
+            save_processed_registry(registry, registry_path)
+            stats['processed'] += 1
+            
+            # Pequeña pausa entre videos para no sobrecargar
+            time.sleep(2)
+    
+    stats['end_time'] = time.time()
+    return stats
+
+
+def format_duration(seconds: float) -> str:
+    """Formatea segundos a formato legible (HH:MM:SS)."""
+    if seconds < 0:
+        return "0:00"
+    hours = int(seconds // 3600)
+    minutes = int((seconds % 3600) // 60)
+    secs = int(seconds % 60)
+    if hours > 0:
+        return f"{hours}h {minutes}m {secs}s"
+    elif minutes > 0:
+        return f"{minutes}m {secs}s"
+    else:
+        return f"{secs}s"
+
+
+def generate_report_chart(stats: Dict, output_path: str):
+    """
+    Genera una gráfica visual del reporte de procesamiento.
+    
+    Args:
+        stats: Diccionario con estadísticas del procesamiento
+        output_path: Ruta donde guardar la imagen
+    """
+    if not MATPLOTLIB_AVAILABLE:
+        log("matplotlib no disponible, saltando generación de gráfica", "WARNING")
+        return None
+    
+    video_details = stats.get('video_details', [])
+    if not video_details:
+        log("Sin videos procesados para generar gráfica", "WARNING")
+        return None
+    
+    # Configurar estilo
+    plt.style.use('seaborn-v0_8-darkgrid' if 'seaborn-v0_8-darkgrid' in plt.style.available else 'ggplot')
+    
+    # Crear figura con subplots
+    fig = plt.figure(figsize=(16, 12))
+    fig.suptitle('📊 Reporte de Procesamiento - Auto Pipeline', fontsize=16, fontweight='bold', y=0.98)
+    
+    # Colores
+    colors = {
+        'audio_total': '#3498db',
+        'audio_util': '#2ecc71', 
+        'processing': '#e74c3c',
+        'categories': ['#9b59b6', '#f39c12', '#1abc9c', '#e91e63', '#00bcd4']
+    }
+    
+    # === Subplot 1: Resumen general (arriba izquierda) ===
+    ax1 = fig.add_subplot(2, 2, 1)
+    
+    total_time = stats.get('end_time', time.time()) - stats.get('start_time', time.time())
+    total_audio = stats.get('total_audio_duration', 0)
+    useful_audio = stats.get('useful_audio_duration', 0)
+    
+    metrics = ['Videos\nProcesados', 'Audio Total\n(descargado)', 'Audio Útil\n(segmentos)', 'Tiempo\nProcesamiento']
+    values = [
+        stats.get('processed', 0) + stats.get('downloaded', 0),
+        total_audio / 60,  # En minutos
+        useful_audio / 60,  # En minutos
+        total_time / 60  # En minutos
+    ]
+    bar_colors = ['#3498db', colors['audio_total'], colors['audio_util'], colors['processing']]
+    
+    bars = ax1.bar(metrics, values, color=bar_colors, edgecolor='white', linewidth=2)
+    ax1.set_ylabel('Cantidad / Minutos', fontsize=10)
+    ax1.set_title('Resumen General', fontsize=12, fontweight='bold')
+    
+    # Añadir valores sobre las barras
+    for bar, val, metric in zip(bars, values, metrics):
+        height = bar.get_height()
+        if 'Videos' in metric:
+            label = f'{int(val)}'
+        else:
+            label = f'{val:.1f} min'
+        ax1.annotate(label, xy=(bar.get_x() + bar.get_width() / 2, height),
+                    xytext=(0, 3), textcoords="offset points",
+                    ha='center', va='bottom', fontsize=10, fontweight='bold')
+    
+    # === Subplot 2: Tiempo por video (arriba derecha) ===
+    ax2 = fig.add_subplot(2, 2, 2)
+    
+    titles = [v.get('title', '')[:25] + '...' if len(v.get('title', '')) > 25 else v.get('title', '') 
+              for v in video_details]
+    audio_durations = [v.get('audio_duration', 0) / 60 for v in video_details]
+    processing_times = [v.get('processing_time', 0) / 60 for v in video_details]
+    
+    x = range(len(titles))
+    width = 0.35
+    
+    bars1 = ax2.bar([i - width/2 for i in x], audio_durations, width, 
+                    label='Duración Audio', color=colors['audio_total'], alpha=0.8)
+    bars2 = ax2.bar([i + width/2 for i in x], processing_times, width,
+                    label='Tiempo Proceso', color=colors['processing'], alpha=0.8)
+    
+    ax2.set_ylabel('Minutos', fontsize=10)
+    ax2.set_title('Duración vs Tiempo de Procesamiento por Video', fontsize=12, fontweight='bold')
+    ax2.set_xticks(x)
+    ax2.set_xticklabels(titles, rotation=45, ha='right', fontsize=8)
+    ax2.legend(loc='upper right')
+    
+    # === Subplot 3: Audio útil vs total (abajo izquierda) ===
+    ax3 = fig.add_subplot(2, 2, 3)
+    
+    useful_durations = [v.get('useful_duration', 0) / 60 for v in video_details]
+    
+    x = range(len(titles))
+    ax3.bar(x, audio_durations, label='Audio Total', color=colors['audio_total'], alpha=0.6)
+    ax3.bar(x, useful_durations, label='Audio Útil', color=colors['audio_util'], alpha=0.9)
+    
+    ax3.set_ylabel('Minutos', fontsize=10)
+    ax3.set_xlabel('Videos', fontsize=10)
+    ax3.set_title('Audio Total vs Audio Útil (Segmentos)', fontsize=12, fontweight='bold')
+    ax3.set_xticks(x)
+    ax3.set_xticklabels(titles, rotation=45, ha='right', fontsize=8)
+    ax3.legend(loc='upper right')
+    
+    # === Subplot 4: Estadísticas de texto (abajo derecha) ===
+    ax4 = fig.add_subplot(2, 2, 4)
+    ax4.axis('off')
+    
+    # Calcular estadísticas adicionales
+    efficiency = (useful_audio / total_audio * 100) if total_audio > 0 else 0
+    avg_processing = sum(processing_times) / len(processing_times) if processing_times else 0
+    total_segments = sum(v.get('segments', 0) for v in video_details)
+    
+    # Crear tabla de estadísticas
+    stats_text = f"""
+    ╔══════════════════════════════════════════════════╗
+    ║           📈 ESTADÍSTICAS DETALLADAS             ║
+    ╠══════════════════════════════════════════════════╣
+    ║  Videos procesados:      {stats.get('processed', 0):>6}                  ║
+    ║  Videos descargados:     {stats.get('downloaded', 0):>6}                  ║
+    ║  Videos fallidos:        {stats.get('failed', 0):>6}                  ║
+    ╠══════════════════════════════════════════════════╣
+    ║  Audio total descargado: {format_duration(total_audio):>12}            ║
+    ║  Audio útil procesado:   {format_duration(useful_audio):>12}            ║
+    ║  Eficiencia:             {efficiency:>6.1f}%                 ║
+    ╠══════════════════════════════════════════════════╣
+    ║  Tiempo total ejecución: {format_duration(total_time):>12}            ║
+    ║  Promedio por video:     {format_duration(avg_processing * 60):>12}            ║
+    ║  Total segmentos:        {total_segments:>6}                  ║
+    ╚══════════════════════════════════════════════════╝
+    """
+    
+    ax4.text(0.5, 0.5, stats_text, transform=ax4.transAxes, 
+             fontsize=11, fontfamily='monospace',
+             verticalalignment='center', horizontalalignment='center',
+             bbox=dict(boxstyle='round', facecolor='#2c3e50', alpha=0.1))
+    
+    # Ajustar layout
+    plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+    
+    # Guardar
+    chart_path = os.path.join(output_path, f'pipeline_report_{datetime.now().strftime("%Y%m%d_%H%M%S")}.png')
+    plt.savefig(chart_path, dpi=150, bbox_inches='tight', facecolor='white', edgecolor='none')
+    plt.close()
+    
+    log(f"Gráfica guardada en: {chart_path}", "SUCCESS")
+    return chart_path
+
+
+def retry_failed_videos(registry: Dict, registry_path: str, data_path: str, 
+                        config_path: str) -> Dict:
+    """
+    Reprocesa videos que fallaron en la etapa de procesamiento.
+    Solo procesa los que ya tienen audio descargado.
+    
+    Returns:
+        Estadísticas de la ejecución
+    """
+    stats = {
+        'searched': 0,
+        'found': 0,
+        'downloaded': 0,
+        'processed': 0,
+        'skipped': 0,
+        'failed': 0,
+        'errors': [],
+        'start_time': time.time(),
+        'total_audio_duration': 0,
+        'useful_audio_duration': 0,
+        'processing_times': [],
+        'video_details': []
+    }
+    
+    failed_videos = registry.get('failed', {})
+    
+    if not failed_videos:
+        log("No hay videos fallidos para reprocesar", "INFO")
+        stats['end_time'] = time.time()
+        return stats
+    
+    # Filtrar solo los que fallaron en procesamiento (ya tienen audio)
+    to_retry = []
+    for video_id, info in failed_videos.items():
+        if info.get('stage') == 'processing' and info.get('audio_path'):
+            audio_path = info.get('audio_path')
+            if os.path.exists(audio_path):
+                to_retry.append((video_id, info))
+            else:
+                log(f"Audio no encontrado: {audio_path}", "WARNING")
+    
+    log(f"Videos a reprocesar: {len(to_retry)}", "INFO")
+    stats['found'] = len(to_retry)
+    
+    for video_id, info in to_retry:
+        title = info.get('title', 'Sin título')
+        audio_path = info.get('audio_path')
+        
+        log(f"\n--- Reprocesando: {title[:60]} ---", "INFO")
+        
+        video_start_time = time.time()
+        
+        # Obtener duración del audio
+        try:
+            import subprocess
+            result = subprocess.run(
+                ['ffprobe', '-v', 'error', '-show_entries', 'format=duration',
+                 '-of', 'default=noprint_wrappers=1:nokey=1', audio_path],
+                capture_output=True, text=True, timeout=30
+            )
+            video_duration = float(result.stdout.strip()) if result.returncode == 0 else 0
+        except:
+            video_duration = 0
+        
+        stats['total_audio_duration'] += video_duration
+        
+        # Procesar
+        success, result = process_audio(audio_path, data_path, config_path)
+        
+        video_end_time = time.time()
+        processing_time = video_end_time - video_start_time
+        
+        if not success:
+            log(f"   ❌ Falló de nuevo: {result[:100]}", "ERROR")
+            stats['failed'] += 1
+            stats['errors'].append(f"Retry: {title[:40]} - {result}")
+            continue
+        
+        # Extraer número de segmentos
+        num_segments = 0
+        if result and 'segmentos' in result:
+            try:
+                num_segments = int(result.split()[0])
+            except:
+                pass
+        
+        useful_duration = num_segments * 12
+        stats['useful_audio_duration'] += useful_duration
+        stats['processing_times'].append(processing_time)
+        
+        stats['video_details'].append({
+            'title': title[:40],
+            'audio_duration': video_duration,
+            'useful_duration': useful_duration,
+            'processing_time': processing_time,
+            'segments': num_segments,
+            'category': 'retry'
+        })
+        
+        # Mover de failed a processed
+        registry.setdefault('processed', {})[video_id] = {
+            'title': title,
+            'audio_path': audio_path,
+            'segments': result,
+            'timestamp': datetime.now().isoformat(),
+            'retried': True
+        }
+        del registry['failed'][video_id]
+        save_processed_registry(registry, registry_path)
+        
+        stats['processed'] += 1
+        log(f"   ✓ Procesado: {result}", "SUCCESS")
+    
+    stats['end_time'] = time.time()
+    return stats
+
+
+def print_summary(stats: Dict, data_path: str = None):
+    """Imprime resumen de la ejecución y genera gráfica."""
+    total_time = stats.get('end_time', time.time()) - stats.get('start_time', time.time())
+    total_audio = stats.get('total_audio_duration', 0)
+    useful_audio = stats.get('useful_audio_duration', 0)
+    
+    print(f"\n{'='*60}")
+    print(f"{Colors.BOLD}📊 RESUMEN DE EJECUCIÓN{Colors.RESET}")
+    print(f"{'='*60}")
+    print(f"   Búsquedas realizadas: {stats['searched']}")
+    print(f"   Videos encontrados:   {stats['found']}")
+    print(f"   Videos saltados:      {stats['skipped']}")
+    print(f"   {Colors.GREEN}Descargados:           {stats['downloaded']}{Colors.RESET}")
+    print(f"   {Colors.GREEN}Procesados:            {stats['processed']}{Colors.RESET}")
+    print(f"   {Colors.RED}Fallidos:              {stats['failed']}{Colors.RESET}")
+    
+    print(f"\n{Colors.CYAN}⏱️  TIEMPOS:{Colors.RESET}")
+    print(f"   Audio total descargado: {format_duration(total_audio)}")
+    print(f"   Audio útil procesado:   {format_duration(useful_audio)}")
+    print(f"   Tiempo de ejecución:    {format_duration(total_time)}")
+    
+    if total_audio > 0:
+        efficiency = (useful_audio / total_audio) * 100
+        print(f"   Eficiencia:             {efficiency:.1f}%")
+    
+    if stats['errors']:
+        print(f"\n{Colors.YELLOW}Errores:{Colors.RESET}")
+        for err in stats['errors'][:10]:
+            print(f"   - {err}")
+        if len(stats['errors']) > 10:
+            print(f"   ... y {len(stats['errors']) - 10} errores más")
+    
+    print(f"{'='*60}\n")
+    
+    # Generar gráfica si hay datos y ruta
+    if data_path and stats.get('video_details'):
+        generate_report_chart(stats, data_path)
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description='Pipeline automático de búsqueda, descarga y procesamiento de podcasts',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Ejemplos:
+  python scripts/auto_pipeline.py --videos 20         # Descargar y procesar 20 videos
+  python scripts/auto_pipeline.py --dry-run           # Ver qué se descargaría sin hacerlo
+  python scripts/auto_pipeline.py --category podcasts_negocios --videos 5  # 5 videos de una categoría
+  python scripts/auto_pipeline.py --limit 2           # Máximo 2 videos por query
+  python scripts/auto_pipeline.py --download-only --videos 10  # Solo descargar 10, sin procesar
+        """
+    )
+    
+    parser.add_argument(
+        '--config', '-c',
+        type=str,
+        default=str(PROJECT_ROOT / 'config' / 'search_queries.json'),
+        help='Ruta al archivo de configuración de búsqueda'
+    )
+    parser.add_argument(
+        '--data-path', '-d',
+        type=str,
+        default=DEFAULT_DATA_PATH,
+        help=f'Ruta base para datos (default: {DEFAULT_DATA_PATH})'
+    )
+    parser.add_argument(
+        '--category',
+        type=str,
+        help='Procesar solo esta categoría'
+    )
+    parser.add_argument(
+        '--limit',
+        type=int,
+        help='Límite de videos por query'
+    )
+    parser.add_argument(
+        '--videos', '-n',
+        type=int,
+        default=10,
+        help='Número total de videos a descargar (default: 10)'
+    )
+    parser.add_argument(
+        '--dry-run',
+        action='store_true',
+        help='Solo mostrar qué se descargaría, sin ejecutar'
+    )
+    parser.add_argument(
+        '--download-only',
+        action='store_true',
+        help='Solo descargar audios, no procesar con pipeline'
+    )
+    parser.add_argument(
+        '--reset-failed',
+        action='store_true',
+        help='Limpiar registro de videos fallidos (no reprocesa)'
+    )
+    parser.add_argument(
+        '--retry-failed',
+        action='store_true',
+        help='Reprocesar videos que fallaron en etapa de procesamiento (ya descargados)'
+    )
+    
+    args = parser.parse_args()
+    
+    # Banner
+    print(f"""
+{Colors.CYAN}{'='*60}
+   🎙️  AUTO PIPELINE - fromPodtoCast
+   Búsqueda, descarga y procesamiento automático
+{'='*60}{Colors.RESET}
+""")
+    
+    # Cargar configuración
+    if not os.path.exists(args.config):
+        log(f"Archivo de configuración no encontrado: {args.config}", "ERROR")
+        sys.exit(1)
+    
+    config = load_config(args.config)
+    log(f"Configuración cargada: {args.config}", "SUCCESS")
+    
+    # Verificar directorio de datos
+    if not os.path.exists(args.data_path):
+        log(f"Directorio de datos no encontrado: {args.data_path}", "ERROR")
+        log("Creando directorio...", "INFO")
+        Path(args.data_path).mkdir(parents=True, exist_ok=True)
+    
+    # Cargar registro de procesados
+    registry_path = os.path.join(args.data_path, 'processed_videos.json')
+    registry = load_processed_registry(registry_path)
+    
+    # Reset failed si se solicita
+    if args.reset_failed:
+        failed_count = len(registry.get('failed', {}))
+        registry['failed'] = {}
+        save_processed_registry(registry, registry_path)
+        log(f"Limpiados {failed_count} registros de videos fallidos", "SUCCESS")
+    
+    processed_count = len(registry.get('processed', {}))
+    failed_count = len(registry.get('failed', {}))
+    log(f"Videos ya procesados: {processed_count}", "INFO")
+    log(f"Videos fallidos: {failed_count}", "INFO")
+    
+    if args.dry_run:
+        log("MODO DRY-RUN: No se descargará ni procesará nada", "WARNING")
+    
+    # Modo retry-failed: reprocesar videos fallidos
+    if args.retry_failed:
+        log("MODO RETRY-FAILED: Reprocesando videos fallidos...", "INFO")
+        config_path = str(PROJECT_ROOT / 'config' / 'config.json')
+        
+        stats = retry_failed_videos(
+            registry=registry,
+            registry_path=registry_path,
+            data_path=args.data_path,
+            config_path=config_path
+        )
+        
+        # Mostrar resumen y generar gráfica
+        print_summary(stats, args.data_path)
+        
+        if stats['processed'] > 0:
+            log("Retry completado exitosamente", "SUCCESS")
+        else:
+            log("No se reprocesaron videos", "WARNING")
+        return
+    
+    # Ejecutar pipeline normal
+    log(f"Objetivo: descargar hasta {args.videos} videos", "INFO")
+    
+    stats = run_pipeline(
+        config=config,
+        registry=registry,
+        registry_path=registry_path,
+        data_path=args.data_path,
+        category_filter=args.category,
+        limit_per_category=args.limit,
+        dry_run=args.dry_run,
+        process_only=args.download_only,
+        max_total_videos=args.videos
+    )
+    
+    # Mostrar resumen y generar gráfica
+    print_summary(stats, args.data_path)
+    
+    if stats['processed'] > 0:
+        log("Pipeline completado exitosamente", "SUCCESS")
+    elif stats['downloaded'] > 0:
+        log("Descargas completadas (sin procesamiento)", "SUCCESS")
+    elif args.dry_run:
+        log("Dry-run completado", "SUCCESS")
+    else:
+        log("No se procesaron nuevos videos", "WARNING")
+
+
+if __name__ == '__main__':
+    main()
+
