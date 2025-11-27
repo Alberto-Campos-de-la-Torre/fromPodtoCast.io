@@ -134,7 +134,7 @@ def search_youtube(query: str, max_results: int = 5,
     """
     log(f"Buscando: '{query}'", "SEARCH")
     
-    # Construir comando yt-dlp para búsqueda
+    # Construir comando yt-dlp para búsqueda (flat-playlist ya incluye duración)
     cmd = [
         'yt-dlp',
         f'ytsearch{max_results * 3}:{query}',  # Buscar más para filtrar después
@@ -152,63 +152,41 @@ def search_youtube(query: str, max_results: int = 5,
             timeout=120
         )
         
-        videos = []
+        # Parsear resultados directamente (flat-playlist ya incluye duración)
+        valid_videos = []
         for line in result.stdout.strip().split('\n'):
             if not line:
                 continue
             try:
                 video = json.loads(line)
-                videos.append(video)
+                video_id = video.get('id')
+                duration = video.get('duration', 0)
+                
+                if not video_id:
+                    continue
+                
+                # Filtrar por duración directamente
+                if duration and min_duration <= duration <= max_duration:
+                    valid_videos.append({
+                        'id': video_id,
+                        'url': f'https://www.youtube.com/watch?v={video_id}',
+                        'title': video.get('title', 'Sin título'),
+                        'duration': duration,
+                        'duration_string': video.get('duration_string', ''),
+                        'channel': video.get('channel', 'Desconocido'),
+                        'upload_date': video.get('upload_date', ''),
+                        'view_count': video.get('view_count', 0),
+                        'description': video.get('description', '')[:500] if video.get('description') else '',
+                    })
+                    
+                    if len(valid_videos) >= max_results:
+                        break
+                        
             except json.JSONDecodeError:
                 continue
         
-        # Ahora obtener información detallada de cada video
-        detailed_videos = []
-        for video in videos[:max_results * 2]:  # Limitar para no hacer demasiadas requests
-            video_id = video.get('id') or video.get('url', '').split('=')[-1]
-            if not video_id:
-                continue
-            
-            # Obtener duración real
-            try:
-                detail_cmd = [
-                    'yt-dlp',
-                    f'https://www.youtube.com/watch?v={video_id}',
-                    '--dump-json',
-                    '--no-download',
-                    '--no-warnings',
-                ]
-                detail_result = subprocess.run(
-                    detail_cmd,
-                    capture_output=True,
-                    text=True,
-                    timeout=30
-                )
-                if detail_result.returncode == 0:
-                    detail = json.loads(detail_result.stdout)
-                    duration = detail.get('duration', 0)
-                    
-                    # Filtrar por duración
-                    if duration and min_duration <= duration <= max_duration:
-                        detailed_videos.append({
-                            'id': video_id,
-                            'url': f'https://www.youtube.com/watch?v={video_id}',
-                            'title': detail.get('title', 'Sin título'),
-                            'duration': duration,
-                            'duration_string': detail.get('duration_string', ''),
-                            'channel': detail.get('channel', 'Desconocido'),
-                            'upload_date': detail.get('upload_date', ''),
-                            'view_count': detail.get('view_count', 0),
-                            'description': detail.get('description', '')[:500],
-                        })
-                        
-                        if len(detailed_videos) >= max_results:
-                            break
-            except (subprocess.TimeoutExpired, json.JSONDecodeError):
-                continue
-        
-        log(f"   Encontrados {len(detailed_videos)} videos válidos", "INFO")
-        return detailed_videos
+        log(f"   Encontrados {len(valid_videos)} videos válidos", "INFO")
+        return valid_videos
         
     except subprocess.TimeoutExpired:
         log(f"   Timeout buscando '{query}'", "WARNING")
