@@ -471,8 +471,6 @@ def download_video(url: str, output_dir: str, audio_only: bool = True,
         '--no-check-certificate',  # En algunos casos ayuda con conexiones lentas
         # Usar cookies del navegador para evitar bloqueo de YouTube
         '--cookies-from-browser', 'chrome',
-        # Opciones para YouTube sin JavaScript runtime
-        '--extractor-args', 'youtube:player_client=android,web',
         '--no-warnings',  # Suprimir warnings de formatos faltantes
     ])
     
@@ -500,7 +498,17 @@ def download_video(url: str, output_dir: str, audio_only: bool = True,
         log_status(f"URL limpia: {clean_url}", "DEBUG")
     
     # Obtener información del video sin descargar con retry
-    info_cmd = cmd + ['--dump-json', '--no-download', clean_url]
+    # Usar comando base sin opciones de audio para obtener info
+    info_cmd = [
+        'yt-dlp',
+        '--socket-timeout', '60',
+        '--no-check-certificate',
+        '--cookies-from-browser', 'chrome',
+        '--no-warnings',
+        '--dump-json',
+        '--no-download',
+        clean_url
+    ]
     log_status("Obteniendo información del video...", "INFO")
     log_status(f"   URL: {clean_url}", "DEBUG")
     log_status(f"   Timeout: 120 segundos", "DEBUG")
