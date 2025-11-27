@@ -549,74 +549,170 @@ Responde con el JSON que contiene las correcciones para TODOS los textos."""
         self.logger.warning("Batch falló, procesando individualmente...")
         return [self.correct(text) for text in texts]
     
+    def _clean_json_response(self, response: str) -> str:
+        """
+        Limpia y repara JSON malformado del LLM.
+        """
+        response = response.strip()
+        
+        # Extraer solo el JSON (ignorar texto antes/después)
+        json_match = re.search(r'\{[\s\S]*\}', response)
+        if json_match:
+            response = json_match.group(0)
+        
+        # Remover comentarios // o /* */
+        response = re.sub(r'//.*?$', '', response, flags=re.MULTILINE)
+        response = re.sub(r'/\*.*?\*/', '', response, flags=re.DOTALL)
+        
+        # Remover comas trailing antes de } o ]
+        response = re.sub(r',(\s*[}\]])', r'\1', response)
+        
+        # Agregar comas faltantes entre objetos en array
+        # Patrón: } seguido de { sin coma
+        response = re.sub(r'\}(\s*)\{', r'},\1{', response)
+        
+        # Agregar comas faltantes entre "campo": valor y siguiente "campo"
+        response = re.sub(r'(\d|"|\])\s*\n\s*"', r'\1,\n"', response)
+        
+        # Escapar comillas dentro de strings (problema común)
+        # Esto es más complejo, lo dejamos para casos específicos
+        
+        return response
+    
+    def _request_json_correction(
+        self, 
+        original_response: str, 
+        error_msg: str,
+        original_texts: List[str]
+    ) -> Optional[str]:
+        """
+        Pide al LLM que corrija su respuesta JSON malformada.
+        """
+        correction_prompt = f"""Tu respuesta anterior tenía un error de formato JSON:
+ERROR: {error_msg}
+
+Tu respuesta fue:
+```
+{original_response[:500]}...
+```
+
+Por favor, responde ÚNICAMENTE con el JSON válido corregido.
+El JSON debe tener esta estructura exacta:
+{{
+  "correcciones": [
+    {{"id": 0, "texto_corregido": "...", "cambios": [], "confianza": 0.95}},
+    {{"id": 1, "texto_corregido": "...", "cambios": [], "confianza": 0.90}}
+  ]
+}}
+
+IMPORTANTE:
+- NO incluyas texto fuera del JSON
+- Usa comas entre cada objeto del array
+- Los IDs deben ser 0, 1, 2... hasta {len(original_texts) - 1}
+- La confianza debe ser un número entre 0 y 1
+"""
+        
+        try:
+            return self._call_ollama(
+                "Eres un corrector de JSON. Responde SOLO con JSON válido.",
+                correction_prompt,
+                timeout=30
+            )
+        except Exception as e:
+            self.logger.warning(f"Error pidiendo corrección JSON: {e}")
+            return None
+    
     def _parse_batch_response(
         self, 
         response: str, 
         original_texts: List[str]
     ) -> Optional[List[Tuple[str, Dict]]]:
-        """Parsea la respuesta de un batch."""
-        try:
-            response = response.strip()
-            
-            # Extraer JSON
-            json_match = re.search(r'\{[\s\S]*\}', response)
-            if json_match:
-                response = json_match.group(0)
-            
-            data = json.loads(response)
-            
-            # Validar con Pydantic si está disponible
-            if PYDANTIC_AVAILABLE:
-                try:
-                    validated = LLMCorrectionBatchResponse(**data)
-                    correcciones = [
-                        (c.texto_corregido, {
-                            'cambios': c.cambios,
-                            'confianza': c.confianza,
-                            'modelo': self.model,
-                            'batch': True,
-                            'pydantic_validated': True
-                        })
-                        for c in validated.correcciones
-                    ]
-                    self.stats['pydantic_validations'] = self.stats.get('pydantic_validations', 0) + len(correcciones)
-                    return correcciones
-                except ValidationError as e:
-                    self.logger.warning(f"Validación Pydantic falló: {e}")
-            
-            # Fallback sin Pydantic
-            correcciones_raw = data.get('correcciones', [])
-            results = []
-            
-            for i, text in enumerate(original_texts):
-                # Buscar corrección correspondiente
-                corr = next(
-                    (c for c in correcciones_raw if c.get('id') == i),
-                    None
-                )
+        """Parsea la respuesta de un batch con reparación y reintentos."""
+        
+        max_retries = 3
+        last_error = ""
+        
+        for attempt in range(max_retries):
+            try:
+                # Limpiar JSON
+                cleaned = self._clean_json_response(response)
                 
-                if corr:
-                    results.append((
-                        corr.get('texto_corregido', text),
-                        {
-                            'cambios': corr.get('cambios', []),
-                            'confianza': max(0.0, min(1.0, float(corr.get('confianza', 0.5)))),
-                            'modelo': self.model,
-                            'batch': True
-                        }
-                    ))
+                # Intentar parsear
+                data = json.loads(cleaned)
+                
+                # Validar con Pydantic
+                if PYDANTIC_AVAILABLE:
+                    try:
+                        validated = LLMCorrectionBatchResponse(**data)
+                        correcciones = [
+                            (c.texto_corregido, {
+                                'cambios': c.cambios,
+                                'confianza': c.confianza,
+                                'modelo': self.model,
+                                'batch': True,
+                                'pydantic_validated': True,
+                                'repair_attempts': attempt
+                            })
+                            for c in validated.correcciones
+                        ]
+                        self.stats['pydantic_validations'] = self.stats.get('pydantic_validations', 0) + len(correcciones)
+                        
+                        if attempt > 0:
+                            self.logger.info(f"✓ JSON reparado en intento {attempt + 1}")
+                        
+                        return correcciones
+                        
+                    except ValidationError as e:
+                        last_error = f"Pydantic: {str(e)[:200]}"
+                        self.logger.warning(f"Validación Pydantic falló (intento {attempt + 1}/{max_retries}): {last_error}")
+                        
+                        # Pedir al LLM que corrija
+                        if attempt < max_retries - 1:
+                            new_response = self._request_json_correction(response, last_error, original_texts)
+                            if new_response:
+                                response = new_response
+                                continue
                 else:
-                    # No se encontró corrección para este índice
-                    results.append((text, {'error': 'missing_in_batch'}))
-            
-            return results
-            
-        except json.JSONDecodeError as e:
-            self.logger.warning(f"Error parseando batch JSON: {e}")
-            return None
-        except Exception as e:
-            self.logger.warning(f"Error procesando batch: {e}")
-            return None
+                    # Sin Pydantic, usar fallback
+                    correcciones_raw = data.get('correcciones', [])
+                    results = []
+                    
+                    for i, text in enumerate(original_texts):
+                        corr = next((c for c in correcciones_raw if c.get('id') == i), None)
+                        
+                        if corr:
+                            results.append((
+                                corr.get('texto_corregido', text),
+                                {
+                                    'cambios': corr.get('cambios', []),
+                                    'confianza': max(0.0, min(1.0, float(corr.get('confianza', 0.5)))),
+                                    'modelo': self.model,
+                                    'batch': True
+                                }
+                            ))
+                        else:
+                            results.append((text, {'error': 'missing_in_batch'}))
+                    
+                    return results
+                    
+            except json.JSONDecodeError as e:
+                last_error = f"JSON: {str(e)}"
+                self.logger.warning(f"Error JSON (intento {attempt + 1}/{max_retries}): {last_error}")
+                
+                # Pedir al LLM que corrija
+                if attempt < max_retries - 1:
+                    new_response = self._request_json_correction(response, last_error, original_texts)
+                    if new_response:
+                        response = new_response
+                        continue
+                        
+            except Exception as e:
+                last_error = str(e)
+                self.logger.warning(f"Error procesando batch (intento {attempt + 1}/{max_retries}): {e}")
+        
+        # Después de 3 intentos, retornar None para caer al fallback
+        self.logger.warning(f"Batch falló después de {max_retries} intentos: {last_error}")
+        return None
     
     # ==================== PROCESAMIENTO PARALELO ====================
     
