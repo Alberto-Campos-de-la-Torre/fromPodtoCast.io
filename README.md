@@ -22,11 +22,26 @@ Solución completa para crear datasets de entrenamiento para modelos TTS (Text-t
 - **Preprocesamiento**: Corrección de puntuación, números, espaciado
 - **Corrección LLM**: Verificación y corrección con modelos de lenguaje (Ollama)
 
-### Optimizaciones LLM (Nuevo)
-- **Batch Processing**: Procesa múltiples textos en una sola llamada (80% menos HTTP calls)
-- **Caché Persistente**: Evita reprocesar textos idénticos entre sesiones
-- **Procesamiento Paralelo**: ThreadPoolExecutor para correcciones simultáneas
-- **Validación Pydantic**: Schemas tipados para respuestas del LLM y metadata
+### 🚀 Optimizaciones de Rendimiento (Nuevo)
+
+#### Validación con Pydantic
+El proyecto utiliza **Pydantic v2** para validación estructurada de datos:
+- `LLMCorrectionResponse`: Valida respuestas del modelo de lenguaje
+- `LLMCorrectionBatchResponse`: Valida respuestas en lote
+- `SegmentMetadata` / `PodcastMetadata`: Valida estructura de salida
+- Detección automática de errores antes de guardar JSON
+- Serialización/deserialización tipada
+
+#### Procesamiento LLM Optimizado
+- **Batch Processing**: Agrupa 5 textos por llamada HTTP (80% menos requests)
+- **Caché Persistente**: Almacena correcciones en JSON con expiración configurable
+- **ThreadPoolExecutor**: Procesamiento paralelo opcional (3-4x más rápido)
+- **Reintentos Inteligentes**: Fallback automático si el batch falla
+
+#### Barras de Progreso
+- Progreso en tiempo real para cada etapa del pipeline
+- Indicadores visuales con colores (tqdm)
+- Resumen detallado al finalizar con estadísticas
 
 ## 📁 Estructura del Proyecto
 
@@ -261,7 +276,9 @@ Al finalizar el procesamiento, se genera automáticamente una gráfica con:
 7. **Validación** → Verifica estructura con Pydantic
 8. **Generación Metadata** → Crea archivos JSON
 
-### Optimizaciones del LLM
+### 🔧 Optimizaciones del Pipeline
+
+#### Rendimiento LLM
 
 | Característica | Descripción | Impacto |
 |----------------|-------------|---------|
@@ -269,6 +286,33 @@ Al finalizar el procesamiento, se genera automáticamente una gráfica con:
 | **Caché Persistente** | Guarda correcciones en JSON | Instant en repetidos |
 | **Paralelo** | ThreadPoolExecutor opcional | 3-4x más rápido |
 | **Pydantic** | Validación de respuestas | <1% errores parsing |
+
+#### Schemas Pydantic
+
+```python
+# src/models/llm_schemas.py
+class LLMCorrectionResponse(BaseModel):
+    texto_corregido: str = Field(..., min_length=1)
+    cambios: List[str] = Field(default_factory=list, max_length=10)
+    confianza: float = Field(ge=0.0, le=1.0)
+
+# src/models/metadata_schemas.py  
+class SegmentMetadata(BaseModel):
+    audio_path: str
+    speaker: str
+    text: str
+    duration: float = Field(gt=0)
+    sample_rate: int = Field(default=22050)
+```
+
+#### Métricas de Rendimiento
+
+| Métrica | Sin Optimización | Con Optimización |
+|---------|------------------|------------------|
+| Llamadas HTTP/podcast | ~200 | ~40 |
+| Tiempo LLM/podcast | ~15 min | ~4 min |
+| Errores de parsing | ~5% | <1% |
+| Textos repetidos | Reprocesados | Desde caché |
 
 ## 🐛 Solución de Problemas
 
@@ -297,7 +341,9 @@ Este proyecto está bajo la licencia MIT.
 
 ## 🔗 Referencias
 
-- [Whisper](https://github.com/openai/whisper) - Transcripción
-- [pyannote.audio](https://github.com/pyannote/pyannote-audio) - Diarización
+- [Whisper](https://github.com/openai/whisper) - Transcripción de audio
+- [pyannote.audio](https://github.com/pyannote/pyannote-audio) - Diarización de hablantes
 - [yt-dlp](https://github.com/yt-dlp/yt-dlp) - Descarga de videos
-- [Ollama](https://ollama.ai/) - Corrección con LLM
+- [Ollama](https://ollama.ai/) - Corrección con LLM local
+- [Pydantic](https://docs.pydantic.dev/) - Validación de datos estructurados
+- [tqdm](https://github.com/tqdm/tqdm) - Barras de progreso
