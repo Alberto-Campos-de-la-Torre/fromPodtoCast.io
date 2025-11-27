@@ -302,6 +302,18 @@ def cleanup_corrupt_files(output_dir: str) -> int:
     return removed
 
 
+def _normalize_title_for_search(title: str) -> str:
+    """Normaliza un título para búsqueda de archivos."""
+    import unicodedata
+    # Normalizar unicode y quitar caracteres especiales
+    normalized = unicodedata.normalize('NFKC', title.lower())
+    # Quitar caracteres especiales comunes
+    for char in ['｜', '|', '#', '?', '？', ':', '：', '"', "'", '/', '\\']:
+        normalized = normalized.replace(char, ' ')
+    # Reducir espacios múltiples
+    return ' '.join(normalized.split())[:50]
+
+
 def download_audio(url: str, output_dir: str, video_title: str) -> Tuple[bool, str]:
     """
     Descarga el audio de un video usando el script download_video.py.
@@ -325,10 +337,10 @@ def download_audio(url: str, output_dir: str, video_title: str) -> Tuple[bool, s
         '--format', 'wav'
     ]
     
-    log(f"Descargando: {video_title[:60]}...", "DOWNLOAD")
+    log(f"📥 {video_title[:55]}...", "DOWNLOAD")
     
     try:
-        # Ejecutar descarga mostrando output en tiempo real
+        # Ejecutar descarga en silencio (solo capturar errores críticos)
         process = subprocess.Popen(
             cmd,
             stdout=subprocess.PIPE,
@@ -337,60 +349,57 @@ def download_audio(url: str, output_dir: str, video_title: str) -> Tuple[bool, s
             bufsize=1
         )
         
-        # Leer output para mostrar progreso
+        # Leer output sin mostrarlo (suprimir errores de yt-dlp)
         output_lines = []
         for line in iter(process.stdout.readline, ''):
             line = line.strip()
             if line:
                 output_lines.append(line)
-                # Mostrar progreso de descarga
-                if 'Progreso:' in line or '✓' in line or '✅' in line:
-                    log(f"   {line[:70]}", "INFO")
-                elif 'ERROR' in line or '❌' in line:
-                    log(f"   {line[:70]}", "ERROR")
         
         process.wait(timeout=3600)  # 1 hora máximo
         
-        # Buscar archivos nuevos (cualquier formato)
-        all_extensions = ['*.wav', '*.mp3', '*.m4a', '*.opus', '*.webm', '*.ogg', '*.mp4', '*.mkv', '*.webm']
-        new_files = set()
-        for ext in all_extensions:
-            new_files.update(Path(output_dir).glob(ext))
+        # Funciones de búsqueda de archivos
+        audio_extensions = ['.wav', '.mp3', '.m4a', '.opus', '.ogg']
+        video_extensions = ['.mp4', '.mkv', '.webm']
+        all_extensions = audio_extensions + video_extensions
         
+        # 1. Buscar archivos nuevos
+        new_files = set()
+        for ext in ['*' + e for e in all_extensions]:
+            new_files.update(Path(output_dir).glob(ext))
         new_files = new_files - existing_files
         
-        # Buscar archivo de audio primero
-        audio_extensions = ['.wav', '.mp3', '.m4a', '.opus', '.ogg']
+        # 2. Buscar audio en archivos nuevos
         for f in new_files:
             if f.suffix.lower() in audio_extensions:
-                log(f"   ✓ Descargado: {f.name}", "SUCCESS")
+                log(f"   ✅ {f.name[:60]}", "SUCCESS")
                 return True, str(f)
         
-        # Si solo hay video (mp4/mkv), convertir a WAV
-        video_extensions = ['.mp4', '.mkv', '.webm']
+        # 3. Buscar video para convertir
         for f in new_files:
             if f.suffix.lower() in video_extensions:
-                log(f"   📹 Video descargado: {f.name}", "INFO")
-                log(f"   🔄 Convirtiendo a WAV...", "INFO")
-                
                 wav_path = f.with_suffix('.wav')
                 if convert_to_wav(str(f), str(wav_path)):
-                    # Eliminar video original
                     try:
                         f.unlink()
                     except:
                         pass
-                    log(f"   ✓ Convertido: {wav_path.name}", "SUCCESS")
+                    log(f"   ✅ {wav_path.name[:60]}", "SUCCESS")
                     return True, str(wav_path)
-                else:
-                    log(f"   ⚠️ Error en conversión, usando video directamente", "WARNING")
-                    return True, str(f)
         
-        # Si no hay archivos nuevos, buscar por timestamp reciente
-        for ext in all_extensions:
-            for f in Path(output_dir).glob(ext):
+        # 4. Buscar por nombre similar al título (puede que yt-dlp falló pero el archivo existe)
+        title_normalized = _normalize_title_for_search(video_title)
+        for f in Path(output_dir).glob('*.wav'):
+            file_normalized = _normalize_title_for_search(f.stem)
+            # Si el nombre del archivo contiene parte del título
+            if title_normalized[:20] in file_normalized or file_normalized[:20] in title_normalized:
+                log(f"   ✅ {f.name[:60]}", "SUCCESS")
+                return True, str(f)
+        
+        # 5. Buscar archivos recientes (últimos 10 minutos)
+        for f in Path(output_dir).iterdir():
+            if f.suffix.lower() in all_extensions:
                 if (datetime.now().timestamp() - f.stat().st_mtime) < 600:
-                    # Si es video, convertir
                     if f.suffix.lower() in video_extensions:
                         wav_path = f.with_suffix('.wav')
                         if convert_to_wav(str(f), str(wav_path)):
@@ -398,24 +407,21 @@ def download_audio(url: str, output_dir: str, video_title: str) -> Tuple[bool, s
                                 f.unlink()
                             except:
                                 pass
-                            log(f"   ✓ Convertido: {wav_path.name}", "SUCCESS")
+                            log(f"   ✅ {wav_path.name[:60]}", "SUCCESS")
                             return True, str(wav_path)
-                    log(f"   ✓ Encontrado: {f.name}", "SUCCESS")
+                    log(f"   ✅ {f.name[:60]}", "SUCCESS")
                     return True, str(f)
         
-        # Debug: listar archivos en el directorio
-        all_files = list(Path(output_dir).iterdir())
-        log(f"   Archivos en directorio ({len(all_files)}): {[f.name for f in all_files[:5]]}", "WARNING")
-        
-        log("   Archivo no encontrado después de descarga", "WARNING")
+        # Solo si realmente no hay archivo
+        log(f"   ❌ No se pudo descargar", "ERROR")
         return False, "Archivo no encontrado"
             
     except subprocess.TimeoutExpired:
         process.kill()
-        log("   Timeout en descarga (1 hora)", "ERROR")
+        log("   ❌ Timeout (1 hora)", "ERROR")
         return False, "Timeout"
     except Exception as e:
-        log(f"   Error: {e}", "ERROR")
+        log(f"   ❌ {str(e)[:50]}", "ERROR")
         return False, str(e)
 
 
