@@ -471,3 +471,172 @@ class SegmentReviewer:
         """Indica si existe un diarizador avanzado disponible."""
         return self.diarizer is not None and getattr(self.diarizer, 'pipeline', None) is not None
 
+    # ==================== NUEVA FUNCIÓN: REVISIÓN ANTES DE NORMALIZAR ====================
+    
+    def review_raw_segments(
+        self,
+        segments: List[Tuple],
+        segments_dir: str,
+        diarization_result: Optional[List[Dict]] = None
+    ) -> List[Tuple]:
+        """
+        Revisa segmentos ANTES de normalizar para detectar múltiples hablantes.
+        Divide segmentos con baja pureza de speaker.
+        
+        Args:
+            segments: Lista de tuplas (path, start, end, speaker)
+            segments_dir: Directorio donde están los segmentos
+            diarization_result: Resultado de diarización global
+        
+        Returns:
+            Lista actualizada de tuplas (path, start, end, speaker)
+        """
+        if not diarization_result:
+            print("   ⚠️  No hay diarización disponible, saltando revisión de pureza")
+            return segments
+        
+        print(f"\n{'─'*50}")
+        print("Revisión de pureza de hablantes (pre-normalización)")
+        print(f"{'─'*50}")
+        print(f"  - Segmentos a revisar: {len(segments)}")
+        print(f"  - Pureza mínima requerida: {self.min_speaker_purity:.0%}")
+        print(f"  - Máximo hablantes/segmento: {self.max_speakers_per_segment}")
+        
+        reviewed_segments = []
+        segments_split = 0
+        segments_discarded = 0
+        segment_counter = 0
+        
+        for seg_tuple in tqdm(segments, desc="   Revisando pureza"):
+            if len(seg_tuple) == 4:
+                seg_path, start, end, speaker = seg_tuple
+            else:
+                seg_path, start, end = seg_tuple
+                speaker = 'SPEAKER_00'
+            
+            # Obtener diarización para este rango de tiempo
+            local_diarization = self._get_segment_diarization_from_global(
+                diarization_result, start, end
+            )
+            
+            if not local_diarization:
+                # Sin diarización para este segmento, mantenerlo
+                reviewed_segments.append((seg_path, start, end, speaker))
+                segment_counter += 1
+                continue
+            
+            # Calcular pureza del speaker
+            dominant_speaker, purity_ratio = self._calculate_speaker_purity(local_diarization)
+            unique_speakers = set(seg.get('speaker', 'SPEAKER_00') for seg in local_diarization)
+            num_speakers = len(unique_speakers)
+            
+            # Caso 1: Múltiples hablantes - dividir
+            if num_speakers > self.max_speakers_per_segment:
+                new_segments = self._split_raw_segment(
+                    seg_path, start, end, local_diarization,
+                    segments_dir, segment_counter
+                )
+                reviewed_segments.extend(new_segments)
+                segment_counter += len(new_segments)
+                segments_split += 1
+                continue
+            
+            # Caso 2: Pureza baja - descartar
+            if purity_ratio < self.min_speaker_purity:
+                segments_discarded += 1
+                # Eliminar archivo
+                try:
+                    if os.path.exists(seg_path):
+                        os.remove(seg_path)
+                except:
+                    pass
+                continue
+            
+            # Caso 3: Pureza OK - mantener con speaker dominante
+            reviewed_segments.append((seg_path, start, end, dominant_speaker))
+            segment_counter += 1
+        
+        print(f"\n   ✓ Revisión completada:")
+        print(f"     - Segmentos originales: {len(segments)}")
+        print(f"     - Segmentos divididos: {segments_split}")
+        print(f"     - Segmentos descartados: {segments_discarded}")
+        print(f"     - Segmentos finales: {len(reviewed_segments)}\n")
+        
+        return reviewed_segments
+    
+    def _split_raw_segment(
+        self,
+        segment_path: str,
+        segment_start: float,
+        segment_end: float,
+        local_diarization: List[Dict],
+        output_dir: str,
+        base_idx: int
+    ) -> List[Tuple]:
+        """
+        Divide un segmento crudo (antes de normalizar) por cambios de hablante.
+        
+        Returns:
+            Lista de tuplas (new_path, start, end, speaker)
+        """
+        try:
+            import librosa
+            import soundfile as sf
+            
+            audio, sr = librosa.load(segment_path, sr=None)
+            duration = len(audio) / sr
+        except Exception as e:
+            print(f"   ⚠️  Error cargando {segment_path}: {e}")
+            return [(segment_path, segment_start, segment_end, 'SPEAKER_00')]
+        
+        new_segments = []
+        idx = base_idx
+        
+        # Ordenar por tiempo
+        sorted_diar = sorted(local_diarization, key=lambda x: x.get('start', 0.0))
+        
+        for diar_seg in sorted_diar:
+            local_start = diar_seg.get('start', 0.0)
+            local_end = diar_seg.get('end', 0.0)
+            speaker = diar_seg.get('speaker', 'SPEAKER_00')
+            seg_duration = local_end - local_start
+            
+            # Solo crear si cumple duración mínima
+            if seg_duration < self.min_segment_duration:
+                continue
+            
+            # Extraer audio
+            start_sample = int(local_start * sr)
+            end_sample = int(local_end * sr)
+            segment_audio = audio[start_sample:end_sample]
+            
+            # Guardar nuevo segmento
+            speaker_clean = speaker.replace('/', '_').replace('\\', '_')
+            new_path = os.path.join(output_dir, f"seg_{idx:04d}_{speaker_clean}_raw.wav")
+            
+            try:
+                sf.write(new_path, segment_audio, sr)
+                
+                # Calcular tiempos absolutos
+                abs_start = segment_start + local_start
+                abs_end = segment_start + local_end
+                
+                new_segments.append((new_path, abs_start, abs_end, speaker))
+                idx += 1
+            except Exception as e:
+                print(f"   ⚠️  Error guardando segmento dividido: {e}")
+                continue
+        
+        # Eliminar archivo original si se dividió
+        if len(new_segments) > 0:
+            try:
+                if os.path.exists(segment_path):
+                    os.remove(segment_path)
+            except:
+                pass
+        else:
+            # No se pudo dividir, mantener original
+            new_segments = [(segment_path, segment_start, segment_end, 'SPEAKER_00')]
+        
+        return new_segments
+

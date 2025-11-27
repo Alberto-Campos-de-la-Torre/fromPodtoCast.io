@@ -281,6 +281,30 @@ class PodcastProcessor:
             metrics['segments']['raw'] = len(segments)
             metrics['segments']['method'] = 'silence'
         
+        # Paso 2.5: Revisión de pureza de hablantes (ANTES de normalizar)
+        # Detecta y divide segmentos con múltiples hablantes
+        if self.segment_reviewer and diarization_result:
+            print("2.5. Revisando pureza de hablantes...")
+            metrics['second_stage']['segments_before'] = len(segments)
+            try:
+                segments = self.segment_reviewer.review_raw_segments(
+                    segments,
+                    segments_dir,
+                    diarization_result
+                )
+                metrics['second_stage']['applied'] = True
+                metrics['second_stage']['segments_after'] = len(segments)
+            except Exception as e:
+                print(f"   ✗ Error en revisión de pureza: {e}")
+                import traceback
+                traceback.print_exc()
+                print("   Continuando con segmentos originales...\n")
+                metrics['second_stage']['segments_after'] = metrics['second_stage']['segments_before']
+        else:
+            metrics['second_stage']['applied'] = False
+            metrics['second_stage']['segments_before'] = len(segments)
+            metrics['second_stage']['segments_after'] = len(segments)
+        
         # Paso 3: Normalizar segmentos (y eliminar segmentos temporales)
         print("3. Normalizando segmentos...")
         normalized_segments = []
@@ -512,34 +536,10 @@ class PodcastProcessor:
         
         print(f"   ✓ Generados {len(metadata)} registros de metadata\n")
         metrics['segments']['metadata_before_review'] = len(metadata)
-        metrics['second_stage']['segments_before'] = len(metadata)
+        # Nota: second_stage ya fue procesada en paso 2.5 (antes de normalizar)
         
-        # Paso 6: Segunda etapa - Revisión de segmentos (opcional)
-        if self.segment_reviewer:
-            print("6. Segunda etapa: Revisando segmentos para detectar múltiples hablantes...")
-            try:
-                metadata = self.segment_reviewer.review_segments(
-                    metadata,
-                    normalized_dir,
-                    normalized_dir,  # Guardar segmentos divididos en el mismo directorio
-                    diarization_result=diarization_result
-                )
-                print(f"   ✓ Revisión completada: {len(metadata)} segmentos finales\n")
-                metrics['second_stage']['applied'] = True
-                metrics['second_stage']['segments_after'] = len(metadata)
-            except Exception as e:
-                print(f"   ✗ Error en revisión de segmentos: {e}")
-                import traceback
-                traceback.print_exc()
-                print("   Continuando con segmentos originales...\n")
-                metrics['second_stage']['segments_after'] = metrics['second_stage']['segments_before']
-        else:
-            print("6. Segunda etapa de revisión (saltada - deshabilitada)\n")
-            metrics['second_stage']['segments_after'] = metrics['second_stage']['segments_before']
-            metrics['second_stage']['applied'] = False
-        
-        # Paso 7: Limpieza y renombrado de segmentos
-        print("7. Limpiando y estandarizando nombres de segmentos...")
+        # Paso 6: Limpieza y renombrado de segmentos
+        print("6. Limpiando y estandarizando nombres de segmentos...")
         metadata, cleanup_stats = self._cleanup_segments(metadata, normalized_dir)
         print(f"   ✓ Segmentos finales: {len(metadata)}")
         if cleanup_stats['removed'] > 0:
