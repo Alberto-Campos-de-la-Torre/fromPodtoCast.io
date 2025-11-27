@@ -116,6 +116,23 @@ def get_video_id(url: str) -> Optional[str]:
     return None
 
 
+def verify_video_available(video_id: str) -> bool:
+    """Verifica si un video está disponible antes de descargarlo."""
+    try:
+        cmd = [
+            'yt-dlp',
+            f'https://www.youtube.com/watch?v={video_id}',
+            '--dump-json',
+            '--no-download',
+            '--no-warnings',
+            '--socket-timeout', '10',
+        ]
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=15)
+        return result.returncode == 0
+    except:
+        return False
+
+
 def search_youtube(query: str, max_results: int = 5, 
                    min_duration: int = 600, max_duration: int = 10800,
                    upload_date: str = None) -> List[Dict]:
@@ -137,7 +154,7 @@ def search_youtube(query: str, max_results: int = 5,
     # Construir comando yt-dlp para búsqueda (flat-playlist ya incluye duración)
     cmd = [
         'yt-dlp',
-        f'ytsearch{max_results * 3}:{query}',  # Buscar más para filtrar después
+        f'ytsearch{max_results * 4}:{query}',  # Buscar más para compensar unavailable
         '--dump-json',
         '--flat-playlist',
         '--no-warnings',
@@ -161,8 +178,16 @@ def search_youtube(query: str, max_results: int = 5,
                 video = json.loads(line)
                 video_id = video.get('id')
                 duration = video.get('duration', 0)
+                availability = video.get('availability')
+                live_status = video.get('live_status')
                 
                 if not video_id:
+                    continue
+                
+                # Filtrar videos no disponibles o en vivo
+                if availability and availability != 'public':
+                    continue
+                if live_status and live_status != 'not_live':
                     continue
                 
                 # Filtrar por duración directamente
@@ -300,6 +325,12 @@ def download_audio(url: str, output_dir: str, video_title: str) -> Tuple[bool, s
         Tuple (éxito, ruta_archivo o mensaje_error)
     """
     download_script = PROJECT_ROOT / 'scripts' / 'download_video.py'
+    
+    # Verificar si el video está disponible antes de descargar
+    video_id = url.split('=')[-1] if '=' in url else url.split('/')[-1]
+    if not verify_video_available(video_id):
+        log(f"   ⚠️ Video no disponible (privado/eliminado)", "WARNING")
+        return False, "Video unavailable"
     
     # Limpiar archivos corruptos antes de descargar
     cleanup_corrupt_files(output_dir)
