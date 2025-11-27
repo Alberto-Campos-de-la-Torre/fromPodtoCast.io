@@ -132,8 +132,10 @@ Corregir MÚLTIPLES transcripciones de podcasts manteniendo:
 ## GLOSARIO
 {glosario_context}
 
-## FORMATO DE RESPUESTA
-Responde ÚNICAMENTE con un JSON válido con esta estructura:
+## FORMATO DE RESPUESTA (CRÍTICO)
+Responde ÚNICAMENTE con JSON válido. NO texto antes ni después.
+
+Estructura EXACTA:
 {{
   "correcciones": [
     {{"id": 0, "texto_corregido": "texto1", "cambios": ["cambio1"], "confianza": 0.95}},
@@ -141,10 +143,14 @@ Responde ÚNICAMENTE con un JSON válido con esta estructura:
   ]
 }}
 
-IMPORTANTE:
-- Responde SOLO el JSON, sin texto adicional
-- Mantén el mismo orden de IDs que los textos de entrada
-- Si un texto está correcto, devuélvelo igual con cambios vacío"""
+REGLAS DEL JSON:
+- USA COMA entre objetos (excepto el último)
+- IDs de 0 a N-1 en orden
+- confianza es NÚMERO (0.0-1.0), no string
+- Solo comillas dobles
+- Escapa comillas en strings: \\"
+
+RESPONDE SOLO JSON."""
 
     def __init__(
         self,
@@ -552,6 +558,7 @@ Responde con el JSON que contiene las correcciones para TODOS los textos."""
     def _clean_json_response(self, response: str) -> str:
         """
         Limpia y repara JSON malformado del LLM.
+        Maneja los errores más comunes de formato.
         """
         response = response.strip()
         
@@ -560,6 +567,12 @@ Responde con el JSON que contiene las correcciones para TODOS los textos."""
         if json_match:
             response = json_match.group(0)
         
+        # Remover prefijos comunes del LLM
+        response = re.sub(r'^```json\s*', '', response)
+        response = re.sub(r'\s*```$', '', response)
+        response = re.sub(r'^Here is.*?:', '', response, flags=re.IGNORECASE)
+        response = re.sub(r'^JSON:?\s*', '', response, flags=re.IGNORECASE)
+        
         # Remover comentarios // o /* */
         response = re.sub(r'//.*?$', '', response, flags=re.MULTILINE)
         response = re.sub(r'/\*.*?\*/', '', response, flags=re.DOTALL)
@@ -567,15 +580,42 @@ Responde con el JSON que contiene las correcciones para TODOS los textos."""
         # Remover comas trailing antes de } o ]
         response = re.sub(r',(\s*[}\]])', r'\1', response)
         
-        # Agregar comas faltantes entre objetos en array
-        # Patrón: } seguido de { sin coma
+        # Agregar comas faltantes entre objetos en array: }{ → },{
         response = re.sub(r'\}(\s*)\{', r'},\1{', response)
         
-        # Agregar comas faltantes entre "campo": valor y siguiente "campo"
+        # Agregar comas faltantes entre propiedades en misma línea
+        # "valor"   "siguiente" → "valor", "siguiente"
+        response = re.sub(r'(")\s+(")', r'\1, \2', response)
+        
+        # Agregar comas faltantes después de números seguidos de "
+        # 0.95   "cambios" → 0.95, "cambios"
+        response = re.sub(r'(\d)(\s+)(")', r'\1,\2\3', response)
+        
+        # Agregar comas faltantes después de ] seguido de "
+        # ]   "siguiente" → ], "siguiente"
+        response = re.sub(r'(\])(\s+)(")', r'\1,\2\3', response)
+        
+        # Agregar comas faltantes entre líneas: valor\n"campo"
         response = re.sub(r'(\d|"|\])\s*\n\s*"', r'\1,\n"', response)
         
-        # Escapar comillas dentro de strings (problema común)
-        # Esto es más complejo, lo dejamos para casos específicos
+        # Arreglar strings no terminadas (problema común)
+        # Buscar líneas que empiezan con " pero no terminan con ",
+        lines = response.split('\n')
+        fixed_lines = []
+        for line in lines:
+            stripped = line.strip()
+            # Si la línea tiene un string no cerrado, intentar cerrarlo
+            if stripped.count('"') % 2 == 1:
+                # Número impar de comillas, agregar una al final
+                if not stripped.endswith('"'):
+                    line = line.rstrip() + '"'
+            fixed_lines.append(line)
+        response = '\n'.join(fixed_lines)
+        
+        # Remover trailing content después del último }
+        last_brace = response.rfind('}')
+        if last_brace != -1:
+            response = response[:last_brace + 1]
         
         return response
     
