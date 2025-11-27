@@ -284,14 +284,16 @@ class PodcastProcessor:
         # Paso 3: Normalizar segmentos (y eliminar segmentos temporales)
         print("3. Normalizando segmentos...")
         normalized_segments = []
-        for segment_tuple in tqdm(segments, desc="   Normalizando"):
+        for idx, segment_tuple in enumerate(tqdm(segments, desc="   Normalizando")):
             if len(segment_tuple) == 4:
                 segment_path, start, end, speaker = segment_tuple
             else:
                 segment_path, start, end = segment_tuple
                 speaker = 'SPEAKER_00'
             
-            segment_name = Path(segment_path).name
+            # Simplificar speaker label para el nombre del archivo
+            simplified_speaker = self._simplify_speaker_label(speaker)
+            segment_name = f"seg_{idx:04d}_{simplified_speaker}.wav"
             normalized_path = os.path.join(normalized_dir, segment_name)
             
             try:

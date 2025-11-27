@@ -280,6 +280,28 @@ def convert_to_wav(input_path: str, output_path: str) -> bool:
         return False
 
 
+def cleanup_corrupt_files(output_dir: str) -> int:
+    """
+    Elimina archivos corruptos o incompletos del directorio.
+    
+    Returns:
+        Número de archivos eliminados
+    """
+    removed = 0
+    patterns = ['*.part', '*.mp4', '*.webm', '*.m4a', '*.temp', '*.tmp']
+    
+    for pattern in patterns:
+        for file_path in Path(output_dir).glob(pattern):
+            try:
+                file_path.unlink()
+                log(f"   🗑️ Eliminado archivo corrupto: {file_path.name}", "WARNING")
+                removed += 1
+            except Exception as e:
+                log(f"   ⚠️ No se pudo eliminar {file_path.name}: {e}", "WARNING")
+    
+    return removed
+
+
 def download_audio(url: str, output_dir: str, video_title: str) -> Tuple[bool, str]:
     """
     Descarga el audio de un video usando el script download_video.py.
@@ -288,6 +310,9 @@ def download_audio(url: str, output_dir: str, video_title: str) -> Tuple[bool, s
         Tuple (éxito, ruta_archivo o mensaje_error)
     """
     download_script = PROJECT_ROOT / 'scripts' / 'download_video.py'
+    
+    # Limpiar archivos corruptos antes de descargar
+    cleanup_corrupt_files(output_dir)
     
     # Guardar archivos existentes antes de descargar
     existing_files = set(Path(output_dir).glob('*'))
@@ -940,15 +965,26 @@ def retry_failed_videos(registry: Dict, registry_path: str, data_path: str,
         stats['end_time'] = time.time()
         return stats
     
-    # Filtrar solo los que fallaron en procesamiento (ya tienen audio)
+    # Filtrar videos que fallaron en procesamiento O están solo descargados (ya tienen audio)
     to_retry = []
     for video_id, info in failed_videos.items():
-        if info.get('stage') == 'processing' and info.get('audio_path'):
+        stage = info.get('stage', '')
+        # Incluir 'processing' (falló procesando) y 'downloaded' (solo descargado, no procesado)
+        if stage in ('processing', 'downloaded') and info.get('audio_path'):
             audio_path = info.get('audio_path')
             if os.path.exists(audio_path):
                 to_retry.append((video_id, info))
             else:
                 log(f"Audio no encontrado: {audio_path}", "WARNING")
+    
+    # También buscar en 'processed' los que solo tienen stage='downloaded'
+    processed_videos = registry.get('processed', {})
+    for video_id, info in processed_videos.items():
+        if info.get('stage') == 'downloaded' and info.get('audio_path'):
+            audio_path = info.get('audio_path')
+            if os.path.exists(audio_path):
+                to_retry.append((video_id, info))
+                log(f"Agregando video solo descargado: {info.get('title', '')[:40]}", "INFO")
     
     log(f"Videos a reprocesar: {len(to_retry)}", "INFO")
     stats['found'] = len(to_retry)
