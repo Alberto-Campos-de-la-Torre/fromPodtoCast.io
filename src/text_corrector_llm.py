@@ -671,6 +671,8 @@ IMPORTANTE:
         
         max_retries = 3
         last_error = ""
+        json_parse_failed = 0
+        pydantic_failed = 0
         
         for attempt in range(max_retries):
             try:
@@ -680,7 +682,7 @@ IMPORTANTE:
                 # Intentar parsear
                 data = json.loads(cleaned)
                 
-                # Validar con Pydantic
+                # JSON parseó correctamente, ahora validar con Pydantic
                 if PYDANTIC_AVAILABLE:
                     try:
                         validated = LLMCorrectionBatchResponse(**data)
@@ -697,14 +699,16 @@ IMPORTANTE:
                         ]
                         self.stats['pydantic_validations'] = self.stats.get('pydantic_validations', 0) + len(correcciones)
                         
+                        # Mostrar mensaje de éxito con Pydantic
                         if attempt > 0:
-                            self.logger.info(f"✓ JSON reparado en intento {attempt + 1}")
+                            print(f"   🔷 Pydantic: JSON reparado en intento {attempt + 1}, {len(correcciones)} items validados")
                         
                         return correcciones
                         
                     except ValidationError as e:
+                        pydantic_failed += 1
                         last_error = f"Pydantic: {str(e)[:200]}"
-                        self.logger.warning(f"Validación Pydantic falló (intento {attempt + 1}/{max_retries}): {last_error}")
+                        print(f"   ⚠️ Pydantic (intento {attempt + 1}/{max_retries}): estructura inválida")
                         
                         # Pedir al LLM que corrija
                         if attempt < max_retries - 1:
@@ -736,8 +740,10 @@ IMPORTANTE:
                     return results
                     
             except json.JSONDecodeError as e:
+                json_parse_failed += 1
                 last_error = f"JSON: {str(e)}"
-                self.logger.warning(f"Error JSON (intento {attempt + 1}/{max_retries}): {last_error}")
+                # Mostrar en consola para visibilidad
+                print(f"   ⚠️ JSON inválido (intento {attempt + 1}/{max_retries})")
                 
                 # Pedir al LLM que corrija
                 if attempt < max_retries - 1:
@@ -751,7 +757,13 @@ IMPORTANTE:
                 self.logger.warning(f"Error procesando batch (intento {attempt + 1}/{max_retries}): {e}")
         
         # Después de 3 intentos, retornar None para caer al fallback
-        self.logger.warning(f"Batch falló después de {max_retries} intentos: {last_error}")
+        if json_parse_failed > 0 and pydantic_failed == 0:
+            print(f"   ❌ Batch falló: JSON malformado ({json_parse_failed} intentos)")
+        elif pydantic_failed > 0:
+            print(f"   ❌ Batch falló: Pydantic rechazó estructura ({pydantic_failed} intentos)")
+        else:
+            print(f"   ❌ Batch falló: {last_error[:50]}")
+        
         return None
     
     # ==================== PROCESAMIENTO PARALELO ====================
