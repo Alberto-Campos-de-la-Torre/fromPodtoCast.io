@@ -442,6 +442,8 @@ class PodcastProcessor:
                 print(f"   ✓ Caché hits: {cache_hits}")
             if llm_stats.get('batch_calls', 0) > 0:
                 print(f"   ✓ Llamadas batch: {llm_stats.get('batch_calls', 0)}")
+            if llm_stats.get('pydantic_validations', 0) > 0:
+                print(f"   🔷 Pydantic: {llm_stats.get('pydantic_validations', 0)} respuestas validadas")
             if llm_failed_count > 0:
                 print(f"   ⚠️  Fallaron {llm_failed_count} correcciones\n")
             else:
@@ -456,6 +458,7 @@ class PodcastProcessor:
                 'total_changes': llm_stats.get('total_changes', 0),
                 'cache_hits': cache_hits,
                 'batch_calls': llm_stats.get('batch_calls', 0),
+                'pydantic_validations': llm_stats.get('pydantic_validations', 0),
                 'processing_time': round(llm_elapsed, 2),
                 'mode': 'batch' if self.llm_use_batch else ('parallel' if self.llm_use_parallel else 'sequential')
             }

@@ -18,6 +18,15 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import logging
 from datetime import datetime
 
+# Barras de progreso
+try:
+    from tqdm import tqdm
+    TQDM_AVAILABLE = True
+except ImportError:
+    TQDM_AVAILABLE = False
+    def tqdm(iterable, **kwargs):
+        return iterable
+
 try:
     from pydantic import ValidationError
     from .models.llm_schemas import (
@@ -191,7 +200,8 @@ IMPORTANTE:
             'total_changes': 0,
             'cache_hits': 0,
             'batch_calls': 0,
-            'individual_calls': 0
+            'individual_calls': 0,
+            'pydantic_validations': 0
         }
         
         # Verificar conexión
@@ -425,12 +435,25 @@ Recuerda: Responde SOLO con el JSON estructurado."""
         
         # Procesar textos no cacheados en batches
         if uncached_texts:
-            self.logger.info(
-                f"Procesando {len(uncached_texts)} textos en batches de {batch_size} "
-                f"({self.stats['cache_hits']} desde caché)"
-            )
+            num_batches = (len(uncached_texts) + batch_size - 1) // batch_size
+            cache_msg = f" (caché: {self.stats['cache_hits']})" if self.stats['cache_hits'] > 0 else ""
+            print(f"   📦 Procesando {len(uncached_texts)} textos en {num_batches} batches{cache_msg}")
             
-            for batch_start in range(0, len(uncached_texts), batch_size):
+            # Crear barra de progreso para batches
+            batch_ranges = range(0, len(uncached_texts), batch_size)
+            if TQDM_AVAILABLE:
+                batch_iterator = tqdm(
+                    batch_ranges,
+                    desc="   Corrigiendo con LLM",
+                    unit="batch",
+                    ncols=80
+                )
+            else:
+                batch_iterator = batch_ranges
+            
+            pydantic_validations = 0
+            
+            for batch_start in batch_iterator:
                 batch_end = min(batch_start + batch_size, len(uncached_texts))
                 batch_texts = uncached_texts[batch_start:batch_end]
                 batch_indices = uncached_indices[batch_start:batch_end]
@@ -440,12 +463,20 @@ Recuerda: Responde SOLO con el JSON estructurado."""
                 for idx, (original_idx, result) in enumerate(zip(batch_indices, batch_results)):
                     results[original_idx] = result
                     
+                    # Contar validaciones Pydantic exitosas
+                    if 'error' not in result[1] and result[1].get('pydantic_validated'):
+                        pydantic_validations += 1
+                    
                     # Guardar en caché si fue exitoso
                     if 'error' not in result[1]:
                         self._add_to_cache(
                             batch_texts[idx],
                             {'texto_corregido': result[0], **result[1]}
                         )
+            
+            # Mostrar resumen de validación Pydantic
+            if PYDANTIC_AVAILABLE and pydantic_validations > 0:
+                print(f"   🔷 Pydantic: {pydantic_validations} respuestas validadas correctamente")
         
         # Guardar caché al final
         if self.enable_cache:
@@ -543,10 +574,12 @@ Responde con el JSON que contiene las correcciones para TODOS los textos."""
                             'cambios': c.cambios,
                             'confianza': c.confianza,
                             'modelo': self.model,
-                            'batch': True
+                            'batch': True,
+                            'pydantic_validated': True
                         })
                         for c in validated.correcciones
                     ]
+                    self.stats['pydantic_validations'] = self.stats.get('pydantic_validations', 0) + len(correcciones)
                     return correcciones
                 except ValidationError as e:
                     self.logger.warning(f"Validación Pydantic falló: {e}")
@@ -679,11 +712,13 @@ Responde con el JSON que contiene las correcciones para TODOS los textos."""
             if PYDANTIC_AVAILABLE:
                 try:
                     validated = LLMCorrectionResponse(**data)
+                    self.stats['pydantic_validations'] = self.stats.get('pydantic_validations', 0) + 1
                     return {
                         'success': True,
                         'texto_corregido': validated.texto_corregido,
                         'cambios': validated.cambios,
-                        'confianza': validated.confianza
+                        'confianza': validated.confianza,
+                        'pydantic_validated': True
                     }
                 except ValidationError as e:
                     self.logger.debug(f"Validación Pydantic falló, usando fallback: {e}")
@@ -796,7 +831,8 @@ Responde con el JSON que contiene las correcciones para TODOS los textos."""
             'total_changes': 0,
             'cache_hits': 0,
             'batch_calls': 0,
-            'individual_calls': 0
+            'individual_calls': 0,
+            'pydantic_validations': 0
         }
 
 
