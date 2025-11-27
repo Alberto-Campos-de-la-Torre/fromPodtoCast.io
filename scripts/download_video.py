@@ -469,6 +469,8 @@ def download_video(url: str, output_dir: str, audio_only: bool = True,
         '--file-access-retries', '3',  # Reintentar acceso a archivos
         '--extractor-retries', '3',  # Reintentar extractores
         '--no-check-certificate',  # En algunos casos ayuda con conexiones lentas
+        # Usar cookies del navegador para evitar bloqueo de YouTube
+        '--cookies-from-browser', 'chrome',
         # Opciones para YouTube sin JavaScript runtime
         '--extractor-args', 'youtube:player_client=android,web',
         '--no-warnings',  # Suprimir warnings de formatos faltantes

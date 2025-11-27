@@ -28,3 +28,4 @@ ffmpeg-python>=0.2.0
 #   o ajustar las versiones según tu entorno principal
 
 pydantic>=2.0
+secretstorage
