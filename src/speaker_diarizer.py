@@ -34,7 +34,8 @@ try:
     from pyannote.core import Segment
     PYANNOTE_AVAILABLE = True
     PYANNOTE_EMBED_AVAILABLE = True
-except ImportError:
+except Exception as e:
+    print(f"⚠️  No se pudo importar pyannote.audio: {e}")
     PYANNOTE_AVAILABLE = False
     PYANNOTE_EMBED_AVAILABLE = False
     Pipeline = None

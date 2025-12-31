@@ -151,3 +151,8 @@ class CacheEntry(BaseModel):
         """Incrementa el contador de hits."""
         self.hits += 1
 
+
+
+
+
+

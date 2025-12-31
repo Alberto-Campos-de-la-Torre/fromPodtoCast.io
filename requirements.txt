@@ -7,12 +7,33 @@ pydub>=0.25.1
 openai-whisper>=20231117
 
 # Speaker Diarization
+# Speaker Diarization
 pyannote.audio>=3.1.0
+torchcodec>=0.9.1
+pytorch-metric-learning>=2.9.0
+torchmetrics>=1.8.2
 
-# PyTorch - Versiones flexibles para compatibilidad
-# Nota: Si ya tienes torch instalado, estas líneas se omitirán
-# torch>=2.0.0,<2.9.0  # Compatible con moshi 0.2.11 (requiere <2.8)
-# torchaudio>=2.0.0,<2.9.0
+# ==============================================================================
+# PyTorch GPU Configuration - CUDA 12.8 (Blackwell Architecture Support)
+# ==============================================================================
+# Este proyecto usa PyTorch con aceleración GPU CUDA 12.8
+# Compatible con: NVIDIA RTX 5090, RTX 5070 Ti (Compute Capability 12.0)
+#
+# Instalación manual requerida (no usar pip install desde requirements.txt):
+#   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
+#
+# Versiones instaladas:
+#   - torch==2.9.1+cu128
+#   - torchvision==0.24.1+cu128  
+#   - torchaudio==2.9.1+cu128
+#
+# Dependencias NVIDIA CUDA 12.8 requeridas (instaladas automáticamente):
+#   - nvidia-cublas-cu12, nvidia-cuda-cupti-cu12, nvidia-cuda-nvrtc-cu12
+#   - nvidia-cuda-runtime-cu12, nvidia-cudnn-cu12, nvidia-cufft-cu12
+#   - nvidia-curand-cu12, nvidia-cusolver-cu12, nvidia-cusparse-cu12
+#   - nvidia-nccl-cu12, nvidia-nvjitlink-cu12, nvidia-nvtx-cu12
+#   - nvidia-nvshmem-cu12, libcufile0 (sistema)
+# ==============================================================================
 
 # Utilidades
 tqdm>=4.66.0
@@ -20,12 +41,6 @@ numpy>=1.24.0
 
 # Opcional: para procesamiento de audio avanzado
 ffmpeg-python>=0.2.0
-
-# Nota sobre dependencias:
-# - Si tienes moshi instalado, torch debe ser <2.8.0
-# - Si tienes torchvision 0.24.0+cu130, torch debe ser 2.9.0
-# - Considera usar un entorno virtual separado para fromPodtoCast
-#   o ajustar las versiones según tu entorno principal
 
 pydantic>=2.0
 secretstorage

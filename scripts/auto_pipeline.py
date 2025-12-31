@@ -50,7 +50,7 @@ PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / 'src'))
 
 # Ruta base para datos
-DEFAULT_DATA_PATH = '/media/ttech-main/42A4266DA426639F/Base de Datos - Voz'
+DEFAULT_DATA_PATH = '/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d'
 
 # Colores ANSI
 class Colors:

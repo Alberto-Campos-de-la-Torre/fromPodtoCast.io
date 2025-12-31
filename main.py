@@ -28,14 +28,11 @@ def main():
         type=str,
         help='Ruta al archivo de audio o directorio con archivos de podcast'
     )
-    # Ruta base para datos de voz
-    DEFAULT_OUTPUT = '/media/ttech-main/42A4266DA426639F/Base de Datos - Voz'
-    
     parser.add_argument(
         '-o', '--output',
         type=str,
-        default=DEFAULT_OUTPUT,
-        help=f'Directorio de salida (default: {DEFAULT_OUTPUT})'
+        default='./data/output',
+        help='Directorio de salida (default: ./data/output)'
     )
     parser.add_argument(
         '-c', '--config',
@@ -46,8 +43,8 @@ def main():
     parser.add_argument(
         '--metadata',
         type=str,
-        default=f'{DEFAULT_OUTPUT}/metadata.json',
-        help=f'Ruta donde guardar el archivo JSON de metadata (default: {DEFAULT_OUTPUT}/metadata.json)'
+        default='./data/output/metadata.json',
+        help='Ruta donde guardar el archivo JSON de metadata (default: ./data/output/metadata.json)'
     )
     
     args = parser.parse_args()

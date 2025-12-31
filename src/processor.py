@@ -148,22 +148,29 @@ class PodcastProcessor:
                         expire_days=llm_config.get('cache_expire_days', 30)
                     )
                 
+                # Configuración del verificador de transcripciones
+                verification_config = llm_config.get('verification', {})
+                enable_verification = llm_config.get('enable_verification', True)
+                
                 self.llm_corrector = TextCorrectorLLM(
-                    ollama_host=llm_config.get('ollama_host', 'http://192.168.1.81:11434'),
-                    model=llm_config.get('model', 'qwen3:8b'),
+                    ollama_host=llm_config.get('ollama_host', 'http://localhost:11434'),
+                    model=llm_config.get('model', 'gpt-oss:20b'),
                     glosario_path=text_config.get('glosario_path'),
                     timeout=llm_config.get('timeout', 120),
                     max_retries=llm_config.get('max_retries', 3),
                     batch_size=self.llm_batch_size,
                     enable_cache=cache_enabled,
                     cache_file=cache_file,
-                    max_workers=self.llm_max_workers
+                    max_workers=self.llm_max_workers,
+                    enable_verification=enable_verification,
+                    verification_config=verification_config
                 )
                 self.llm_min_confidence = llm_config.get('min_confidence', 0.7)
                 
                 mode = "batch" if self.llm_use_batch else ("paralelo" if self.llm_use_parallel else "secuencial")
                 cache_status = f", caché={'ON' if cache_enabled else 'OFF'}"
-                print(f"✓ Corrector LLM inicializado ({llm_config.get('model', 'qwen3:8b')}, modo={mode}{cache_status})")
+                verify_status = f", verificación={'ON' if enable_verification else 'OFF'}"
+                print(f"✓ Corrector LLM inicializado ({llm_config.get('model', 'qwen3:8b')}, modo={mode}{cache_status}{verify_status})")
             except Exception as e:
                 print(f"⚠️  No se pudo inicializar corrector LLM: {e}")
                 self.llm_corrector = None

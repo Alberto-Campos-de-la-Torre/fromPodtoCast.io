@@ -190,3 +190,8 @@ class MetadataValidationResult(BaseModel):
     def add_warning(self, warning: str) -> None:
         self.warnings.append(warning)
 
+
+
+
+
+

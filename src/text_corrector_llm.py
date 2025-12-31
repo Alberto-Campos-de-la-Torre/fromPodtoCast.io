@@ -38,7 +38,32 @@ try:
     )
     PYDANTIC_AVAILABLE = True
 except ImportError:
-    PYDANTIC_AVAILABLE = False
+    try:
+        from pydantic import ValidationError
+        from models.llm_schemas import (
+            LLMCorrectionResponse,
+            LLMCorrectionBatchResponse,
+            LLMCorrectionBatchItem,
+            LLMCorrectionMetadata,
+            CacheEntry
+        )
+        PYDANTIC_AVAILABLE = True
+    except ImportError:
+        PYDANTIC_AVAILABLE = False
+
+
+# Verificador de transcripciones
+try:
+    from .transcription_verifier import TranscriptionVerifier, VerificationResult
+    VERIFIER_AVAILABLE = True
+except ImportError:
+    try:
+        from transcription_verifier import TranscriptionVerifier, VerificationResult
+        VERIFIER_AVAILABLE = True
+    except ImportError:
+        VERIFIER_AVAILABLE = False
+        TranscriptionVerifier = None
+        VerificationResult = None
 
 
 class TextCorrectorLLM:
@@ -52,88 +77,116 @@ class TextCorrectorLLM:
     - Formato de salida estructurado JSON
     - Procesamiento por lotes optimizado
     - Caché de correcciones
+    - Verificación anti-alucinación
     """
     
-    # Master prompt para el modelo (individual)
-    SYSTEM_PROMPT = """Eres un experto corrector de transcripciones de audio en español mexicano.
+    # Master prompt para el modelo (individual) - OPTIMIZADO
+    SYSTEM_PROMPT = """Eres un corrector experto de transcripciones de audio en español mexicano con 20 años de experiencia en podcasts.
 
-## TU TAREA
-Corregir transcripciones de podcasts manteniendo:
-1. La naturalidad del habla oral
-2. Los regionalismos mexicanos (NO los corrijas)
-3. El estilo y tono del hablante original
+## TU ROL
+Actúas como un editor profesional especializado en transcripciones automáticas de Whisper para podcasts mexicanos.
 
-## REGLAS DE CORRECCIÓN
+## TAREA PRINCIPAL
+Corregir ÚNICAMENTE errores de transcripción, preservando el contenido exacto del hablante.
 
-### DEBES CORREGIR:
-- Errores ortográficos (tildes, letras)
-- Puntuación faltante o incorrecta (¿?, ¡!, comas, puntos)
-- Mayúsculas incorrectas (nombres propios, inicios de oración)
-- Números a texto cuando sea natural (5 → cinco)
-- Marcas y nombres: YouTube, TikTok, Instagram, ChatGPT, Google, etc.
-- Acrónimos: IA, SEO, API, URL, etc.
+## ⚠️ REGLA CRÍTICA: NO AGREGAR NI ELIMINAR CONTENIDO
+- NUNCA agregues información que no está en el texto original
+- NUNCA elimines palabras o frases del original
+- NUNCA cambies el significado o intención del hablante
+- NUNCA parafrasees o resumas el contenido
+- El texto corregido DEBE tener aproximadamente la misma longitud que el original
 
-### NO DEBES CORREGIR (MANTENER TAL CUAL):
-- Regionalismos mexicanos: güey, chido, neta, órale, chamba, etc.
-- Muletillas naturales: pues, este, o sea, bueno
-- Expresiones coloquiales: no manches, qué onda, está cañón
-- El estilo informal si es apropiado al contexto
+## CORRECCIONES PERMITIDAS (SOLO ESTAS)
 
-### ERRORES COMUNES DE WHISPER A CORREGIR:
-- "gemina" → "Gemini"
-- "que es" al inicio → "¿Qué es"
-- "por que" → "por qué" (en preguntas)
-- "ai" → "IA"
-- Falta de signos de apertura ¿ y ¡
+### ✅ CORREGIR:
+1. **Ortografía**: tildes (qué, cómo, más), letras incorrectas
+2. **Puntuación**: agregar ¿?, ¡!, comas, puntos donde faltan
+3. **Mayúsculas**: nombres propios, inicio de oración
+4. **Nombres de marcas**: YouTube, TikTok, Instagram, ChatGPT, Google, WhatsApp
+5. **Acrónimos**: IA, SEO, API, URL, PDF, CEO, NFT
+6. **Errores comunes de Whisper**:
+   - "gemina" → "Gemini"
+   - "chat gpt" → "ChatGPT"
+   - "ai" → "IA"
+   - "que es" (al inicio) → "¿Qué es"
+   - "por que" (pregunta) → "por qué"
 
-## GLOSARIO DE REFERENCIA
+### ❌ NO CORREGIR (MANTENER TAL CUAL):
+- Regionalismos: güey, chido, neta, órale, chamba, morro, chale, fresa
+- Muletillas: pues, este, o sea, bueno, ¿no?, ¿verdad?
+- Expresiones coloquiales: no manches, qué onda, está cañón, ni modo
+- Estilo informal del hablante
+- Repeticiones intencionales
+- Pausas o titubeos representados
+
+## GLOSARIO ESPECÍFICO
 {glosario_context}
 
-## FORMATO DE RESPUESTA
-Responde ÚNICAMENTE con un JSON válido con esta estructura exacta:
+## FORMATO DE RESPUESTA (JSON ESTRICTO)
+Responde ÚNICAMENTE con este JSON, sin texto antes ni después:
 {{
   "texto_corregido": "El texto corregido completo",
   "cambios": ["cambio1", "cambio2"],
   "confianza": 0.95
 }}
 
-- texto_corregido: El texto final corregido
-- cambios: Lista de correcciones aplicadas (máximo 5 más relevantes)
-- confianza: Número entre 0 y 1 indicando confianza en la corrección
+### Reglas del JSON:
+- `texto_corregido`: Texto final (misma longitud aproximada del original)
+- `cambios`: Lista de hasta 5 correcciones principales aplicadas
+- `confianza`: Número entre 0.0 y 1.0
 
-IMPORTANTE: 
-- Responde SOLO con el JSON, sin explicaciones adicionales
-- Si el texto está correcto, devuelve el mismo texto con cambios vacío
-- No inventes contenido, solo corrige lo existente"""
+### Si el texto está correcto:
+{{
+  "texto_corregido": "[mismo texto sin cambios]",
+  "cambios": [],
+  "confianza": 0.99
+}}
 
-    # Prompt para batch processing
-    BATCH_SYSTEM_PROMPT = """Eres un experto corrector de transcripciones de audio en español mexicano.
+RESPONDE SOLO JSON. NO EXPLIQUES."""
 
-## TU TAREA
-Corregir MÚLTIPLES transcripciones de podcasts manteniendo:
-1. La naturalidad del habla oral
-2. Los regionalismos mexicanos (NO los corrijas)
-3. El estilo y tono del hablante original
+    # Prompt para batch processing - OPTIMIZADO
+    BATCH_SYSTEM_PROMPT = """Eres un corrector experto de transcripciones de audio en español mexicano.
 
-## REGLAS DE CORRECCIÓN
+## ROL
+Editor profesional especializado en corrección de transcripciones automáticas de podcasts.
 
-### DEBES CORREGIR:
-- Errores ortográficos (tildes, letras)
-- Puntuación faltante o incorrecta (¿?, ¡!, comas, puntos)
-- Mayúsculas incorrectas
-- Marcas y nombres: YouTube, TikTok, Instagram, ChatGPT, etc.
-- Acrónimos: IA, SEO, API, URL, etc.
+## ⚠️ REGLA CRÍTICA: PRESERVAR EL CONTENIDO ORIGINAL
+- NUNCA agregues información nueva
+- NUNCA elimines contenido del original  
+- NUNCA cambies el significado
+- La longitud de cada texto corregido debe ser similar al original
+- Solo corrige errores de ortografía, puntuación y format
 
-### NO DEBES CORREGIR:
-- Regionalismos mexicanos: güey, chido, neta, órale, etc.
-- Muletillas naturales
+## CORRECCIONES PERMITIDAS
+
+### ✅ CORREGIR:
+- Tildes y ortografía
+- Puntuación (¿?, ¡!, comas, puntos)
+- Mayúsculas (nombres propios, inicio de oración)
+- Marcas: YouTube, TikTok, Instagram, ChatGPT, Google
+- Acrónimos: IA, SEO, API, URL
+
+### ❌ NO CORREGIR:
+- Regionalismos mexicanos (güey, chido, neta, órale)
+- Muletillas naturales (pues, este, o sea)
 - Expresiones coloquiales
 
 ## GLOSARIO
 {glosario_context}
 
+## EJEMPLOS DE CORRECCIÓN CORRECTA
+
+Entrada 0: "que es el marketing digital y por que es importante"
+Salida 0: {{"id": 0, "texto_corregido": "¿Qué es el marketing digital y por qué es importante?", "cambios": ["Añadido ¿", "qué con tilde", "por qué separado"], "confianza": 0.95}}
+
+Entrada 1: "vamos a hablar de chat gpt y de youtube"
+Salida 1: {{"id": 1, "texto_corregido": "Vamos a hablar de ChatGPT y de YouTube.", "cambios": ["ChatGPT", "YouTube", "punto final"], "confianza": 0.92}}
+
+Entrada 2: "pues si guey esta bien chido el podcast"
+Salida 2: {{"id": 2, "texto_corregido": "Pues sí güey, está bien chido el podcast.", "cambios": ["sí con tilde", "Mayúscula inicial", "coma después de güey"], "confianza": 0.90}}
+
 ## FORMATO DE RESPUESTA (CRÍTICO)
-Responde ÚNICAMENTE con JSON válido. NO texto antes ni después.
+Responde ÚNICAMENTE con JSON válido. NINGÚN texto antes ni después.
 
 Estructura EXACTA:
 {{
@@ -143,26 +196,28 @@ Estructura EXACTA:
   ]
 }}
 
-REGLAS DEL JSON:
-- USA COMA entre objetos (excepto el último)
-- IDs de 0 a N-1 en orden
-- confianza es NÚMERO (0.0-1.0), no string
+## REGLAS JSON
+- Usa COMA entre objetos del array (excepto el último)
+- IDs consecutivos de 0 a N-1
+- confianza es NÚMERO (0.0-1.0), NO string
 - Solo comillas dobles
-- Escapa comillas en strings: \\"
+- Escapa comillas internas: \\"
 
 RESPONDE SOLO JSON."""
 
     def __init__(
         self,
-        ollama_host: str = "http://192.168.1.81:11434",
-        model: str = "qwen3:8b",
+        ollama_host: str = "http://localhost:11434",
+        model: str = "gpt-oss:20b",
         glosario_path: Optional[str] = None,
-        timeout: int = 120,
+        timeout: int = 300,
         max_retries: int = 3,
         batch_size: int = 5,
         enable_cache: bool = True,
         cache_file: Optional[str] = None,
-        max_workers: int = 2
+        max_workers: int = 2,
+        enable_verification: bool = True,
+        verification_config: Optional[Dict] = None
     ):
         """
         Inicializa el corrector LLM.
@@ -177,7 +232,11 @@ RESPONDE SOLO JSON."""
             enable_cache: Habilitar caché de correcciones
             cache_file: Ruta al archivo de caché
             max_workers: Workers para paralelización
+            enable_verification: Habilitar verificación de correcciones
+            verification_config: Configuración del verificador (optional)
         """
+        if not ollama_host.startswith(('http://', 'https://')):
+            ollama_host = f"http://{ollama_host}"
         self.ollama_host = ollama_host.rstrip('/')
         self.model = model
         self.timeout = timeout
@@ -197,6 +256,21 @@ RESPONDE SOLO JSON."""
         if enable_cache and cache_file:
             self._load_cache()
         
+        # Verificador de transcripciones
+        self.enable_verification = enable_verification and VERIFIER_AVAILABLE
+        self.verifier = None
+        if self.enable_verification:
+            v_config = verification_config or {}
+            self.verifier = TranscriptionVerifier(
+                min_length_ratio=v_config.get('min_length_ratio', 0.70),
+                max_length_ratio=v_config.get('max_length_ratio', 1.40),
+                min_word_preservation=v_config.get('min_word_preservation', 0.80),
+                max_new_word_ratio=v_config.get('max_new_word_ratio', 0.25),
+                min_sequence_similarity=v_config.get('min_sequence_similarity', 0.60),
+                logger=self.logger
+            )
+            self.logger.info("✓ Verificador de transcripciones habilitado")
+        
         # Estadísticas extendidas
         self.stats = {
             'processed': 0,
@@ -207,7 +281,10 @@ RESPONDE SOLO JSON."""
             'cache_hits': 0,
             'batch_calls': 0,
             'individual_calls': 0,
-            'pydantic_validations': 0
+            'pydantic_validations': 0,
+            'verification_passed': 0,
+            'verification_failed': 0,
+            'verification_reverted': 0
         }
         
         # Verificar conexión
@@ -405,15 +482,17 @@ Recuerda: Responde SOLO con el JSON estructurado."""
     def correct_batch_optimized(
         self,
         texts: List[str],
-        batch_size: Optional[int] = None
+        batch_size: Optional[int] = None,
+        verify_corrections: Optional[bool] = None
     ) -> List[Tuple[str, Dict]]:
         """
         Corrige múltiples textos en lotes optimizados.
         Reduce llamadas HTTP agrupando textos.
         
         Args:
-            texts: Lista de textos a corregir
+            texts: Lista de textos a corrigir
             batch_size: Tamaño del lote (usa self.batch_size si no se especifica)
+            verify_corrections: Verificar correcciones (usa self.enable_verification si no se especifica)
             
         Returns:
             Lista de tuplas (texto_corregido, metadata) en el mismo orden
@@ -422,6 +501,8 @@ Recuerda: Responde SOLO con el JSON estructurado."""
             return []
         
         batch_size = batch_size or self.batch_size
+        should_verify = verify_corrections if verify_corrections is not None else self.enable_verification
+        
         results: List[Tuple[str, Dict]] = [None] * len(texts)  # type: ignore
         uncached_indices: List[int] = []
         uncached_texts: List[str] = []
@@ -443,7 +524,8 @@ Recuerda: Responde SOLO con el JSON estructurado."""
         if uncached_texts:
             num_batches = (len(uncached_texts) + batch_size - 1) // batch_size
             cache_msg = f" (caché: {self.stats['cache_hits']})" if self.stats['cache_hits'] > 0 else ""
-            print(f"   📦 Procesando {len(uncached_texts)} textos en {num_batches} batches{cache_msg}")
+            verify_msg = " [verificación ON]" if should_verify and self.verifier else ""
+            print(f"   📦 Procesando {len(uncached_texts)} textos en {num_batches} batches{cache_msg}{verify_msg}")
             
             # Crear barra de progreso para batches
             batch_ranges = range(0, len(uncached_texts), batch_size)
@@ -458,6 +540,9 @@ Recuerda: Responde SOLO con el JSON estructurado."""
                 batch_iterator = batch_ranges
             
             pydantic_validations = 0
+            verification_passed = 0
+            verification_failed = 0
+            verification_reverted = 0
             
             for batch_start in batch_iterator:
                 batch_end = min(batch_start + batch_size, len(uncached_texts))
@@ -466,6 +551,44 @@ Recuerda: Responde SOLO con el JSON estructurado."""
                 
                 batch_results = self._process_batch(batch_texts)
                 
+                # Verificar correcciones si está habilitado
+                if should_verify and self.verifier:
+                    verified_results = []
+                    for idx, (original_text, (corrected_text, meta)) in enumerate(zip(batch_texts, batch_results)):
+                        if 'error' not in meta:
+                            # Verificar la corrección
+                            llm_conf = meta.get('confianza', 1.0)
+                            v_result = self.verifier.verify(original_text, corrected_text, llm_conf)
+                            
+                            if v_result.is_valid:
+                                verification_passed += 1
+                                meta['verification'] = {
+                                    'passed': True,
+                                    'score': v_result.confidence_score,
+                                    'checks_passed': v_result.checks_passed
+                                }
+                                verified_results.append((corrected_text, meta))
+                            else:
+                                verification_failed += 1
+                                # Revertir al texto original
+                                verification_reverted += 1
+                                meta['verification'] = {
+                                    'passed': False,
+                                    'score': v_result.confidence_score,
+                                    'checks_failed': v_result.checks_failed,
+                                    'warnings': v_result.warnings,
+                                    'reverted': True
+                                }
+                                self.logger.debug(
+                                    f"Verificación falló para: '{original_text[:50]}...' -> "
+                                    f"Revirtiendo. Checks: {v_result.checks_failed}"
+                                )
+                                verified_results.append((original_text, meta))
+                        else:
+                            verified_results.append((corrected_text, meta))
+                    
+                    batch_results = verified_results
+                
                 for idx, (original_idx, result) in enumerate(zip(batch_indices, batch_results)):
                     results[original_idx] = result
                     
@@ -473,16 +596,28 @@ Recuerda: Responde SOLO con el JSON estructurado."""
                     if 'error' not in result[1] and result[1].get('pydantic_validated'):
                         pydantic_validations += 1
                     
-                    # Guardar en caché si fue exitoso
+                    # Guardar en caché si fue exitoso y verificado
                     if 'error' not in result[1]:
-                        self._add_to_cache(
-                            batch_texts[idx],
-                            {'texto_corregido': result[0], **result[1]}
-                        )
+                        # Solo cachear si pasó verificación o verificación está deshabilitada
+                        verification_info = result[1].get('verification', {})
+                        if not should_verify or verification_info.get('passed', True):
+                            self._add_to_cache(
+                                batch_texts[idx],
+                                {'texto_corregido': result[0], **result[1]}
+                            )
+            
+            # Actualizar estadísticas de verificación
+            self.stats['verification_passed'] += verification_passed
+            self.stats['verification_failed'] += verification_failed
+            self.stats['verification_reverted'] += verification_reverted
             
             # Mostrar resumen de validación Pydantic
             if PYDANTIC_AVAILABLE and pydantic_validations > 0:
                 print(f"   🔷 Pydantic: {pydantic_validations} respuestas validadas correctamente")
+            
+            # Mostrar resumen de verificación
+            if should_verify and self.verifier and (verification_passed > 0 or verification_failed > 0):
+                print(f"   🔍 Verificación: {verification_passed} OK, {verification_failed} fallaron ({verification_reverted} revertidos)")
         
         # Guardar caché al final
         if self.enable_cache:
@@ -980,11 +1115,14 @@ IMPORTANTE:
             'cache_hits': 0,
             'batch_calls': 0,
             'individual_calls': 0,
-            'pydantic_validations': 0
+            'pydantic_validations': 0,
+            'verification_passed': 0,
+            'verification_failed': 0,
+            'verification_reverted': 0
         }
 
 
-def test_connection(host: str = "http://192.168.1.81:11434", model: str = "qwen3:8b"):
+def test_connection(host: str = "http://localhost:11434", model: str = "gpt-oss:20b"):
     """Prueba la conexión y el modelo."""
     print(f"🔌 Probando conexión a {host}...")
     
@@ -1050,8 +1188,8 @@ if __name__ == '__main__':
         format='%(asctime)s - %(levelname)s - %(message)s'
     )
     
-    host = sys.argv[1] if len(sys.argv) > 1 else "http://192.168.1.81:11434"
-    model = sys.argv[2] if len(sys.argv) > 2 else "qwen3:8b"
+    host = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:11434"
+    model = sys.argv[2] if len(sys.argv) > 2 else "gpt-oss:20b"
     
     print("=" * 60)
     print("  TEST: Text Corrector LLM (Ollama) - Optimizado")
