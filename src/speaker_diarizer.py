@@ -92,7 +92,8 @@ class SpeakerDiarizer:
                 )
                 
                 # Mover pipeline al dispositivo correcto
-                if self.device == "cuda" and torch.cuda.is_available():
+                # Soportar formatos: 'cuda', 'cuda:0', 'cuda:1', etc.
+                if self.device.startswith("cuda") and torch.cuda.is_available():
                     self.pipeline = self.pipeline.to(torch.device(self.device))
                     print(f"   ✓ Pipeline cargado en {self.device}")
                 else:

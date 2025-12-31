@@ -208,7 +208,7 @@ RESPONDE SOLO JSON."""
     def __init__(
         self,
         ollama_host: str = "http://localhost:11434",
-        model: str = "gpt-oss:20b",
+        model: str = "qwen3:14b",
         glosario_path: Optional[str] = None,
         timeout: int = 300,
         max_retries: int = 3,
@@ -944,40 +944,134 @@ IMPORTANTE:
         self, 
         system_prompt: str, 
         user_prompt: str,
-        timeout: Optional[int] = None
+        timeout: Optional[int] = None,
+        max_retries: int = 3
     ) -> Optional[str]:
-        """Llama a la API de Ollama."""
+        """
+        Llama a la API de Ollama con reintentos y backoff exponencial.
+        
+        Maneja error 500, timeouts y problemas de conexión automáticamente.
+        """
+        import time as time_module
+        
+        actual_timeout = timeout or self.timeout
+        
+        # Qwen3 tiene modo "thinking" activado por defecto
+        # Agregar /no_think para desactivarlo y obtener respuesta directa
+        is_qwen3 = 'qwen3' in self.model.lower()
+        final_system = f"/no_think\n{system_prompt}" if is_qwen3 else system_prompt
+        
+        for attempt in range(max_retries):
+            try:
+                response = requests.post(
+                    f"{self.ollama_host}/api/generate",
+                    json={
+                        "model": self.model,
+                        "prompt": user_prompt,
+                        "system": final_system,
+                        "stream": False,
+                        "options": {
+                            "temperature": 0.3,
+                            "top_p": 0.9,
+                            "num_predict": 4096 if is_qwen3 else 2048,  # Más tokens para qwen3
+                        }
+                    },
+                    timeout=actual_timeout
+                )
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    # Qwen3 puede poner respuesta en 'response' o 'thinking'
+                    result = data.get('response', '')
+                    if not result and is_qwen3:
+                        # Si response está vacío, extraer del thinking
+                        thinking = data.get('thinking', '')
+                        if thinking:
+                            self.logger.debug(f"Usando thinking como respuesta para qwen3")
+                            result = thinking
+                    return result
+                
+                elif response.status_code == 500:
+                    # Error interno del servidor - intentar precargar modelo
+                    self.logger.warning(
+                        f"Error 500 en Ollama (intento {attempt + 1}/{max_retries}). "
+                        "Puede que el modelo no esté cargado."
+                    )
+                    if attempt == 0:
+                        # Intentar precargar el modelo en el primer error
+                        self._preload_model()
+                    
+                    # Backoff exponencial
+                    wait_time = (2 ** attempt) * 2  # 2, 4, 8 segundos
+                    self.logger.info(f"Esperando {wait_time}s antes de reintentar...")
+                    time_module.sleep(wait_time)
+                    continue
+                
+                elif response.status_code == 503:
+                    # Servicio no disponible - el servidor está sobrecargado
+                    self.logger.warning(
+                        f"Ollama sobrecargado (503), intento {attempt + 1}/{max_retries}"
+                    )
+                    wait_time = (2 ** attempt) * 3  # 3, 6, 12 segundos
+                    time_module.sleep(wait_time)
+                    continue
+                
+                else:
+                    self.logger.error(
+                        f"Error Ollama: {response.status_code} - {response.text[:200]}"
+                    )
+                    return None
+                    
+            except requests.exceptions.Timeout:
+                self.logger.warning(
+                    f"Timeout en Ollama ({actual_timeout}s), intento {attempt + 1}/{max_retries}"
+                )
+                # Aumentar timeout progresivamente
+                actual_timeout = int(actual_timeout * 1.5)
+                continue
+                
+            except requests.exceptions.ConnectionError as e:
+                self.logger.error(f"Error de conexión con Ollama: {e}")
+                # Verificar si Ollama está corriendo
+                if attempt == 0:
+                    self.logger.info("Verificando estado de Ollama...")
+                    if not self._verify_connection():
+                        self.logger.error("Ollama no está disponible")
+                        return None
+                wait_time = (2 ** attempt) * 2
+                time_module.sleep(wait_time)
+                continue
+                
+            except requests.exceptions.RequestException as e:
+                self.logger.error(f"Error en request: {e}")
+                return None
+        
+        self.logger.error(f"Falló después de {max_retries} intentos")
+        return None
+    
+    def _preload_model(self) -> bool:
+        """Precarga el modelo en memoria para evitar cold starts."""
         try:
+            self.logger.info(f"Precargando modelo {self.model}...")
             response = requests.post(
                 f"{self.ollama_host}/api/generate",
                 json={
                     "model": self.model,
-                    "prompt": user_prompt,
-                    "system": system_prompt,
+                    "prompt": "",  # Prompt vacío solo para cargar
                     "stream": False,
-                    "options": {
-                        "temperature": 0.3,
-                        "top_p": 0.9,
-                        "num_predict": 2048,  # Más tokens para batches
-                    }
+                    "options": {"num_predict": 1}
                 },
-                timeout=timeout or self.timeout
+                timeout=120  # 2 minutos para cargar modelo grande
             )
-            
             if response.status_code == 200:
-                return response.json().get('response', '')
+                self.logger.info(f"✓ Modelo {self.model} precargado")
+                return True
             else:
-                self.logger.error(
-                    f"Error Ollama: {response.status_code} - {response.text}"
-                )
-                return None
-                
-        except requests.exceptions.Timeout:
-            self.logger.error("Timeout en llamada a Ollama")
-            return None
-        except requests.exceptions.RequestException as e:
-            self.logger.error(f"Error de conexión: {e}")
-            return None
+                self.logger.warning(f"Error precargando modelo: {response.status_code}")
+                return False
+        except Exception as e:
+            self.logger.warning(f"Error precargando modelo: {e}")
+            return False
     
     def _parse_response(self, response: str, original_text: str) -> Dict:
         """Parsea la respuesta JSON del LLM."""
@@ -1122,7 +1216,7 @@ IMPORTANTE:
         }
 
 
-def test_connection(host: str = "http://localhost:11434", model: str = "gpt-oss:20b"):
+def test_connection(host: str = "http://localhost:11434", model: str = "qwen3:14b"):
     """Prueba la conexión y el modelo."""
     print(f"🔌 Probando conexión a {host}...")
     
@@ -1189,7 +1283,7 @@ if __name__ == '__main__':
     )
     
     host = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:11434"
-    model = sys.argv[2] if len(sys.argv) > 2 else "gpt-oss:20b"
+    model = sys.argv[2] if len(sys.argv) > 2 else "qwen3:14b"
     
     print("=" * 60)
     print("  TEST: Text Corrector LLM (Ollama) - Optimizado")

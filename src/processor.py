@@ -5,6 +5,7 @@ Optimizado con:
 - Procesamiento por lotes para corrección LLM
 - Caché de correcciones
 - Paralelización opcional
+- Distribución Multi-GPU
 """
 import os
 import json
@@ -25,6 +26,7 @@ from voice_bank import VoiceBankManager
 from text_preprocessor import TextPreprocessor
 from text_corrector_llm import TextCorrectorLLM
 from correction_cache import BatchCorrectionCache, get_global_cache
+from gpu_manager import GPUManager, get_gpu_manager
 
 
 class PodcastProcessor:
@@ -40,6 +42,20 @@ class PodcastProcessor:
         self.config = config
         self.voice_bank_manager = None
         
+        # Inicializar GPUManager para distribución de carga
+        gpu_config = config.get('gpu_config', {})
+        self.gpu_manager = GPUManager(gpu_config)
+        
+        # Obtener dispositivos específicos para cada componente
+        whisper_device = self.gpu_manager.get_device_for_whisper()
+        diarization_device = self.gpu_manager.get_device_for_diarization()
+        
+        if gpu_config.get('enabled', False):
+            print(f"🎮 Multi-GPU habilitado:")
+            print(f"   • Whisper → {whisper_device}")
+            print(f"   • Diarization → {diarization_device}")
+            print(f"   • Ollama → cuda:0 (vía systemd)")
+        
         # Inicializar componentes
         self.segmenter = AudioSegmenter(
             min_duration=config.get('min_duration', 10.0),
@@ -54,9 +70,10 @@ class PodcastProcessor:
             normalize_peak=config.get('normalize_peak', True)
         )
         
+        # Usar dispositivo de GPUManager para Whisper
         self.transcriber = AudioTranscriber(
             model_name=config.get('whisper_model', 'base'),
-            device=config.get('device', None),
+            device=whisper_device if gpu_config.get('enabled') else config.get('device'),
             language=config.get('language', None)
         )
         
@@ -77,18 +94,16 @@ class PodcastProcessor:
         else:
             print("Voice bank deshabilitado (use_voice_bank=false).")
         
-        # Diarizador opcional (puede requerir token de HF)
+        # Diarizador con dispositivo específico de GPUManager
         hf_token = config.get('hf_token', None)
         use_diarization = config.get('use_diarization', False)
         
-        # Inicializar diarizador siempre (usará método simple si pyannote no está disponible)
         try:
             self.diarizer = SpeakerDiarizer(
                 hf_token=hf_token if (use_diarization or hf_token) else None,
-                device=config.get('device', None),
+                device=diarization_device if gpu_config.get('enabled') else config.get('device'),
                 voice_bank_manager=self.voice_bank_manager if use_voice_bank else None
             )
-            # El diarizador siempre está disponible (método simple por defecto)
         except Exception as e:
             print(f"⚠️  Advertencia: No se pudo inicializar diarizador: {e}")
             print("   Continuando sin diarización...")
@@ -154,7 +169,7 @@ class PodcastProcessor:
                 
                 self.llm_corrector = TextCorrectorLLM(
                     ollama_host=llm_config.get('ollama_host', 'http://localhost:11434'),
-                    model=llm_config.get('model', 'gpt-oss:20b'),
+                    model=llm_config.get('model', 'qwen3:14b'),
                     glosario_path=text_config.get('glosario_path'),
                     timeout=llm_config.get('timeout', 120),
                     max_retries=llm_config.get('max_retries', 3),
