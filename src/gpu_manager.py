@@ -115,6 +115,29 @@ class GPUManager:
             }
         return info
     
+    def cleanup_memory(self):
+        """
+        Libera memoria GPU no utilizada.
+        
+        Llamar después de procesar cada video para evitar 
+        acumulación de memoria que cause congelamiento.
+        """
+        import gc
+        gc.collect()
+        
+        if not torch.cuda.is_available() or self.device_count == 0:
+            return
+        
+        for i in range(self.device_count):
+            try:
+                with torch.cuda.device(i):
+                    torch.cuda.empty_cache()
+                    torch.cuda.synchronize()
+            except Exception as e:
+                self.logger.debug(f"Error limpiando GPU {i}: {e}")
+        
+        self.logger.debug(f"Memoria GPU liberada en {self.device_count} dispositivos")
+    
     def print_status(self):
         """Imprime el estado actual de las GPUs."""
         print("\n" + "="*60)

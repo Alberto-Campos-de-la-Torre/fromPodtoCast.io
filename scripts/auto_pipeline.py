@@ -746,7 +746,6 @@ def run_pipeline(config: Dict, registry: Dict, registry_path: str,
                 'category': cat_name
             })
             
-            # Éxito completo
             registry.setdefault('processed', {})[video_id] = {
                 'title': title,
                 'channel': video.get('channel', ''),
@@ -758,6 +757,18 @@ def run_pipeline(config: Dict, registry: Dict, registry_path: str,
             }
             save_processed_registry(registry, registry_path)
             stats['processed'] += 1
+            
+            # === LIMPIEZA DE MEMORIA ENTRE VIDEOS ===
+            # Previene acumulación que causa congelamiento después de 4-5 videos
+            import gc
+            gc.collect()
+            try:
+                import torch
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+                    torch.cuda.synchronize()
+            except ImportError:
+                pass
             
             # Pequeña pausa entre videos para no sobrecargar
             time.sleep(2)

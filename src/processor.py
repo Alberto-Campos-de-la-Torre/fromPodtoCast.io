@@ -277,6 +277,11 @@ class PodcastProcessor:
             metrics['diarization']['status'] = 'disabled'
             use_diarization_segmentation = False
         
+        # Limpieza parcial de memoria después de diarización
+        import gc
+        gc.collect()
+        self.gpu_manager.cleanup_memory()
+        
         # Paso 2: Segmentar audio (por diarización o por silencios)
         if use_diarization_segmentation and diarization_result:
             print("2. Segmentando audio por segmentos de habla...")
@@ -326,6 +331,10 @@ class PodcastProcessor:
             metrics['second_stage']['applied'] = False
             metrics['second_stage']['segments_before'] = len(segments)
             metrics['second_stage']['segments_after'] = len(segments)
+        
+        # Limpieza de memoria después de revisión de pureza (punto crítico de congelamiento)
+        gc.collect()
+        self.gpu_manager.cleanup_memory()
         
         # Paso 3: Normalizar segmentos (y eliminar segmentos temporales)
         print("3. Normalizando segmentos...")
@@ -458,7 +467,20 @@ class PodcastProcessor:
                         corrections.append(self.llm_corrector.correct(text))
                 
                 # Aplicar correcciones
-                for idx, (original_idx, (corrected, meta)) in enumerate(zip(valid_indices, corrections)):
+                for idx, (original_idx, correction) in enumerate(zip(valid_indices, corrections)):
+                    # Safety check: manejar None o resultados mal formados
+                    if correction is None:
+                        print(f"   ⚠️  Corrección None en índice {idx}, saltando...")
+                        llm_failed_count += 1
+                        continue
+                    
+                    try:
+                        corrected, meta = correction
+                    except (TypeError, ValueError) as e:
+                        print(f"   ⚠️  Error desempaquetando corrección {idx}: {e}")
+                        llm_failed_count += 1
+                        continue
+                    
                     trans = transcriptions[original_idx]
                     original = trans['text']
                     
@@ -512,6 +534,10 @@ class PodcastProcessor:
             }
         else:
             metrics['llm_correction'] = {'enabled': False}
+        
+        # Limpieza de memoria después de corrección LLM (punto crítico de congelamiento)
+        gc.collect()
+        self.gpu_manager.cleanup_memory()
         
         # Paso 5: Generar metadatos finales
         print("5. Generando metadatos finales...")
@@ -596,6 +622,8 @@ class PodcastProcessor:
         Returns:
             Lista de todos los metadatos generados
         """
+        import gc
+        
         all_metadata = []
         
         for i, audio_file in enumerate(input_audio_files, 1):
@@ -606,6 +634,12 @@ class PodcastProcessor:
                 all_metadata.extend(metadata)
             except Exception as e:
                 print(f"✗ Error procesando {audio_file}: {e}")
+            
+            # === LIMPIEZA DE MEMORIA ENTRE VIDEOS ===
+            # Previene acumulación que causa congelamiento después de 4-5 videos
+            print("   🧹 Limpiando memoria...")
+            gc.collect()
+            self.gpu_manager.cleanup_memory()
         
         return all_metadata
     
