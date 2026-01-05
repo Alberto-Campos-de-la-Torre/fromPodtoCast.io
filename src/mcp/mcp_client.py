@@ -287,29 +287,45 @@ class SimpleMCPClient:
         }
     
     def validar_uso(self, palabra: str, contexto: str) -> Dict[str, Any]:
-        """Valida uso de término."""
+        """
+        Valida uso de término.
+        
+        IMPORTANTE: Este diccionario es TÉCNICO. Si una palabra no está,
+        NO significa que sea incorrecta - simplemente no es un término técnico.
+        
+        Retorna:
+        - valido=True, mantener_original=True: Regionalismo/término protegido, NO corregir
+        - valido=True: Término técnico válido
+        - valido=None (neutral): Palabra común no en diccionario, usar criterio del LLM
+        """
         resultado = self.buscar_termino(palabra)
         
         if not resultado.get("encontrado"):
+            # CAMBIO: No encontrado = NEUTRAL, no inválido
+            # El diccionario es técnico, no contiene todas las palabras del español
             return {
-                "valido": False,
-                "razon": "Término no encontrado",
-                "sugerencias": self.buscar_similar(palabra, 3)["resultados"]
+                "valido": None,  # Neutral - dejar al LLM decidir
+                "en_diccionario": False,
+                "razon": "Palabra común (no es término técnico)",
+                "sugerencias": []  # No sugerimos nada, es palabra normal
             }
         
         termino_info = resultado["datos"]
         
-        # Verificar si debe mantener original
+        # Verificar si debe mantener original (regionalismo/término protegido)
         if termino_info.get('mantener_original') or termino_info.get('no_corregir'):
             return {
                 "valido": True,
+                "en_diccionario": True,
                 "es_regionalismo": True,
                 "mantener_original": True,
-                "mensaje": f"'{palabra}' debe mantenerse tal cual"
+                "mensaje": f"'{palabra}' es un término protegido, debe mantenerse tal cual"
             }
         
+        # Término técnico válido
         return {
             "valido": True,
+            "en_diccionario": True,
             "forma_correcta": termino_info.get('forma_correcta', palabra),
             "tipo": termino_info.get('tipo'),
             "categoria": termino_info.get('categoria')

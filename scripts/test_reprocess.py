@@ -114,7 +114,9 @@ def main():
     print(f"\n🚀 Ejecutando re-procesamiento...")
     print(f"   (Esto puede tardar unos segundos...)\n")
     
-    cmd = f"python scripts/reprocess_metadata.py {test_file} --config config/config_example_mcp.json"
+    # Usar el mismo intérprete de python que está ejecutando este script
+    python_cmd = sys.executable
+    cmd = f"{python_cmd} scripts/reprocess_metadata.py {test_file} --config config/config_example_mcp.json"
     print(f"Comando: {cmd}\n")
     
     result = os.system(cmd)

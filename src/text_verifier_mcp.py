@@ -62,13 +62,13 @@ Tu tarea es VALIDAR las correcciones ya aplicadas a un texto transcrito.
 {mcp_validations}
 
 ## TU TAREA
-Revisa las correcciones y determina si son válidas según el diccionario.
+Revisa las correcciones y determina si son válidas.
 
 ### REGLAS CRÍTICAS:
-1. Si el diccionario indica "mantener_original: true", REVERTIR esa corrección
-2. Si una corrección no está en el diccionario, evaluarla con escepticismo alto
-3. Priorizar preservación de regionalismos y expresiones coloquiales
-4. Aceptar solo correcciones de ortografía, puntuación y formato de marcas
+1. Si el diccionario indica "mantener_original: true", REVERTIR esa corrección (es un término protegido).
+2. Si una corrección es ortográfica o gramatical clara ("prueva" -> "prueba"), ACEPTARLA incluso si no está en el diccionario.
+3. El diccionario es de TÉRMINOS TÉCNICOS, no contiene todas las palabras comunes. Si una palabra común corregida no está en el diccionario, verifícala tú mismo.
+4. Priorizar la fluidez y corrección del español.
 
 ## FORMATO DE RESPUESTA (JSON)
 {{
@@ -245,27 +245,70 @@ RESPONDE SOLO CON EL JSON."""
         return results
     
     def _detect_changes(self, original: str, corrected: str) -> List[Dict[str, Any]]:
-        """Detecta cambios entre texto original y corregido."""
+        """
+        Detecta cambios entre texto original y corregido usando difflib.
+        Identifica inserciones, eliminaciones y reemplazos a nivel de palabra.
+        """
+        import difflib
+        
         cambios = []
         
-        # Dividir en palabras (simplificado)
+        # Tokenizar por palabras
         palabras_orig = original.split()
         palabras_corr = corrected.split()
         
-        # Detectar diferencias
-        max_len = max(len(palabras_orig), len(palabras_corr))
+        # Usar SequenceMatcher para encontrar diferencias
+        matcher = difflib.SequenceMatcher(None, palabras_orig, palabras_corr)
         
-        for i in range(max_len):
-            palabra_orig = palabras_orig[i] if i < len(palabras_orig) else ""
-            palabra_corr = palabras_corr[i] if i < len(palabras_corr) else ""
+        for tag, i1, i2, j1, j2 in matcher.get_opcodes():
+            if tag == 'equal':
+                continue
             
-            if palabra_orig.lower() != palabra_corr.lower():
+            # Extraer segmentos afectados
+            segmento_orig = palabras_orig[i1:i2]
+            segmento_corr = palabras_corr[j1:j2]
+            
+            # Procesar cada cambio dentro del bloque
+            # Si es un reemplazo 1 a 1
+            if tag == 'replace' and len(segmento_orig) == 1 and len(segmento_corr) == 1:
                 cambios.append({
-                    'posicion': i,
-                    'palabra_original': palabra_orig,
-                    'palabra_nueva': palabra_corr,
-                    'tipo': self._classify_change(palabra_orig, palabra_corr)
+                    'posicion': i1,
+                    'palabra_original': segmento_orig[0],
+                    'palabra_nueva': segmento_corr[0],
+                    'tipo': self._classify_change(segmento_orig[0], segmento_corr[0])
                 })
+            # Si son múltiples palabras o inserción/eliminación
+            else:
+                # Simplificación: tratar todo el bloque como un cambio compuesto
+                # O intentar alinear mejor si es posible
+                if tag == 'replace':
+                    # Intentar emparejar lo mejor posible
+                    for k in range(max(len(segmento_orig), len(segmento_corr))):
+                        p_orig = segmento_orig[k] if k < len(segmento_orig) else ""
+                        p_new = segmento_corr[k] if k < len(segmento_corr) else ""
+                        if p_orig != p_new:
+                            cambios.append({
+                                'posicion': i1 + k,
+                                'palabra_original': p_orig,
+                                'palabra_nueva': p_new,
+                                'tipo': self._classify_change(p_orig, p_new)
+                            })
+                elif tag == 'delete':
+                    for k, p in enumerate(segmento_orig):
+                        cambios.append({
+                            'posicion': i1 + k,
+                            'palabra_original': p,
+                            'palabra_nueva': "",
+                            'tipo': 'eliminacion'
+                        })
+                elif tag == 'insert':
+                    for k, p in enumerate(segmento_corr):
+                        cambios.append({
+                            'posicion': i1,  # Posición en original
+                            'palabra_original': "",
+                            'palabra_nueva': p,
+                            'tipo': 'adicion'
+                        })
         
         return cambios
     
@@ -294,11 +337,17 @@ RESPONDE SOLO CON EL JSON."""
             palabra = cambio['palabra_nueva']
             
             if validacion.get('mantener_original'):
-                lines.append(f"- '{palabra}': MANTENER ORIGINAL (regionalismo)")
-            elif validacion.get('valido'):
-                lines.append(f"- '{palabra}': VÁLIDO ({validacion.get('tipo', 'término')})")
+                # Término protegido - DEBE revertirse
+                lines.append(f"- '{palabra}': ⚠️ TÉRMINO PROTEGIDO (regionalismo/técnico) - REVERTIR")
+            elif validacion.get('valido') is True:
+                # Término técnico validado
+                lines.append(f"- '{palabra}': ✓ VÁLIDO ({validacion.get('tipo', 'término técnico')})")
+            elif validacion.get('valido') is None or validacion.get('en_diccionario') is False:
+                # Palabra común, no técnica - usar criterio del LLM
+                lines.append(f"- '{palabra}': Palabra común (usa tu criterio lingüístico)")
             else:
-                lines.append(f"- '{palabra}': NO ENCONTRADO en diccionario")
+                # Fallback
+                lines.append(f"- '{palabra}': Sin información específica")
         
         return '\n'.join(lines)
     
