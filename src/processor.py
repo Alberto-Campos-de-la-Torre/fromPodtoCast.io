@@ -28,6 +28,15 @@ from text_corrector_llm import TextCorrectorLLM
 from correction_cache import BatchCorrectionCache, get_global_cache
 from gpu_manager import GPUManager, get_gpu_manager
 
+# MCP Verification
+try:
+    from text_verifier_mcp import TextVerifierMCP
+    MCP_VERIFIER_AVAILABLE = True
+except ImportError:
+    MCP_VERIFIER_AVAILABLE = False
+    TextVerifierMCP = None
+
+
 
 class PodcastProcessor:
     """Clase principal para procesar podcasts y generar datos de entrenamiento."""
@@ -185,10 +194,31 @@ class PodcastProcessor:
                 mode = "batch" if self.llm_use_batch else ("paralelo" if self.llm_use_parallel else "secuencial")
                 cache_status = f", caché={'ON' if cache_enabled else 'OFF'}"
                 verify_status = f", verificación={'ON' if enable_verification else 'OFF'}"
-                print(f"✓ Corrector LLM inicializado ({llm_config.get('model', 'qwen3:8b')}, modo={mode}{cache_status}{verify_status})")
+                print(f"✓ Corrector LLM inicializado ({llm_config.get('model', 'qwen3:14b')}, modo={mode}{cache_status}{verify_status})")
             except Exception as e:
                 print(f"⚠️  No se pudo inicializar corrector LLM: {e}")
                 self.llm_corrector = None
+        
+        # Inicializar verificador MCP (segunda fase de verificación)
+        self.mcp_verifier = None
+        mcp_config = llm_config.get('mcp_verification', {})
+        if llm_config.get('enabled', False) and mcp_config.get('enabled', False):
+            if MCP_VERIFIER_AVAILABLE:
+                try:
+                    self.mcp_verifier = TextVerifierMCP(
+                        ollama_host=llm_config.get('ollama_host', 'http://localhost:11434'),
+                        model=mcp_config.get('model', llm_config.get('model', 'qwen3:14b')),
+                        dictionary_path=mcp_config.get('dictionary_path'),
+                        timeout=mcp_config.get('timeout', 60),
+                        confidence_threshold=mcp_config.get('confidence_threshold', 0.80)
+                    )
+                    print(f"✓ Verificador MCP inicializado (modelo={mcp_config.get('model', 'qwen3:14b')})")
+                except Exception as e:
+                    print(f"⚠️  No se pudo inicializar verificador MCP: {e}")
+                    self.mcp_verifier = None
+            else:
+                print(f"⚠️  Verificador MCP no disponible (instalar: pip install mcp)")
+
     
     def process_podcast(self, input_audio_path: str, output_dir: str, 
                        podcast_id: Optional[str] = None) -> List[Dict]:
@@ -534,6 +564,71 @@ class PodcastProcessor:
             }
         else:
             metrics['llm_correction'] = {'enabled': False}
+        
+        # Paso 4.7: Verificación MCP (segunda fase - opcional)
+        if self.mcp_verifier and self.llm_corrector:
+            mcp_start_time = time.time()
+            print("4.7. Verificando correcciones con MCP...")
+            
+            # Preparar datos para verificación
+            corrections_to_verify = []
+            for i, trans in enumerate(transcriptions):
+                if trans.get('llm_correction'):
+                    original = trans['llm_correction']['original']
+                    corrected = trans['text']
+                    metadata = trans['llm_correction']
+                    corrections_to_verify.append((i, original, corrected, metadata))
+            
+            mcp_verified_count = 0
+            mcp_reverted_count = 0
+            
+            if corrections_to_verify:
+                # Verificar en lote
+                verification_data = [(orig, corr, meta) for _, orig, corr, meta in corrections_to_verify]
+                verification_results = self.mcp_verifier.verify_batch(verification_data)
+                
+                # Aplicar resultados de verificación
+                for (idx, _, _, _), result in zip(corrections_to_verify, verification_results):
+                    trans = transcriptions[idx]
+                    
+                    # Si el texto fue revertido por MCP
+                    if result.cambios_revertidos:
+                        trans['text'] = result.texto_verificado
+                        trans['llm_correction']['mcp_reverted'] = True
+                        trans['llm_correction']['mcp_razon'] = result.cambios_revertidos
+                        mcp_reverted_count += 1
+                    else:
+                        # Verificación aceptada
+                        trans['text'] = result.texto_verificado
+                        trans['llm_correction']['mcp_verified'] = True
+                        trans['llm_correction']['mcp_confianza'] = result.confianza
+                        mcp_verified_count += 1
+                    
+                    # Guardar validaciones MCP
+                    if result.validaciones_mcp:
+                        trans['llm_correction']['mcp_validaciones'] = result.validaciones_mcp
+            
+            mcp_elapsed = time.time() - mcp_start_time
+            mcp_stats = self.mcp_verifier.get_stats()
+            
+            print(f"   ✓ Verificados {mcp_verified_count} textos con MCP")
+            if mcp_reverted_count > 0:
+                print(f"   ⚠️  Revertidos {mcp_reverted_count} textos (regionalismos/términos protegidos)")
+            print(f"   ✓ Consultas al diccionario: {mcp_stats.get('consultas_mcp', 0)}")
+            print(f"   ✓ Confianza promedio: {mcp_stats.get('promedio_confianza', 0):.2f}")
+            print(f"   ✓ Tiempo: {mcp_elapsed:.1f}s\n")
+            
+            metrics['mcp_verification'] = {
+                'enabled': True,
+                'verified': mcp_verified_count,
+                'reverted': mcp_reverted_count,
+                'dictionary_queries': mcp_stats.get('consultas_mcp', 0),
+                'avg_confidence': mcp_stats.get('promedio_confianza', 0),
+                'processing_time': round(mcp_elapsed, 2)
+            }
+        else:
+            metrics['mcp_verification'] = {'enabled': False}
+
         
         # Limpieza de memoria después de corrección LLM (punto crítico de congelamiento)
         gc.collect()

@@ -1,0 +1,636 @@
+{
+    "version": "2.0.0",
+    "metadata": {
+        "descripcion": "Base de datos expandida de términos técnicos, expresiones farmacéuticas y médicas para verificación de transcripciones - ENARM multiespecialidad",
+        "idioma": "es-MX",
+        "ultima_actualizacion": "2026-01-05",
+        "nota_expansion": "Expansión masiva con terminología médica multiespecialidad para ENARM: gastroenterología, cirugía, cardiología, neumología, nefrología, neurología, endocrinología, hematología, infectología, signos epónimos, escalas clínicas, laboratorios mexicanos y errores comunes de Whisper",
+        "total_terminos": 180,
+        "categorias_cubiertas": ["gastroenterologia", "cirugia", "cardiologia", "neumologia", "nefrologia", "neurologia", "endocrinologia", "hematologia", "infectologia", "imagenologia", "laboratorio", "farmacologia", "instituciones_mx", "semiologia"]
+    },
+    "terminos": {
+        "ChatGPT": {
+            "tipo": "marca",
+            "categoria": "ia",
+            "definicion": "Chatbot de OpenAI basado en GPT",
+            "variantes_incorrectas": ["chat gpt", "chatgpt", "chat GPT", "Chat GPT", "chat-gpt"],
+            "forma_correcta": "ChatGPT",
+            "ejemplos": ["Estamos probando ChatGPT para nuestro proyecto"],
+            "contextos_relacionados": ["IA", "modelo de lenguaje", "OpenAI", "LLM"]
+        },
+        "YouTube": {
+            "tipo": "marca",
+            "categoria": "redes_sociales",
+            "definicion": "Plataforma de videos de Google",
+            "variantes_incorrectas": ["youtube", "you tube", "Youtube", "You Tube"],
+            "forma_correcta": "YouTube",
+            "ejemplos": ["Subí el video a YouTube"],
+            "contextos_relacionados": ["video", "streaming", "contenido"]
+        },
+        "WhatsApp": {
+            "tipo": "marca",
+            "categoria": "mensajeria",
+            "definicion": "Aplicación de mensajería instantánea de Meta",
+            "variantes_incorrectas": ["whatsapp", "whats app", "Whats App", "watsap"],
+            "forma_correcta": "WhatsApp",
+            "ejemplos": ["Envíame un mensaje por WhatsApp"],
+            "contextos_relacionados": ["mensajes", "chat", "Meta"]
+        },
+        "IMSS": {
+            "tipo": "acronimo",
+            "categoria": "instituciones_mx",
+            "definicion": "Instituto Mexicano del Seguro Social",
+            "variantes_incorrectas": ["imss", "I.M.S.S.", "Imss"],
+            "forma_correcta": "IMSS",
+            "forma_expandida": "Instituto Mexicano del Seguro Social",
+            "ejemplos": ["El paciente es derechohabiente del IMSS", "Cita en el IMSS"],
+            "contextos_relacionados": ["seguro social", "salud", "México", "derechohabiente"]
+        },
+        "ISSSTE": {
+            "tipo": "acronimo",
+            "categoria": "instituciones_mx",
+            "definicion": "Instituto de Seguridad y Servicios Sociales de los Trabajadores del Estado",
+            "variantes_incorrectas": ["issste", "I.S.S.S.T.E.", "Issste", "ISSTE"],
+            "forma_correcta": "ISSSTE",
+            "forma_expandida": "Instituto de Seguridad y Servicios Sociales de los Trabajadores del Estado",
+            "ejemplos": ["Trabaja para el gobierno y tiene ISSSTE"],
+            "contextos_relacionados": ["trabajadores del estado", "salud", "México"]
+        },
+        "COFEPRIS": {
+            "tipo": "acronimo",
+            "categoria": "instituciones_mx",
+            "definicion": "Comisión Federal para la Protección contra Riesgos Sanitarios",
+            "variantes_incorrectas": ["cofepris", "Cofrepris", "COFERIS", "cofrepris"],
+            "forma_correcta": "COFEPRIS",
+            "forma_expandida": "Comisión Federal para la Protección contra Riesgos Sanitarios",
+            "ejemplos": ["El medicamento tiene registro de COFEPRIS"],
+            "contextos_relacionados": ["registro sanitario", "medicamentos", "salud", "México"]
+        },
+        "CENETEC": {
+            "tipo": "acronimo",
+            "categoria": "instituciones_mx",
+            "definicion": "Centro Nacional de Excelencia Tecnológica en Salud",
+            "variantes_incorrectas": ["cenetec", "Cenetec", "CENETC"],
+            "forma_correcta": "CENETEC",
+            "forma_expandida": "Centro Nacional de Excelencia Tecnológica en Salud",
+            "ejemplos": ["Guía de Práctica Clínica de CENETEC"],
+            "contextos_relacionados": ["guías clínicas", "GPC", "evidencia médica", "México"]
+        },
+        "ENARM": {
+            "tipo": "acronimo",
+            "categoria": "educacion_medica",
+            "definicion": "Examen Nacional para Aspirantes a Residencias Médicas",
+            "variantes_incorrectas": ["enarm", "E.N.A.R.M.", "Enarm"],
+            "forma_correcta": "ENARM",
+            "forma_expandida": "Examen Nacional para Aspirantes a Residencias Médicas",
+            "ejemplos": ["Preparación para el ENARM"],
+            "contextos_relacionados": ["residencia médica", "especialidad", "examen", "medicina"]
+        },
+        "McBurney": {
+            "tipo": "signo_eponimo",
+            "categoria": "gastroenterologia",
+            "definicion": "Punto doloroso a un tercio de distancia entre espina ilíaca anterosuperior y ombligo, indicativo de apendicitis",
+            "variantes_incorrectas": ["Macburney", "Mc Burney", "MacBurney", "mcburney", "Mac Burney"],
+            "forma_correcta": "McBurney",
+            "ejemplos": ["Dolor a la palpación en punto de McBurney"],
+            "contextos_relacionados": ["apendicitis", "abdomen agudo", "exploración abdominal", "fosa ilíaca derecha"]
+        },
+        "Blumberg": {
+            "tipo": "signo_eponimo",
+            "categoria": "gastroenterologia",
+            "definicion": "Signo de rebote: dolor al soltar súbitamente la presión abdominal, indica irritación peritoneal",
+            "variantes_incorrectas": ["Bloomberg", "Blunberg", "blumberg", "Blunber"],
+            "forma_correcta": "Blumberg",
+            "ejemplos": ["Signo de Blumberg positivo"],
+            "contextos_relacionados": ["peritonitis", "abdomen agudo", "rebote", "irritación peritoneal"]
+        },
+        "Murphy": {
+            "tipo": "signo_eponimo",
+            "categoria": "gastroenterologia",
+            "definicion": "Interrupción dolorosa de la inspiración al palpar el hipocondrio derecho, indica colecistitis",
+            "variantes_incorrectas": ["Morfi", "Morphy", "murphy", "Murfy"],
+            "forma_correcta": "Murphy",
+            "ejemplos": ["Murphy positivo en colecistitis"],
+            "contextos_relacionados": ["colecistitis", "vesícula biliar", "hipocondrio derecho"]
+        },
+        "Rovsing": {
+            "tipo": "signo_eponimo",
+            "categoria": "gastroenterologia",
+            "definicion": "Dolor en fosa ilíaca derecha al presionar la fosa ilíaca izquierda, sugiere apendicitis",
+            "variantes_incorrectas": ["Robsin", "Rosing", "rovsing", "Robsing", "Rovsin"],
+            "forma_correcta": "Rovsing",
+            "ejemplos": ["Rovsing positivo en apendicitis"],
+            "contextos_relacionados": ["apendicitis", "abdomen agudo", "fosa ilíaca derecha"]
+        },
+        "Cullen": {
+            "tipo": "signo_eponimo",
+            "categoria": "gastroenterologia",
+            "definicion": "Equimosis periumbilical que indica hemorragia retroperitoneal",
+            "variantes_incorrectas": ["Culen", "cullen", "Collen"],
+            "forma_correcta": "Cullen",
+            "ejemplos": ["Signo de Cullen en pancreatitis necrotizante"],
+            "contextos_relacionados": ["pancreatitis", "hemorragia retroperitoneal", "abdomen agudo"]
+        },
+        "Grey-Turner": {
+            "tipo": "signo_eponimo",
+            "categoria": "gastroenterologia",
+            "definicion": "Equimosis en flancos que indica hemorragia retroperitoneal",
+            "variantes_incorrectas": ["Grey Turner", "gray turner", "Gray-Turner", "Grey Tirner"],
+            "forma_correcta": "Grey-Turner",
+            "ejemplos": ["Signo de Grey-Turner en pancreatitis severa"],
+            "contextos_relacionados": ["pancreatitis", "hemorragia retroperitoneal", "flancos"]
+        },
+        "Kernig": {
+            "tipo": "signo_eponimo",
+            "categoria": "neurologia",
+            "definicion": "Resistencia a la extensión de la rodilla con cadera flexionada, indica irritación meníngea",
+            "variantes_incorrectas": ["Kernin", "Carning", "kernig", "Kernick"],
+            "forma_correcta": "Kernig",
+            "ejemplos": ["Signo de Kernig positivo en meningitis"],
+            "contextos_relacionados": ["meningitis", "irritación meníngea", "rigidez de nuca"]
+        },
+        "Brudzinski": {
+            "tipo": "signo_eponimo",
+            "categoria": "neurologia",
+            "definicion": "Flexión involuntaria de rodillas al flexionar el cuello, indica irritación meníngea",
+            "variantes_incorrectas": ["Brudinski", "Brudzinsky", "brudzinski", "Brudzenski"],
+            "forma_correcta": "Brudzinski",
+            "ejemplos": ["Signo de Brudzinski positivo"],
+            "contextos_relacionados": ["meningitis", "irritación meníngea", "rigidez de nuca"]
+        },
+        "Babinski": {
+            "tipo": "signo_eponimo",
+            "categoria": "neurologia",
+            "definicion": "Extensión del primer dedo al estimular la planta del pie, indica lesión piramidal",
+            "variantes_incorrectas": ["Babinsky", "Bavinski", "babinski"],
+            "forma_correcta": "Babinski",
+            "ejemplos": ["Signo de Babinski positivo bilateral"],
+            "contextos_relacionados": ["lesión piramidal", "EVC", "motoneurona superior"]
+        },
+        "Chvostek": {
+            "tipo": "signo_eponimo",
+            "categoria": "endocrinologia",
+            "definicion": "Contracción facial al percutir el nervio facial, indica hipocalcemia",
+            "variantes_incorrectas": ["Chvostec", "Cvostek", "chvostek"],
+            "forma_correcta": "Chvostek",
+            "ejemplos": ["Signo de Chvostek en hipocalcemia"],
+            "contextos_relacionados": ["hipocalcemia", "paratiroides", "tetania"]
+        },
+        "Trousseau": {
+            "tipo": "signo_eponimo",
+            "categoria": "endocrinologia",
+            "definicion": "Espasmo carpopedal al inflar el manguito de presión, indica hipocalcemia",
+            "variantes_incorrectas": ["Truso", "Trosseau", "trousseau"],
+            "forma_correcta": "Trousseau",
+            "ejemplos": ["Signo de Trousseau positivo"],
+            "contextos_relacionados": ["hipocalcemia", "tetania", "paratiroides"]
+        },
+        "Child-Pugh": {
+            "tipo": "escala_clinica",
+            "categoria": "gastroenterologia",
+            "definicion": "Clasificación pronóstica de cirrosis hepática basada en bilirrubina, albúmina, INR, ascitis y encefalopatía",
+            "variantes_incorrectas": ["Child Pugh", "child-pugh", "Child Puff", "Chil-Pugh"],
+            "forma_correcta": "Child-Pugh",
+            "ejemplos": ["Cirrosis Child-Pugh clase B"],
+            "contextos_relacionados": ["cirrosis", "hepatopatía", "pronóstico hepático", "trasplante hepático"]
+        },
+        "MELD": {
+            "tipo": "escala_clinica",
+            "categoria": "gastroenterologia",
+            "definicion": "Model for End-Stage Liver Disease, score pronóstico para trasplante hepático",
+            "variantes_incorrectas": ["meld", "M.E.L.D.", "Meld"],
+            "forma_correcta": "MELD",
+            "forma_expandida": "Model for End-Stage Liver Disease",
+            "ejemplos": ["MELD score de 25 puntos"],
+            "contextos_relacionados": ["cirrosis", "trasplante hepático", "insuficiencia hepática"]
+        },
+        "Glasgow": {
+            "tipo": "escala_clinica",
+            "categoria": "neurologia",
+            "definicion": "Escala de Coma de Glasgow, evalúa nivel de consciencia (3-15 puntos)",
+            "variantes_incorrectas": ["glasgow", "Glazgow", "Glasgo"],
+            "forma_correcta": "Glasgow",
+            "ejemplos": ["Glasgow de 8, requiere intubación"],
+            "contextos_relacionados": ["coma", "nivel de consciencia", "trauma craneoencefálico", "TCE"]
+        },
+        "NIHSS": {
+            "tipo": "escala_clinica",
+            "categoria": "neurologia",
+            "definicion": "National Institutes of Health Stroke Scale, evalúa déficit neurológico en EVC",
+            "variantes_incorrectas": ["nihss", "N.I.H.S.S.", "NISS"],
+            "forma_correcta": "NIHSS",
+            "forma_expandida": "National Institutes of Health Stroke Scale",
+            "ejemplos": ["NIHSS de 12 puntos al ingreso"],
+            "contextos_relacionados": ["EVC", "ictus", "stroke", "déficit neurológico"]
+        },
+        "APACHE": {
+            "tipo": "escala_clinica",
+            "categoria": "medicina_critica",
+            "definicion": "Acute Physiology and Chronic Health Evaluation, score de gravedad en UCI",
+            "variantes_incorrectas": ["apache", "Apache", "APACHI"],
+            "forma_correcta": "APACHE",
+            "forma_expandida": "Acute Physiology and Chronic Health Evaluation",
+            "ejemplos": ["APACHE II de 25 puntos"],
+            "contextos_relacionados": ["UCI", "terapia intensiva", "pronóstico", "gravedad"]
+        },
+        "SOFA": {
+            "tipo": "escala_clinica",
+            "categoria": "medicina_critica",
+            "definicion": "Sequential Organ Failure Assessment, evalúa falla orgánica múltiple",
+            "variantes_incorrectas": ["sofa", "S.O.F.A.", "Sofa"],
+            "forma_correcta": "SOFA",
+            "forma_expandida": "Sequential Organ Failure Assessment",
+            "ejemplos": ["SOFA score de 8 indica sepsis"],
+            "contextos_relacionados": ["sepsis", "falla orgánica", "UCI", "choque séptico"]
+        },
+        "qSOFA": {
+            "tipo": "escala_clinica",
+            "categoria": "medicina_critica",
+            "definicion": "Quick SOFA, criterios rápidos de sepsis fuera de UCI",
+            "variantes_incorrectas": ["qsofa", "QSOFA", "q-SOFA", "quickSOFA"],
+            "forma_correcta": "qSOFA",
+            "forma_expandida": "Quick Sequential Organ Failure Assessment",
+            "ejemplos": ["qSOFA de 2 puntos, sospecha de sepsis"],
+            "contextos_relacionados": ["sepsis", "urgencias", "triage", "infección"]
+        },
+        "CURB-65": {
+            "tipo": "escala_clinica",
+            "categoria": "neumologia",
+            "definicion": "Score de gravedad en neumonía adquirida en comunidad",
+            "variantes_incorrectas": ["curb-65", "CURB65", "Curb-65", "CURB 65"],
+            "forma_correcta": "CURB-65",
+            "forma_expandida": "Confusion, Urea, Respiratory rate, Blood pressure, age 65+",
+            "ejemplos": ["CURB-65 de 3, amerita hospitalización"],
+            "contextos_relacionados": ["neumonía", "NAC", "hospitalización", "gravedad"]
+        },
+        "CHA2DS2-VASc": {
+            "tipo": "escala_clinica",
+            "categoria": "cardiologia",
+            "definicion": "Score de riesgo tromboembólico en fibrilación auricular",
+            "variantes_incorrectas": ["CHADS2-VASC", "CHA2DS2VASc", "chadsvasc", "CHAD VASC"],
+            "forma_correcta": "CHA2DS2-VASc",
+            "ejemplos": ["CHA2DS2-VASc de 4, requiere anticoagulación"],
+            "contextos_relacionados": ["fibrilación auricular", "anticoagulación", "riesgo embólico", "EVC"]
+        },
+        "NYHA": {
+            "tipo": "escala_clinica",
+            "categoria": "cardiologia",
+            "definicion": "Clasificación funcional de insuficiencia cardíaca",
+            "variantes_incorrectas": ["nyha", "N.Y.H.A.", "Nyha"],
+            "forma_correcta": "NYHA",
+            "forma_expandida": "New York Heart Association",
+            "ejemplos": ["Insuficiencia cardíaca NYHA clase III"],
+            "contextos_relacionados": ["insuficiencia cardíaca", "disnea", "capacidad funcional"]
+        },
+        "APGAR": {
+            "tipo": "escala_clinica",
+            "categoria": "neonatologia",
+            "definicion": "Score de valoración del recién nacido al minuto y 5 minutos",
+            "variantes_incorrectas": ["apgar", "Apgar", "ABGAR"],
+            "forma_correcta": "APGAR",
+            "ejemplos": ["APGAR 8/9 al minuto y cinco minutos"],
+            "contextos_relacionados": ["recién nacido", "neonato", "reanimación neonatal"]
+        },
+        "hematocrito": {
+            "tipo": "termino_medico",
+            "categoria": "laboratorio",
+            "definicion": "Porcentaje del volumen sanguíneo ocupado por eritrocitos",
+            "variantes_incorrectas": ["hema tocrito", "matócrito", "hematócrito", "ematocrito"],
+            "forma_correcta": "hematocrito",
+            "ejemplos": ["Hematocrito de 42%"],
+            "contextos_relacionados": ["biometría hemática", "anemia", "hemoglobina", "BH"]
+        },
+        "hemoglobina": {
+            "tipo": "termino_medico",
+            "categoria": "laboratorio",
+            "definicion": "Proteína transportadora de oxígeno en eritrocitos",
+            "variantes_incorrectas": ["hemo globina", "emoglobina", "hemoglovina"],
+            "forma_correcta": "hemoglobina",
+            "ejemplos": ["Hemoglobina de 12 g/dL"],
+            "contextos_relacionados": ["anemia", "oxígeno", "eritrocitos", "HbA1c"]
+        },
+        "transaminasas": {
+            "tipo": "termino_medico",
+            "categoria": "laboratorio",
+            "definicion": "Enzimas hepáticas AST (TGO) y ALT (TGP)",
+            "variantes_incorrectas": ["transaminazas", "trans aminasas", "transaminacas"],
+            "forma_correcta": "transaminasas",
+            "ejemplos": ["Transaminasas elevadas en miles"],
+            "contextos_relacionados": ["función hepática", "hepatitis", "AST", "ALT", "PFH"]
+        },
+        "creatinina": {
+            "tipo": "termino_medico",
+            "categoria": "laboratorio",
+            "definicion": "Marcador de función renal derivado del metabolismo muscular",
+            "variantes_incorrectas": ["creatinine", "creatinyna", "createnina"],
+            "forma_correcta": "creatinina",
+            "ejemplos": ["Creatinina de 1.9 mg/dL elevada"],
+            "contextos_relacionados": ["función renal", "TFG", "insuficiencia renal", "BUN"]
+        },
+        "paracetamol": {
+            "tipo": "principio_activo",
+            "categoria": "medicamentos",
+            "definicion": "Analgésico y antipirético, también llamado acetaminofén",
+            "variantes_incorrectas": ["para cetamol", "paracetamól", "parcetamol", "parasétamol"],
+            "forma_correcta": "paracetamol",
+            "ejemplos": ["Paracetamol 500 mg cada 6 horas"],
+            "contextos_relacionados": ["Tempra", "Tylenol", "analgésico", "hepatotoxicidad"]
+        },
+        "índice tabáquico": {
+            "tipo": "termino_medico",
+            "categoria": "semiologia",
+            "definicion": "Medida de exposición al tabaco: paquetes/día x años fumando",
+            "variantes_incorrectas": ["instabáquico", "indice tabaquico", "índice tabaco", "indicé tabáquico"],
+            "forma_correcta": "índice tabáquico",
+            "ejemplos": ["Índice tabáquico de 20 paquetes-año"],
+            "contextos_relacionados": ["tabaquismo", "fumador", "EPOC", "cáncer pulmonar"]
+        },
+        "frecuencia cardíaca": {
+            "tipo": "termino_medico",
+            "categoria": "semiologia",
+            "definicion": "Número de latidos del corazón por minuto",
+            "variantes_incorrectas": ["frecuencia carrera", "frecuencia cardiáca", "frecuencia cardíaka"],
+            "forma_correcta": "frecuencia cardíaca",
+            "ejemplos": ["Frecuencia cardíaca de 108 lpm"],
+            "contextos_relacionados": ["FC", "pulso", "taquicardia", "bradicardia"]
+        },
+        "índice de masa corporal": {
+            "tipo": "termino_medico",
+            "categoria": "semiologia",
+            "definicion": "Relación peso/talla² para clasificar estado nutricional",
+            "variantes_incorrectas": ["índice de más a corporal", "indice de masa corporal", "IMC"],
+            "forma_correcta": "índice de masa corporal",
+            "ejemplos": ["Índice de masa corporal de 32 indica obesidad"],
+            "contextos_relacionados": ["IMC", "obesidad", "sobrepeso", "nutrición"]
+        },
+        "electrocardiograma": {
+            "tipo": "termino_medico",
+            "categoria": "cardiologia",
+            "definicion": "Registro gráfico de la actividad eléctrica cardíaca",
+            "variantes_incorrectas": ["electro cardiograma", "electrocardiográma", "EKG", "electro cardio grama"],
+            "forma_correcta": "electrocardiograma",
+            "ejemplos": ["Electrocardiograma con elevación del ST"],
+            "contextos_relacionados": ["ECG", "corazón", "arritmia", "infarto"]
+        },
+        "tomografía": {
+            "tipo": "termino_medico",
+            "categoria": "imagenologia",
+            "definicion": "Técnica de imagen que obtiene cortes transversales del cuerpo",
+            "variantes_incorrectas": ["tomografia", "acto homogramosafía", "TAC"],
+            "forma_correcta": "tomografía",
+            "ejemplos": ["Tomografía de abdomen contrastada"],
+            "contextos_relacionados": ["TAC", "TC", "imagen", "diagnóstico"]
+        },
+        "colecistectomía": {
+            "tipo": "termino_medico",
+            "categoria": "cirugia",
+            "definicion": "Extirpación quirúrgica de la vesícula biliar",
+            "variantes_incorrectas": ["colecisto ectomía", "colecistectomia", "colescistectomía"],
+            "forma_correcta": "colecistectomía",
+            "ejemplos": ["Colecistectomía laparoscópica"],
+            "contextos_relacionados": ["vesícula biliar", "colelitiasis", "colecistitis", "laparoscopía"]
+        },
+        "laparoscopía": {
+            "tipo": "termino_medico",
+            "categoria": "cirugia",
+            "definicion": "Técnica quirúrgica mínimamente invasiva con cámara",
+            "variantes_incorrectas": ["laparoscopia", "laparocospía", "laparo scopía"],
+            "forma_correcta": "laparoscopía",
+            "ejemplos": ["Colecistectomía por laparoscopía"],
+            "contextos_relacionados": ["cirugía mínimamente invasiva", "cámara", "trocares"]
+        },
+        "Mallory-Weiss": {
+            "tipo": "sindrome_eponimo",
+            "categoria": "gastroenterologia",
+            "definicion": "Desgarro de la mucosa esofagogástrica por vómitos, causa sangrado digestivo",
+            "variantes_incorrectas": ["Malori Weis", "Mallory Weiss", "mallory-weiss"],
+            "forma_correcta": "Mallory-Weiss",
+            "ejemplos": ["Síndrome de Mallory-Weiss post vómitos"],
+            "contextos_relacionados": ["sangrado digestivo alto", "vómitos", "alcoholismo"]
+        },
+        "Guillain-Barré": {
+            "tipo": "sindrome_eponimo",
+            "categoria": "neurologia",
+            "definicion": "Polirradiculoneuropatía inflamatoria aguda con parálisis flácida ascendente",
+            "variantes_incorrectas": ["Guillen Barré", "Gillian Barre", "Guilan Barre"],
+            "forma_correcta": "Guillain-Barré",
+            "ejemplos": ["Síndrome de Guillain-Barré post infeccioso"],
+            "contextos_relacionados": ["parálisis flácida", "arreflexia", "inmunoglobulina", "plasmaféresis"]
+        },
+        "Wernicke-Korsakoff": {
+            "tipo": "sindrome_eponimo",
+            "categoria": "neurologia",
+            "definicion": "Encefalopatía por déficit de tiamina, asociada a alcoholismo",
+            "variantes_incorrectas": ["Vernicke Corzacof", "Wernicke Korsakoff", "Bernicke"],
+            "forma_correcta": "Wernicke-Korsakoff",
+            "ejemplos": ["Síndrome de Wernicke-Korsakoff en alcohólico"],
+            "contextos_relacionados": ["alcoholismo", "tiamina", "confusión", "oftalmoplejía"]
+        },
+        "Pisa Farmacéutica": {
+            "tipo": "laboratorio_mx",
+            "categoria": "farmaceutica",
+            "definicion": "Laboratorio farmacéutico mexicano, el más grande del país",
+            "variantes_incorrectas": ["pisa farmaceutica", "Pisa", "Laboratorios Pisa"],
+            "forma_correcta": "Pisa Farmacéutica",
+            "ejemplos": ["Medicamento fabricado por Pisa Farmacéutica"],
+            "contextos_relacionados": ["laboratorio mexicano", "medicamentos", "genéricos"]
+        },
+        "Tempra": {
+            "tipo": "marca_farmaceutica",
+            "categoria": "medicamentos",
+            "definicion": "Marca comercial de paracetamol en México",
+            "variantes_incorrectas": ["tempra", "Tenpra", "Temrpa"],
+            "forma_correcta": "Tempra",
+            "ejemplos": ["Tempra 500 mg cada 6 horas"],
+            "contextos_relacionados": ["paracetamol", "analgésico", "antipirético"]
+        },
+        "Rivotril": {
+            "tipo": "marca_farmaceutica",
+            "categoria": "medicamentos",
+            "definicion": "Marca comercial de clonazepam",
+            "variantes_incorrectas": ["rivotril", "Ribotril", "Rivotríl"],
+            "forma_correcta": "Rivotril",
+            "ejemplos": ["Rivotril 2 mg al acostarse"],
+            "contextos_relacionados": ["clonazepam", "benzodiacepina", "controlado", "ansiedad"]
+        },
+        "NOM-004": {
+            "tipo": "normativa",
+            "categoria": "legislacion_mx",
+            "definicion": "Norma Oficial Mexicana del Expediente Clínico",
+            "variantes_incorrectas": ["nom-004", "NOM 004", "nom004"],
+            "forma_correcta": "NOM-004",
+            "forma_expandida": "NOM-004-SSA3-2012, Del expediente clínico",
+            "ejemplos": ["Cumplir con NOM-004 del expediente clínico"],
+            "contextos_relacionados": ["expediente clínico", "historia clínica", "documentación médica"]
+        },
+        "CIE-10": {
+            "tipo": "clasificacion",
+            "categoria": "codificacion",
+            "definicion": "Clasificación Internacional de Enfermedades, décima revisión",
+            "variantes_incorrectas": ["cie-10", "CIE 10", "CIE10", "ICD-10"],
+            "forma_correcta": "CIE-10",
+            "forma_expandida": "Clasificación Internacional de Enfermedades, décima revisión",
+            "ejemplos": ["Código CIE-10 de neumonía"],
+            "contextos_relacionados": ["codificación", "diagnóstico", "OMS"]
+        }
+    },
+    "categorias": {
+        "marcas_tecnologia": [
+            "ChatGPT", "YouTube", "TikTok", "Instagram", "WhatsApp", "Google",
+            "Facebook", "Twitter", "LinkedIn", "Spotify", "Netflix", "Amazon", "Apple", "Microsoft"
+        ],
+        "acronimos_tecnologia": [
+            "IA", "API", "URL", "HTTP", "HTTPS", "HTML", "CSS", "JSON", "XML", "SQL", "NoSQL", "AWS", "GPU", "CPU"
+        ],
+        "acronimos_negocios": [
+            "CEO", "CFO", "CTO", "CMO", "COO", "SEO", "SEM", "ROI", "KPI", "B2B", "B2C"
+        ],
+        "regionalismos_mx": [
+            "güey", "chido", "neta", "órale", "chamba", "morro", "chale", "fresa", "no manches", "qué onda"
+        ],
+        "marcas_farmaceuticas": [
+            "Acxion", "Diety", "Lose", "Ifentil", "Ifor", "Glucophage", "Ifecin", "Advil", "Motrin",
+            "Tempra", "Voltaren", "Rivotril", "Losec", "Tylenol", "Aspirina"
+        ],
+        "principios_activos": [
+            "fentermina", "fenproporex", "mazindol", "ibuprofeno", "metformina", "ifosfamida", "ampicilina",
+            "paracetamol", "omeprazol", "atorvastatina", "losartán", "enalapril", "metoprolol",
+            "ceftriaxona", "ciprofloxacino", "amoxicilina", "diclofenaco", "clonazepam", "alprazolam",
+            "ácido acetilsalicílico", "prednisona", "dexametasona", "insulina", "levotiroxina"
+        ],
+        "acronimos_medicos": [
+            "AINE", "COFEPRIS", "PLM", "SSA", "IMSS", "ISSSTE", "CENETEC", "CONAMED", "ENARM", "CIFRHS",
+            "ECG", "BH", "QS", "PFH", "EGO", "TAC", "RMN", "USG", "TP", "TTPa", "INR", "BUN", "TFG",
+            "CPRE", "EPOC", "IAMCEST", "IAMSEST", "NIHSS", "APACHE", "SOFA", "qSOFA", "CURB-65", "NYHA",
+            "CHA2DS2-VASc", "HAS-BLED", "APGAR", "MELD", "NAC", "ERC", "IRA", "TVP", "TEP", "EVC", "FA"
+        ],
+        "laboratorios_mx": [
+            "Investigación Farmacéutica", "IFA Celtics", "Productos Medix", "Dinafarma",
+            "Laboratorios Pisa", "BIOMEP", "Pisa Farmacéutica", "Sanfer", "Senosiain", "Silanes",
+            "Liomont", "Rimsa", "Sophia", "Armstrong", "BIRMEX", "Genomma Lab"
+        ],
+        "signos_eponimos": [
+            "McBurney", "Blumberg", "Murphy", "Rovsing", "Cullen", "Grey-Turner", "Courvoisier-Terrier",
+            "Kehr", "psoas", "obturador", "Kernig", "Brudzinski", "Babinski", "Chvostek", "Trousseau",
+            "Giordano", "Homans"
+        ],
+        "escalas_clinicas": [
+            "Child-Pugh", "MELD", "Ranson", "Forrest", "Clavien-Dindo", "Glasgow", "NIHSS",
+            "APACHE", "SOFA", "qSOFA", "CURB-65", "Wells", "CHA2DS2-VASc", "HAS-BLED",
+            "NYHA", "Killip", "APGAR", "Silverman-Andersen", "TIMI", "GRACE", "GOLD", "Wagner"
+        ],
+        "sindromes_eponimos": [
+            "Mallory-Weiss", "Wernicke-Korsakoff", "Guillain-Barré", "Parkinson", "Alzheimer",
+            "Cushing", "Addison", "Graves", "Hashimoto"
+        ],
+        "especialidades_medicas": [
+            "gastroenterologia", "cirugia", "cardiologia", "neumologia", "nefrologia",
+            "neurologia", "endocrinologia", "hematologia", "infectologia", "neonatologia",
+            "medicina_critica", "imagenologia", "laboratorio"
+        ],
+        "normativas_mexicanas": [
+            "NOM-004", "NOM-015", "NOM-030", "NOM-007", "NOM-006", "NOM-010"
+        ],
+        "errores_whisper_frecuentes": [
+            "hema tocrito", "para cetamol", "instabáquico", "frecuencia carrera",
+            "índice de más a corporal", "hepato megalia", "electro cardiograma",
+            "acto homogramosafía", "colecisto ectomía"
+        ]
+    },
+    "reglas_contextuales": {
+        "inicio_pregunta": {
+            "patron": "^(que|como|cuando|donde|por que|cual)",
+            "correccion": "Añadir signos de interrogación y tildes apropiadas",
+            "ejemplos": {
+                "que es": "¿Qué es",
+                "como funciona": "¿Cómo funciona",
+                "por que": "¿Por qué"
+            }
+        },
+        "marcas_tecnologicas": {
+            "patron": "(chat\\s*gpt|you\\s*tube|tik\\s*tok|insta\\s*gram|whats\\s*app)",
+            "accion": "Corregir formato de marca registrada",
+            "case_sensitive": true
+        },
+        "medicamentos": {
+            "patron": "(acxion|diety|lose|ifentil|ifor|glucophage|ifecin|tempra|voltaren|rivotril|losec)",
+            "accion": "Capitalizar nombre comercial de medicamento",
+            "case_sensitive": true
+        },
+        "principios_activos": {
+            "patron": "(fentermina|fenproporex|mazindol|ibuprofeno|metformina|paracetamol|omeprazol|atorvastatina|losartan|enalapril|metoprolol|ceftriaxona|ciprofloxacino|amoxicilina|diclofenaco|clonazepam|alprazolam)",
+            "accion": "Mantener en minúsculas (nombre genérico)",
+            "case_sensitive": true
+        },
+        "signos_eponimos": {
+            "patron": "(mcburney|blumberg|murphy|rovsing|cullen|grey-turner|kernig|brudzinski|babinski|chvostek|trousseau)",
+            "accion": "Capitalizar correctamente el epónimo",
+            "case_sensitive": true
+        },
+        "escalas_clinicas": {
+            "patron": "(child-pugh|meld|ranson|forrest|glasgow|nihss|apache|sofa|qsofa|curb-65|wells|nyha|killip|apgar)",
+            "accion": "Capitalizar correctamente la escala",
+            "case_sensitive": true
+        },
+        "instituciones_mexicanas": {
+            "patron": "(imss|issste|cofepris|cenetec|conamed|enarm|cifrhs|ssa)",
+            "accion": "Convertir a mayúsculas (acrónimo institucional)",
+            "case_sensitive": true
+        },
+        "terminos_fragmentados": {
+            "patron": "(hema\\s*tocrito|para\\s*cetamol|hepato\\s*megalia|espleno\\s*megalia|electro\\s*cardiograma|hipo\\s*tension|hiper\\s*tension|hipo\\s*glucemia|hiper\\s*glucemia)",
+            "accion": "Unir términos médicos fragmentados incorrectamente por Whisper",
+            "case_sensitive": false
+        },
+        "prefijos_hipo_hiper": {
+            "patron": "(hipo\\s+|hiper\\s+)(tension|glucemia|natremia|potasemia|tiroidismo|calcemia)",
+            "accion": "Unir prefijo con término sin espacio",
+            "case_sensitive": false
+        }
+    },
+    "errores_whisper_comunes": {
+        "fragmentacion": {
+            "descripcion": "Whisper fragmenta términos médicos compuestos",
+            "ejemplos": {
+                "hema tocrito": "hematocrito",
+                "para cetamol": "paracetamol",
+                "hepato megalia": "hepatomegalia",
+                "electro cardiograma": "electrocardiograma",
+                "hipo tensión": "hipotensión",
+                "hiper glucemia": "hiperglucemia"
+            }
+        },
+        "eponimos_mal_transcritos": {
+            "descripcion": "Whisper confunde nombres propios médicos",
+            "ejemplos": {
+                "Macburney": "McBurney",
+                "Bloomberg": "Blumberg",
+                "Morfi": "Murphy",
+                "Robsin": "Rovsing",
+                "Guillen Barré": "Guillain-Barré",
+                "Child Puff": "Child-Pugh"
+            }
+        },
+        "confusiones_foneticas": {
+            "descripcion": "Errores por similitud fonética en español",
+            "ejemplos": {
+                "matócrito": "hematocrito",
+                "instabáquico": "índice tabáquico",
+                "frecuencia carrera": "frecuencia cardíaca",
+                "índice de más a corporal": "índice de masa corporal",
+                "conclusión y letar": "confusión y letargo",
+                "acto homogramosafía": "tomografía"
+            }
+        },
+        "terminaciones_medicas": {
+            "descripcion": "Confusión de sufijos médicos",
+            "ejemplos": {
+                "-ectomía": "extirpación",
+                "-otomía": "incisión",
+                "-ostomía": "abertura permanente",
+                "-itis": "inflamación",
+                "-osis": "condición crónica"
+            }
+        }
+    }
+}

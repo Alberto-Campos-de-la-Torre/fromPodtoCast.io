@@ -9,6 +9,144 @@
   },
   "categories": [
     {
+      "name": "enarm_preparacion",
+      "enabled": true,
+      "queries": [
+        "ENARM casos clínicos resueltos",
+        "ENARM preguntas y respuestas explicadas",
+        "ENARM medicina interna casos",
+        "ENARM cirugía general casos clínicos",
+        "ENARM pediatría casos complejos",
+        "ENARM ginecología obstetricia casos",
+        "ENARM urgencias médicas",
+        "ENARM diagnóstico diferencial",
+        "preguntas ENARM comentadas",
+        "simulacro ENARM explicado"
+      ],
+      "exclude_keywords": ["shorts", "resumen 1 minuto", "meme"]
+    },
+    {
+      "name": "medicina_interna_avanzada",
+      "enabled": true,
+      "queries": [
+        "medicina interna casos clínicos complejos",
+        "endocrinología casos clínicos español",
+        "cardiología avanzada español",
+        "nefrología casos clínicos",
+        "gastroenterología casos complejos",
+        "reumatología diagnóstico diferencial",
+        "infectología casos clínicos",
+        "hematología casos clínicos español",
+        "neumología casos complejos"
+      ],
+      "exclude_keywords": ["remedios caseros", "cura milagrosa", "shorts"]
+    },
+    {
+      "name": "cirugia_especializada",
+      "enabled": true,
+      "queries": [
+        "cirugía general casos clínicos",
+        "abdomen agudo diagnóstico diferencial",
+        "trauma casos clínicos español",
+        "cirugía laparoscópica técnicas",
+        "urgencias quirúrgicas explicadas",
+        "manejo politraumatizado",
+        "complicaciones postoperatorias"
+      ],
+      "exclude_keywords": ["shorts", "animación simple"]
+    },
+    {
+      "name": "pediatria_compleja",
+      "enabled": true,
+      "queries": [
+        "pediatría casos clínicos complejos",
+        "neonatología casos clínicos",
+        "emergencias pediátricas",
+        "diagnóstico diferencial pediatría",
+        "enfermedades raras pediatría",
+        "reanimación neonatal avanzada"
+      ],
+      "exclude_keywords": ["consejos mamás", "remedios caseros", "shorts"]
+    },
+    {
+      "name": "ginecologia_obstetricia",
+      "enabled": true,
+      "queries": [
+        "ginecología casos clínicos complejos",
+        "obstetricia alto riesgo casos",
+        "emergencias obstétricas",
+        "diagnóstico diferencial ginecología",
+        "patología cervical casos",
+        "complicaciones embarazo"
+      ],
+      "exclude_keywords": ["remedios naturales", "shorts"]
+    },
+    {
+      "name": "diagnostico_imagenologia",
+      "enabled": true,
+      "queries": [
+        "radiología casos clínicos español",
+        "interpretación TAC casos",
+        "resonancia magnética casos clínicos",
+        "ultrasonido diagnóstico casos",
+        "radiografía tórax casos complejos",
+        "imagenología diagnóstico diferencial"
+      ],
+      "exclude_keywords": ["shorts", "básico"]
+    },
+    {
+      "name": "medicina_urgencias",
+      "enabled": true,
+      "queries": [
+        "medicina urgencias casos clínicos",
+        "ACLS casos clínicos español",
+        "trauma avanzado ATLS",
+        "shock casos clínicos",
+        "intoxicaciones casos clínicos",
+        "urgencias cardiovasculares",
+        "manejo vía aérea difícil"
+      ],
+      "exclude_keywords": ["shorts", "primeros auxilios básicos"]
+    },
+    {
+      "name": "farmacologia_clinica",
+      "enabled": true,
+      "queries": [
+        "farmacología clínica casos",
+        "interacciones medicamentosas complejas",
+        "antibióticos casos clínicos",
+        "farmacocinética clínica",
+        "reacciones adversas medicamentos"
+      ],
+      "exclude_keywords": ["shorts", "remedios"]
+    },
+    {
+      "name": "podcasts_medicina_especializada",
+      "enabled": true,
+      "queries": [
+        "podcast medicina interna español",
+        "podcast cardiología español",
+        "podcast médicos especialistas español",
+        "podcast medicina basada evidencia",
+        "podcast residentes médicos español",
+        "discusión casos clínicos podcast"
+      ],
+      "exclude_keywords": ["remedios caseros", "milagro", "shorts"]
+    },
+    {
+      "name": "seminarios_medicos",
+      "enabled": true,
+      "queries": [
+        "seminario medicina interna",
+        "sesión clínica casos complejos",
+        "conferencia medicina español",
+        "grand rounds español",
+        "ateneo médico casos",
+        "sesión bibliográfica medicina"
+      ],
+      "exclude_keywords": ["shorts", "trailer"]
+    },
+    {
       "name": "podcasts_negocios",
       "enabled": true,
       "queries": [
@@ -16,7 +154,8 @@
         "podcast negocios latinoamerica",
         "podcast marketing digital español",
         "podcast startups español",
-        "podcast finanzas personales español"
+        "podcast finanzas personales español",
+        "podcast inversión español"
       ],
       "exclude_keywords": ["shorts", "reacción", "meme"]
     },
@@ -27,9 +166,10 @@
         "podcast tecnología español",
         "podcast inteligencia artificial español",
         "podcast programación español",
-        "podcast ciberseguridad español"
+        "podcast ciberseguridad español",
+        "podcast innovación tecnológica"
       ],
-      "exclude_keywords": ["tutorial", "curso"]
+      "exclude_keywords": ["tutorial", "curso básico", "shorts"]
     },
     {
       "name": "entrevistas",
@@ -37,9 +177,10 @@
       "queries": [
         "entrevista podcast español largo",
         "charla emprendedores español",
-        "conversaciones profundas podcast"
+        "conversaciones profundas podcast",
+        "entrevista médicos especialistas"
       ],
-      "exclude_keywords": ["corto", "resumen", "clip"]
+      "exclude_keywords": ["corto", "resumen", "clip", "shorts"]
     },
     {
       "name": "podcasts_educacion",
@@ -49,21 +190,7 @@
         "podcast ciencia español",
         "podcast historia español"
       ],
-      "exclude_keywords": []
-    },
-    {
-      "name": "podcasts_medicina",
-      "enabled": true,
-      "queries": [
-        "podcast medicina español",
-        "podcast salud español",
-        "podcast médico español entrevista",
-        "podcast nutrición español",
-        "podcast psicología español",
-        "podcast neurociencia español",
-        "podcast doctores español"
-      ],
-      "exclude_keywords": ["remedios caseros", "milagro", "cura", "shorts"]
+      "exclude_keywords": ["shorts"]
     }
   ],
   "channels_whitelist": [
@@ -73,4 +200,3 @@
     
   ]
 }
-

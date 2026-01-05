@@ -623,6 +623,14 @@ Recuerda: Responde SOLO con el JSON estructurado."""
         if self.enable_cache:
             self._save_cache()
         
+        # Asegurar que no hay None en los resultados (safety check)
+        for i, result in enumerate(results):
+            if result is None:
+                # Si por alguna razón un resultado quedó como None, usar texto original
+                original_text = texts[i] if i < len(texts) else ""
+                results[i] = (original_text, {'error': 'resultado_no_procesado', 'fallback': True})
+                self.logger.warning(f"Resultado None en índice {i}, usando texto original como fallback")
+        
         return results
     
     def _process_batch(self, texts: List[str]) -> List[Tuple[str, Dict]]:

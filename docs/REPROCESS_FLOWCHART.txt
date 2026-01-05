@@ -1,0 +1,151 @@
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│        SISTEMA DE RE-PROCESAMIENTO DE METADATA                     │
+│             Sin necesidad de re-procesar audio                      │
+└─────────────────────────────────────────────────────────────────────┘
+
+                            FLUJO DE TRABAJO
+
+┌────────────────────┐
+│  Metadata Original │  ← Archivo JSON con transcripciones
+│  (archivo.json)    │
+└──────────┬─────────┘
+           │
+           ▼
+┌──────────────────────────────────────────────────────────────────┐
+│                    1. CREAR BACKUP                               │
+│  archivo.json → archivo.json.backup_20260105_084700              │
+└──────────┬───────────────────────────────────────────────────────┘
+           │
+           ▼
+┌──────────────────────────────────────────────────────────────────┐
+│                    2. CARGAR METADATA                            │
+│  • Lee JSON                                                      │
+│  • Identifica estructura (lista/dict)                           │
+│  • Extrae textos originales                                     │
+└──────────┬───────────────────────────────────────────────────────┘
+           │
+           ▼
+┌──────────────────────────────────────────────────────────────────┐
+│               3. CORRECCIÓN LLM (Batch Optimizado)               │
+│                                                                  │
+│   Textos → [batch_1] → Ollama (qwen3:14b) → Correcciones       │
+│            [batch_2] → Ollama (qwen3:14b) → Correcciones       │
+│            [batch_3] → Ollama (qwen3:14b) → Correcciones       │
+│                                                                  │
+│   Características:                                               │
+│   ✓ Procesamiento por lotes (5 textos/request)                 │
+│   ✓ Cache persistente (textos ya procesados)                   │
+│   ✓ Preservación de texto original                             │
+│   ✓ Reintentos automáticos en caso de error                    │
+└──────────┬───────────────────────────────────────────────────────┘
+           │
+           ▼
+┌──────────────────────────────────────────────────────────────────┐
+│            4. VERIFICACIÓN MCP (Diccionario)                     │
+│                                                                  │
+│   Correcciones → Consulta Diccionario → Validaciones           │
+│                                                                  │
+│   Acciones:                                                      │
+│   ✓ Verifica regionalismos                                     │
+│   ✓ Protege términos técnicos                                  │
+│   ✓ Revierte correcciones incorrectas                          │
+│   ✓ Calcula confianza final                                    │
+└──────────┬───────────────────────────────────────────────────────┘
+           │
+           ▼
+┌──────────────────────────────────────────────────────────────────┐
+│                5. ACTUALIZAR METADATA                            │
+│                                                                  │
+│   Estructura actualizada:                                        │
+│   {                                                              │
+│     "text": "texto corregido",                                  │
+│     "text_original": "texto original",                          │
+│     "llm_correction": {                                         │
+│       "original": "...",                                        │
+│       "cambios": [...],                                         │
+│       "confianza": 0.95,                                        │
+│       "reprocessed_at": "2026-01-05T08:47:00",                 │
+│       "mcp_verified": true,                                     │
+│       "mcp_confianza": 0.92,                                    │
+│       "mcp_validaciones": [...]                                 │
+│     }                                                            │
+│   }                                                              │
+└──────────┬───────────────────────────────────────────────────────┘
+           │
+           ▼
+┌──────────────────────────────────────────────────────────────────┐
+│                  6. GUARDAR RESULTADO                            │
+│  archivo.json ← Metadata actualizado con correcciones           │
+└──────────┬───────────────────────────────────────────────────────┘
+           │
+           ▼
+┌──────────────────────────────────────────────────────────────────┐
+│               7. MOSTRAR ESTADÍSTICAS                            │
+│                                                                  │
+│  ============================================================    │
+│  RESUMEN DE RE-PROCESAMIENTO                                    │
+│  ============================================================    │
+│  Total de entradas:   1250                                      │
+│  Entradas vacías:     12                                        │
+│                                                                  │
+│  Corrección LLM:                                                │
+│    Corregidas:        843                                       │
+│    Fallidas:          8                                         │
+│    Cache hits:        127                                       │
+│                                                                  │
+│  Verificación MCP:                                              │
+│    Verificadas:       823                                       │
+│    Revertidas:        20                                        │
+│  ============================================================    │
+└──────────────────────────────────────────────────────────────────┘
+
+
+                        MODOS DE USO
+
+┌─────────────────────────────────────────────────────────────────┐
+│  MODO 1: Archivo Individual                                     │
+│  python scripts/reprocess_metadata.py archivo.json              │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  MODO 2: Procesamiento en Lote                                  │
+│  python scripts/reprocess_metadata.py --all --data-dir DIR      │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  MODO 3: Configuración Personalizada                            │
+│  python scripts/reprocess_metadata.py --all --config config.json│
+└─────────────────────────────────────────────────────────────────┘
+
+
+                    VENTAJAS DEL SISTEMA
+
+✅ NO re-procesa audio (ahorra tiempo y recursos)
+✅ Backups automáticos (seguridad total)
+✅ Batch processing (80% menos llamadas HTTP)
+✅ Cache inteligente (no repite trabajo)
+✅ MCP verification (protege regionalismos)
+✅ Estadísticas detalladas (transparencia)
+✅ Preserva datos originales (nunca se pierden)
+
+
+                      CASOS DE USO
+
+📌 Cambiaste el modelo LLM (qwen3:14b → qwen3:32b)
+📌 Actualizaste el diccionario MCP (nuevos términos)
+📌 Ajustaste parámetros de confianza (más estricto)
+📌 Encontraste errores en correcciones previas
+📌 Quieres aplicar nuevas reglas de corrección
+
+
+                   ARCHIVOS DISPONIBLES
+
+📄 scripts/reprocess_metadata.py   (602 líneas) - Script principal
+📄 scripts/example_reprocess.sh    (112 líneas) - Ejemplos de uso
+📄 scripts/test_reprocess.py       (152 líneas) - Tests automáticos
+📄 docs/REPROCESS_METADATA.md      (319 líneas) - Documentación completa
+📄 docs/REPROCESS_SUMMARY.md       (272 líneas) - Resumen de implementación
+
+Total: 1,457 líneas de código y documentación
+```

@@ -1,0 +1,860 @@
+{
+    "version": "1.1.0",
+    "metadata": {
+        "descripcion": "Base de datos expandida de términos técnicos, expresiones farmacéuticas y médicas para verificación de transcripciones",
+        "idioma": "es-MX",
+        "ultima_actualizacion": "2026-01-04",
+        "nota_expansion": "Agregados términos farmacéuticos, medicamentos, principios activos y laboratorios mexicanos"
+    },
+    "terminos": {
+        "ChatGPT": {
+            "tipo": "marca",
+            "categoria": "ia",
+            "definicion": "Chatbot de OpenAI basado en GPT (Generative Pre-trained Transformer)",
+            "variantes_incorrectas": [
+                "chat gpt",
+                "chatgpt",
+                "chat GPT",
+                "Chat GPT",
+                "chat-gpt"
+            ],
+            "forma_correcta": "ChatGPT",
+            "ejemplos": [
+                "Estamos probando ChatGPT para nuestro proyecto",
+                "ChatGPT ha revolucionado la forma en que interactuamos con IA"
+            ],
+            "contextos_relacionados": [
+                "IA",
+                "modelo de lenguaje",
+                "OpenAI",
+                "LLM"
+            ]
+        },
+        "YouTube": {
+            "tipo": "marca",
+            "categoria": "redes_sociales",
+            "definicion": "Plataforma de videos de Google",
+            "variantes_incorrectas": [
+                "youtube",
+                "you tube",
+                "Youtube",
+                "You Tube"
+            ],
+            "forma_correcta": "YouTube",
+            "ejemplos": [
+                "Subí el video a YouTube",
+                "El podcast está disponible en YouTube"
+            ],
+            "contextos_relacionados": [
+                "video",
+                "streaming",
+                "contenido",
+                "canal"
+            ]
+        },
+        "TikTok": {
+            "tipo": "marca",
+            "categoria": "redes_sociales",
+            "definicion": "Plataforma de videos cortos",
+            "variantes_incorrectas": [
+                "tiktok",
+                "tik tok",
+                "Tik Tok",
+                "tick tock"
+            ],
+            "forma_correcta": "TikTok",
+            "ejemplos": [
+                "El contenido viral en TikTok",
+                "Creamos una campaña en TikTok"
+            ],
+            "contextos_relacionados": [
+                "video",
+                "viral",
+                "contenido",
+                "social media"
+            ]
+        },
+        "Instagram": {
+            "tipo": "marca",
+            "categoria": "redes_sociales",
+            "definicion": "Red social de Meta para compartir fotos y videos",
+            "variantes_incorrectas": [
+                "instagram",
+                "insta gram",
+                "Insta"
+            ],
+            "forma_correcta": "Instagram",
+            "ejemplos": [
+                "Publicamos en Instagram todos los días",
+                "El engagement en Instagram ha crecido"
+            ],
+            "contextos_relacionados": [
+                "fotos",
+                "stories",
+                "reels",
+                "Meta"
+            ]
+        },
+        "WhatsApp": {
+            "tipo": "marca",
+            "categoria": "mensajeria",
+            "definicion": "Aplicación de mensajería instantánea de Meta",
+            "variantes_incorrectas": [
+                "whatsapp",
+                "whats app",
+                "Whats App",
+                "watsap"
+            ],
+            "forma_correcta": "WhatsApp",
+            "ejemplos": [
+                "Envíame un mensaje por WhatsApp",
+                "Creamos un grupo de WhatsApp"
+            ],
+            "contextos_relacionados": [
+                "mensajes",
+                "chat",
+                "Meta",
+                "comunicación"
+            ]
+        },
+        "Google": {
+            "tipo": "marca",
+            "categoria": "tecnologia",
+            "definicion": "Empresa tecnológica y motor de búsqueda",
+            "variantes_incorrectas": [
+                "google",
+                "gogle",
+                "googl"
+            ],
+            "forma_correcta": "Google",
+            "ejemplos": [
+                "Busca en Google",
+                "Los servicios de Google Cloud"
+            ],
+            "contextos_relacionados": [
+                "búsqueda",
+                "tecnología",
+                "internet",
+                "cloud"
+            ]
+        },
+        "IA": {
+            "tipo": "acronimo",
+            "categoria": "tecnologia",
+            "definicion": "Inteligencia Artificial",
+            "variantes_incorrectas": [
+                "ai",
+                "I.A.",
+                "ia",
+                "AI"
+            ],
+            "forma_correcta": "IA",
+            "forma_expandida": "Inteligencia Artificial",
+            "ejemplos": [
+                "La IA está transformando la industria",
+                "Desarrollamos modelos de IA generativa"
+            ],
+            "contextos_relacionados": [
+                "machine learning",
+                "deep learning",
+                "algoritmos"
+            ]
+        },
+        "SEO": {
+            "tipo": "acronimo",
+            "categoria": "marketing",
+            "definicion": "Search Engine Optimization (Optimización para Motores de Búsqueda)",
+            "variantes_incorrectas": [
+                "seo",
+                "S.E.O.",
+                "s.e.o"
+            ],
+            "forma_correcta": "SEO",
+            "forma_expandida": "Search Engine Optimization",
+            "ejemplos": [
+                "Mejorar el SEO del sitio web",
+                "Estrategias de SEO y SEM"
+            ],
+            "contextos_relacionados": [
+                "marketing digital",
+                "Google",
+                "posicionamiento",
+                "keywords"
+            ]
+        },
+        "API": {
+            "tipo": "acronimo",
+            "categoria": "tecnologia",
+            "definicion": "Application Programming Interface (Interfaz de Programación de Aplicaciones)",
+            "variantes_incorrectas": [
+                "api",
+                "A.P.I."
+            ],
+            "forma_correcta": "API",
+            "forma_expandida": "Application Programming Interface",
+            "ejemplos": [
+                "Integrar la API de pagos",
+                "Documentación de la API REST"
+            ],
+            "contextos_relacionados": [
+                "desarrollo",
+                "integración",
+                "REST",
+                "endpoints"
+            ]
+        },
+        "URL": {
+            "tipo": "acronimo",
+            "categoria": "tecnologia",
+            "definicion": "Uniform Resource Locator (Localizador Uniforme de Recursos)",
+            "variantes_incorrectas": [
+                "url",
+                "U.R.L."
+            ],
+            "forma_correcta": "URL",
+            "forma_expandida": "Uniform Resource Locator",
+            "ejemplos": [
+                "Copia la URL del sitio",
+                "La URL debe ser amigable para SEO"
+            ],
+            "contextos_relacionados": [
+                "web",
+                "link",
+                "dirección",
+                "HTTP"
+            ]
+        },
+        "PDF": {
+            "tipo": "acronimo",
+            "categoria": "tecnologia",
+            "definicion": "Portable Document Format (Formato de Documento Portátil)",
+            "variantes_incorrectas": [
+                "pdf",
+                "P.D.F."
+            ],
+            "forma_correcta": "PDF",
+            "forma_expandida": "Portable Document Format",
+            "ejemplos": [
+                "Descarga el reporte en PDF",
+                "Exportar a formato PDF"
+            ],
+            "contextos_relacionados": [
+                "documento",
+                "archivo",
+                "Adobe"
+            ]
+        },
+        "CEO": {
+            "tipo": "acronimo",
+            "categoria": "negocios",
+            "definicion": "Chief Executive Officer (Director Ejecutivo)",
+            "variantes_incorrectas": [
+                "ceo",
+                "C.E.O."
+            ],
+            "forma_correcta": "CEO",
+            "forma_expandida": "Chief Executive Officer",
+            "ejemplos": [
+                "El CEO de la empresa anunció",
+                "Reunión con el CEO"
+            ],
+            "contextos_relacionados": [
+                "empresa",
+                "liderazgo",
+                "directivo"
+            ]
+        },
+        "güey": {
+            "tipo": "regionalismo",
+            "categoria": "mexico",
+            "definicion": "Expresión coloquial mexicana (amigo, tipo)",
+            "mantener_original": true,
+            "no_corregir": true,
+            "ejemplos": [
+                "Qué onda güey",
+                "Está bien chido güey"
+            ],
+            "contextos_validos": [
+                "conversación informal",
+                "podcast casual"
+            ]
+        },
+        "chido": {
+            "tipo": "regionalismo",
+            "categoria": "mexico",
+            "definicion": "Expresión mexicana que significa 'genial' o 'bueno'",
+            "mantener_original": true,
+            "no_corregir": true,
+            "ejemplos": [
+                "Está bien chido",
+                "Qué chido está el proyecto"
+            ],
+            "contextos_validos": [
+                "conversación informal",
+                "podcast casual"
+            ]
+        },
+        "neta": {
+            "tipo": "regionalismo",
+            "categoria": "mexico",
+            "definicion": "Expresión mexicana que significa 'verdad' o 'en serio'",
+            "mantener_original": true,
+            "no_corregir": true,
+            "ejemplos": [
+                "¿Neta?",
+                "Es neta lo que te digo"
+            ],
+            "contextos_validos": [
+                "conversación informal"
+            ]
+        },
+        "órale": {
+            "tipo": "regionalismo",
+            "categoria": "mexico",
+            "definicion": "Expresión mexicana de sorpresa o aprobación",
+            "mantener_original": true,
+            "no_corregir": true,
+            "ejemplos": [
+                "¡Órale!",
+                "Órale pues"
+            ],
+            "contextos_validos": [
+                "conversación informal"
+            ]
+        },
+        "Acxion": {
+            "tipo": "marca_farmaceutica",
+            "categoria": "medicamentos",
+            "definicion": "Medicamento anorexigénico (fentermina) de Investigación Farmacéutica",
+            "variantes_incorrectas": [
+                "acxion",
+                "axion",
+                "accion"
+            ],
+            "forma_correcta": "Acxion",
+            "nombre_completo": "IFA Acxion",
+            "ejemplos": [
+                "Recetó Acxion para control de peso",
+                "El paciente está tomando Acxion 30 mg"
+            ],
+            "contextos_relacionados": [
+                "fentermina",
+                "anorexigénico",
+                "control de peso",
+                "pastillas para adelgazar"
+            ]
+        },
+        "fentermina": {
+            "tipo": "principio_activo",
+            "categoria": "medicamentos",
+            "definicion": "Principio activo anorexigénico usado en el control de peso",
+            "variantes_incorrectas": [
+                "fentamina",
+                "fentermyna"
+            ],
+            "forma_correcta": "fentermina",
+            "ejemplos": [
+                "La fentermina es un medicamento controlado",
+                "Prescribió fentermina 30 mg"
+            ],
+            "contextos_relacionados": [
+                "Acxion",
+                "anorexigénico",
+                "control de peso",
+                "medicamento controlado"
+            ]
+        },
+        "Diety": {
+            "tipo": "marca_farmaceutica",
+            "categoria": "medicamentos",
+            "definicion": "Medicamento anorexigénico (fenproporex) de IFA Celtics",
+            "variantes_incorrectas": [
+                "diety",
+                "dieti",
+                "daiety"
+            ],
+            "forma_correcta": "Diety",
+            "nombre_completo": "IFA Diety",
+            "ejemplos": [
+                "Paciente solicita Diety en farmacia",
+                "Diety AP de 20 mg liberación prolongada"
+            ],
+            "contextos_relacionados": [
+                "fenproporex",
+                "anorexigénico",
+                "control de peso",
+                "pastillas para la dieta"
+            ]
+        },
+        "fenproporex": {
+            "tipo": "principio_activo",
+            "categoria": "medicamentos",
+            "definicion": "Principio activo anorexigénico usado en el control de peso",
+            "variantes_incorrectas": [
+                "fenproprorex",
+                "fenproporex"
+            ],
+            "forma_correcta": "fenproporex",
+            "ejemplos": [
+                "El fenproporex es un medicamento controlado",
+                "Fenproporex 10 mg tabletas"
+            ],
+            "contextos_relacionados": [
+                "Diety",
+                "anorexigénico",
+                "control de peso",
+                "medicamento controlado"
+            ]
+        },
+        "mazindol": {
+            "tipo": "principio_activo",
+            "categoria": "medicamentos",
+            "definicion": "Principio activo anorexigénico usado en el control de peso",
+            "variantes_incorrectas": [
+                "masindol",
+                "mazindol"
+            ],
+            "forma_correcta": "mazindol",
+            "ejemplos": [
+                "El mazindol es un medicamento controlado",
+                "Prescribió mazindol 1 mg"
+            ],
+            "contextos_relacionados": [
+                "Lose",
+                "IFA Lose",
+                "anorexigénico",
+                "control de peso"
+            ]
+        },
+        "Lose": {
+            "tipo": "marca_farmaceutica",
+            "categoria": "medicamentos",
+            "definicion": "Medicamento anorexigénico (mazindol) de Investigación Farmacéutica",
+            "variantes_incorrectas": [
+                "lose",
+                "loose",
+                "louse"
+            ],
+            "forma_correcta": "Lose",
+            "nombre_completo": "IFA Lose",
+            "ejemplos": [
+                "El médico recetó Lose para control de peso",
+                "Lose 2 mg tabletas"
+            ],
+            "contextos_relacionados": [
+                "mazindol",
+                "anorexigénico",
+                "control de peso",
+                "pastillas para bajar de peso"
+            ]
+        },
+        "ibuprofeno": {
+            "tipo": "principio_activo",
+            "categoria": "medicamentos",
+            "definicion": "Antiinflamatorio no esteroideo (AINE) usado como analgésico y antipirético",
+            "variantes_incorrectas": [
+                "ibuprofeno",
+                "ibuprofeno",
+                "ibuprofen"
+            ],
+            "forma_correcta": "ibuprofeno",
+            "ejemplos": [
+                "Tome ibuprofeno 400 mg cada 8 horas",
+                "El ibuprofeno ayuda con la fiebre"
+            ],
+            "contextos_relacionados": [
+                "Advil",
+                "Motrin",
+                "antiinflamatorio",
+                "analgésico",
+                "AINE"
+            ]
+        },
+        "Ifentil": {
+            "tipo": "marca_farmaceutica",
+            "categoria": "medicamentos",
+            "definicion": "Medicamento con ibuprofeno 200 mg de BIOMEP",
+            "variantes_incorrectas": [
+                "ifentil",
+                "ifentyl",
+                "ifentilo"
+            ],
+            "forma_correcta": "Ifentil",
+            "ejemplos": [
+                "Ifentil 200 mg para el dolor",
+                "Compré Ifentil en la farmacia"
+            ],
+            "contextos_relacionados": [
+                "ibuprofeno",
+                "antiinflamatorio",
+                "analgésico",
+                "dolor",
+                "fiebre"
+            ]
+        },
+        "metformina": {
+            "tipo": "principio_activo",
+            "categoria": "medicamentos",
+            "definicion": "Hipoglucemiante oral usado para tratamiento de diabetes tipo 2",
+            "variantes_incorrectas": [
+                "metformyna",
+                "metfromina"
+            ],
+            "forma_correcta": "metformina",
+            "ejemplos": [
+                "La metformina ayuda a controlar el azúcar",
+                "Toma metformina 500 mg dos veces al día"
+            ],
+            "contextos_relacionados": [
+                "Glucophage",
+                "diabetes",
+                "hipoglucemiante",
+                "pastillas para el azúcar"
+            ]
+        },
+        "Ifor": {
+            "tipo": "marca_farmaceutica",
+            "categoria": "medicamentos",
+            "definicion": "Medicamento con metformina 500 mg de Productos Medix",
+            "variantes_incorrectas": [
+                "ifor",
+                "ifore",
+                "yfor"
+            ],
+            "forma_correcta": "Ifor",
+            "ejemplos": [
+                "El doctor recetó Ifor 500 mg",
+                "Ifor D es la versión dispersable"
+            ],
+            "contextos_relacionados": [
+                "metformina",
+                "diabetes",
+                "hipoglucemiante",
+                "Medix"
+            ]
+        },
+        "Glucophage": {
+            "tipo": "marca_farmaceutica",
+            "categoria": "medicamentos",
+            "definicion": "Marca de referencia de metformina",
+            "variantes_incorrectas": [
+                "glucophage",
+                "glucofage",
+                "glucofaje"
+            ],
+            "forma_correcta": "Glucophage",
+            "ejemplos": [
+                "Glucophage es la marca original de metformina",
+                "El paciente pide Glucophage en farmacia"
+            ],
+            "contextos_relacionados": [
+                "metformina",
+                "diabetes",
+                "hipoglucemiante"
+            ]
+        },
+        "ifosfamida": {
+            "tipo": "principio_activo",
+            "categoria": "medicamentos",
+            "definicion": "Agente quimioterapéutico usado en tratamiento oncológico",
+            "variantes_incorrectas": [
+                "ifosfamida",
+                "ifoxfamida"
+            ],
+            "forma_correcta": "ifosfamida",
+            "ejemplos": [
+                "Protocolo de quimioterapia con ifosfamida",
+                "La ifosfamida se administra por vía intravenosa"
+            ],
+            "contextos_relacionados": [
+                "quimioterapia",
+                "oncología",
+                "medicamento oncológico",
+                "tratamiento de cáncer"
+            ]
+        },
+        "ampicilina": {
+            "tipo": "principio_activo",
+            "categoria": "medicamentos",
+            "definicion": "Antibiótico betalactámico del grupo de las penicilinas",
+            "variantes_incorrectas": [
+                "ampicilina",
+                "ampicylina"
+            ],
+            "forma_correcta": "ampicilina",
+            "ejemplos": [
+                "Prescribió ampicilina 500 mg cada 6 horas",
+                "La ampicilina es efectiva contra infecciones bacterianas"
+            ],
+            "contextos_relacionados": [
+                "antibiótico",
+                "penicilina",
+                "infección",
+                "bacterias"
+            ]
+        },
+        "Ifecin": {
+            "tipo": "marca_farmaceutica",
+            "categoria": "medicamentos",
+            "definicion": "Medicamento con ampicilina 500 mg de Dinafarma",
+            "variantes_incorrectas": [
+                "ifecin",
+                "ifecyn",
+                "ifesyn"
+            ],
+            "forma_correcta": "Ifecin",
+            "ejemplos": [
+                "Ifecin 500 mg cápsulas",
+                "El médico recetó Ifecin para la infección"
+            ],
+            "contextos_relacionados": [
+                "ampicilina",
+                "antibiótico",
+                "infección"
+            ]
+        },
+        "AINE": {
+            "tipo": "acronimo",
+            "categoria": "medicamentos",
+            "definicion": "Antiinflamatorio No Esteroideo",
+            "variantes_incorrectas": [
+                "aine",
+                "A.I.N.E."
+            ],
+            "forma_correcta": "AINE",
+            "forma_expandida": "Antiinflamatorio No Esteroideo",
+            "ejemplos": [
+                "El ibuprofeno es un AINE",
+                "Los AINE ayudan con el dolor y la inflamación"
+            ],
+            "contextos_relacionados": [
+                "antiinflamatorio",
+                "ibuprofeno",
+                "naproxeno",
+                "analgésico"
+            ]
+        },
+        "COFEPRIS": {
+            "tipo": "acronimo",
+            "categoria": "instituciones_mx",
+            "definicion": "Comisión Federal para la Protección contra Riesgos Sanitarios",
+            "variantes_incorrectas": [
+                "cofepris",
+                "Cofrepris",
+                "COFERIS"
+            ],
+            "forma_correcta": "COFEPRIS",
+            "forma_expandida": "Comisión Federal para la Protección contra Riesgos Sanitarios",
+            "ejemplos": [
+                "El medicamento tiene registro de COFEPRIS",
+                "COFEPRIS regula los medicamentos en México"
+            ],
+            "contextos_relacionados": [
+                "registro sanitario",
+                "medicamentos",
+                "salud",
+                "México"
+            ]
+        },
+        "PLM": {
+            "tipo": "acronimo",
+            "categoria": "medicamentos",
+            "definicion": "Diccionario de Especialidades Farmacéuticas (PLM)",
+            "variantes_incorrectas": [
+                "plm",
+                "P.L.M."
+            ],
+            "forma_correcta": "PLM",
+            "forma_expandida": "Pharmaceutical and Laboratory Marketing",
+            "ejemplos": [
+                "Consulta el PLM para información del medicamento",
+                "El PLM es la referencia en México"
+            ],
+            "contextos_relacionados": [
+                "medicamentos",
+                "vademécum",
+                "farmacia"
+            ]
+        },
+        "SSA": {
+            "tipo": "acronimo",
+            "categoria": "instituciones_mx",
+            "definicion": "Secretaría de Salud",
+            "variantes_incorrectas": [
+                "ssa",
+                "S.S.A."
+            ],
+            "forma_correcta": "SSA",
+            "forma_expandida": "Secretaría de Salud",
+            "ejemplos": [
+                "Registro sanitario SSA",
+                "La SSA aprueba medicamentos en México"
+            ],
+            "contextos_relacionados": [
+                "salud",
+                "México",
+                "registro sanitario",
+                "COFEPRIS"
+            ]
+        },
+        "anorexigénico": {
+            "tipo": "termino_medico",
+            "categoria": "medicamentos",
+            "definicion": "Medicamento que reduce o suprime el apetito",
+            "variantes_incorrectas": [
+                "anorexigenico",
+                "anorexico"
+            ],
+            "forma_correcta": "anorexigénico",
+            "ejemplos": [
+                "La fentermina es un anorexigénico",
+                "Los anorexigénicos requieren receta médica"
+            ],
+            "contextos_relacionados": [
+                "control de peso",
+                "apetito",
+                "obesidad",
+                "dieta"
+            ]
+        },
+        "hipoglucemiante": {
+            "tipo": "termino_medico",
+            "categoria": "medicamentos",
+            "definicion": "Medicamento que reduce los niveles de glucosa en sangre",
+            "variantes_incorrectas": [
+                "hipoglucemyante",
+                "ipoglucemiante"
+            ],
+            "forma_correcta": "hipoglucemiante",
+            "ejemplos": [
+                "La metformina es un hipoglucemiante oral",
+                "Los hipoglucemiantes controlan la diabetes"
+            ],
+            "contextos_relacionados": [
+                "diabetes",
+                "glucosa",
+                "azúcar en sangre",
+                "metformina"
+            ]
+        }
+    },
+    "categorias": {
+        "marcas_tecnologia": [
+            "ChatGPT",
+            "YouTube",
+            "TikTok",
+            "Instagram",
+            "WhatsApp",
+            "Google",
+            "Facebook",
+            "Twitter",
+            "LinkedIn",
+            "Spotify",
+            "Netflix",
+            "Amazon",
+            "Apple",
+            "Microsoft"
+        ],
+        "acronimos_tecnologia": [
+            "IA",
+            "API",
+            "URL",
+            "HTTP",
+            "HTTPS",
+            "HTML",
+            "CSS",
+            "JSON",
+            "XML",
+            "SQL",
+            "NoSQL",
+            "AWS",
+            "GPU",
+            "CPU"
+        ],
+        "acronimos_negocios": [
+            "CEO",
+            "CFO",
+            "CTO",
+            "CMO",
+            "COO",
+            "SEO",
+            "SEM",
+            "ROI",
+            "KPI",
+            "B2B",
+            "B2C"
+        ],
+        "regionalismos_mx": [
+            "güey",
+            "chido",
+            "neta",
+            "órale",
+            "chamba",
+            "morro",
+            "chale",
+            "fresa",
+            "no manches",
+            "qué onda"
+        ],
+        "marcas_farmaceuticas": [
+            "Acxion",
+            "Diety",
+            "Lose",
+            "Ifentil",
+            "Ifor",
+            "Glucophage",
+            "Ifecin",
+            "Advil",
+            "Motrin"
+        ],
+        "principios_activos": [
+            "fentermina",
+            "fenproporex",
+            "mazindol",
+            "ibuprofeno",
+            "metformina",
+            "ifosfamida",
+            "ampicilina"
+        ],
+        "acronimos_medicos": [
+            "AINE",
+            "COFEPRIS",
+            "PLM",
+            "SSA"
+        ],
+        "laboratorios_mx": [
+            "Investigación Farmacéutica",
+            "IFA Celtics",
+            "Productos Medix",
+            "Dinafarma",
+            "Laboratorios Pisa",
+            "BIOMEP"
+        ]
+    },
+    "reglas_contextuales": {
+        "inicio_pregunta": {
+            "patron": "^(que|como|cuando|donde|por que|cual)",
+            "correccion": "Añadir signos de interrogación y tildes apropiadas",
+            "ejemplos": {
+                "que es": "¿Qué es",
+                "como funciona": "¿Cómo funciona",
+                "por que": "¿Por qué"
+            }
+        },
+        "marcas_tecnologicas": {
+            "patron": "(chat\\s*gpt|you\\s*tube|tik\\s*tok|insta\\s*gram|whats\\s*app)",
+            "accion": "Corregir formato de marca registrada",
+            "case_sensitive": true
+        },
+        "medicamentos": {
+            "patron": "(acxion|diety|lose|ifentil|ifor|glucophage|ifecin)",
+            "accion": "Capitalizar nombre comercial de medicamento",
+            "case_sensitive": true
+        },
+        "principios_activos": {
+            "patron": "(fentermina|fenproporex|mazindol|ibuprofeno|metformina|ifosfamida|ampicilina)",
+            "accion": "Mantener en minúsculas (nombre genérico)",
+            "case_sensitive": true
+        }
+    }
+}

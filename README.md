@@ -55,6 +55,8 @@ fromPodtoCast/
 ├── scripts/
 │   ├── auto_pipeline.py       # Pipeline automático completo
 │   ├── download_video.py      # Descarga de videos/audio
+│   ├── reprocess_metadata.py  # Re-procesar metadata con LLM/MCP
+│   ├── cleanup_pipeline.py    # Limpieza y recuperación del pipeline
 │   └── check_dependencies.py  # Verificador de dependencias
 ├── src/
 │   ├── processor.py           # Orquestador del pipeline
@@ -158,6 +160,33 @@ Para descargar videos individualmente:
 ```bash
 python scripts/download_video.py "URL_DEL_VIDEO" -o ./data/input --format wav
 ```
+
+### 4. Re-procesamiento de Metadata
+
+Para re-aplicar correcciones LLM y verificación MCP a metadata ya generado (sin re-procesar audio):
+
+```bash
+# Re-procesar un archivo de metadata específico
+python scripts/reprocess_metadata.py data/output/metadata/mi_podcast.json
+
+# Re-procesar todos los archivos en un directorio
+python scripts/reprocess_metadata.py --all --data-dir data/output
+
+# Con configuración personalizada
+python scripts/reprocess_metadata.py --all --config config/config.json
+
+# Sin crear backups (no recomendado)
+python scripts/reprocess_metadata.py archivo.json --no-backup
+```
+
+**Casos de uso:**
+- Cambiaste el modelo LLM y quieres mejorar las correcciones
+- Actualizaste el diccionario MCP con nuevos términos
+- Ajustaste los parámetros de confianza
+- Encontraste errores en correcciones previas
+
+Ver [REPROCESS_METADATA.md](docs/REPROCESS_METADATA.md) para más detalles.
+
 
 ## ⚙️ Configuración
 
