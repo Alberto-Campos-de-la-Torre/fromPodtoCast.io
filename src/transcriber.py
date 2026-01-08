@@ -20,17 +20,25 @@ class AudioTranscriber:
     """Clase para transcribir audio a texto."""
     
     def __init__(self, model_name: str = "base", device: Optional[str] = None, 
-                 language: Optional[str] = None):
+                 language: Optional[str] = None, force_language: bool = False):
         """
         Inicializa el transcriptor de audio.
         
         Args:
             model_name: Nombre del modelo Whisper a usar (tiny, base, small, medium, large)
             device: Dispositivo a usar ('cuda', 'cpu', o None para auto-detectar)
-            language: Idioma del audio (None para auto-detectar)
+            language: Idioma del audio (None para auto-detectar, 'es' para español)
+            force_language: Si True, fuerza el idioma especificado ignorando auto-detección.
+                           Útil para evitar falsos positivos de catalán/gallego en español.
         """
         self.model_name = model_name
         self.language = language
+        self.force_language = force_language
+        
+        # Si force_language está activo pero no hay idioma, usar español por defecto
+        if self.force_language and self.language is None:
+            self.language = 'es'
+            print(f"⚠️  force_language activo sin idioma especificado, usando 'es' (español)")
         
         # Detectar dispositivo
         if device is None:
@@ -39,7 +47,8 @@ class AudioTranscriber:
             self.device = device
         
         # Cargar modelo
-        print(f"Cargando modelo Whisper '{model_name}' en {self.device}...")
+        lang_msg = f", idioma={'forzado: ' + self.language if self.force_language else 'auto-detectar'}"
+        print(f"Cargando modelo Whisper '{model_name}' en {self.device}{lang_msg}...")
         self.model = whisper.load_model(model_name, device=self.device)
         print("Modelo cargado exitosamente.")
     

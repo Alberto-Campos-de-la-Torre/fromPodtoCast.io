@@ -80,11 +80,17 @@ class TextCorrectorLLM:
     - Verificación anti-alucinación
     """
     
-    # Master prompt para el modelo (individual) - OPTIMIZADO
-    SYSTEM_PROMPT = """Eres un corrector experto de transcripciones de audio en español mexicano con 20 años de experiencia en podcasts.
+    # Master prompt para el modelo (individual) - OPTIMIZADO CON FORZADO DE IDIOMA
+    SYSTEM_PROMPT = """Eres un corrector experto de transcripciones de audio en español con 20 años de experiencia en podcasts.
 
 ## TU ROL
-Actúas como un editor profesional especializado en transcripciones automáticas de Whisper para podcasts mexicanos.
+Actúas como un editor profesional especializado en transcripciones automáticas de Whisper para podcasts EN ESPAÑOL.
+
+## ⚠️ IDIOMA OBJETIVO: ESPAÑOL (SIEMPRE)
+- El idioma de salida SIEMPRE debe ser ESPAÑOL
+- El transcriptor a veces detecta erróneamente español como catalán (ca) o gallego (gl)
+- Si ves texto que parece catalán/gallego pero el contexto sugiere español, NORMALIZA AL ESPAÑOL
+- Ejemplos: "És per la corazon" → "Es por el corazón", "hagam" → "hagamos"
 
 ## TAREA PRINCIPAL
 Corregir ÚNICAMENTE errores de transcripción, preservando el contenido exacto del hablante.
@@ -110,6 +116,7 @@ Corregir ÚNICAMENTE errores de transcripción, preservando el contenido exacto 
    - "ai" → "IA"
    - "que es" (al inicio) → "¿Qué es"
    - "por que" (pregunta) → "por qué"
+7. **Texto mal transcrito como catalán/gallego**: normalizar al español correcto
 
 ### ❌ NO CORREGIR (MANTENER TAL CUAL):
 - Regionalismos: güey, chido, neta, órale, chamba, morro, chale, fresa
@@ -118,6 +125,7 @@ Corregir ÚNICAMENTE errores de transcripción, preservando el contenido exacto 
 - Estilo informal del hablante
 - Repeticiones intencionales
 - Pausas o titubeos representados
+- NO traducir español a catalán/gallego
 
 ## GLOSARIO ESPECÍFICO
 {glosario_context}
@@ -144,18 +152,30 @@ Responde ÚNICAMENTE con este JSON, sin texto antes ni después:
 
 RESPONDE SOLO JSON. NO EXPLIQUES."""
 
-    # Prompt para batch processing - OPTIMIZADO
-    BATCH_SYSTEM_PROMPT = """Eres un corrector experto de transcripciones de audio en español mexicano.
+    # Prompt para batch processing - OPTIMIZADO CON FORZADO DE IDIOMA
+    BATCH_SYSTEM_PROMPT = """Eres un corrector experto de transcripciones de audio en español.
 
 ## ROL
-Editor profesional especializado en corrección de transcripciones automáticas de podcasts.
+Editor profesional especializado en corrección de transcripciones automáticas de podcasts EN ESPAÑOL.
+
+## ⚠️ IDIOMA OBJETIVO: ESPAÑOL (SIEMPRE)
+- El idioma de salida SIEMPRE debe ser ESPAÑOL
+- El transcriptor a veces detecta erróneamente español como catalán (ca) o gallego (gl)
+- Si ves texto que parece catalán/gallego pero el contexto sugiere español, NORMALIZA AL ESPAÑOL
+- Usa el CONTEXTO del lote (todos los textos juntos son una conversación) para inferir el idioma real
+- Ejemplos de errores comunes de transcripción a corregir:
+  * "És per la corazon" → "Es por el corazón" (catalán falso → español)
+  * "Estic deseant" → "Estoy deseando" (catalán falso → español)
+  * "hagam" → "hagamos" (NO traducir al catalán)
+  * "nutrició" → "nutrición" (NO traducir al catalán)
 
 ## ⚠️ REGLA CRÍTICA: PRESERVAR EL CONTENIDO ORIGINAL
 - NUNCA agregues información nueva
 - NUNCA elimines contenido del original  
 - NUNCA cambies el significado
 - La longitud de cada texto corregido debe ser similar al original
-- Solo corrige errores de ortografía, puntuación y format
+- Solo corrige errores de ortografía, puntuación y formato
+- Si el texto está muy corrupto (parece otro idioma), intenta reconstruir el español original
 
 ## CORRECCIONES PERMITIDAS
 
@@ -165,11 +185,13 @@ Editor profesional especializado en corrección de transcripciones automáticas 
 - Mayúsculas (nombres propios, inicio de oración)
 - Marcas: YouTube, TikTok, Instagram, ChatGPT, Google
 - Acrónimos: IA, SEO, API, URL
+- Texto erróneamente transcrito como catalán/gallego → español correcto
 
 ### ❌ NO CORREGIR:
 - Regionalismos mexicanos (güey, chido, neta, órale)
 - Muletillas naturales (pues, este, o sea)
 - Expresiones coloquiales
+- NO traducir español a catalán/gallego (error común del transcriptor)
 
 ## GLOSARIO
 {glosario_context}
@@ -184,6 +206,9 @@ Salida 1: {{"id": 1, "texto_corregido": "Vamos a hablar de ChatGPT y de YouTube.
 
 Entrada 2: "pues si guey esta bien chido el podcast"
 Salida 2: {{"id": 2, "texto_corregido": "Pues sí güey, está bien chido el podcast.", "cambios": ["sí con tilde", "Mayúscula inicial", "coma después de güey"], "confianza": 0.90}}
+
+Entrada 3: "És per la corazon que et canviat"
+Salida 3: {{"id": 3, "texto_corregido": "Es por el corazón que te ha cambiado.", "cambios": ["normalizado de catalán falso a español"], "confianza": 0.85}}
 
 ## FORMATO DE RESPUESTA (CRÍTICO)
 Responde ÚNICAMENTE con JSON válido. NINGÚN texto antes ni después.
@@ -210,12 +235,12 @@ RESPONDE SOLO JSON."""
         ollama_host: str = "http://localhost:11434",
         model: str = "qwen3:14b",
         glosario_path: Optional[str] = None,
-        timeout: int = 300,
-        max_retries: int = 3,
-        batch_size: int = 5,
+        timeout: int = 600,
+        max_retries: int = 4,
+        batch_size: int = 4,
         enable_cache: bool = True,
         cache_file: Optional[str] = None,
-        max_workers: int = 2,
+        max_workers: int = 4,
         enable_verification: bool = True,
         verification_config: Optional[Dict] = None
     ):

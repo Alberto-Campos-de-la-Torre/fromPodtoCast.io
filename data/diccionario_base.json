@@ -6,535 +6,4408 @@
         "ultima_actualizacion": "2026-01-05",
         "nota_expansion": "Expansión masiva con terminología médica multiespecialidad para ENARM: gastroenterología, cirugía, cardiología, neumología, nefrología, neurología, endocrinología, hematología, infectología, signos epónimos, escalas clínicas, laboratorios mexicanos y errores comunes de Whisper",
         "total_terminos": 180,
-        "categorias_cubiertas": ["gastroenterologia", "cirugia", "cardiologia", "neumologia", "nefrologia", "neurologia", "endocrinologia", "hematologia", "infectologia", "imagenologia", "laboratorio", "farmacologia", "instituciones_mx", "semiologia"]
+        "categorias_cubiertas": [
+            "gastroenterologia",
+            "cirugia",
+            "cardiologia",
+            "neumologia",
+            "nefrologia",
+            "neurologia",
+            "endocrinologia",
+            "hematologia",
+            "infectologia",
+            "imagenologia",
+            "laboratorio",
+            "farmacologia",
+            "instituciones_mx",
+            "semiologia"
+        ]
     },
     "terminos": {
         "ChatGPT": {
             "tipo": "marca",
             "categoria": "ia",
             "definicion": "Chatbot de OpenAI basado en GPT",
-            "variantes_incorrectas": ["chat gpt", "chatgpt", "chat GPT", "Chat GPT", "chat-gpt"],
+            "variantes_incorrectas": [
+                "chat gpt",
+                "chatgpt",
+                "chat GPT",
+                "Chat GPT",
+                "chat-gpt"
+            ],
             "forma_correcta": "ChatGPT",
-            "ejemplos": ["Estamos probando ChatGPT para nuestro proyecto"],
-            "contextos_relacionados": ["IA", "modelo de lenguaje", "OpenAI", "LLM"]
+            "ejemplos": [
+                "Estamos probando ChatGPT para nuestro proyecto"
+            ],
+            "contextos_relacionados": [
+                "IA",
+                "modelo de lenguaje",
+                "OpenAI",
+                "LLM"
+            ]
         },
         "YouTube": {
             "tipo": "marca",
             "categoria": "redes_sociales",
             "definicion": "Plataforma de videos de Google",
-            "variantes_incorrectas": ["youtube", "you tube", "Youtube", "You Tube"],
+            "variantes_incorrectas": [
+                "youtube",
+                "you tube",
+                "Youtube",
+                "You Tube"
+            ],
             "forma_correcta": "YouTube",
-            "ejemplos": ["Subí el video a YouTube"],
-            "contextos_relacionados": ["video", "streaming", "contenido"]
+            "ejemplos": [
+                "Subí el video a YouTube"
+            ],
+            "contextos_relacionados": [
+                "video",
+                "streaming",
+                "contenido"
+            ]
         },
         "WhatsApp": {
             "tipo": "marca",
             "categoria": "mensajeria",
             "definicion": "Aplicación de mensajería instantánea de Meta",
-            "variantes_incorrectas": ["whatsapp", "whats app", "Whats App", "watsap"],
+            "variantes_incorrectas": [
+                "whatsapp",
+                "whats app",
+                "Whats App",
+                "watsap"
+            ],
             "forma_correcta": "WhatsApp",
-            "ejemplos": ["Envíame un mensaje por WhatsApp"],
-            "contextos_relacionados": ["mensajes", "chat", "Meta"]
+            "ejemplos": [
+                "Envíame un mensaje por WhatsApp"
+            ],
+            "contextos_relacionados": [
+                "mensajes",
+                "chat",
+                "Meta"
+            ]
         },
         "IMSS": {
             "tipo": "acronimo",
             "categoria": "instituciones_mx",
             "definicion": "Instituto Mexicano del Seguro Social",
-            "variantes_incorrectas": ["imss", "I.M.S.S.", "Imss"],
+            "variantes_incorrectas": [
+                "imss",
+                "I.M.S.S.",
+                "Imss"
+            ],
             "forma_correcta": "IMSS",
             "forma_expandida": "Instituto Mexicano del Seguro Social",
-            "ejemplos": ["El paciente es derechohabiente del IMSS", "Cita en el IMSS"],
-            "contextos_relacionados": ["seguro social", "salud", "México", "derechohabiente"]
+            "ejemplos": [
+                "El paciente es derechohabiente del IMSS",
+                "Cita en el IMSS"
+            ],
+            "contextos_relacionados": [
+                "seguro social",
+                "salud",
+                "México",
+                "derechohabiente"
+            ]
         },
         "ISSSTE": {
             "tipo": "acronimo",
             "categoria": "instituciones_mx",
             "definicion": "Instituto de Seguridad y Servicios Sociales de los Trabajadores del Estado",
-            "variantes_incorrectas": ["issste", "I.S.S.S.T.E.", "Issste", "ISSTE"],
+            "variantes_incorrectas": [
+                "issste",
+                "I.S.S.S.T.E.",
+                "Issste",
+                "ISSTE"
+            ],
             "forma_correcta": "ISSSTE",
             "forma_expandida": "Instituto de Seguridad y Servicios Sociales de los Trabajadores del Estado",
-            "ejemplos": ["Trabaja para el gobierno y tiene ISSSTE"],
-            "contextos_relacionados": ["trabajadores del estado", "salud", "México"]
+            "ejemplos": [
+                "Trabaja para el gobierno y tiene ISSSTE"
+            ],
+            "contextos_relacionados": [
+                "trabajadores del estado",
+                "salud",
+                "México"
+            ]
         },
         "COFEPRIS": {
             "tipo": "acronimo",
             "categoria": "instituciones_mx",
             "definicion": "Comisión Federal para la Protección contra Riesgos Sanitarios",
-            "variantes_incorrectas": ["cofepris", "Cofrepris", "COFERIS", "cofrepris"],
+            "variantes_incorrectas": [
+                "cofepris",
+                "Cofrepris",
+                "COFERIS",
+                "cofrepris"
+            ],
             "forma_correcta": "COFEPRIS",
             "forma_expandida": "Comisión Federal para la Protección contra Riesgos Sanitarios",
-            "ejemplos": ["El medicamento tiene registro de COFEPRIS"],
-            "contextos_relacionados": ["registro sanitario", "medicamentos", "salud", "México"]
+            "ejemplos": [
+                "El medicamento tiene registro de COFEPRIS"
+            ],
+            "contextos_relacionados": [
+                "registro sanitario",
+                "medicamentos",
+                "salud",
+                "México"
+            ]
         },
         "CENETEC": {
             "tipo": "acronimo",
             "categoria": "instituciones_mx",
             "definicion": "Centro Nacional de Excelencia Tecnológica en Salud",
-            "variantes_incorrectas": ["cenetec", "Cenetec", "CENETC"],
+            "variantes_incorrectas": [
+                "cenetec",
+                "Cenetec",
+                "CENETC"
+            ],
             "forma_correcta": "CENETEC",
             "forma_expandida": "Centro Nacional de Excelencia Tecnológica en Salud",
-            "ejemplos": ["Guía de Práctica Clínica de CENETEC"],
-            "contextos_relacionados": ["guías clínicas", "GPC", "evidencia médica", "México"]
+            "ejemplos": [
+                "Guía de Práctica Clínica de CENETEC"
+            ],
+            "contextos_relacionados": [
+                "guías clínicas",
+                "GPC",
+                "evidencia médica",
+                "México"
+            ]
         },
         "ENARM": {
             "tipo": "acronimo",
             "categoria": "educacion_medica",
             "definicion": "Examen Nacional para Aspirantes a Residencias Médicas",
-            "variantes_incorrectas": ["enarm", "E.N.A.R.M.", "Enarm"],
+            "variantes_incorrectas": [
+                "enarm",
+                "E.N.A.R.M.",
+                "Enarm"
+            ],
             "forma_correcta": "ENARM",
             "forma_expandida": "Examen Nacional para Aspirantes a Residencias Médicas",
-            "ejemplos": ["Preparación para el ENARM"],
-            "contextos_relacionados": ["residencia médica", "especialidad", "examen", "medicina"]
+            "ejemplos": [
+                "Preparación para el ENARM"
+            ],
+            "contextos_relacionados": [
+                "residencia médica",
+                "especialidad",
+                "examen",
+                "medicina"
+            ]
         },
         "McBurney": {
             "tipo": "signo_eponimo",
             "categoria": "gastroenterologia",
             "definicion": "Punto doloroso a un tercio de distancia entre espina ilíaca anterosuperior y ombligo, indicativo de apendicitis",
-            "variantes_incorrectas": ["Macburney", "Mc Burney", "MacBurney", "mcburney", "Mac Burney"],
+            "variantes_incorrectas": [
+                "Macburney",
+                "Mc Burney",
+                "MacBurney",
+                "mcburney",
+                "Mac Burney"
+            ],
             "forma_correcta": "McBurney",
-            "ejemplos": ["Dolor a la palpación en punto de McBurney"],
-            "contextos_relacionados": ["apendicitis", "abdomen agudo", "exploración abdominal", "fosa ilíaca derecha"]
+            "ejemplos": [
+                "Dolor a la palpación en punto de McBurney"
+            ],
+            "contextos_relacionados": [
+                "apendicitis",
+                "abdomen agudo",
+                "exploración abdominal",
+                "fosa ilíaca derecha"
+            ]
         },
         "Blumberg": {
             "tipo": "signo_eponimo",
             "categoria": "gastroenterologia",
             "definicion": "Signo de rebote: dolor al soltar súbitamente la presión abdominal, indica irritación peritoneal",
-            "variantes_incorrectas": ["Bloomberg", "Blunberg", "blumberg", "Blunber"],
+            "variantes_incorrectas": [
+                "Bloomberg",
+                "Blunberg",
+                "blumberg",
+                "Blunber"
+            ],
             "forma_correcta": "Blumberg",
-            "ejemplos": ["Signo de Blumberg positivo"],
-            "contextos_relacionados": ["peritonitis", "abdomen agudo", "rebote", "irritación peritoneal"]
+            "ejemplos": [
+                "Signo de Blumberg positivo"
+            ],
+            "contextos_relacionados": [
+                "peritonitis",
+                "abdomen agudo",
+                "rebote",
+                "irritación peritoneal"
+            ]
         },
         "Murphy": {
             "tipo": "signo_eponimo",
             "categoria": "gastroenterologia",
             "definicion": "Interrupción dolorosa de la inspiración al palpar el hipocondrio derecho, indica colecistitis",
-            "variantes_incorrectas": ["Morfi", "Morphy", "murphy", "Murfy"],
+            "variantes_incorrectas": [
+                "Morfi",
+                "Morphy",
+                "murphy",
+                "Murfy"
+            ],
             "forma_correcta": "Murphy",
-            "ejemplos": ["Murphy positivo en colecistitis"],
-            "contextos_relacionados": ["colecistitis", "vesícula biliar", "hipocondrio derecho"]
+            "ejemplos": [
+                "Murphy positivo en colecistitis"
+            ],
+            "contextos_relacionados": [
+                "colecistitis",
+                "vesícula biliar",
+                "hipocondrio derecho"
+            ]
         },
         "Rovsing": {
             "tipo": "signo_eponimo",
             "categoria": "gastroenterologia",
             "definicion": "Dolor en fosa ilíaca derecha al presionar la fosa ilíaca izquierda, sugiere apendicitis",
-            "variantes_incorrectas": ["Robsin", "Rosing", "rovsing", "Robsing", "Rovsin"],
+            "variantes_incorrectas": [
+                "Robsin",
+                "Rosing",
+                "rovsing",
+                "Robsing",
+                "Rovsin"
+            ],
             "forma_correcta": "Rovsing",
-            "ejemplos": ["Rovsing positivo en apendicitis"],
-            "contextos_relacionados": ["apendicitis", "abdomen agudo", "fosa ilíaca derecha"]
+            "ejemplos": [
+                "Rovsing positivo en apendicitis"
+            ],
+            "contextos_relacionados": [
+                "apendicitis",
+                "abdomen agudo",
+                "fosa ilíaca derecha"
+            ]
         },
         "Cullen": {
             "tipo": "signo_eponimo",
             "categoria": "gastroenterologia",
             "definicion": "Equimosis periumbilical que indica hemorragia retroperitoneal",
-            "variantes_incorrectas": ["Culen", "cullen", "Collen"],
+            "variantes_incorrectas": [
+                "Culen",
+                "cullen",
+                "Collen"
+            ],
             "forma_correcta": "Cullen",
-            "ejemplos": ["Signo de Cullen en pancreatitis necrotizante"],
-            "contextos_relacionados": ["pancreatitis", "hemorragia retroperitoneal", "abdomen agudo"]
+            "ejemplos": [
+                "Signo de Cullen en pancreatitis necrotizante"
+            ],
+            "contextos_relacionados": [
+                "pancreatitis",
+                "hemorragia retroperitoneal",
+                "abdomen agudo"
+            ]
         },
         "Grey-Turner": {
             "tipo": "signo_eponimo",
             "categoria": "gastroenterologia",
             "definicion": "Equimosis en flancos que indica hemorragia retroperitoneal",
-            "variantes_incorrectas": ["Grey Turner", "gray turner", "Gray-Turner", "Grey Tirner"],
+            "variantes_incorrectas": [
+                "Grey Turner",
+                "gray turner",
+                "Gray-Turner",
+                "Grey Tirner"
+            ],
             "forma_correcta": "Grey-Turner",
-            "ejemplos": ["Signo de Grey-Turner en pancreatitis severa"],
-            "contextos_relacionados": ["pancreatitis", "hemorragia retroperitoneal", "flancos"]
+            "ejemplos": [
+                "Signo de Grey-Turner en pancreatitis severa"
+            ],
+            "contextos_relacionados": [
+                "pancreatitis",
+                "hemorragia retroperitoneal",
+                "flancos"
+            ]
         },
         "Kernig": {
             "tipo": "signo_eponimo",
             "categoria": "neurologia",
             "definicion": "Resistencia a la extensión de la rodilla con cadera flexionada, indica irritación meníngea",
-            "variantes_incorrectas": ["Kernin", "Carning", "kernig", "Kernick"],
+            "variantes_incorrectas": [
+                "Kernin",
+                "Carning",
+                "kernig",
+                "Kernick"
+            ],
             "forma_correcta": "Kernig",
-            "ejemplos": ["Signo de Kernig positivo en meningitis"],
-            "contextos_relacionados": ["meningitis", "irritación meníngea", "rigidez de nuca"]
+            "ejemplos": [
+                "Signo de Kernig positivo en meningitis"
+            ],
+            "contextos_relacionados": [
+                "meningitis",
+                "irritación meníngea",
+                "rigidez de nuca"
+            ]
         },
         "Brudzinski": {
             "tipo": "signo_eponimo",
             "categoria": "neurologia",
             "definicion": "Flexión involuntaria de rodillas al flexionar el cuello, indica irritación meníngea",
-            "variantes_incorrectas": ["Brudinski", "Brudzinsky", "brudzinski", "Brudzenski"],
+            "variantes_incorrectas": [
+                "Brudinski",
+                "Brudzinsky",
+                "brudzinski",
+                "Brudzenski"
+            ],
             "forma_correcta": "Brudzinski",
-            "ejemplos": ["Signo de Brudzinski positivo"],
-            "contextos_relacionados": ["meningitis", "irritación meníngea", "rigidez de nuca"]
+            "ejemplos": [
+                "Signo de Brudzinski positivo"
+            ],
+            "contextos_relacionados": [
+                "meningitis",
+                "irritación meníngea",
+                "rigidez de nuca"
+            ]
         },
         "Babinski": {
             "tipo": "signo_eponimo",
             "categoria": "neurologia",
             "definicion": "Extensión del primer dedo al estimular la planta del pie, indica lesión piramidal",
-            "variantes_incorrectas": ["Babinsky", "Bavinski", "babinski"],
+            "variantes_incorrectas": [
+                "Babinsky",
+                "Bavinski",
+                "babinski"
+            ],
             "forma_correcta": "Babinski",
-            "ejemplos": ["Signo de Babinski positivo bilateral"],
-            "contextos_relacionados": ["lesión piramidal", "EVC", "motoneurona superior"]
+            "ejemplos": [
+                "Signo de Babinski positivo bilateral"
+            ],
+            "contextos_relacionados": [
+                "lesión piramidal",
+                "EVC",
+                "motoneurona superior"
+            ]
         },
         "Chvostek": {
             "tipo": "signo_eponimo",
             "categoria": "endocrinologia",
             "definicion": "Contracción facial al percutir el nervio facial, indica hipocalcemia",
-            "variantes_incorrectas": ["Chvostec", "Cvostek", "chvostek"],
+            "variantes_incorrectas": [
+                "Chvostec",
+                "Cvostek",
+                "chvostek"
+            ],
             "forma_correcta": "Chvostek",
-            "ejemplos": ["Signo de Chvostek en hipocalcemia"],
-            "contextos_relacionados": ["hipocalcemia", "paratiroides", "tetania"]
+            "ejemplos": [
+                "Signo de Chvostek en hipocalcemia"
+            ],
+            "contextos_relacionados": [
+                "hipocalcemia",
+                "paratiroides",
+                "tetania"
+            ]
         },
         "Trousseau": {
             "tipo": "signo_eponimo",
             "categoria": "endocrinologia",
             "definicion": "Espasmo carpopedal al inflar el manguito de presión, indica hipocalcemia",
-            "variantes_incorrectas": ["Truso", "Trosseau", "trousseau"],
+            "variantes_incorrectas": [
+                "Truso",
+                "Trosseau",
+                "trousseau"
+            ],
             "forma_correcta": "Trousseau",
-            "ejemplos": ["Signo de Trousseau positivo"],
-            "contextos_relacionados": ["hipocalcemia", "tetania", "paratiroides"]
+            "ejemplos": [
+                "Signo de Trousseau positivo"
+            ],
+            "contextos_relacionados": [
+                "hipocalcemia",
+                "tetania",
+                "paratiroides"
+            ]
         },
         "Child-Pugh": {
             "tipo": "escala_clinica",
             "categoria": "gastroenterologia",
             "definicion": "Clasificación pronóstica de cirrosis hepática basada en bilirrubina, albúmina, INR, ascitis y encefalopatía",
-            "variantes_incorrectas": ["Child Pugh", "child-pugh", "Child Puff", "Chil-Pugh"],
+            "variantes_incorrectas": [
+                "Child Pugh",
+                "child-pugh",
+                "Child Puff",
+                "Chil-Pugh"
+            ],
             "forma_correcta": "Child-Pugh",
-            "ejemplos": ["Cirrosis Child-Pugh clase B"],
-            "contextos_relacionados": ["cirrosis", "hepatopatía", "pronóstico hepático", "trasplante hepático"]
+            "ejemplos": [
+                "Cirrosis Child-Pugh clase B"
+            ],
+            "contextos_relacionados": [
+                "cirrosis",
+                "hepatopatía",
+                "pronóstico hepático",
+                "trasplante hepático"
+            ]
         },
         "MELD": {
             "tipo": "escala_clinica",
             "categoria": "gastroenterologia",
             "definicion": "Model for End-Stage Liver Disease, score pronóstico para trasplante hepático",
-            "variantes_incorrectas": ["meld", "M.E.L.D.", "Meld"],
+            "variantes_incorrectas": [
+                "meld",
+                "M.E.L.D.",
+                "Meld"
+            ],
             "forma_correcta": "MELD",
             "forma_expandida": "Model for End-Stage Liver Disease",
-            "ejemplos": ["MELD score de 25 puntos"],
-            "contextos_relacionados": ["cirrosis", "trasplante hepático", "insuficiencia hepática"]
+            "ejemplos": [
+                "MELD score de 25 puntos"
+            ],
+            "contextos_relacionados": [
+                "cirrosis",
+                "trasplante hepático",
+                "insuficiencia hepática"
+            ]
         },
         "Glasgow": {
             "tipo": "escala_clinica",
             "categoria": "neurologia",
             "definicion": "Escala de Coma de Glasgow, evalúa nivel de consciencia (3-15 puntos)",
-            "variantes_incorrectas": ["glasgow", "Glazgow", "Glasgo"],
+            "variantes_incorrectas": [
+                "glasgow",
+                "Glazgow",
+                "Glasgo"
+            ],
             "forma_correcta": "Glasgow",
-            "ejemplos": ["Glasgow de 8, requiere intubación"],
-            "contextos_relacionados": ["coma", "nivel de consciencia", "trauma craneoencefálico", "TCE"]
+            "ejemplos": [
+                "Glasgow de 8, requiere intubación"
+            ],
+            "contextos_relacionados": [
+                "coma",
+                "nivel de consciencia",
+                "trauma craneoencefálico",
+                "TCE"
+            ]
         },
         "NIHSS": {
             "tipo": "escala_clinica",
             "categoria": "neurologia",
             "definicion": "National Institutes of Health Stroke Scale, evalúa déficit neurológico en EVC",
-            "variantes_incorrectas": ["nihss", "N.I.H.S.S.", "NISS"],
+            "variantes_incorrectas": [
+                "nihss",
+                "N.I.H.S.S.",
+                "NISS"
+            ],
             "forma_correcta": "NIHSS",
             "forma_expandida": "National Institutes of Health Stroke Scale",
-            "ejemplos": ["NIHSS de 12 puntos al ingreso"],
-            "contextos_relacionados": ["EVC", "ictus", "stroke", "déficit neurológico"]
+            "ejemplos": [
+                "NIHSS de 12 puntos al ingreso"
+            ],
+            "contextos_relacionados": [
+                "EVC",
+                "ictus",
+                "stroke",
+                "déficit neurológico"
+            ]
         },
         "APACHE": {
             "tipo": "escala_clinica",
             "categoria": "medicina_critica",
             "definicion": "Acute Physiology and Chronic Health Evaluation, score de gravedad en UCI",
-            "variantes_incorrectas": ["apache", "Apache", "APACHI"],
+            "variantes_incorrectas": [
+                "apache",
+                "Apache",
+                "APACHI"
+            ],
             "forma_correcta": "APACHE",
             "forma_expandida": "Acute Physiology and Chronic Health Evaluation",
-            "ejemplos": ["APACHE II de 25 puntos"],
-            "contextos_relacionados": ["UCI", "terapia intensiva", "pronóstico", "gravedad"]
+            "ejemplos": [
+                "APACHE II de 25 puntos"
+            ],
+            "contextos_relacionados": [
+                "UCI",
+                "terapia intensiva",
+                "pronóstico",
+                "gravedad"
+            ]
         },
         "SOFA": {
             "tipo": "escala_clinica",
             "categoria": "medicina_critica",
             "definicion": "Sequential Organ Failure Assessment, evalúa falla orgánica múltiple",
-            "variantes_incorrectas": ["sofa", "S.O.F.A.", "Sofa"],
+            "variantes_incorrectas": [
+                "sofa",
+                "S.O.F.A.",
+                "Sofa"
+            ],
             "forma_correcta": "SOFA",
             "forma_expandida": "Sequential Organ Failure Assessment",
-            "ejemplos": ["SOFA score de 8 indica sepsis"],
-            "contextos_relacionados": ["sepsis", "falla orgánica", "UCI", "choque séptico"]
+            "ejemplos": [
+                "SOFA score de 8 indica sepsis"
+            ],
+            "contextos_relacionados": [
+                "sepsis",
+                "falla orgánica",
+                "UCI",
+                "choque séptico"
+            ]
         },
         "qSOFA": {
             "tipo": "escala_clinica",
             "categoria": "medicina_critica",
             "definicion": "Quick SOFA, criterios rápidos de sepsis fuera de UCI",
-            "variantes_incorrectas": ["qsofa", "QSOFA", "q-SOFA", "quickSOFA"],
+            "variantes_incorrectas": [
+                "qsofa",
+                "QSOFA",
+                "q-SOFA",
+                "quickSOFA"
+            ],
             "forma_correcta": "qSOFA",
             "forma_expandida": "Quick Sequential Organ Failure Assessment",
-            "ejemplos": ["qSOFA de 2 puntos, sospecha de sepsis"],
-            "contextos_relacionados": ["sepsis", "urgencias", "triage", "infección"]
+            "ejemplos": [
+                "qSOFA de 2 puntos, sospecha de sepsis"
+            ],
+            "contextos_relacionados": [
+                "sepsis",
+                "urgencias",
+                "triage",
+                "infección"
+            ]
         },
         "CURB-65": {
             "tipo": "escala_clinica",
             "categoria": "neumologia",
             "definicion": "Score de gravedad en neumonía adquirida en comunidad",
-            "variantes_incorrectas": ["curb-65", "CURB65", "Curb-65", "CURB 65"],
+            "variantes_incorrectas": [
+                "curb-65",
+                "CURB65",
+                "Curb-65",
+                "CURB 65"
+            ],
             "forma_correcta": "CURB-65",
             "forma_expandida": "Confusion, Urea, Respiratory rate, Blood pressure, age 65+",
-            "ejemplos": ["CURB-65 de 3, amerita hospitalización"],
-            "contextos_relacionados": ["neumonía", "NAC", "hospitalización", "gravedad"]
+            "ejemplos": [
+                "CURB-65 de 3, amerita hospitalización"
+            ],
+            "contextos_relacionados": [
+                "neumonía",
+                "NAC",
+                "hospitalización",
+                "gravedad"
+            ]
         },
         "CHA2DS2-VASc": {
             "tipo": "escala_clinica",
             "categoria": "cardiologia",
             "definicion": "Score de riesgo tromboembólico en fibrilación auricular",
-            "variantes_incorrectas": ["CHADS2-VASC", "CHA2DS2VASc", "chadsvasc", "CHAD VASC"],
+            "variantes_incorrectas": [
+                "CHADS2-VASC",
+                "CHA2DS2VASc",
+                "chadsvasc",
+                "CHAD VASC"
+            ],
             "forma_correcta": "CHA2DS2-VASc",
-            "ejemplos": ["CHA2DS2-VASc de 4, requiere anticoagulación"],
-            "contextos_relacionados": ["fibrilación auricular", "anticoagulación", "riesgo embólico", "EVC"]
+            "ejemplos": [
+                "CHA2DS2-VASc de 4, requiere anticoagulación"
+            ],
+            "contextos_relacionados": [
+                "fibrilación auricular",
+                "anticoagulación",
+                "riesgo embólico",
+                "EVC"
+            ]
         },
         "NYHA": {
             "tipo": "escala_clinica",
             "categoria": "cardiologia",
             "definicion": "Clasificación funcional de insuficiencia cardíaca",
-            "variantes_incorrectas": ["nyha", "N.Y.H.A.", "Nyha"],
+            "variantes_incorrectas": [
+                "nyha",
+                "N.Y.H.A.",
+                "Nyha"
+            ],
             "forma_correcta": "NYHA",
             "forma_expandida": "New York Heart Association",
-            "ejemplos": ["Insuficiencia cardíaca NYHA clase III"],
-            "contextos_relacionados": ["insuficiencia cardíaca", "disnea", "capacidad funcional"]
+            "ejemplos": [
+                "Insuficiencia cardíaca NYHA clase III"
+            ],
+            "contextos_relacionados": [
+                "insuficiencia cardíaca",
+                "disnea",
+                "capacidad funcional"
+            ]
         },
         "APGAR": {
             "tipo": "escala_clinica",
             "categoria": "neonatologia",
             "definicion": "Score de valoración del recién nacido al minuto y 5 minutos",
-            "variantes_incorrectas": ["apgar", "Apgar", "ABGAR"],
+            "variantes_incorrectas": [
+                "apgar",
+                "Apgar",
+                "ABGAR"
+            ],
             "forma_correcta": "APGAR",
-            "ejemplos": ["APGAR 8/9 al minuto y cinco minutos"],
-            "contextos_relacionados": ["recién nacido", "neonato", "reanimación neonatal"]
+            "ejemplos": [
+                "APGAR 8/9 al minuto y cinco minutos"
+            ],
+            "contextos_relacionados": [
+                "recién nacido",
+                "neonato",
+                "reanimación neonatal"
+            ]
         },
         "hematocrito": {
             "tipo": "termino_medico",
             "categoria": "laboratorio",
             "definicion": "Porcentaje del volumen sanguíneo ocupado por eritrocitos",
-            "variantes_incorrectas": ["hema tocrito", "matócrito", "hematócrito", "ematocrito"],
+            "variantes_incorrectas": [
+                "hema tocrito",
+                "matócrito",
+                "hematócrito",
+                "ematocrito"
+            ],
             "forma_correcta": "hematocrito",
-            "ejemplos": ["Hematocrito de 42%"],
-            "contextos_relacionados": ["biometría hemática", "anemia", "hemoglobina", "BH"]
+            "ejemplos": [
+                "Hematocrito de 42%"
+            ],
+            "contextos_relacionados": [
+                "biometría hemática",
+                "anemia",
+                "hemoglobina",
+                "BH"
+            ]
         },
         "hemoglobina": {
             "tipo": "termino_medico",
             "categoria": "laboratorio",
             "definicion": "Proteína transportadora de oxígeno en eritrocitos",
-            "variantes_incorrectas": ["hemo globina", "emoglobina", "hemoglovina"],
+            "variantes_incorrectas": [
+                "hemo globina",
+                "emoglobina",
+                "hemoglovina"
+            ],
             "forma_correcta": "hemoglobina",
-            "ejemplos": ["Hemoglobina de 12 g/dL"],
-            "contextos_relacionados": ["anemia", "oxígeno", "eritrocitos", "HbA1c"]
+            "ejemplos": [
+                "Hemoglobina de 12 g/dL"
+            ],
+            "contextos_relacionados": [
+                "anemia",
+                "oxígeno",
+                "eritrocitos",
+                "HbA1c"
+            ]
         },
         "transaminasas": {
             "tipo": "termino_medico",
             "categoria": "laboratorio",
             "definicion": "Enzimas hepáticas AST (TGO) y ALT (TGP)",
-            "variantes_incorrectas": ["transaminazas", "trans aminasas", "transaminacas"],
+            "variantes_incorrectas": [
+                "transaminazas",
+                "trans aminasas",
+                "transaminacas"
+            ],
             "forma_correcta": "transaminasas",
-            "ejemplos": ["Transaminasas elevadas en miles"],
-            "contextos_relacionados": ["función hepática", "hepatitis", "AST", "ALT", "PFH"]
+            "ejemplos": [
+                "Transaminasas elevadas en miles"
+            ],
+            "contextos_relacionados": [
+                "función hepática",
+                "hepatitis",
+                "AST",
+                "ALT",
+                "PFH"
+            ]
         },
         "creatinina": {
             "tipo": "termino_medico",
             "categoria": "laboratorio",
             "definicion": "Marcador de función renal derivado del metabolismo muscular",
-            "variantes_incorrectas": ["creatinine", "creatinyna", "createnina"],
+            "variantes_incorrectas": [
+                "creatinine",
+                "creatinyna",
+                "createnina"
+            ],
             "forma_correcta": "creatinina",
-            "ejemplos": ["Creatinina de 1.9 mg/dL elevada"],
-            "contextos_relacionados": ["función renal", "TFG", "insuficiencia renal", "BUN"]
+            "ejemplos": [
+                "Creatinina de 1.9 mg/dL elevada"
+            ],
+            "contextos_relacionados": [
+                "función renal",
+                "TFG",
+                "insuficiencia renal",
+                "BUN"
+            ]
         },
         "paracetamol": {
             "tipo": "principio_activo",
             "categoria": "medicamentos",
             "definicion": "Analgésico y antipirético, también llamado acetaminofén",
-            "variantes_incorrectas": ["para cetamol", "paracetamól", "parcetamol", "parasétamol"],
+            "variantes_incorrectas": [
+                "para cetamol",
+                "paracetamól",
+                "parcetamol",
+                "parasétamol"
+            ],
             "forma_correcta": "paracetamol",
-            "ejemplos": ["Paracetamol 500 mg cada 6 horas"],
-            "contextos_relacionados": ["Tempra", "Tylenol", "analgésico", "hepatotoxicidad"]
+            "ejemplos": [
+                "Paracetamol 500 mg cada 6 horas"
+            ],
+            "contextos_relacionados": [
+                "Tempra",
+                "Tylenol",
+                "analgésico",
+                "hepatotoxicidad"
+            ]
         },
         "índice tabáquico": {
             "tipo": "termino_medico",
             "categoria": "semiologia",
             "definicion": "Medida de exposición al tabaco: paquetes/día x años fumando",
-            "variantes_incorrectas": ["instabáquico", "indice tabaquico", "índice tabaco", "indicé tabáquico"],
+            "variantes_incorrectas": [
+                "instabáquico",
+                "indice tabaquico",
+                "índice tabaco",
+                "indicé tabáquico"
+            ],
             "forma_correcta": "índice tabáquico",
-            "ejemplos": ["Índice tabáquico de 20 paquetes-año"],
-            "contextos_relacionados": ["tabaquismo", "fumador", "EPOC", "cáncer pulmonar"]
+            "ejemplos": [
+                "Índice tabáquico de 20 paquetes-año"
+            ],
+            "contextos_relacionados": [
+                "tabaquismo",
+                "fumador",
+                "EPOC",
+                "cáncer pulmonar"
+            ]
         },
         "frecuencia cardíaca": {
             "tipo": "termino_medico",
             "categoria": "semiologia",
             "definicion": "Número de latidos del corazón por minuto",
-            "variantes_incorrectas": ["frecuencia carrera", "frecuencia cardiáca", "frecuencia cardíaka"],
+            "variantes_incorrectas": [
+                "frecuencia carrera",
+                "frecuencia cardiáca",
+                "frecuencia cardíaka"
+            ],
             "forma_correcta": "frecuencia cardíaca",
-            "ejemplos": ["Frecuencia cardíaca de 108 lpm"],
-            "contextos_relacionados": ["FC", "pulso", "taquicardia", "bradicardia"]
+            "ejemplos": [
+                "Frecuencia cardíaca de 108 lpm"
+            ],
+            "contextos_relacionados": [
+                "FC",
+                "pulso",
+                "taquicardia",
+                "bradicardia"
+            ]
         },
         "índice de masa corporal": {
             "tipo": "termino_medico",
             "categoria": "semiologia",
             "definicion": "Relación peso/talla² para clasificar estado nutricional",
-            "variantes_incorrectas": ["índice de más a corporal", "indice de masa corporal", "IMC"],
+            "variantes_incorrectas": [
+                "índice de más a corporal",
+                "indice de masa corporal",
+                "IMC"
+            ],
             "forma_correcta": "índice de masa corporal",
-            "ejemplos": ["Índice de masa corporal de 32 indica obesidad"],
-            "contextos_relacionados": ["IMC", "obesidad", "sobrepeso", "nutrición"]
+            "ejemplos": [
+                "Índice de masa corporal de 32 indica obesidad"
+            ],
+            "contextos_relacionados": [
+                "IMC",
+                "obesidad",
+                "sobrepeso",
+                "nutrición"
+            ]
         },
         "electrocardiograma": {
             "tipo": "termino_medico",
             "categoria": "cardiologia",
             "definicion": "Registro gráfico de la actividad eléctrica cardíaca",
-            "variantes_incorrectas": ["electro cardiograma", "electrocardiográma", "EKG", "electro cardio grama"],
+            "variantes_incorrectas": [
+                "electro cardiograma",
+                "electrocardiográma",
+                "EKG",
+                "electro cardio grama"
+            ],
             "forma_correcta": "electrocardiograma",
-            "ejemplos": ["Electrocardiograma con elevación del ST"],
-            "contextos_relacionados": ["ECG", "corazón", "arritmia", "infarto"]
+            "ejemplos": [
+                "Electrocardiograma con elevación del ST"
+            ],
+            "contextos_relacionados": [
+                "ECG",
+                "corazón",
+                "arritmia",
+                "infarto"
+            ]
         },
         "tomografía": {
             "tipo": "termino_medico",
             "categoria": "imagenologia",
             "definicion": "Técnica de imagen que obtiene cortes transversales del cuerpo",
-            "variantes_incorrectas": ["tomografia", "acto homogramosafía", "TAC"],
+            "variantes_incorrectas": [
+                "tomografia",
+                "acto homogramosafía",
+                "TAC"
+            ],
             "forma_correcta": "tomografía",
-            "ejemplos": ["Tomografía de abdomen contrastada"],
-            "contextos_relacionados": ["TAC", "TC", "imagen", "diagnóstico"]
+            "ejemplos": [
+                "Tomografía de abdomen contrastada"
+            ],
+            "contextos_relacionados": [
+                "TAC",
+                "TC",
+                "imagen",
+                "diagnóstico"
+            ]
         },
         "colecistectomía": {
             "tipo": "termino_medico",
             "categoria": "cirugia",
             "definicion": "Extirpación quirúrgica de la vesícula biliar",
-            "variantes_incorrectas": ["colecisto ectomía", "colecistectomia", "colescistectomía"],
+            "variantes_incorrectas": [
+                "colecisto ectomía",
+                "colecistectomia",
+                "colescistectomía"
+            ],
             "forma_correcta": "colecistectomía",
-            "ejemplos": ["Colecistectomía laparoscópica"],
-            "contextos_relacionados": ["vesícula biliar", "colelitiasis", "colecistitis", "laparoscopía"]
+            "ejemplos": [
+                "Colecistectomía laparoscópica"
+            ],
+            "contextos_relacionados": [
+                "vesícula biliar",
+                "colelitiasis",
+                "colecistitis",
+                "laparoscopía"
+            ]
         },
         "laparoscopía": {
             "tipo": "termino_medico",
             "categoria": "cirugia",
             "definicion": "Técnica quirúrgica mínimamente invasiva con cámara",
-            "variantes_incorrectas": ["laparoscopia", "laparocospía", "laparo scopía"],
+            "variantes_incorrectas": [
+                "laparoscopia",
+                "laparocospía",
+                "laparo scopía"
+            ],
             "forma_correcta": "laparoscopía",
-            "ejemplos": ["Colecistectomía por laparoscopía"],
-            "contextos_relacionados": ["cirugía mínimamente invasiva", "cámara", "trocares"]
+            "ejemplos": [
+                "Colecistectomía por laparoscopía"
+            ],
+            "contextos_relacionados": [
+                "cirugía mínimamente invasiva",
+                "cámara",
+                "trocares"
+            ]
         },
         "Mallory-Weiss": {
             "tipo": "sindrome_eponimo",
             "categoria": "gastroenterologia",
             "definicion": "Desgarro de la mucosa esofagogástrica por vómitos, causa sangrado digestivo",
-            "variantes_incorrectas": ["Malori Weis", "Mallory Weiss", "mallory-weiss"],
+            "variantes_incorrectas": [
+                "Malori Weis",
+                "Mallory Weiss",
+                "mallory-weiss"
+            ],
             "forma_correcta": "Mallory-Weiss",
-            "ejemplos": ["Síndrome de Mallory-Weiss post vómitos"],
-            "contextos_relacionados": ["sangrado digestivo alto", "vómitos", "alcoholismo"]
+            "ejemplos": [
+                "Síndrome de Mallory-Weiss post vómitos"
+            ],
+            "contextos_relacionados": [
+                "sangrado digestivo alto",
+                "vómitos",
+                "alcoholismo"
+            ]
         },
         "Guillain-Barré": {
             "tipo": "sindrome_eponimo",
             "categoria": "neurologia",
             "definicion": "Polirradiculoneuropatía inflamatoria aguda con parálisis flácida ascendente",
-            "variantes_incorrectas": ["Guillen Barré", "Gillian Barre", "Guilan Barre"],
+            "variantes_incorrectas": [
+                "Guillen Barré",
+                "Gillian Barre",
+                "Guilan Barre"
+            ],
             "forma_correcta": "Guillain-Barré",
-            "ejemplos": ["Síndrome de Guillain-Barré post infeccioso"],
-            "contextos_relacionados": ["parálisis flácida", "arreflexia", "inmunoglobulina", "plasmaféresis"]
+            "ejemplos": [
+                "Síndrome de Guillain-Barré post infeccioso"
+            ],
+            "contextos_relacionados": [
+                "parálisis flácida",
+                "arreflexia",
+                "inmunoglobulina",
+                "plasmaféresis"
+            ]
         },
         "Wernicke-Korsakoff": {
             "tipo": "sindrome_eponimo",
             "categoria": "neurologia",
             "definicion": "Encefalopatía por déficit de tiamina, asociada a alcoholismo",
-            "variantes_incorrectas": ["Vernicke Corzacof", "Wernicke Korsakoff", "Bernicke"],
+            "variantes_incorrectas": [
+                "Vernicke Corzacof",
+                "Wernicke Korsakoff",
+                "Bernicke"
+            ],
             "forma_correcta": "Wernicke-Korsakoff",
-            "ejemplos": ["Síndrome de Wernicke-Korsakoff en alcohólico"],
-            "contextos_relacionados": ["alcoholismo", "tiamina", "confusión", "oftalmoplejía"]
+            "ejemplos": [
+                "Síndrome de Wernicke-Korsakoff en alcohólico"
+            ],
+            "contextos_relacionados": [
+                "alcoholismo",
+                "tiamina",
+                "confusión",
+                "oftalmoplejía"
+            ]
         },
         "Pisa Farmacéutica": {
             "tipo": "laboratorio_mx",
             "categoria": "farmaceutica",
             "definicion": "Laboratorio farmacéutico mexicano, el más grande del país",
-            "variantes_incorrectas": ["pisa farmaceutica", "Pisa", "Laboratorios Pisa"],
+            "variantes_incorrectas": [
+                "pisa farmaceutica",
+                "Pisa",
+                "Laboratorios Pisa"
+            ],
             "forma_correcta": "Pisa Farmacéutica",
-            "ejemplos": ["Medicamento fabricado por Pisa Farmacéutica"],
-            "contextos_relacionados": ["laboratorio mexicano", "medicamentos", "genéricos"]
+            "ejemplos": [
+                "Medicamento fabricado por Pisa Farmacéutica"
+            ],
+            "contextos_relacionados": [
+                "laboratorio mexicano",
+                "medicamentos",
+                "genéricos"
+            ]
         },
         "Tempra": {
             "tipo": "marca_farmaceutica",
             "categoria": "medicamentos",
             "definicion": "Marca comercial de paracetamol en México",
-            "variantes_incorrectas": ["tempra", "Tenpra", "Temrpa"],
+            "variantes_incorrectas": [
+                "tempra",
+                "Tenpra",
+                "Temrpa"
+            ],
             "forma_correcta": "Tempra",
-            "ejemplos": ["Tempra 500 mg cada 6 horas"],
-            "contextos_relacionados": ["paracetamol", "analgésico", "antipirético"]
+            "ejemplos": [
+                "Tempra 500 mg cada 6 horas"
+            ],
+            "contextos_relacionados": [
+                "paracetamol",
+                "analgésico",
+                "antipirético"
+            ]
         },
         "Rivotril": {
             "tipo": "marca_farmaceutica",
             "categoria": "medicamentos",
             "definicion": "Marca comercial de clonazepam",
-            "variantes_incorrectas": ["rivotril", "Ribotril", "Rivotríl"],
+            "variantes_incorrectas": [
+                "rivotril",
+                "Ribotril",
+                "Rivotríl"
+            ],
             "forma_correcta": "Rivotril",
-            "ejemplos": ["Rivotril 2 mg al acostarse"],
-            "contextos_relacionados": ["clonazepam", "benzodiacepina", "controlado", "ansiedad"]
+            "ejemplos": [
+                "Rivotril 2 mg al acostarse"
+            ],
+            "contextos_relacionados": [
+                "clonazepam",
+                "benzodiacepina",
+                "controlado",
+                "ansiedad"
+            ]
         },
         "NOM-004": {
             "tipo": "normativa",
             "categoria": "legislacion_mx",
             "definicion": "Norma Oficial Mexicana del Expediente Clínico",
-            "variantes_incorrectas": ["nom-004", "NOM 004", "nom004"],
+            "variantes_incorrectas": [
+                "nom-004",
+                "NOM 004",
+                "nom004"
+            ],
             "forma_correcta": "NOM-004",
             "forma_expandida": "NOM-004-SSA3-2012, Del expediente clínico",
-            "ejemplos": ["Cumplir con NOM-004 del expediente clínico"],
-            "contextos_relacionados": ["expediente clínico", "historia clínica", "documentación médica"]
+            "ejemplos": [
+                "Cumplir con NOM-004 del expediente clínico"
+            ],
+            "contextos_relacionados": [
+                "expediente clínico",
+                "historia clínica",
+                "documentación médica"
+            ]
         },
         "CIE-10": {
             "tipo": "clasificacion",
             "categoria": "codificacion",
             "definicion": "Clasificación Internacional de Enfermedades, décima revisión",
-            "variantes_incorrectas": ["cie-10", "CIE 10", "CIE10", "ICD-10"],
+            "variantes_incorrectas": [
+                "cie-10",
+                "CIE 10",
+                "CIE10",
+                "ICD-10"
+            ],
             "forma_correcta": "CIE-10",
             "forma_expandida": "Clasificación Internacional de Enfermedades, décima revisión",
-            "ejemplos": ["Código CIE-10 de neumonía"],
-            "contextos_relacionados": ["codificación", "diagnóstico", "OMS"]
+            "ejemplos": [
+                "Código CIE-10 de neumonía"
+            ],
+            "contextos_relacionados": [
+                "codificación",
+                "diagnóstico",
+                "OMS"
+            ]
+        },
+        "Software": {
+            "tipo": "termino_medico",
+            "categoria": "tecnologia_informatica",
+            "definicion": "Conjunto de instrucciones y datos que permiten a una computadora realizar operaciones específicas",
+            "variantes_incorrectas": [
+                "Sofware",
+                "Softeare",
+                "Sowtware",
+                "Sofware",
+                "Sofware"
+            ],
+            "forma_correcta": "Software",
+            "ejemplos": [
+                "El software de diagnóstico requiere actualización constante para mantener su precisión"
+            ],
+            "contextos_relacionados": [
+                "hardware",
+                "programa",
+                "sistema operativo",
+                "aplicación",
+                "código"
+            ]
+        },
+        "Página de inicio - ISTQB Glossary": {
+            "tipo": "acronimo",
+            "categoria": "software_testing",
+            "definicion": "Página principal de un recurso de vocabulario técnico relacionado con la certificación en pruebas de software por el ISTQB.",
+            "variantes_incorrectas": [
+                "Página de inicio - ISTQB Glosario",
+                "Página de inicio - ISTQB Glossary",
+                "Página de inicio - ISTQB Glossary",
+                "Página de inicio - ISTQB Glossary",
+                "Página de inicio - ISTQB Glossary"
+            ],
+            "forma_correcta": "Página de inicio - ISTQB Glossary",
+            "ejemplos": [
+                "El término 'Página de inicio - ISTQB Glossary' se encuentra en la sección principal del recurso de vocabulario técnico del ISTQB."
+            ],
+            "contextos_relacionados": [
+                "vocabulario técnico",
+                "certificación en pruebas de software",
+                "ISTQB",
+                "glosario",
+                "homepage"
+            ]
+        },
+        "Glosario de pruebas de software - Parasoft": {
+            "tipo": "marca",
+            "categoria": "software testing",
+            "definicion": "Glosario de pruebas de software - Parasoft es un recurso que describe términos y metodologías utilizadas en la validación y verificación de software mediante herramientas y procesos automatizados, específicamente asociado a la herramienta Parasoft.",
+            "variantes_incorrectas": [
+                "Glossario de pruebas de software - Parosoft",
+                "Glosario de pruebas de software - Para Soft",
+                "Glosario de pruebas de software - Parsoft",
+                "Glosario de pruebas de software - Parasoft (con acento faltante)"
+            ],
+            "forma_correcta": "Glosario de pruebas de software - Parasoft",
+            "ejemplos": [
+                "El Glosario de pruebas de software - Parasoft incluye términos como 'pruebas unitarias' y 'automatización de pruebas'.",
+                "Los ingenieros utilizan el Glosario de pruebas de software - Parasoft para alinear su lenguaje técnico con las herramientas de desarrollo."
+            ],
+            "contextos_relacionados": [
+                "pruebas de software",
+                "automatización de pruebas",
+                "validación de software",
+                "herramientas de desarrollo",
+                "Parasoft"
+            ]
+        },
+        "Feedback": {
+            "tipo": "termino_medico",
+            "categoria": "procedimientos_medicos",
+            "definicion": "Proceso de retorno de información para mejorar la calidad de un procedimiento o tratamiento, común en evaluaciones clínicas y sistemas de salud.",
+            "variantes_incorrectas": [
+                "Fedback",
+                "Fedeback",
+                "Feedbak",
+                "Fedback",
+                "Feedbac",
+                "Fedeback",
+                "Fedebac"
+            ],
+            "forma_correcta": "Feedback",
+            "ejemplos": [
+                "El feedback del paciente permitió ajustar el protocolo de rehabilitación.",
+                "El equipo recibió feedback sobre la eficacia del procedimiento quirúrgico."
+            ],
+            "contextos_relacionados": [
+                "retroalimentación",
+                "evaluación",
+                "mejora",
+                "procedimiento",
+                "tratamiento",
+                "calidad"
+            ]
+        },
+        "Compra glosario - Prueba Amazon Prime": {
+            "tipo": "procedimiento",
+            "categoria": "pruebas_de_transcripcion",
+            "definicion": "Frase de prueba utilizada para evaluar la precisión de sistemas de transcripción automática en contextos comerciales y técnicos",
+            "variantes_incorrectas": [
+                "Cobrar glosario - Perro Amazon Perme",
+                "Compro glosario - Prueba Amazon Perme",
+                "Compra goloso - Perro Amazon Prime",
+                "Combra glosario - Prueba Amazon Perme"
+            ],
+            "forma_correcta": "Compra glosario - Prueba Amazon Prime",
+            "ejemplos": [
+                "El término 'Compra glosario - Prueba Amazon Prime' se utiliza en pruebas de transcripción para evaluar la precisión del sistema en reconocer frases comerciales y técnicas"
+            ],
+            "contextos_relacionados": [
+                "transcripcion_automatizada",
+                "pruebas_de_ia",
+                "reconocimiento_voz",
+                "servicios_comerciales",
+                "glosario_tecnico"
+            ]
+        },
+        "Enfermedades": {
+            "tipo": "termino_medico",
+            "categoria": "cardiología",
+            "definicion": "Conjunto de alteraciones patológicas que afectan la estructura o función de un órgano, tejido o sistema, incluyendo trastornos hereditarios, infecciosos, metabólicos o degenerativos.",
+            "variantes_incorrectas": [
+                "Enfermedez",
+                "Enfermedas",
+                "Enfermedes",
+                "Enfermedezas",
+                "Enfermedez"
+            ],
+            "forma_correcta": "Enfermedades",
+            "ejemplos": [
+                "Las enfermedades cardiovasculares son un grupo de trastornos que afectan al corazón y los vasos sanguíneos."
+            ],
+            "contextos_relacionados": [
+                "trastornos",
+                "disfunciones",
+                "afectaciones",
+                "patologías",
+                "condiciones"
+            ]
+        },
+        "Neurodegenerativas": {
+            "tipo": "termino_medico",
+            "categoria": "neurologia",
+            "definicion": "Enfermedades caracterizadas por la progresiva pérdida de estructura y función de las neuronas, incluyendo condiciones como el Alzheimer, Parkinson y esclerosis múltiple.",
+            "variantes_incorrectas": [
+                "Neurodegenerativa",
+                "Neurodegenerativa",
+                "Neurodegenerativas",
+                "Neurodegenerativa",
+                "Neurodegenerativas"
+            ],
+            "forma_correcta": "Neurodegenerativas",
+            "ejemplos": [
+                "Las enfermedades neurodegenerativas son un grupo de trastornos que afectan el sistema nervioso central."
+            ],
+            "contextos_relacionados": [
+                "enfermedades",
+                "sistema nervioso",
+                "Alzheimer",
+                "Parkinson",
+                "degeneración"
+            ]
+        },
+        "Panorámica de las enfermedades neurodegenerativas": {
+            "tipo": "termino_medico",
+            "categoria": "neurologia",
+            "definicion": "Revisión integral de trastornos progresivos que afectan las funciones cerebrales, incluyendo Alzheimer, Parkinson y esclerosis múltiple, caracterizados por la degeneración neuronal irreversible.",
+            "variantes_incorrectas": [
+                "Panoramica de las enfermedades neurodegenerativas",
+                "Panorámica de la enfermedad neurodegenerativas",
+                "Panorámica de las enfermedades neurodegenerativa",
+                "Panorámica de las enfermedades neurodegenerativos"
+            ],
+            "forma_correcta": "Panorámica de las enfermedades neurodegenerativas",
+            "ejemplos": [
+                "La panorámica de las enfermedades neurodegenerativas permite identificar patrones de degeneración en múltiples sistemas nerviosos."
+            ],
+            "contextos_relacionados": [
+                "neurodegeneración",
+                "trastornos cognitivos",
+                "fibras neurofibrilares",
+                "placas amiloides",
+                "diagnóstico diferencial"
+            ]
+        },
+        "El sistema digestivo - Des Moines University": {
+            "tipo": "termino_medico",
+            "categoria": "gastroenterología",
+            "definicion": "Sistema anatómico responsable de la ingestión, digestión, absorción y eliminación de nutrientes, incluyendo órganos como el estómago, intestino delgado y grueso.",
+            "variantes_incorrectas": [
+                "El sistema digestivo - Des Monis University",
+                "El sistema digestivo - Des Moines Univeristy",
+                "El sistema digestivo - Des Moines Univesidad",
+                "El sistema digestivo - Des Moines Universidadd"
+            ],
+            "forma_correcta": "El sistema digestivo - Des Moines University",
+            "ejemplos": [
+                "La descripción del sistema digestivo en el currículo de Des Moines University incluye el análisis de la motilidad intestinal y la función pancreática."
+            ],
+            "contextos_relacionados": [
+                "anatomía",
+                "fisiología",
+                "sistema gastrointestinal",
+                "educación médica",
+                "universidad"
+            ]
+        },
+        "Términos": {
+            "tipo": "termino_medico",
+            "categoria": "cardiología, neurología, gastroenterología",
+            "definicion": "Conceptos o palabras utilizadas en el lenguaje técnico de la medicina para describir enfermedades, procedimientos o diagnósticos específicos",
+            "variantes_incorrectas": [
+                "Termínos",
+                "Terminos",
+                "Términos",
+                "Términos",
+                "Terminos"
+            ],
+            "forma_correcta": "Términos",
+            "ejemplos": [
+                "Los términos médicos en cardiología son esenciales para el diagnóstico preciso de patologías del corazón"
+            ],
+            "contextos_relacionados": [
+                "palabras clave",
+                "conceptos médicos",
+                "especialidades"
+            ]
+        },
+        "Neurología": {
+            "tipo": "termino_medico",
+            "categoria": "neurología",
+            "definicion": "Especialidad médica que estudia el funcionamiento, diagnóstico y tratamiento de trastornos del sistema nervioso central y periférico, incluyendo el cerebro, la médula espinal y los nervios.",
+            "variantes_incorrectas": [
+                "Neurologia",
+                "Neurologia",
+                "Neurologia",
+                "Neurologia",
+                "Neurologia"
+            ],
+            "forma_correcta": "Neurología",
+            "ejemplos": [
+                "El paciente fue referido a neurología para evaluar sus síntomas de convulsiones."
+            ],
+            "contextos_relacionados": [
+                "sistema nervioso",
+                "diagnóstico",
+                "trastornos neurológicos",
+                "neurólogo",
+                "tratamiento"
+            ]
+        },
+        "Clínica": {
+            "tipo": "termino_medico",
+            "categoria": "otros",
+            "definicion": "Unidad o institución dedicada a la atención médica, diagnóstico y tratamiento de pacientes, en el ámbito de la medicina en general.",
+            "variantes_incorrectas": [
+                "Clinica",
+                "Clinicas",
+                "Clínica",
+                "Cliníca",
+                "Clínica",
+                "Clínica",
+                "Clinica"
+            ],
+            "forma_correcta": "Clínica",
+            "ejemplos": [
+                "La clínica de cardiología realizó un estudio detallado del paciente.",
+                "En la clínica de gastroenterología, se diagnosticó una úlcera péptica."
+            ],
+            "contextos_relacionados": [
+                "hospital",
+                "consultorio",
+                "diagnóstico",
+                "tratamiento",
+                "especialidad médica"
+            ]
+        },
+        "PDF PATOLOGIA CARDIACA - udec.cl": {
+            "tipo": "procedimiento",
+            "categoria": "cardiología",
+            "definicion": "Documento PDF que contiene información sobre patologías cardíacas, incluyendo diagnósticos, análisis de tejidos y estudios clínicos relacionados con enfermedades del corazón.",
+            "variantes_incorrectas": [
+                "PDF PATOLIGIA CARDIACA - udec.cl",
+                "PDF PATOLOGIA CARDIACA - udc.cl",
+                "PDF PATOLOGIA CARDIACA UDEC.CL",
+                "PDF PATOLOGIA CARDIACA - udec.cl"
+            ],
+            "forma_correcta": "PDF PATOLOGIA CARDIACA - udec.cl",
+            "ejemplos": [
+                "El PDF de patología cardíaca fue revisado por el cardiólogo para diagnóstico.",
+                "El documento PDF PATOLOGIA CARDIACA - udec.cl contiene imágenes de resonancia magnética del corazón."
+            ],
+            "contextos_relacionados": [
+                "enfermedades cardíacas",
+                "diagnóstico médico",
+                "estudios de imagen",
+                "universidad de concepción"
+            ]
+        },
+        "PDF Enfermedades Cardiovasculares": {
+            "tipo": "termino_medico",
+            "categoria": "cardiología",
+            "definicion": "Grupo de trastornos que afectan al corazón y los vasos sanguíneos, incluyendo aterosclerosis, hipertensión, infartos y arritmias.",
+            "variantes_incorrectas": [
+                "PDF Enfermedades Cardiologicas",
+                "PDF Enfermedades Cardiovasculares",
+                "PDF Enfermedades Cardiovasculares",
+                "PDF Enfermedades Cardiovasculares"
+            ],
+            "forma_correcta": "PDF Enfermedades Cardiovasculares",
+            "ejemplos": [
+                "El PDF Enfermedades Cardiovasculares contiene estudios recientes sobre la prevención de infartos."
+            ],
+            "contextos_relacionados": [
+                "infarto",
+                "aterosclerosis",
+                "hipertensión",
+                "cardiología",
+                "vasos sanguíneos"
+            ]
+        },
+        "PDF Patología cardiovascular Indice - SEFH": {
+            "tipo": "procedimiento",
+            "categoria": "cardiología",
+            "definicion": "Índice de patología cardiovascular incluido en un documento PDF elaborado por la Sociedad Española de Cardiología (SEFH), que contiene información sobre diagnósticos, tratamientos y protocolos relacionados con enfermedades cardiovasculares.",
+            "variantes_incorrectas": [
+                "PFD Patología cardiovascular Indice - SEFH",
+                "PDF Patología cardíaca Indice - SEF",
+                "PDF Patología cardiovascular Indice - SEFH",
+                "PDF Patología cardiovascular Indice - SEF",
+                "PDF Patología cardiovascular Indice - SEFH"
+            ],
+            "forma_correcta": "PDF Patología cardiovascular Indice - SEFH",
+            "ejemplos": [
+                "El PDF Patología cardiovascular Indice - SEFH es utilizado por los médicos para consultar protocolos de diagnóstico.",
+                "El documento PDF Patología cardiovascular Indice - SEFH fue actualizado en 2023 por la SEFH."
+            ],
+            "contextos_relacionados": [
+                "patología cardiovascular",
+                "SEFH",
+                "documentos médicos",
+                "cardiología",
+                "índice clínico"
+            ]
+        },
+        "PDF Patologías del Sistema Cardiovascular - UNEMI": {
+            "tipo": "acronimo",
+            "categoria": "cardiología",
+            "definicion": "Documento PDF que contiene una lista de patologías relacionadas con el sistema cardiovascular, elaborado por la Universidad Nacional de Educación Médica e Instituto (UNEMI).",
+            "variantes_incorrectas": [
+                "PDE Patologías del Sistema Cardiovascular - UNEMI",
+                "PDF Patologías del Sistemas Cardiovascular - UNEMI",
+                "PDF Patologías del Sistema Cardiovasculares - UNEME",
+                "PDF Patologías del Sistema Cardiaco - UNEMI"
+            ],
+            "forma_correcta": "PDF Patologías del Sistema Cardiovascular - UNEMI",
+            "ejemplos": [
+                "El estudiante de medicina consultó el PDF Patologías del Sistema Cardiovascular - UNEMI para revisar casos clínicos de miocarditis.",
+                "El médico utilizó el documento PDF Patologías del Sistema Cardiovascular - UNEMI durante la conferencia sobre enfermedades cardiovasculares."
+            ],
+            "contextos_relacionados": [
+                "cardiología",
+                "patologías",
+                "UNEMI",
+                "PDF",
+                "sistema cardiovascular",
+                "documentos médicos",
+                "educación médica"
+            ]
+        },
+        "Medicamento": {
+            "tipo": "termino_medico",
+            "categoria": "farmacologia",
+            "definicion": "Sustancia utilizada para prevenir, diagnosticar, curar o aliviar síntomas de una enfermedad",
+            "variantes_incorrectas": [
+                "Medicamanto",
+                "Medicamento",
+                "Medicamento",
+                "Medicamento",
+                "Medicamento"
+            ],
+            "forma_correcta": "Medicamento",
+            "ejemplos": [
+                "El médico recetó el medicamento para controlar la presión arterial"
+            ],
+            "contextos_relacionados": [
+                "farmacia",
+                "farmaceutico",
+                "tratamiento",
+                "enfermedad",
+                "dosis"
+            ]
+        },
+        "MEDICAMENTOS": {
+            "tipo": "termino_medico",
+            "categoria": "farmacología",
+            "definicion": "Sustancias utilizadas para prevenir, diagnosticar, tratar o aliviar síntomas de enfermedades o trastornos.",
+            "variantes_incorrectas": [
+                "medicametos",
+                "medicamentox",
+                "medicamentos",
+                "medicamnetos",
+                "medicamentos"
+            ],
+            "forma_correcta": "MEDICAMENTOS",
+            "ejemplos": [
+                "El paciente recibió medicamentos para controlar la presión arterial."
+            ],
+            "contextos_relacionados": [
+                "farmacia",
+                "fármaco",
+                "tratamiento",
+                "dosis",
+                "prescripción"
+            ]
+        },
+        "PDF Medicamentos Y Catálogo De Cuadro Básico": {
+            "tipo": "procedimiento",
+            "categoria": "farmacia/regionalismos_mx",
+            "definicion": "Documento PDF que contiene un catálogo de medicamentos básicos utilizados en el sistema de salud mexicano, incluyendo su clasificación y uso terapéutico.",
+            "variantes_incorrectas": [
+                "PFD Medicamentos Y Catalago De Cuadro Basico",
+                "PDF Medicamentos E Catalago De Cuadro Basico",
+                "PDF Medicamentos Y Catlogo De Cuadro Basico",
+                "PDF Medicamentos Y Catalago De Cuadro Basico",
+                "PDF Medicamentos Y Catálogo De Cuadro Basico"
+            ],
+            "forma_correcta": "PDF Medicamentos Y Catálogo De Cuadro Básico",
+            "ejemplos": [
+                "El PDF Medicamentos Y Catálogo De Cuadro Básico es utilizado por los farmacéuticos para identificar medicamentos esenciales en México."
+            ],
+            "contextos_relacionados": [
+                "medicamentos esenciales",
+                "sistema de salud mexicano",
+                "catálogos farmacéuticos",
+                "Cuadro Básico de Medicamentos",
+                "documentos PDF en salud"
+            ]
+        },
+        "Laboratorios fabricantes de medicamentos": {
+            "tipo": "termino_medico",
+            "categoria": "industria_farmaceutica",
+            "definicion": "Empresas dedicadas a la producción y distribución de medicamentos en México, identificadas por su nombre comercial y registro sanitario.",
+            "variantes_incorrectas": [
+                "Laboratorios fabricante de medicamentos",
+                "Laboratorios fabricadores de medicamentos",
+                "Laboratorios fabrican medicamentos",
+                "Laboratorios fabricando medicamentos",
+                "Laboratorios fabrica medicamentos"
+            ],
+            "forma_correcta": "Laboratorios fabricantes de medicamentos",
+            "ejemplos": [
+                "Los laboratorios fabricantes de medicamentos en México deben cumplir con normas de calidad del COFEPRIS.",
+                "Ejemplos de laboratorios fabricantes de medicamentos incluyen a Sanofi y Merck."
+            ],
+            "contextos_relacionados": [
+                "medicamentos genéricos",
+                "registro sanitario",
+                "COFEPRIS",
+                "industria farmacéutica en México"
+            ]
+        },
+        "more info": {
+            "tipo": "acronimo",
+            "categoria": "interfaz_de_sistemas_medicos",
+            "definicion": "Acronimo para 'More Information', utilizado en interfaces de sistemas de salud para indicar acceso a detalles adicionales sobre medicamentos",
+            "variantes_incorrectas": [
+                "more if no",
+                "more in no",
+                "more info",
+                "more info",
+                "mora info",
+                "more in fo"
+            ],
+            "forma_correcta": "more info",
+            "ejemplos": [
+                "El botón 'more info' muestra la composición química del medicamento",
+                "Al hacer clic en 'more info', se despliegan instrucciones de uso detalladas"
+            ],
+            "contextos_relacionados": [
+                "interfaz médica",
+                "detalles farmacéuticos",
+                "sistema de información"
+            ]
+        },
+        "Medicamentos": {
+            "tipo": "termino_medico",
+            "categoria": "farmacología",
+            "definicion": "Sustancias utilizadas para prevenir, diagnosticar, tratar o aliviar síntomas de enfermedades",
+            "variantes_incorrectas": [
+                "Medicaciones",
+                "Medicamentos",
+                "Medicamentos",
+                "Medicamentos",
+                "Medicamentos",
+                "Medicamentos",
+                "Medicamentos",
+                "Medicamentos",
+                "Medicamentos",
+                "Medicamentos"
+            ],
+            "forma_correcta": "Medicamentos",
+            "ejemplos": [
+                "Los medicamentos recetados por el médico deben tomarse según las indicaciones"
+            ],
+            "contextos_relacionados": [
+                "farmacéuticos",
+                "tratamientos",
+                "enfermedades",
+                "prescripciones",
+                "farmacia"
+            ]
+        },
+        "DOF - Diario Oficial de la Federación": {
+            "tipo": "acronimo",
+            "categoria": "regionalismos_mx",
+            "definicion": "Publicación gubernamental mexicana que contiene normas, leyes, decretos y otros documentos oficiales emitidos por el Poder Ejecutivo Federal.",
+            "variantes_incorrectas": [
+                "DOR",
+                "DOF - Diario Oficial Federal",
+                "DOF - Diario Oficial de la Federación (sin guion)",
+                "DOF - Diario Oficial de la Federación (transcripción fonética: 'dofe')"
+            ],
+            "forma_correcta": "DOF - Diario Oficial de la Federación",
+            "ejemplos": [
+                "El DOF publica la lista de medicamentos con registro sanitario vigente en México.",
+                "Los profesionales de la salud consultan el DOF para validar la vigencia de normativas farmacéuticas."
+            ],
+            "contextos_relacionados": [
+                "publicación oficial",
+                "normativa",
+                "gobierno federal",
+                "registro sanitario",
+                "farmacopea"
+            ]
+        },
+        "Acceso y Uso de Medicamentos - Portal INSP": {
+            "tipo": "procedimiento",
+            "categoria": "salud_publica",
+            "definicion": "Portal digital del Instituto Nacional de Salud Pública (INSP) que proporciona información sobre el acceso, distribución y uso adecuado de medicamentos en México.",
+            "variantes_incorrectas": [
+                "Acceso y Uso de Medicamentos - Porta INSP",
+                "Acceso y Uso de Medicamentos - Portal INSS",
+                "Acceso y Uso de Medicamentos - Portales INSP",
+                "Acceso y Uso de Medicamentos - Portal INP"
+            ],
+            "forma_correcta": "Acceso y Uso de Medicamentos - Portal INSP",
+            "ejemplos": [
+                "Los usuarios pueden consultar el Portal INSP para verificar la disponibilidad de medicamentos en su región.",
+                "El Portal INSP permite a los profesionales de la salud acceder a lineamientos actualizados sobre el uso terapéutico de fármacos."
+            ],
+            "contextos_relacionados": [
+                "INSP",
+                "medicamentos",
+                "acceso",
+                "salud pública",
+                "distribución farmacéutica",
+                "portal digital"
+            ]
+        },
+        "Departamento de farmacología": {
+            "tipo": "termino_medico",
+            "categoria": "especialidad",
+            "definicion": "Área de la medicina dedicada al estudio de los medicamentos, sus efectos biológicos, mecanismos de acción y interacciones con el organismo.",
+            "variantes_incorrectas": [
+                "Departamento de farmacologia",
+                "Departamento de farmacolgia",
+                "Departamento de farmacologia",
+                "Deparato de farmacologia",
+                "Farmacologia departamento"
+            ],
+            "forma_correcta": "Departamento de farmacología",
+            "ejemplos": [
+                "El Departamento de farmacología del Instituto Nacional de Salud investiga nuevos fármacos para el tratamiento del diabetes."
+            ],
+            "contextos_relacionados": [
+                "farmacéuticos",
+                "medicamentos",
+                "fármacos",
+                "especialidad médica",
+                "investigación clínica"
+            ]
+        },
+        "Glosario": {
+            "tipo": "termino_medico",
+            "categoria": "cardiología, neurología, gastroenterología",
+            "definicion": "Colección de términos especializados con sus definiciones, utilizada como referencia en campos médicos específicos.",
+            "variantes_incorrectas": [
+                "Glossario",
+                "Glosario",
+                "Glosario",
+                "Glosario",
+                "Glosario"
+            ],
+            "forma_correcta": "Glosario",
+            "ejemplos": [
+                "El glosario incluye términos de cardiología como 'infarto' y 'arritmia'."
+            ],
+            "contextos_relacionados": [
+                "términos médicos",
+                "definiciones",
+                "especialidades",
+                "referencias"
+            ]
+        },
+        "GASTRO glosario - Quizlet": {
+            "tipo": "acronimo",
+            "categoria": "gastroenterología",
+            "definicion": "Especialidad médica que estudia el sistema digestivo, incluyendo el estómago, intestinos y sus funciones.",
+            "variantes_incorrectas": [
+                "GASTRO glosario - Quizzlet",
+                "GASTRO glosario - Quizle",
+                "GASTRO glosario - Quizzlet",
+                "GASTRO glosario - Quizletz"
+            ],
+            "forma_correcta": "GASTRO glosario - Quizlet",
+            "ejemplos": [
+                "El término 'GASTRO glosario - Quizlet' se utiliza para referirse a un recurso educativo en gastroenterología."
+            ],
+            "contextos_relacionados": [
+                "digestivo",
+                "estómago",
+                "intestino",
+                "hepatología",
+                "gastroenterología clínica"
+            ]
+        },
+        "Problemas neurológicos - Centro Médico ABC": {
+            "tipo": "termino_medico",
+            "categoria": "neurología",
+            "definicion": "Conjunto de trastornos o alteraciones en el sistema nervioso, atendidos en el Centro Médico ABC.",
+            "variantes_incorrectas": [
+                "Problemas neurologicos",
+                "Problemas neurológicos - Centro Médico AB",
+                "Problemas neurologicos - Centro Médico ABC",
+                "Problemas neurológicos - Centro Medico ABC",
+                "Problemas neurológicos - Centro Médico ABC "
+            ],
+            "forma_correcta": "Problemas neurológicos - Centro Médico ABC",
+            "ejemplos": [
+                "El paciente fue derivado al Centro Médico ABC por problemas neurológicos complejos."
+            ],
+            "contextos_relacionados": [
+                "trastornos del sistema nervioso",
+                "neurología clínica",
+                "diagnóstico neurológico",
+                "Centro Médico ABC",
+                "atención médica especializada"
+            ]
+        },
+        "Términos médicos para la enfermedad hepática": {
+            "tipo": "termino_medico",
+            "categoria": "gastroenterología",
+            "definicion": "Conjunto de términos técnicos relacionados con la patología hepática, incluyendo etiología, fisiopatología, diagnóstico y manejo terapéutico de enfermedades del hígado.",
+            "variantes_incorrectas": [
+                "términos médicos para la enfermedad hepática",
+                "términos médicos para la enfermad hepática",
+                "términos médicos para la enfermedad hepática",
+                "términos médicos para la enfermedad hepática",
+                "términos médicos para la enfermedad hepática"
+            ],
+            "forma_correcta": "Términos médicos para la enfermedad hepática",
+            "ejemplos": [
+                "La lista de términos médicos para la enfermedad hepática incluye conceptos como cirrosis, esteatohepatitis y hepatitis viral."
+            ],
+            "contextos_relacionados": [
+                "hígado",
+                "cirrosis",
+                "hepatitis",
+                "fisiopatología",
+                "gastroenterología"
+            ]
+        },
+        "Glosario - Amigos del Hígado": {
+            "tipo": "marca",
+            "categoria": "gastroenterología",
+            "definicion": "Glosario promovido por la campaña 'Amigos del Hígado' para educar sobre el cuidado del hígado y enfermedades hepáticas",
+            "variantes_incorrectas": [
+                "Glosario - Amigos del Higado",
+                "Glosario - Amigos del Higado",
+                "Glosario - Amigos del Hígado",
+                "Glosario - Amigos del Higado",
+                "Glosario - Amigos del Hígado"
+            ],
+            "forma_correcta": "Glosario - Amigos del Hígado",
+            "ejemplos": [
+                "El glosario 'Amigos del Hígado' incluye términos clave sobre la cirrosis y el hepatoma."
+            ],
+            "contextos_relacionados": [
+                "hígado",
+                "enfermedades hepáticas",
+                "gastroenterología",
+                "educación sanitaria"
+            ]
+        },
+        "ca Auscultación cardiaca normal. Arritmia c.": {
+            "tipo": "termino_medico",
+            "categoria": "cardiología",
+            "definicion": "Auscultación cardíaca normal con presencia de arritmia cardíaca, registrada en notas clínicas breves o transcripciones de exámenes físicos.",
+            "variantes_incorrectas": [
+                "ca Auscultación cardiaca normal. Arritmia con",
+                "ca Auscultación cardiaca normal. Arritmia c.",
+                "ca Auscultación cardiaca normal. Arritmia co",
+                "ca Auscultación cardiaca normal. Arritmia ca",
+                "ca Auscultación cardiaca normal. Arritmia c."
+            ],
+            "forma_correcta": "ca Auscultación cardiaca normal. Arritmia c.",
+            "ejemplos": [
+                "El paciente presenta ca Auscultación cardiaca normal. Arritmia c. durante el examen físico.",
+                "En la revisión del historial clínico, se registra ca Auscultación cardiaca normal. Arritmia c. como hallazgo clave."
+            ],
+            "contextos_relacionados": [
+                "auscultación",
+                "arritmia",
+                "cardiaca",
+                "examen físico",
+                "notas clínicas"
+            ]
+        },
+        "Generalidades sobre las arritmias - MSD Manuals": {
+            "tipo": "termino_medico",
+            "categoria": "cardiología",
+            "definicion": "Conjunto de conceptos fundamentales relacionados con las alteraciones anómalas del ritmo cardíaco, incluyendo su clasificación, causas, manifestaciones clínicas y enfoques diagnósticos y terapéuticos.",
+            "variantes_incorrectas": [
+                "Generalidades sobre las aritmias - MSD Manuales",
+                "Generalidades sobre las arritmias - MSD Manual",
+                "Generalidades sobre las arritmias - MSD Manuales",
+                "Generalidades sobre las arritmias - MSD Manual",
+                "Generalidades sobre las arritmias - MSD Manuales"
+            ],
+            "forma_correcta": "Generalidades sobre las arritmias - MSD Manuals",
+            "ejemplos": [
+                "El capítulo 'Generalidades sobre las arritmias - MSD Manuals' explica los mecanismos de las alteraciones del ritmo cardíaco."
+            ],
+            "contextos_relacionados": [
+                "cardiología",
+                "ritmo cardíaco",
+                "electrocardiograma",
+                "fibrilación auricular",
+                "taquicardia",
+                "arritmias cardíacas"
+            ]
+        },
+        "Arritmia": {
+            "tipo": "termino_medico",
+            "categoria": "cardiología",
+            "definicion": "Alteración del ritmo normal del corazón, caracterizada por variaciones anormales en la frecuencia o secuencia de los latidos cardíacos.",
+            "variantes_incorrectas": [
+                "Aritmia",
+                "Arrimia",
+                "Arritmia",
+                "Arritmia",
+                "Arritmia"
+            ],
+            "forma_correcta": "Arritmia",
+            "ejemplos": [
+                "El paciente fue diagnosticado con una arritmia auricular debido a la presencia de extrasístoles."
+            ],
+            "contextos_relacionados": [
+                "ritmo cardíaco",
+                "fibrilación",
+                "taquicardia",
+                "bradicardia",
+                "electrocardiograma"
+            ]
+        },
+        "PDF Manual de GASTROENTEROLOGÍ - usfx.bo": {
+            "tipo": "termino_medico",
+            "categoria": "gastroenterología",
+            "definicion": "Manual en formato PDF que contiene información técnica y clínica sobre gastroenterología, emitido por la institución usfx.bo.",
+            "variantes_incorrectas": [
+                "PDF Manual de GASTROENTEROLOGIA - usfx.bo",
+                "PDF Manual de GASTROENTEROLOGIA - usfx.bo",
+                "PDF Manual de GASTROENTEROLOGÍA - usfx.bo",
+                "PDF Manual de GASTROENTEROLOGÍ - usfx",
+                "PDF Manual de GASTROENTEROLOGÍ - usfx.boo"
+            ],
+            "forma_correcta": "PDF Manual de GASTROENTEROLOGÍ - usfx.bo",
+            "ejemplos": [
+                "El PDF Manual de GASTROENTEROLOGÍ - usfx.bo es una referencia clave para médicos especializados en el área.",
+                "Los profesionales utilizan el PDF Manual de GASTROENTEROLOGÍ - usfx.bo para diagnósticos precisos."
+            ],
+            "contextos_relacionados": [
+                "manual médico",
+                "gastroenterología clínica",
+                "PDF de referencia",
+                "usfx.bo",
+                "documentación médica"
+            ]
+        },
+        "PDF Gastroenterología - senosiain.mx": {
+            "tipo": "termino_medico",
+            "categoria": "gastroenterología",
+            "definicion": "Documento PDF que contiene información especializada en gastroenterología, disponible en el sitio web senosiain.mx",
+            "variantes_incorrectas": [
+                "PDF Gastrosenterología",
+                "PDF Gastrotenterología",
+                "PDF Gastroentelología",
+                "senosiaim.mx",
+                "senosiain.mz"
+            ],
+            "forma_correcta": "PDF Gastroenterología - senosiain.mx",
+            "ejemplos": [
+                "El PDF Gastroenterología - senosiain.mx contiene estudios recientes sobre enfermedades digestivas"
+            ],
+            "contextos_relacionados": [
+                "documento PDF",
+                "gastroenterología clínica",
+                "senosiain.mx",
+                "medicina digestiva"
+            ]
+        },
+        "Glosario - Cardio": {
+            "tipo": "termino_medico",
+            "categoria": "cardiologia",
+            "definicion": "Lista de términos técnicos relacionados con la especialidad de cardiología, utilizada para facilitar la comprensión de conceptos médicos complejos.",
+            "variantes_incorrectas": [
+                "Glosario - Icardio",
+                "Glosario - Icardo",
+                "Glossario - Icardio",
+                "Glosario - Cardiio"
+            ],
+            "forma_correcta": "Glosario - Cardio",
+            "ejemplos": [
+                "El glosario - cardio incluye términos como miocardiopatía, arritmia y angioplastia."
+            ],
+            "contextos_relacionados": [
+                "cardiologia",
+                "terminologia_medica",
+                "glosario_medico",
+                "especialidades_medicas"
+            ]
+        },
+        "Cofepris": {
+            "tipo": "acronimo",
+            "categoria": "regionalismos_mx",
+            "definicion": "Comisión Federal para la Protección contra Riesgos Sanitarios, institución gubernamental mexicana encargada de regular medicamentos, dispositivos médicos y productos sanitarios.",
+            "variantes_incorrectas": [
+                "Cofepis",
+                "Cofebris",
+                "Cofepres",
+                "Cofepri",
+                "Cofepirs"
+            ],
+            "forma_correcta": "Cofepris",
+            "ejemplos": [
+                "Los medicamentos aprobados por Cofepris cumplen con estándares de seguridad en México.",
+                "Cofepris revocó la licencia de un farmacéutico por incumplimiento normativo."
+            ],
+            "contextos_relacionados": [
+                "regulación de medicamentos",
+                "agencia sanitaria",
+                "aprobación de fármacos",
+                "seguridad farmacéutica",
+                "México"
+            ]
+        },
+        "PDF Medicamentos - Unam": {
+            "tipo": "regionalismo",
+            "categoria": "regionalismos_mx",
+            "definicion": "Documento PDF generado por la Universidad Nacional Autónoma de México (UNAM) que contiene información sobre nombres comunes de medicamentos en uso en México, utilizado como referencia en salud pública y farmacia.",
+            "variantes_incorrectas": [
+                "PDF Medicamentos - Unaam",
+                "PDF Medicamento - Unam",
+                "PFD Medicamentos - Unam",
+                "PDF Medicamentos - Unan",
+                "PDF Medicamentos - Unamex"
+            ],
+            "forma_correcta": "PDF Medicamentos - Unam",
+            "ejemplos": [
+                "El PDF Medicamentos - Unam es una herramienta clave para identificar medicamentos genéricos en México.",
+                "Los profesionales de la salud consultan el PDF Medicamentos - Unam para validar nombres comerciales de fármacos."
+            ],
+            "contextos_relacionados": [
+                "farmacia",
+                "medicamentos genéricos",
+                "UNAM",
+                "registro sanitario",
+                "nombres comerciales de medicamentos"
+            ]
+        },
+        "Obinutuzumab Preguntas Frecuentes": {
+            "tipo": "termino_medico",
+            "categoria": "farmacología",
+            "definicion": "Documento que contiene preguntas frecuentes sobre el medicamento Obinutuzumab, un inhibidor de la proteína CD20 utilizado en el tratamiento de linfomas y leucemias.",
+            "variantes_incorrectas": [
+                "Obinutuzumab preguntas frecuentes",
+                "Obinutuzumab preguntas frecuentes",
+                "Obinutuzumab preguntas frecuentes",
+                "Obinutuzumab preguntas frecuentes",
+                "Obinutuzumab preguntas frecuentes",
+                "Obinutuzumab preguntas frecuentes",
+                "Obinutuzumab preguntas frecuentes",
+                "Obinutuzumab preguntas frecuentes"
+            ],
+            "forma_correcta": "Obinutuzumab Preguntas Frecuentes",
+            "ejemplos": [
+                "El documento 'Obinutuzumab Preguntas Frecuentes' incluye información sobre dosis, efectos secundarios y contraindicaciones."
+            ],
+            "contextos_relacionados": [
+                "farmacología",
+                "oncología",
+                "CD20",
+                "tratamiento de linfoma",
+                "documentación clínica"
+            ]
+        },
+        "Catalogo": {
+            "tipo": "termino_medico",
+            "categoria": "farmacia/regionalismos_mx",
+            "definicion": "Lista oficial de medicamentos aprobados y registrados en México, utilizada para referencia en prescripciones y distribución.",
+            "variantes_incorrectas": [
+                "Catálogo",
+                "Catálogo",
+                "Catálogo",
+                "Catálogo",
+                "Catálogo",
+                "Catálogo",
+                "Catálogo",
+                "Catálogo",
+                "Catálogo",
+                "Catálogo"
+            ],
+            "forma_correcta": "Catalogo",
+            "ejemplos": [
+                "El Catalogo de Medicamentos de la Secretaría de Salud incluye fármacos de uso común en el sistema público mexicano."
+            ],
+            "contextos_relacionados": [
+                "medicamentos",
+                "farmacia",
+                "aprobación",
+                "México",
+                "Salud"
+            ]
+        },
+        "Inicio - ANAFAM": {
+            "tipo": "marca",
+            "categoria": "regionalismos_mx",
+            "definicion": "Marca comercial de medicamentos utilizada en México, posiblemente asociada a productos farmacéuticos específicos.",
+            "variantes_incorrectas": [
+                "Inico - ANAFAM",
+                "Inicio - ANA FAM",
+                "Inico - ANA FAM",
+                "Inico - ANAFAM",
+                "Inicio - ANA FAM",
+                "Inico - ANA FAM",
+                "Inicio - ANAFAM",
+                "Inico - ANAFAM",
+                "Inicio - ANA FAM",
+                "Inico - ANA FAM"
+            ],
+            "forma_correcta": "Inicio - ANAFAM",
+            "ejemplos": [
+                "El inicio del tratamiento con ANAFAM se programó para mañana.",
+                "El paciente recibió el medicamento Inicio - ANAFAM según la prescripción."
+            ],
+            "contextos_relacionados": [
+                "medicamento",
+                "farmacia",
+                "tratamiento",
+                "marca comercial",
+                "regionalismos mexicanos"
+            ]
+        },
+        "Marcas y laboratorios - Farmalisto México": {
+            "tipo": "marca",
+            "categoria": "laboratorios_mx",
+            "definicion": "Empresa farmacéutica mexicana dedicada a la producción y distribución de medicamentos genericos y de marca propia en el mercado nacional.",
+            "variantes_incorrectas": [
+                "Farmanisto",
+                "Farmalisto",
+                "Farmalisto Mexico",
+                "Farmorliso",
+                "Farmorliso México",
+                "Farmalisto Méxoco"
+            ],
+            "forma_correcta": "Marcas y laboratorios - Farmalisto México",
+            "ejemplos": [
+                "Farmalisto México es un laboratorio farmacéutico con presencia en más de 30 países.",
+                "Los medicamentos de Farmalisto México son reconocidos por su calidad y accesibilidad en México."
+            ],
+            "contextos_relacionados": [
+                "laboratorios farmacéuticos",
+                "medicamentos genericos",
+                "farmacia",
+                "compañías farmacéuticas",
+                "México"
+            ]
+        },
+        "Farmacéutica": {
+            "tipo": "marca",
+            "categoria": "empresas_farmaceuticas_mx",
+            "definicion": "Empresa dedicada a la investigación, desarrollo, producción y distribución de medicamentos y productos farmacéuticos en México.",
+            "variantes_incorrectas": [
+                "Farmaceutica",
+                "Farmaceutica",
+                "Farmaceutica",
+                "Farmaceutica",
+                "Farmaceutica",
+                "Farmacé utica",
+                "Farmacé utica"
+            ],
+            "forma_correcta": "Farmacéutica",
+            "ejemplos": [
+                "La empresa farmacéutica Farmex produce medicamentos de uso común en México."
+            ],
+            "contextos_relacionados": [
+                "medicamentos",
+                "industria farmacéutica",
+                "farmacia",
+                "compañías farmacéuticas",
+                "producción de medicamentos"
+            ]
+        },
+        "PDF Manual de Farmacologia basica y clinica": {
+            "tipo": "termino_medico",
+            "categoria": "farmacología",
+            "definicion": "Documento que contiene información básica y clínica sobre farmacología, utilizado como recurso educativo en el ámbito médico.",
+            "variantes_incorrectas": [
+                "PDF Manual de Farmacologia basica y clinica",
+                "PDF Manual de Farmacologia basica y clinica",
+                "PDF Manual de Farmacologia basica y clinica",
+                "PDF Manual de Farmacologia basica y clinica",
+                "PDF Manual de Farmacologia basica y clinica",
+                "PDF Manual de Farmacologia basica y clinica"
+            ],
+            "forma_correcta": "PDF Manual de Farmacologia basica y clinica",
+            "ejemplos": [
+                "El PDF Manual de Farmacologia basica y clinica es utilizado por estudiantes de medicina para repasar conceptos clínicos."
+            ],
+            "contextos_relacionados": [
+                "farmacología clínica",
+                "medicamentos comunes",
+                "guías terapéuticas",
+                "farmacoterapia",
+                "manuales médicos"
+            ]
+        },
+        "PDF manual de farmacologia": {
+            "tipo": "termino_medico",
+            "categoria": "farmacologia",
+            "definicion": "Manual en formato PDF que contiene información sobre fármacos, sus usos, dosis, efectos adversos y mecanismos de acción.",
+            "variantes_incorrectas": [
+                "PDF manuel de farmacologia",
+                "PDF manua de farmacologia",
+                "PDF manual de farmacologia",
+                "PDF manual de farmacología",
+                "PDF manual de farmacolgia"
+            ],
+            "forma_correcta": "PDF manual de farmacologia",
+            "ejemplos": [
+                "El PDF manual de farmacologia es utilizado por los médicos para consultar dosis de medicamentos."
+            ],
+            "contextos_relacionados": [
+                "farmacología",
+                "medicamentos",
+                "dosificación",
+                "efectos adversos",
+                "guía clínica"
+            ]
+        },
+        "Farmacología": {
+            "tipo": "termino_medico",
+            "categoria": "farmacologia",
+            "definicion": "Estudio científico de los medicamentos, sus efectos, mecanismos de acción y su uso terapéutico",
+            "variantes_incorrectas": [
+                "Farmacologia",
+                "Farmacología",
+                "Farmacología",
+                "Farmaco",
+                "Logia",
+                "Farmacologia"
+            ],
+            "forma_correcta": "Farmacología",
+            "ejemplos": [
+                "La farmacología es fundamental para entender cómo los medicamentos actúan en el cuerpo humano"
+            ],
+            "contextos_relacionados": [
+                "medicamentos",
+                "fármacos",
+                "terapias",
+                "efectos adversos",
+                "dosis",
+                "farmacia"
+            ]
+        },
+        "Dilameg - Sitio web": {
+            "tipo": "marca",
+            "categoria": "regionalismos_mx",
+            "definicion": "Nombre comercial de un sitio web asociado a la distribución o información sobre medicamentos en México",
+            "variantes_incorrectas": [
+                "Dilamex",
+                "Dilameg Web",
+                "Dilameg - Sitio",
+                "Dilameg Web",
+                "Dilameg Sitio"
+            ],
+            "forma_correcta": "Dilameg - Sitio web",
+            "ejemplos": [
+                "El paciente fue redirigido al sitio web Dilameg para obtener información sobre medicamentos recetados"
+            ],
+            "contextos_relacionados": [
+                "farmacia en línea",
+                "medicamentos en México",
+                "distribución farmacéutica"
+            ]
+        },
+        "Farmatodo Farmacia en Línea": {
+            "tipo": "marca",
+            "categoria": "farmacias_mx",
+            "definicion": "Cadena de farmacias en línea en México que ofrece venta de medicamentos y productos de salud a través de su plataforma digital.",
+            "variantes_incorrectas": [
+                "Farmatodo Farmacia en Linea",
+                "Farmatodo Farmacia en Línea",
+                "Farmatodo Farmacia en Línea",
+                "Farmatodo Farmacia en Línea",
+                "Farmatodo Farmacia en Línea"
+            ],
+            "forma_correcta": "Farmatodo Farmacia en Línea",
+            "ejemplos": [
+                "El paciente compró sus medicamentos en Farmatodo Farmacia en Línea por medio de su sitio web."
+            ],
+            "contextos_relacionados": [
+                "farmacias en línea",
+                "venta de medicamentos",
+                "plataforma digital",
+                "México",
+                "salud"
+            ]
+        },
+        "Acceso a Bases de Datos - Portal INSP": {
+            "tipo": "regionalismo",
+            "categoria": "regionalismos_mx",
+            "definicion": "Portal institucional en México que proporciona acceso a bases de datos relacionadas con información sanitaria, farmacéutica y de políticas públicas, gestionado por el Instituto Nacional de Salud Pública (INSP).",
+            "variantes_incorrectas": [
+                "Acceso a Bases de Datos - Portal INSS",
+                "Acceso a Bases de Datos - Portal INSO",
+                "Acceso a Bases de Datos - Porta INSP",
+                "Acceso a Bases de Datos - Portal INSPS"
+            ],
+            "forma_correcta": "Acceso a Bases de Datos - Portal INSP",
+            "ejemplos": [
+                "Los profesionales de la salud utilizan el Portal INSP para consultar actualizaciones sobre medicamentos registrados en México.",
+                "El Portal INSP es una herramienta clave para acceder a bases de datos epidemiológicas nacionales."
+            ],
+            "contextos_relacionados": [
+                "INSP",
+                "bases de datos",
+                "acceso",
+                "salud pública",
+                "México",
+                "farmacéutica"
+            ]
+        },
+        "glosario de términos médicos de cardiología pdf": {
+            "tipo": "termino_medico",
+            "categoria": "cardiología",
+            "definicion": "Colección organizada de términos técnicos especializados en cardiología, disponibles en formato PDF para consulta y referencia médica",
+            "variantes_incorrectas": [
+                "glosario de terminos medicos de cardiologia pdf",
+                "glosario de terminos medico de cardiologia pdf",
+                "glosario de terminos medico de cardiologica pdf",
+                "glosario de terminos medico de cardiologia pdv",
+                "glosario de terminos medicos de cardiologia pdv"
+            ],
+            "forma_correcta": "glosario de términos médicos de cardiología pdf",
+            "ejemplos": [
+                "El glosario de términos médicos de cardiología PDF incluye definiciones de miocardio, arritmia y angioplastia"
+            ],
+            "contextos_relacionados": [
+                "glosario médico",
+                "cardiología",
+                "PDF",
+                "términos técnicos",
+                "transcripción médica"
+            ]
+        },
+        "Neurologia": {
+            "tipo": "termino_medico",
+            "categoria": "neurología",
+            "definicion": "Especialidad médica que estudia el sistema nervioso central y periférico, incluyendo el diagnóstico y tratamiento de trastornos del cerebro, médula espinal, nervios y músculos.",
+            "variantes_incorrectas": [
+                "Neurologia",
+                "Neurologia",
+                "Neurologia",
+                "Neurologia",
+                "Neurologia",
+                "Neurologia"
+            ],
+            "forma_correcta": "Neurologia",
+            "ejemplos": [
+                "El paciente fue derivado al servicio de Neurologia para la evaluación de convulsiones recurrentes."
+            ],
+            "contextos_relacionados": [
+                "sistema nervioso",
+                "encefalo",
+                "medula",
+                "neurona",
+                "trastornos neurológicos"
+            ]
+        },
+        "PDF Trastornos Neurológicos - Paho": {
+            "tipo": "termino_medico",
+            "categoria": "neurología",
+            "definicion": "Documento o guía proporcionada por la Organización Panamericana de la Salud (PAHO) que detalla información sobre trastornos neurológicos, incluyendo diagnóstico, tratamiento y manejo clínico.",
+            "variantes_incorrectas": [
+                "PDF Trastornos Neurológicos - PAH",
+                "PDF Trastornos Neurológicos - Paho",
+                "PDF Trastornos Neurológicos - PAHOO",
+                "PDF Trastornos Neurologicos - PAHO",
+                "PDF Trastornos Neurólogicos - PAHO"
+            ],
+            "forma_correcta": "PDF Trastornos Neurológicos - Paho",
+            "ejemplos": [
+                "El PDF Trastornos Neurológicos - PAHO es una referencia clave para el diagnóstico temprano de enfermedades como la esclerosis múltiple."
+            ],
+            "contextos_relacionados": [
+                "Organización Panamericana de la Salud",
+                "guía clínica",
+                "trastornos del sistema nervioso",
+                "diagnóstico neurológico"
+            ]
+        },
+        "Trastornos": {
+            "tipo": "termino_medico",
+            "categoria": "psiquiatria",
+            "definicion": "Conjunto de alteraciones patológicas que afectan el funcionamiento normal de un órgano, sistema o proceso biológico.",
+            "variantes_incorrectas": [
+                "Trasnores",
+                "Trasstornos",
+                "Trastornos",
+                "Tras tornos",
+                "Trastornos (sin 's')"
+            ],
+            "forma_correcta": "Trastornos",
+            "ejemplos": [
+                "Los trastornos del sueño son comunes en pacientes con insomnio.",
+                "Trastornos cardíacos como la arritmia requieren evaluación urgente."
+            ],
+            "contextos_relacionados": [
+                "disfunciones",
+                "alteraciones",
+                "síndromes",
+                "enfermedades",
+                "patologías"
+            ]
+        },
+        "Gastroenterología": {
+            "tipo": "termino_medico",
+            "categoria": "gastroenterología",
+            "definicion": "Especialidad médica que estudia el funcionamiento, diagnóstico y tratamiento de las enfermedades del sistema digestivo, incluyendo el estómago, intestino, hígado, páncreas y vesícula biliar.",
+            "variantes_incorrectas": [
+                "Gastroenterologia",
+                "Gastrenterologia",
+                "Gastroenterologia",
+                "Gastrenterologia",
+                "Gastroenterologia"
+            ],
+            "forma_correcta": "Gastroenterología",
+            "ejemplos": [
+                "El paciente fue derivado al especialista en gastroenterología para una evaluación más detallada."
+            ],
+            "contextos_relacionados": [
+                "sistema digestivo",
+                "enfermedades digestivas",
+                "endoscopia",
+                "hepatología",
+                "trastornos del intestino"
+            ]
+        },
+        "Cuadro Comparativo Síndromes Gastrointestinales": {
+            "tipo": "termino_medico",
+            "categoria": "gastroenterología",
+            "definicion": "Tabla estructurada que compara características clínicas, etiología, diagnóstico y tratamiento de diferentes síndromes gastrointestinales para facilitar el diagnóstico diferencial.",
+            "variantes_incorrectas": [
+                "Cuadro Comparativo Sindromes Gastrointestinales",
+                "Cuadro Comparativo Síndromes Gastrointestinal",
+                "Cuadro Comparativo Síndrome Gastrointestinales",
+                "Cuadro Comparativo Síndromes Gastrointestinale",
+                "Cuadro Comparativo Síndromes Gastrointestinales (sin acento)"
+            ],
+            "forma_correcta": "Cuadro Comparativo Síndromes Gastrointestinales",
+            "ejemplos": [
+                "El cuadro comparativo síndromes gastrointestinales fue utilizado para diferenciar entre el síndrome de Zollinger-Ellison y el síndrome de dumping."
+            ],
+            "contextos_relacionados": [
+                "síndrome",
+                "diagnóstico diferencial",
+                "gastroenterología",
+                "tabla comparativa",
+                "síntomas"
+            ]
+        },
+        "Listado de enfermedades del aparato digestivo": {
+            "tipo": "termino_medico",
+            "categoria": "gastroenterología",
+            "definicion": "Enumeración sistemática de patologías que afectan al sistema digestivo, incluyendo enfermedades del esófago, estómago, intestino, hígado, páncreas y vesícula biliar.",
+            "variantes_incorrectas": [
+                "lista",
+                "de",
+                "enfermedades",
+                "del",
+                "aparato",
+                "digestivo",
+                "listado",
+                "de",
+                "enfermedades",
+                "del",
+                "sistema",
+                "digestivo"
+            ],
+            "forma_correcta": "Listado de enfermedades del aparato digestivo",
+            "ejemplos": [
+                "El médico proporcionó un listado de enfermedades del aparato digestivo durante la consulta de gastroenterología."
+            ],
+            "contextos_relacionados": [
+                "gastroenterología",
+                "sistema digestivo",
+                "trastornos digestivos",
+                "diagnóstico diferencial"
+            ]
+        },
+        "SINDROMES": {
+            "tipo": "termino_medico",
+            "categoria": "cardiología, neurología, gastroenterología",
+            "definicion": "Conjunto de signos y síntomas característicos que ocurren juntos y sugieren una condición patológica específica en un órgano o sistema.",
+            "variantes_incorrectas": [
+                "sindromes",
+                "sindromas",
+                "sindro",
+                "sindromes",
+                "sindromes"
+            ],
+            "forma_correcta": "SINDROMES",
+            "ejemplos": [
+                "Los síndromes de la enfermedad de Crohn son comunes en gastroenterología.",
+                "El síndrome de Guillain-Barré es un ejemplo de síndromes neurológicos agudos."
+            ],
+            "contextos_relacionados": [
+                "síndrome",
+                "diagnóstico",
+                "signos",
+                "síntomas",
+                "tratamiento",
+                "cardiología",
+                "neurología",
+                "gastroenterología"
+            ]
+        },
+        "Arritmias": {
+            "tipo": "termino_medico",
+            "categoria": "cardiología",
+            "definicion": "Alteración en la frecuencia o ritmo cardíaco, caracterizada por pausas, taquicardias o bradicardias anómalas",
+            "variantes_incorrectas": [
+                "Arritmia",
+                "Arritmias",
+                "Arritmias",
+                "Arritmias",
+                "Arritmias"
+            ],
+            "forma_correcta": "Arritmias",
+            "ejemplos": [
+                "El paciente presenta arritmias ventriculares por bloqueo auriculoventricular."
+            ],
+            "contextos_relacionados": [
+                "cardiología",
+                "ritmo cardíaco",
+                "electrocardiograma",
+                "taquicardia",
+                "bradicardia"
+            ]
+        },
+        "Trastornos digestivos - Nutrition.gov": {
+            "tipo": "termino_medico",
+            "categoria": "gastroenterología",
+            "definicion": "Grupo de condiciones patológicas que afectan la función normal del sistema digestivo, incluyendo trastornos de la motilidad, absorción, secreción y procesamiento de nutrientes.",
+            "variantes_incorrectas": [
+                "Trastornos digesitivos - Nutrition.gov",
+                "Trastornos digestivo - Nutrition.gov",
+                "Trastornos digestivos - Nutricion.gov",
+                "Trastornos digestivos - Nutrition govt",
+                "Trastornos digestivo - Nutricion.gov"
+            ],
+            "forma_correcta": "Trastornos digestivos - Nutrition.gov",
+            "ejemplos": [
+                "Los trastornos digestivos - Nutrition.gov clasifican la enfermedad celíaca como una alteración autoinmune del intestino delgado.",
+                "Según Nutrition.gov, los trastornos digestivos incluyen disfunción del esfínter esofágico y pancreatitis crónica."
+            ],
+            "contextos_relacionados": [
+                "sistema gastrointestinal",
+                "trastornos gastrointestinales",
+                "enfermedades digestivas",
+                "nutrición clínica",
+                "trastornos del sistema digestivo"
+            ]
+        },
+        "Patologías del sistema digestivo - Visible Body": {
+            "tipo": "termino_medico",
+            "categoria": "gastroenterología",
+            "definicion": "Conjunto de alteraciones anatómicas, funcionales o metabólicas que afectan al sistema digestivo, representadas en el recurso educativo 'Visible Body' como modelos visuales y descriptivos.",
+            "variantes_incorrectas": [
+                "Patologias del sistema digestivo - Visible Body",
+                "Patologicas del sistema digestivo - Visible Body",
+                "Patologías del sistema digestivo - Visible Bodie",
+                "Patologías del sistema digetivo - Visible Body"
+            ],
+            "forma_correcta": "Patologías del sistema digestivo - Visible Body",
+            "ejemplos": [
+                "El análisis de patologías del sistema digestivo - Visible Body permite identificar lesiones en el esófago, estómago y intestino delgado con precisión anatómica."
+            ],
+            "contextos_relacionados": [
+                "gastritis",
+                "colitis",
+                "sistema digestivo",
+                "enfermedades digestivas",
+                "Visible Body"
+            ]
+        },
+        "PDF Patologías digestivas - UNAM": {
+            "tipo": "termino_medico",
+            "categoria": "gastroenterología",
+            "definicion": "Documento digital (PDF) que contiene una compilación de patologías relacionadas con el sistema digestivo, elaborado por la Universidad Nacional Autónoma de México (UNAM).",
+            "variantes_incorrectas": [
+                "PFD Patologías digestivas - UNAM",
+                "PDF Patologías digesativas - UNAM",
+                "PDF Patologías digestivas - UAM",
+                "PDF Patologías digestivas UNAM"
+            ],
+            "forma_correcta": "PDF Patologías digestivas - UNAM",
+            "ejemplos": [
+                "El PDF Patologías digestivas - UNAM se utiliza como material de referencia en cursos de gastroenterología en la UNAM."
+            ],
+            "contextos_relacionados": [
+                "gastroenterología",
+                "patologías digestivas",
+                "UNAM",
+                "documentos médicos",
+                "educación médica"
+            ]
+        },
+        "Neurología clínica - Google Sites": {
+            "tipo": "termino_medico",
+            "categoria": "neurologia",
+            "definicion": "Especialidad médica dedicada al estudio, diagnóstico y tratamiento de trastornos del sistema nervioso central y periférico en pacientes adultos y pediátricos.",
+            "variantes_incorrectas": [
+                "Neurologia clinica - Google Sites",
+                "Neurologia clinica - Google Sits",
+                "Neurologia clinica - Google Sites",
+                "Neurologia clinica - Google Sites",
+                "Neurologia clinica - Google Sits"
+            ],
+            "forma_correcta": "Neurología clínica - Google Sites",
+            "ejemplos": [
+                "El enlace a Neurología clínica - Google Sites contiene información sobre trastornos neurológicos comunes en adultos mayores."
+            ],
+            "contextos_relacionados": [
+                "diagnóstico",
+                "trastornos neurológicos",
+                "tratamiento",
+                "Google Sites",
+                "especialidad médica"
+            ]
+        },
+        "PDF GLOSARIO - svneurologia.org": {
+            "tipo": "marca",
+            "categoria": "neurologia",
+            "definicion": "Recurso digital en formato PDF que contiene un glosario especializado en términos médicos de neurología, disponible en el sitio web svneurologia.org",
+            "variantes_incorrectas": [
+                "PDF Glosario - svneurologia.org",
+                "PDF GLOSARIO SVNEUROLOGIA.ORG",
+                "PDF GLOSAIO - svneurologia.org",
+                "PDF GLOSARIO - svn neurologia.org",
+                "PDF GLOSARIO - svneurologia org"
+            ],
+            "forma_correcta": "PDF GLOSARIO - svneurologia.org",
+            "ejemplos": [
+                "El médico consultó el PDF GLOSARIO - svneurologia.org para verificar el término 'encefalomielitis' antes de la consulta especializada."
+            ],
+            "contextos_relacionados": [
+                "glosario médico",
+                "neurología",
+                "terminología médica",
+                "recursos educativos"
+            ]
+        },
+        "Cardiología": {
+            "tipo": "termino_medico",
+            "categoria": "cardiología",
+            "definicion": "Rama de la medicina que estudia el corazón, los vasos sanguíneos y los músculos cardíacos, así como sus patologías y tratamientos.",
+            "variantes_incorrectas": [
+                "Cardiologia",
+                "Cardiología",
+                "Cardio logía",
+                "Cardiología",
+                "Cardiología"
+            ],
+            "forma_correcta": "Cardiología",
+            "ejemplos": [
+                "La cardiología se enfoca en el estudio del corazón y sus enfermedades."
+            ],
+            "contextos_relacionados": [
+                "corazón",
+                "enfermedades cardíacas",
+                "electrocardiograma",
+                "cardiaco",
+                "arritmia"
+            ]
+        },
+        "Glosario - UI Cardiología": {
+            "tipo": "termino_medico",
+            "categoria": "cardiología",
+            "definicion": "Lista de términos médicos especializados en cardiología, utilizada para la consulta y referencia en contextos clínicos.",
+            "variantes_incorrectas": [
+                "Glosario - UI Cardiologia",
+                "Glosario - UI cardiología",
+                "Glosario - UI cardiologia",
+                "Glosario - UI cardiología",
+                "Glosario - UI cardiología"
+            ],
+            "forma_correcta": "Glosario - UI Cardiología",
+            "ejemplos": [
+                "El glosario - UI Cardiología incluye términos como miocardiopatía y arritmia."
+            ],
+            "contextos_relacionados": [
+                "términos médicos",
+                "cardiología",
+                "glosario clínico",
+                "referencia médica"
+            ]
+        },
+        "PDF EPISODIO IV - Gastro": {
+            "tipo": "procedimiento",
+            "categoria": "gastroenterología",
+            "definicion": "Documento PDF correspondiente al cuarto episodio de un protocolo clínico o estudio gastroenterológico",
+            "variantes_incorrectas": [
+                "PDF EPISODIO IV - Gasto",
+                "PDF EPISODIO IV - Gastroenterología",
+                "PDF EPISODIO V - Gastro",
+                "PDF EPISODIO IV - Gastro (sin guion)"
+            ],
+            "forma_correcta": "PDF EPISODIO IV - Gastro",
+            "ejemplos": [
+                "El PDF EPISODIO IV - Gastro contiene los resultados del endoscopio digestivo superior del paciente."
+            ],
+            "contextos_relacionados": [
+                "documentos médicos",
+                "protocolos clínicos",
+                "endoscopía",
+                "gastroenterología"
+            ]
+        },
+        "Cardiaca": {
+            "tipo": "termino_medico",
+            "categoria": "cardiología",
+            "definicion": "Relacionado con el corazón o las funciones cardíacas",
+            "variantes_incorrectas": [
+                "cardiaco",
+                "cardiaca",
+                "cardic",
+                "cardiaca"
+            ],
+            "forma_correcta": "Cardiaca",
+            "ejemplos": [
+                "La evaluación de la función cardiaca es esencial en el diagnóstico de insuficiencia cardíaca."
+            ],
+            "contextos_relacionados": [
+                "corazón",
+                "miocardio",
+                "arritmia",
+                "insuficiencia cardiaca"
+            ]
+        },
+        "Neurociencia del sueño - neuronup.com": {
+            "tipo": "termino_medico",
+            "categoria": "neurologia",
+            "definicion": "Rama de la neurología que estudia los mecanismos cerebrales, fisiológicos y patológicos relacionados con el sueño, su regulación y trastornos asociados.",
+            "variantes_incorrectas": [
+                "Neurocencia del sueño - neuronup.com",
+                "Neurociencia del sueño - neurónup.com",
+                "Neurociencia del sueno - neuronup.com",
+                "Neurociencia del sueño neuronup.com",
+                "Neurocien del sueño - neuronup.com"
+            ],
+            "forma_correcta": "Neurociencia del sueño - neuronup.com",
+            "ejemplos": [
+                "La neurociencia del sueño analiza los patrones de actividad cerebral durante los ciclos de sueño REM y no REM.",
+                "El sitio web neuronup.com ofrece recursos sobre el tratamiento de trastornos del sueño desde una perspectiva neurológica."
+            ],
+            "contextos_relacionados": [
+                "trastornos del sueño",
+                "fisiología del sueño",
+                "neurología del sueño",
+                "apnea del sueño",
+                "insomnio",
+                "neurotransmisores",
+                "ritmo circadiano"
+            ]
+        },
+        "Sueño": {
+            "tipo": "termino_medico",
+            "categoria": "neurología",
+            "definicion": "Estado fisiológico de reposo caracterizado por alteraciones en la conciencia, reducción de la actividad sensorial y inhibición de la actividad muscular voluntaria, relevante en el diagnóstico de trastornos del sueño y su relación con patologías neurológicas.",
+            "variantes_incorrectas": [
+                "sueño",
+                "sueño",
+                "sueño",
+                "sueño",
+                "sueño"
+            ],
+            "forma_correcta": "Sueño",
+            "ejemplos": [
+                "El sueño en pacientes con apnea obstructiva del sueño debe evaluarse con polisomnografía.",
+                "Trastornos del sueño son frecuentes en enfermos de Parkinson."
+            ],
+            "contextos_relacionados": [
+                "insomnio",
+                "apnea",
+                "sueño REM",
+                "trastornos del sueño",
+                "neurología del sueño"
+            ]
+        },
+        "Intestinales": {
+            "tipo": "termino_medico",
+            "categoria": "gastroenterologia",
+            "definicion": "Relacionado con el intestino o el tracto gastrointestinal, incluyendo sus estructuras, funciones y patologías asociadas.",
+            "variantes_incorrectas": [
+                "Intestinales",
+                "Intestinales",
+                "Intestinales",
+                "Intestinales",
+                "Intestinales",
+                "Intestinales"
+            ],
+            "forma_correcta": "Intestinales",
+            "ejemplos": [
+                "Los síntomas intestinales comunes incluyen dolor abdominal, diarrea y flatulencia."
+            ],
+            "contextos_relacionados": [
+                "intestino",
+                "gastroenteritis",
+                "síndrome del intestino irritable",
+                "mucosa intestinal",
+                "peristalsis"
+            ]
+        },
+        "Inflamatorias": {
+            "tipo": "termino_medico",
+            "categoria": "cardiología, gastroenterología, neurología",
+            "definicion": "Procesos o condiciones caracterizadas por la inflamación, comúnmente encontradas en enfermedades del corazón, sistema nervioso y tracto gastrointestinal.",
+            "variantes_incorrectas": [
+                "Inflamatorias",
+                "Inflamatoria",
+                "Inflamatorias",
+                "Inflamatorias",
+                "Inflamatorias"
+            ],
+            "forma_correcta": "Inflamatorias",
+            "ejemplos": [
+                "Las lesiones inflamatorias en el intestino delgado son comunes en la enfermedad de Crohn.",
+                "La miocarditis inflamatoria puede causar insuficiencia cardíaca.",
+                "La inflamación crónica en el sistema nervioso central está asociada con la esclerosis múltiple."
+            ],
+            "contextos_relacionados": [
+                "inflamación",
+                "inflamatorio",
+                "enfermedad inflamatoria",
+                "crónica",
+                "aguda",
+                "inmunológica",
+                "infecciosa",
+                "autoinmune"
+            ]
+        },
+        "Enfermedad inflamatoria intestinal - GPnotebook": {
+            "tipo": "termino_medico",
+            "categoria": "gastroenterologia",
+            "definicion": "Grupo de trastornos crónicos caracterizados por la inflamación persistente del tracto gastrointestinal, incluyendo la enfermedad de Crohn y la colitis ulcerosa, con manifestaciones clínicas como diarrea, dolor abdominal y anemia.",
+            "variantes_incorrectas": [
+                "Enfermedad inflamatoria intestinal - GP notebook",
+                "Enfermedad inflamatoria intestinal GPnotebook",
+                "Enfermedad inflamatoria intestinal - G P notebook",
+                "Enfermedad inflamatoria intestinal - GPnotebook (transcripción fragmentada)"
+            ],
+            "forma_correcta": "Enfermedad inflamatoria intestinal - GPnotebook",
+            "ejemplos": [
+                "El paciente fue diagnosticado con enfermedad inflamatoria intestinal - GPnotebook tras una colonoscopia que reveló lesiones difusas en el colon."
+            ],
+            "contextos_relacionados": [
+                "Crohn",
+                "colitis ulcerosa",
+                "síntomas digestivos",
+                "tratamiento farmacológico"
+            ]
+        },
+        "PDF Síntomas y signos neurológicos": {
+            "tipo": "termino_medico",
+            "categoria": "neurologia",
+            "definicion": "Lista de síntomas y signos neurológicos que pueden indicar patologías en el sistema nervioso central y periférico, organizados en un documento PDF para uso clínico o educativo",
+            "variantes_incorrectas": [
+                "PDF Sintomas y signos neurológicos",
+                "PDF Sintomas y signo neurológico",
+                "PDF Sintomas y signos neurológico",
+                "PDF Sintomas y signos neurologico",
+                "PDF sintomas y signos neurológicos"
+            ],
+            "forma_correcta": "PDF Síntomas y signos neurológicos",
+            "ejemplos": [
+                "El PDF Síntomas y signos neurológicos fue revisado por el equipo de neurología para actualizar los criterios de diagnóstico de la esclerosis múltiple"
+            ],
+            "contextos_relacionados": [
+                "diagnóstico diferencial",
+                "evaluación neurológica",
+                "patología del sistema nervioso",
+                "documentación clínica",
+                "trastornos neurodegenerativos"
+            ]
+        },
+        "Síntomas": {
+            "tipo": "termino_medico",
+            "categoria": "cardiología, neurología, gastroenterología",
+            "definicion": "Manifestaciones clínicas perceptibles por el paciente o observables por el médico que indican la presencia de una enfermedad o alteración funcional.",
+            "variantes_incorrectas": [
+                "Signos",
+                "Simptomas",
+                "Simtomas",
+                "Sintomas",
+                "Sintoma",
+                "Sintomas",
+                "Sintoma",
+                "Sintomas"
+            ],
+            "forma_correcta": "Síntomas",
+            "ejemplos": [
+                "Los síntomas de la gastritis incluyen dolor epigástrico y náuseas.",
+                "Los síntomas de una infartación aguda de miocardio incluyen dolor torácico y sudoración.",
+                "Los síntomas de la migraña pueden incluir dolor de cabeza unilateral y náuseas."
+            ],
+            "contextos_relacionados": [
+                "manifestaciones clínicas",
+                "signos",
+                "diagnóstico",
+                "trastornos",
+                "tratamiento",
+                "enfermedades"
+            ]
+        },
+        "Insuficiencia": {
+            "tipo": "termino_medico",
+            "categoria": "cardiología",
+            "definicion": "Incapacidad de un órgano o sistema para desempeñar sus funciones normales, especialmente en el contexto cardíaco donde el corazón no puede bombear suficiente sangre.",
+            "variantes_incorrectas": [
+                "insuficiente",
+                "insuficencia",
+                "insuficienca",
+                "insuficiente",
+                "insufiencia",
+                "insuficencia",
+                "insuficiente",
+                "insuficencia"
+            ],
+            "forma_correcta": "Insuficiencia",
+            "ejemplos": [
+                "La insuficiencia cardíaca es un estado en el que el corazón no puede bombear suficiente sangre.",
+                "La insuficiencia hepática puede llevar a la acumulación de toxinas en la sangre."
+            ],
+            "contextos_relacionados": [
+                "cardiaca",
+                "hepática",
+                "renal",
+                "sistemica",
+                "organica",
+                "funcional",
+                "compensada",
+                "descompensada"
+            ]
+        },
+        "Cardíaca": {
+            "tipo": "termino_medico",
+            "categoria": "cardiología",
+            "definicion": "Relativo al corazón o a sus funciones, especialmente en contextos patológicos o fisiológicos.",
+            "variantes_incorrectas": [
+                "Cardiaca",
+                "Cardiaca",
+                "Cardiaca",
+                "Cardiaca",
+                "Cardiaca",
+                "Cardiaca",
+                "Cardiaca",
+                "Cardiaca",
+                "Cardiaca"
+            ],
+            "forma_correcta": "Cardíaca",
+            "ejemplos": [
+                "La evaluación de la función cardíaca es clave en el diagnóstico de insuficiencia cardíaca."
+            ],
+            "contextos_relacionados": [
+                "corazón",
+                "miocardio",
+                "arritmia",
+                "insuficiencia cardíaca",
+                "ecocardiografía"
+            ]
+        },
+        "Trastorno": {
+            "tipo": "termino_medico",
+            "categoria": "cardiología, neurología, gastroenterología",
+            "definicion": "Alteración patológica en la función normal de un órgano o sistema, que puede manifestarse como síntomas clínicos o hallazgos anatómicos y fisiológicos.",
+            "variantes_incorrectas": [
+                "Trasntorno",
+                "Trastornno",
+                "Trastorn",
+                "Trasntornno",
+                "Trastorno (con acento incorrecto)"
+            ],
+            "forma_correcta": "Trastorno",
+            "ejemplos": [
+                "El trastorno de conducción es una alteración en el sistema de His-Purkinje que afecta la sincronización del corazón.",
+                "El trastorno del movimiento en la neurología incluye condiciones como la Parkinson.",
+                "El trastorno inflamatorio intestinal es un diagnóstico común en gastroenterología."
+            ],
+            "contextos_relacionados": [
+                "disorder",
+                "pathology",
+                "alteración",
+                "síntoma",
+                "diagnóstico"
+            ]
+        },
+        "Trastornos del Movimiento - Clínica Merced": {
+            "tipo": "termino_medico",
+            "categoria": "neurologia",
+            "definicion": "Grupo de trastornos neurológicos que afectan el control motor, incluyendo enfermedades como el Parkinson, la distonía y la corea. La Clínica Merced se especializa en el diagnóstico y tratamiento de estos trastornos.",
+            "variantes_incorrectas": [
+                "Trastornos del Movimiento - Clínica Mercurio",
+                "Trastornos del Movimiento - Clínica Mercedes",
+                "Trastornos del Movimiento - Clínica Merced (sin guion)",
+                "Trastornos del Movimiento - Clínica Mercedo",
+                "Trastornos del Movimiento - Clínica Merced (transcripción fragmentada)"
+            ],
+            "forma_correcta": "Trastornos del Movimiento - Clínica Merced",
+            "ejemplos": [
+                "Los pacientes con trastornos del movimiento son evaluados en la Clínica Merced por especialistas en neurología."
+            ],
+            "contextos_relacionados": [
+                "neurología",
+                "trastornos neurológicos",
+                "clínicas especializadas",
+                "trastornos de Parkinson",
+                "terapias ocupacionales"
+            ]
+        },
+        "Movimiento": {
+            "tipo": "termino_medico",
+            "categoria": "gastroenterología",
+            "definicion": "Acción de desplazamiento o desplazamiento de un órgano, tejido o estructura dentro del cuerpo, observado en el contexto de la función fisiológica o patológica.",
+            "variantes_incorrectas": [
+                "Moviemiento",
+                "Movimiento",
+                "Movimiento",
+                "Movimiento",
+                "Movimiento",
+                "Movimiento",
+                "Movimiento",
+                "Movimiento"
+            ],
+            "forma_correcta": "Movimiento",
+            "ejemplos": [
+                "El movimiento peristáltico es esencial para el transporte de los alimentos a través del intestino.",
+                "El movimiento involuntario puede ser un síntoma de trastornos neurológicos.",
+                "El movimiento auricular se observa durante la contracción del corazón."
+            ],
+            "contextos_relacionados": [
+                "peristalsis",
+                "involuntario",
+                "contracción",
+                "función",
+                "patología",
+                "órgano",
+                "tejido",
+                "estructura"
+            ]
+        },
+        "Enfermedades del hígado - Mejor con Salud": {
+            "tipo": "marca",
+            "categoria": "gastroenterologia",
+            "definicion": "Programa de salud pública enfocado en la prevención y manejo de enfermedades hepáticas mediante educación y promoción de estilos de vida saludables.",
+            "variantes_incorrectas": [
+                "Enfermedades del higado - Mejor con salud",
+                "Enfermedades del hígado - Mejor con Salud",
+                "Enfermedades del hígado Mejor con Salud",
+                "Enfermedades del higado - Mejor con Salud"
+            ],
+            "forma_correcta": "Enfermedades del hígado - Mejor con Salud",
+            "ejemplos": [
+                "El programa 'Enfermedades del hígado - Mejor con Salud' incluye campañas de detección temprana de cirrosis."
+            ],
+            "contextos_relacionados": [
+                "enfermedades hepáticas",
+                "prevención de enfermedades",
+                "salud pública",
+                "hepatología"
+            ]
+        },
+        "Higado": {
+            "tipo": "termino_medico",
+            "categoria": "gastroenterología",
+            "definicion": "Órgano del sistema digestivo responsable de la producción de bilis, metabolismo de nutrientes y detoxificación de sustancias.",
+            "variantes_incorrectas": [
+                "higado",
+                "higad",
+                "higado",
+                "higado",
+                "higado",
+                "higado",
+                "higado"
+            ],
+            "forma_correcta": "Higado",
+            "ejemplos": [
+                "La cirrosis del higado es una enfermedad crónica que afecta su función hepática.",
+                "El higado almacena vitaminas liposolubles como la A y la D."
+            ],
+            "contextos_relacionados": [
+                "hepatitis",
+                "bilis",
+                "metabolismo",
+                "enfermedades digestivas",
+                "cirrosis"
+            ]
+        },
+        "TÉRMINOS": {
+            "tipo": "termino_medico",
+            "categoria": "terminologia_medica",
+            "definicion": "Conjunto de palabras o expresiones técnicas utilizadas en el lenguaje especializado de la medicina",
+            "variantes_incorrectas": [
+                "terminos",
+                "terminos medicos",
+                "terminos generales",
+                "terminos de especialidad",
+                "terminos clinicos"
+            ],
+            "forma_correcta": "TÉRMINOS",
+            "ejemplos": [
+                "Los términos médicos en cardiología incluyen palabras como miocardio y arritmia."
+            ],
+            "contextos_relacionados": [
+                "terminología",
+                "especialidades médicas",
+                "jerga médica"
+            ]
+        },
+        "México": {
+            "tipo": "regionalismo",
+            "categoria": "regionalismos_mx",
+            "definicion": "Nombre oficial del país donde se utilizan términos específicos en la nomenclatura farmacéutica local.",
+            "variantes_incorrectas": [
+                "Méjico",
+                "México",
+                "México",
+                "México",
+                "México"
+            ],
+            "forma_correcta": "México",
+            "ejemplos": [
+                "El medicamento se encuentra disponible únicamente en México debido a regulaciones locales."
+            ],
+            "contextos_relacionados": [
+                "nombres comerciales",
+                "terminología farmacéutica local",
+                "distribución regional"
+            ]
+        },
+        "Catálogo": {
+            "tipo": "termino_medico",
+            "categoria": "farmacologia",
+            "definicion": "Lista oficial o compendio de nombres de medicamentos comunes en México, utilizada para identificación y referencia en el ámbito farmacéutico",
+            "variantes_incorrectas": [
+                "Catalago",
+                "Catálogu",
+                "Catálog",
+                "Catalo",
+                "Catálogos",
+                "Catálogo"
+            ],
+            "forma_correcta": "Catálogo",
+            "ejemplos": [
+                "El Catálogo de medicamentos comunes en México incluye antibióticos como amoxicilina y analgésicos como paracetamol"
+            ],
+            "contextos_relacionados": [
+                "medicamentos comunes",
+                "nombres genéricos",
+                "farmacia",
+                "regulación farmacéutica",
+                "listado de medicamentos"
+            ]
+        },
+        "esofagitis por reflujo gastroesofágico": {
+            "tipo": "termino_medico",
+            "categoria": "gastroenterologia",
+            "definicion": "Inflamación del esófago causada por el reflujo de ácido estomacal hacia la faringe.",
+            "variantes_incorrectas": [
+                "esofagitis por reflujo",
+                "esofagitis por reflujo",
+                "esofagitis por reflujo"
+            ],
+            "forma_correcta": "esofagitis por reflujo gastroesofágico",
+            "ejemplos": [
+                "El paciente presenta esofagitis por reflujo gastroesofágico tras una radiografía de bario."
+            ],
+            "contextos_relacionados": [
+                "reflujo",
+                "ácido",
+                "esófago",
+                "trastorno"
+            ]
+        },
+        "síndrome de Long QT": {
+            "tipo": "acronimo",
+            "categoria": "cardiologia",
+            "definicion": "Síndrome caracterizado por la presencia de arritmias, insuficiencia cardíaca y alteraciones electrocardiográficas.",
+            "variantes_incorrectas": [
+                "síndrome de long qt",
+                "sindromes long qt",
+                "sindrome de long qt"
+            ],
+            "forma_correcta": "síndrome de Long QT",
+            "ejemplos": [
+                "El paciente fue diagnosticado con síndrome de Long QT tras un electrocardiograma."
+            ],
+            "contextos_relacionados": [
+                "arritmia",
+                "electrocardiograma",
+                "genética",
+                "cardiaco"
+            ]
+        },
+        "dolor de McBurney": {
+            "tipo": "regionalismo",
+            "categoria": "regionalismos_mx",
+            "definicion": "Término utilizado en México para referirse al dolor en la región epigástrica asociado a la apendicitis.",
+            "variantes_incorrectas": [
+                "dolor de mcd burney",
+                "dolor de mc burney",
+                "dolor de mcburney"
+            ],
+            "forma_correcta": "dolor de McBurney",
+            "ejemplos": [
+                "El dolor de McBurney es un signo clínico clave en el diagnóstico de apendicitis."
+            ],
+            "contextos_relacionados": [
+                "apendicitis",
+                "dolor",
+                "signo",
+                "abdominal"
+            ]
+        },
+        "Cardiology Service, Hospital": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "Término médico verificado",
+            "variantes_incorrectas": [
+                "Cardio logía Servicio, Hos pital",
+                "Cardiología Servicio, Hos pital",
+                "Cardiología Servicio, Hos pital",
+                "Cardiología Servicio, Hos pital",
+                "Cardiología Servicio, Hos pital",
+                "Cardiología Servicio, Hos pital",
+                "Cardiología Servicio, Hos pital",
+                "Cardiología Servicio, Hos pital"
+            ],
+            "forma_correcta": "Cardiology Service, Hospital",
+            "ejemplos": [
+                "Término médico: Cardiology Service, Hospital"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "Cardiology": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "Término médico verificado",
+            "variantes_incorrectas": [
+                "Cardiología",
+                "Car dio logía",
+                "Carcologia",
+                "Cardiología",
+                "Cardiología",
+                "Cardiología",
+                "Cardiología",
+                "Cardiología"
+            ],
+            "forma_correcta": "Cardiology",
+            "ejemplos": [
+                "Término médico: Cardiology"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "El canon de medicina": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "mucho en el desarrollo de la medicina medieval en Europa Occidental. El canon de medicina fue una autoridad de la medicina hasta el siglo XVIII.​ Establece",
+            "variantes_incorrectas": [
+                "El ca non de medicina",
+                "El ca non de me dicina",
+                "El canón de medicina",
+                "El ca non de med ci na",
+                "El ca non de med ci na",
+                "El ca non de medicina",
+                "El ca non de med ci na",
+                "El ca non de me dicina"
+            ],
+            "forma_correcta": "El canon de medicina",
+            "ejemplos": [
+                "Término médico: El canon de medicina"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "JAMA Internal Medicine": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "subespecializadas se encuentra JAMA Internal Medicine y otras revistas especializadas como JAMA Cardiology o JAMA Neurology.​ La revista tiene una serie",
+            "variantes_incorrectas": [
+                "J A M A",
+                "JAY AMA",
+                "Medicina Interno",
+                "Medicinia Interna",
+                "Interna Medicina",
+                "JAMA Interna",
+                "Medicina Interna",
+                "JAMA Medica"
+            ],
+            "forma_correcta": "JAMA Internal Medicine",
+            "ejemplos": [
+                "Término médico: JAMA Internal Medicine"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "Obras de referencia médica de Dorland": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "Book for Medical Transcriptionists (2001) (ISBN 0721693954) Dorland&#039;s Cardiology Word Book for Medical Transcriptionists (2000) (ISBN 072169151X) Dorland&#039;s",
+            "variantes_incorrectas": [
+                "Ob ras de refe rencia medica de Dor land",
+                "Obra de refe rencia medica de Dorlant",
+                "Obras de refe rencia medica de Dorlond",
+                "Obras de refe rencia medica Dorland",
+                "Ob ras de refe rencia medica Dorland",
+                "Obras de refe rencia medica de Dor land",
+                "Obra de refe rencia medica de Dorland",
+                "Obras de refe rencia medica de Dorlant"
+            ],
+            "forma_correcta": "Obras de referencia médica de Dorland",
+            "ejemplos": [
+                "Término médico: Obras de referencia médica de Dorland"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "Helen Brooke Taussig": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "E B (1999), «The Paediatric Cardiology Hall of Fame: Helen Brooke Taussig MD. May 24, 1898 to May 21, 1986.», Cardiology in the young (1999 Jan) 9 (1):",
+            "variantes_incorrectas": [
+                "He len Brooke Tau sig",
+                "Hilena Brooke Tausig",
+                "Helen Brock Tausig",
+                "Helen Brooke Taus sig",
+                "Hilena Brock Tausig",
+                "He len Brock Taus sig",
+                "Helen Brock Tausig",
+                "Helen Brooke Taus sig"
+            ],
+            "forma_correcta": "Helen Brooke Taussig",
+            "ejemplos": [
+                "Término médico: Helen Brooke Taussig"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "Cardiogeriatría": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "título I Guidelines of the Cardiogeriatrics Department of the Brazilian Cardiology Society (aún no existe la versión en español).​​ En 1981 se publicó un",
+            "variantes_incorrectas": [
+                "cardiogeriatría",
+                "cardiogeriatría",
+                "cardiogeriatría",
+                "cardiogeriatría",
+                "cardiogeriatría",
+                "cardiogeriatría",
+                "cardiogeriatría",
+                "cardiogeriatría"
+            ],
+            "forma_correcta": "Cardiogeriatría",
+            "ejemplos": [
+                "Término médico: Cardiogeriatría"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "Theodore Caldwell Janeway": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "título de doctor en Medicina en 1895. En 1904,​ publicaría The Clinical Study of Blood Pressure.​ En 1914 obtendría la cátedra de Medicina en la Universidad",
+            "variantes_incorrectas": [
+                "Teodoro Calwell Janeway",
+                "Teodoro Calldell Janwey",
+                "Teodore Mac Calwell",
+                "Teodoro Calwell Janway",
+                "Teodoro Mac Calldell",
+                "Teodoro Calwell Janwey",
+                "Teodoro Mac Calwell Janway",
+                "Teodoro Calldell Janeway"
+            ],
+            "forma_correcta": "Theodore Caldwell Janeway",
+            "ejemplos": [
+                "Término médico: Theodore Caldwell Janeway"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "Ayurveda": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "sistema de medicina tradicional integrativa originario del subcontinente indio.​ Basado en curas naturales y cambios en el estilo de vida. ​ Medicina alternativa",
+            "variantes_incorrectas": [
+                "Ayu rveda",
+                "Aivurveda",
+                "Aivurvida",
+                "Aivurvida",
+                "Aivurvida",
+                "Aivurvida",
+                "Aivurvida",
+                "Aivurvida"
+            ],
+            "forma_correcta": "Ayurveda",
+            "ejemplos": [
+                "Término médico: Ayurveda"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "Neurology": {
+            "tipo": "termino_medico",
+            "categoria": "neurology",
+            "definicion": "Término médico verificado",
+            "variantes_incorrectas": [
+                "Neuro logía",
+                "Neurolog ía",
+                "Neurología",
+                "Neurología",
+                "Neurología",
+                "Neurología",
+                "Neurología",
+                "Neurología"
+            ],
+            "forma_correcta": "Neurology",
+            "ejemplos": [
+                "Término médico: Neurology"
+            ],
+            "contextos_relacionados": [
+                "neurology"
+            ]
+        },
+        "Coma (medicina)": {
+            "tipo": "termino_medico",
+            "categoria": "neurology",
+            "definicion": "En medicina, el coma (del griego κῶμα [kôma], que significa «sueño profundo») es un estado grave de pérdida de consciencia,​ que puede resultar de una",
+            "variantes_incorrectas": [
+                "Co ma",
+                "Come",
+                "Coba",
+                "Cima",
+                "Corna",
+                "Com a",
+                "Cuma",
+                "Co ma"
+            ],
+            "forma_correcta": "Coma (medicina)",
+            "ejemplos": [
+                "Término médico: Coma (medicina)"
+            ],
+            "contextos_relacionados": [
+                "neurology"
+            ]
+        },
+        "Owsei Temkin": {
+            "tipo": "termino_medico",
+            "categoria": "neurology",
+            "definicion": "historia de la medicina en la Universidad Johns Hopkins. Se lo consideró uno de los mayores expertos en la conexión entre la medicina y la cultura a través",
+            "variantes_incorrectas": [
+                "Oweisi Temkín",
+                "Owseí Temkín",
+                "Owsei Temkín",
+                "Oweisi Temkinn",
+                "Owseí Temkín",
+                "Owsei Temkín",
+                "Owseí Temkín",
+                "Oweisi Temkín"
+            ],
+            "forma_correcta": "Owsei Temkin",
+            "ejemplos": [
+                "Término médico: Owsei Temkin"
+            ],
+            "contextos_relacionados": [
+                "neurology"
+            ]
+        },
+        "Abasia (medicina)": {
+            "tipo": "termino_medico",
+            "categoria": "neurology",
+            "definicion": "Victor’s Principles of Neurology (9th edition). New York, NY: McGraw-Hill Medical. (en inglés) Harrison&#039;s principles of internal medicine - 16th Ed. (2005)",
+            "variantes_incorrectas": [
+                "Aba sia",
+                "Ab a sia",
+                "Abasía",
+                "Abazía",
+                "Abacía",
+                "Abesía",
+                "Abisía",
+                "Abasía"
+            ],
+            "forma_correcta": "Abasia (medicina)",
+            "ejemplos": [
+                "Término médico: Abasia (medicina)"
+            ],
+            "contextos_relacionados": [
+                "neurology"
+            ]
+        },
+        "Neuropsiquiatría": {
+            "tipo": "termino_medico",
+            "categoria": "neurology",
+            "definicion": "Psychiatry and Neurology». American Journal of Psychiatry (en inglés) 159 (8): 1261-1264.  Martin, J.B. (2002). «The integration of neurology, psychiatry",
+            "variantes_incorrectas": [
+                "Neuro psiquiatría",
+                "Neuropsi quiatría",
+                "Neuropsiquiatría",
+                "Neuropsiquiatría",
+                "Neuropsiquiatría",
+                "Neuropsiquiatría",
+                "Neuropsiquiatría",
+                "Neuropsiquiatría"
+            ],
+            "forma_correcta": "Neuropsiquiatría",
+            "ejemplos": [
+                "Término médico: Neuropsiquiatría"
+            ],
+            "contextos_relacionados": [
+                "neurology"
+            ]
+        },
+        "Gastroenterology": {
+            "tipo": "termino_medico",
+            "categoria": "gastroenterology",
+            "definicion": "Término médico verificado",
+            "variantes_incorrectas": [
+                "Gastro enterología",
+                "Gastro entero logía",
+                "Jastroenterología",
+                "Gastroenterología",
+                "Gastrolenterología",
+                "Bastroenterología",
+                "Gastrenterología",
+                "Gastroenterología"
+            ],
+            "forma_correcta": "Gastroenterology",
+            "ejemplos": [
+                "Término médico: Gastroenterology"
+            ],
+            "contextos_relacionados": [
+                "gastroenterology"
+            ]
+        },
+        "American College of Gastroenterology": {
+            "tipo": "termino_medico",
+            "categoria": "gastroenterology",
+            "definicion": "(Maryland).​ Su principal medio de difusión es The American Journal of Gastroenterology, el cual es uno de los más influyentes de la gastroenterología a nivel",
+            "variantes_incorrectas": [
+                "American Collegio de Gastroenterología",
+                "Americana College de Gastroenterología",
+                "American College de Gastroenterología",
+                "American College de Gastronterología",
+                "American College de Gastro ente rología",
+                "American College de Gastronterología",
+                "Americana Colegio de Gastroenterología",
+                "American College de Gastroenterología"
+            ],
+            "forma_correcta": "American College of Gastroenterology",
+            "ejemplos": [
+                "Término médico: American College of Gastroenterology"
+            ],
+            "contextos_relacionados": [
+                "gastroenterology"
+            ]
+        },
+        "Canadian Journal of Gastroenterology and Hepatology": {
+            "tipo": "termino_medico",
+            "categoria": "gastroenterology",
+            "definicion": "Canadian Journal of Gastroenterology and Hepatology  es una revista médica revisada por pares que cubre todos los aspectos de la gastroenterología y la",
+            "variantes_incorrectas": [
+                "Canadina Jornal de Gastroenterología y Hepatología",
+                "Canadina Jornal de Gastronterología y Hepatología",
+                "Candian Jornal de Gastroenterología y Hepatología",
+                "Canadina Jornal de Gas troenterología y Hepatología",
+                "Canadina Jornal de Gastroenterología e Hepatología",
+                "Canadina Jornal de Gastroenterología y Hepatología",
+                "Canadina Jornal de Gastroenterología y Hepatología",
+                "Canadina Jornal de Gastroenterología y Hepatología"
+            ],
+            "forma_correcta": "Canadian Journal of Gastroenterology and Hepatology",
+            "ejemplos": [
+                "Término médico: Canadian Journal of Gastroenterology and Hepatology"
+            ],
+            "contextos_relacionados": [
+                "gastroenterology"
+            ]
+        },
+        "The American Journal of Gastroenterology": {
+            "tipo": "termino_medico",
+            "categoria": "gastroenterology",
+            "definicion": "American Journal of Gastroenterology es una revista médica revisada por pares propiedad del American College of Gastroenterology. Ha sido publicado por",
+            "variantes_incorrectas": [
+                "El Americano Jornal de Gastróenterología",
+                "Americana Jornal de Gastrenterología",
+                "El Americano Jornal de Gastronterología",
+                "El Americano Jornal de Gastróenterología",
+                "Americana Jornal de Gastróenterología",
+                "El Americano Jornal de Gastróenterología",
+                "El Americano Jornal de Gastróenterología",
+                "El Americano Jornal de Gastróenterología"
+            ],
+            "forma_correcta": "The American Journal of Gastroenterology",
+            "ejemplos": [
+                "Término médico: The American Journal of Gastroenterology"
+            ],
+            "contextos_relacionados": [
+                "gastroenterology"
+            ]
+        },
+        "Medicina hiperbárica": {
+            "tipo": "termino_medico",
+            "categoria": "gastroenterology",
+            "definicion": "«Fundamentos e indicaciones de la oxigenoterapia hiperbárica». Medicina Integral.  «La Medicina Hiperbárica, esa gran olvidada». Archivado desde el original",
+            "variantes_incorrectas": [
+                "Medicina hiper bárica",
+                "Medicina hiperbarica",
+                "Medicina hiperbórica",
+                "Medicina hiperbárica",
+                "Medicina hiperbárica",
+                "Medicina jiperbárica",
+                "Medicina hiperbárica",
+                "Medicina hiperbárica"
+            ],
+            "forma_correcta": "Medicina hiperbárica",
+            "ejemplos": [
+                "Término médico: Medicina hiperbárica"
+            ],
+            "contextos_relacionados": [
+                "gastroenterology"
+            ]
+        },
+        "Hemorragia gastrointestinal": {
+            "tipo": "termino_medico",
+            "categoria": "gastroenterology",
+            "definicion": "meta-analysis of randomized controlled trials.». World journal of gastroenterology : WJG 19 (40): 6919-27. PMID 24187470. doi:10.3748/wjg.v19.i40.6919",
+            "variantes_incorrectas": [
+                "Hemo rragia gastrointestinal",
+                "Hemorragia gasto intestinal",
+                "Hemorragia gastro intestinal",
+                "Hemorragia gastrointesinal",
+                "Hemorragia gastrointestinol",
+                "Hemorragia gasto intestinal",
+                "Hemo rragia gasto intestinal",
+                "Hemorragia gastrointesinal"
+            ],
+            "forma_correcta": "Hemorragia gastrointestinal",
+            "ejemplos": [
+                "Término médico: Hemorragia gastrointestinal"
+            ],
+            "contextos_relacionados": [
+                "gastroenterology"
+            ]
+        },
+        "Enema de café": {
+            "tipo": "termino_medico",
+            "categoria": "gastroenterology",
+            "definicion": "(2008). «Coffee enema induced acute colitis». The Korean Journal of Gastroenterology = Taehan Sohwagi Hakhoe Chi (en inglés) 52 (4): 251-254. PMID 19077527",
+            "variantes_incorrectas": [
+                "Enema de ca fe",
+                "Enoma de café",
+                "Enama de cafe",
+                "Enema de cafee",
+                "E ne ma de café",
+                "Enema de cafee",
+                "Enema de cabé",
+                "Enema de ca fè"
+            ],
+            "forma_correcta": "Enema de café",
+            "ejemplos": [
+                "Término médico: Enema de café"
+            ],
+            "contextos_relacionados": [
+                "gastroenterology"
+            ]
+        },
+        "Escala de heces de Bristol": {
+            "tipo": "termino_medico",
+            "categoria": "gastroenterology",
+            "definicion": "useful guide to intestinal transit time». Scandinavian Journal of Gastroenterology (en inglés) 32 (9): 920-4. PMID 9299672.  The Continence Foundation",
+            "variantes_incorrectas": [
+                "Es cala de heces de Bris tol",
+                "Escala de haces de Bris to",
+                "Es cala de haces de Bris tol",
+                "Escala de heces de Bris to",
+                "Es cala de heces de Bris to",
+                "Escala de haces de Bris tol",
+                "Es cala de heces de Bris to",
+                "Escala de heces de Bris tol"
+            ],
+            "forma_correcta": "Escala de heces de Bristol",
+            "ejemplos": [
+                "Término médico: Escala de heces de Bristol"
+            ],
+            "contextos_relacionados": [
+                "gastroenterology"
+            ]
+        },
+        "Nephrology Nursing": {
+            "tipo": "termino_medico",
+            "categoria": "nephrology",
+            "definicion": "Término médico verificado",
+            "variantes_incorrectas": [
+                "Enfermería Ne frologica",
+                "Enfermería Nefrologica",
+                "Enfermería Neferología",
+                "Enfermería Nefrología",
+                "Enfermería Nefrológica",
+                "Enfermería Ne frologica",
+                "Enfermería Nefrológica",
+                "Enfermería Nefrología"
+            ],
+            "forma_correcta": "Nephrology Nursing",
+            "ejemplos": [
+                "Término médico: Nephrology Nursing"
+            ],
+            "contextos_relacionados": [
+                "nephrology"
+            ]
+        },
+        "Nephrology": {
+            "tipo": "termino_medico",
+            "categoria": "nephrology",
+            "definicion": "Término médico verificado",
+            "variantes_incorrectas": [
+                "Nef rología",
+                "Neftrología",
+                "Neprología",
+                "Nebrología",
+                "Nefrología",
+                "Nefrologia",
+                "Nevrología",
+                "Nefrología"
+            ],
+            "forma_correcta": "Nephrology",
+            "ejemplos": [
+                "Término médico: Nephrology"
+            ],
+            "contextos_relacionados": [
+                "nephrology"
+            ]
+        },
+        "Sociedad Estadounidense de Nefrología": {
+            "tipo": "termino_medico",
+            "categoria": "nephrology",
+            "definicion": "of the American Society of Nephrology (JASN),el Clinical Journal of the American Society of Nephrology (CJASN), el Nephrology Self-Assessment Program (NephSAP)",
+            "variantes_incorrectas": [
+                "Sociedad Estadounidense de Nefro logía",
+                "Sociedad Estadounidense de Nefrología",
+                "Socieda Estadounidense de Nefrología",
+                "Sociedad Estadounidense de Nefrologia",
+                "Sociedad Estadounidense de Nefrología",
+                "Sociedad Estadounidense de Nefrología",
+                "Sociedad Estadounidense de Nefrología",
+                "Sociedad Estadounidense de Nefrología"
+            ],
+            "forma_correcta": "Sociedad Estadounidense de Nefrología",
+            "ejemplos": [
+                "Término médico: Sociedad Estadounidense de Nefrología"
+            ],
+            "contextos_relacionados": [
+                "nephrology"
+            ]
+        },
+        "Nefrología": {
+            "tipo": "termino_medico",
+            "categoria": "nephrology",
+            "definicion": "Renal Medicine (en inglés) Nature Clinical Practice Nephrology (en inglés) Trasplante renal experimental Datos: Q177635 Multimedia: Nephrology / Q177635",
+            "variantes_incorrectas": [
+                "Ne fro logía",
+                "Neurología",
+                "Nevrología",
+                "Nefro logía",
+                "Nefrología",
+                "Nefrologísia",
+                "Nefrología",
+                "Nefrología"
+            ],
+            "forma_correcta": "Nefrología",
+            "ejemplos": [
+                "Término médico: Nefrología"
+            ],
+            "contextos_relacionados": [
+                "nephrology"
+            ]
+        },
+        "Juan Rodríguez Soriano": {
+            "tipo": "termino_medico",
+            "categoria": "nephrology",
+            "definicion": "destacado de:​ European Society for Pediatric Nephrology (ESPN) en 1967. International Society of Pediatric Nephrology (IPNA) en 1968. Asociación Latino-Americana",
+            "variantes_incorrectas": [
+                "Huan Rodríguez Soriano",
+                "Juan Rodo ríguez Soriano",
+                "Juan Rodrigez Soriano",
+                "Juan Rodríguez Soranino",
+                "Johan Rodríguez Soriano",
+                "Juan Rodríguez Sorianoo",
+                "Juan Rodríguez Soriano",
+                "Soriano Rodríguez"
+            ],
+            "forma_correcta": "Juan Rodríguez Soriano",
+            "ejemplos": [
+                "Término médico: Juan Rodríguez Soriano"
+            ],
+            "contextos_relacionados": [
+                "nephrology"
+            ]
+        },
+        "Infarto renal": {
+            "tipo": "termino_medico",
+            "categoria": "nephrology",
+            "definicion": " Medicina de Familia. SEMERGEN, 90 - 92. doi:10.1016/S1138-3593(06)73227-0​ Saeed, K. (2012). Renal infarction. International journal of nephrology and",
+            "variantes_incorrectas": [
+                "In farto re n al",
+                "In far to re n al",
+                "In farto re n al",
+                "In far to re n al",
+                "Infarto re n al",
+                "In farto re n al",
+                "In far to re n al",
+                "In farto re n al"
+            ],
+            "forma_correcta": "Infarto renal",
+            "ejemplos": [
+                "Término médico: Infarto renal"
+            ],
+            "contextos_relacionados": [
+                "nephrology"
+            ]
+        },
+        "Fenacetina": {
+            "tipo": "termino_medico",
+            "categoria": "nephrology",
+            "definicion": "legislation.» (PDF (acceso público)). Journal of the American Society of Nephrology : JASN 12 (3): 550-556.  Schwarz, A; Preuschof, L; Zellner, D (Enero de",
+            "variantes_incorrectas": [
+                "Fe na cetina",
+                "Penacetina",
+                "Finacetina",
+                "Fenecetina",
+                "Fenaceta",
+                "Fenacina",
+                "Fenasetina",
+                "Fenacetina"
+            ],
+            "forma_correcta": "Fenacetina",
+            "ejemplos": [
+                "Término médico: Fenacetina"
+            ],
+            "contextos_relacionados": [
+                "nephrology"
+            ]
+        },
+        "Johann Lukas Schönlein": {
+            "tipo": "termino_medico",
+            "categoria": "nephrology",
+            "definicion": "de enero de 1864, ibíd.) fue un naturalista y profesor de medicina alemán. Estudió medicina en Landshut, Jena, Gotinga, y Würzburgo. Tras varios años",
+            "variantes_incorrectas": [
+                "Johan Lukas Schönlein",
+                "Joann Lukas Schonlein",
+                "Johann Lukas Schonlein",
+                "Johann Lukas Schonleyn",
+                "Johann Lukas Schonleyn",
+                "Johann Lukas Schonleyn",
+                "Johann Lukas Schönlein",
+                "Johann Lukas Schönlein"
+            ],
+            "forma_correcta": "Johann Lukas Schönlein",
+            "ejemplos": [
+                "Término médico: Johann Lukas Schönlein"
+            ],
+            "contextos_relacionados": [
+                "nephrology"
+            ]
+        },
+        "Renalasa": {
+            "tipo": "termino_medico",
+            "categoria": "nephrology",
+            "definicion": "of nephrology. 2006;17:208 [Abstract] Ghosh S. et al. Effect of renalase inhibition on blood pressure. Journal of the american society of nephrology. 2006;17:208",
+            "variantes_incorrectas": [
+                "Re nalasa",
+                "Ren alasa",
+                "Renal asa",
+                "Renalisa",
+                "Renaliza",
+                "Renalaza",
+                "Renalosa",
+                "Renelasa"
+            ],
+            "forma_correcta": "Renalasa",
+            "ejemplos": [
+                "Término médico: Renalasa"
+            ],
+            "contextos_relacionados": [
+                "nephrology"
+            ]
+        },
+        "Ricardo Jorge Esper": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "&quot;Maestro de la Medicina&quot; en la Academia de la Medicina Argentina y luego, en 2011, recibió el mismo galardón en la Facultad de Medicina de la Universidad",
+            "variantes_incorrectas": [
+                "Ri car do Jor ge Es per",
+                "Ricardoo Jorhe Eispera",
+                "Rr icardo Jor ge Es per",
+                "Ricardo Jorhe Es pera",
+                "Ricardo Jor ge Es per",
+                "Ricardoo Jorhe Es per",
+                "Ricardo Jorhe Eisper",
+                "Ri car do Jorhe Espera"
+            ],
+            "forma_correcta": "Ricardo Jorge Esper",
+            "ejemplos": [
+                "Término médico: Ricardo Jorge Esper"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "Manuel Martínez-Sellés d'Oliveira Soares": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "Cardiovasculares de 2021 a 2023.​ Journal of Clinical Medicine Highly Cited Papers in the Section “Cardiology”: Acute coronary syndrome in the older patient​",
+            "variantes_incorrectas": [
+                "Manuel Martínez Sellés d' Oliveira Soares",
+                "Manuel Martínez Sellés do Oliveira Soares",
+                "Manuel Martínez-Sellés d'Olivera Soares",
+                "Manuel Martínez-Sellés d'Oliveira Soorés",
+                "Manuel Martinez-Sellés d'Oliveira Soares",
+                "Manuel Martínez-Sellés d'Oliveira Soorés",
+                "Manuel Martínez-Sellés d'Oliveira Soares"
+            ],
+            "forma_correcta": "Manuel Martínez-Sellés d'Oliveira Soares",
+            "ejemplos": [
+                "Término médico: Manuel Martínez-Sellés d'Oliveira Soares"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "Galvanómetro de Einthoven": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "de Milenio. Real Academia Nac. Medicina. p. 118–. GGKEY:F6FGT2G6JAQ.  (EN) Louis J. Acierno, The History of Cardiology, Nueva York, Parthenon Publishing",
+            "variantes_incorrectas": [
+                "Galva nómetro de Einthoven",
+                "Galvano métrico de Einthoven",
+                "Galvano metro de Einthoven",
+                "Ein thoven",
+                "Eint hoven",
+                "Galvano métrico de Eint hoven",
+                "Galva nómetro de Ein thoven",
+                "Galvano metro de Eint hoven"
+            ],
+            "forma_correcta": "Galvanómetro de Einthoven",
+            "ejemplos": [
+                "Término médico: Galvanómetro de Einthoven"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "Otto Hernández Pieretti": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "ciudad de Barcelona, se graduó de pregrado en Educación Superior, medicina (1954), Medicina Interna (1955) y Cardiología (1960) y para 1961 obtuvo el doctorado",
+            "variantes_incorrectas": [
+                "Oto Hernández Pieretti",
+                "Otto Her nández Pieretti",
+                "Otto Herandez Pieretti",
+                "Otto Hernández Peretti",
+                "Otto Hernández Piereta",
+                "Otto Hernández Pierretti",
+                "Otto Hernández Pie retti",
+                "Otto Hernández Pieretti"
+            ],
+            "forma_correcta": "Otto Hernández Pieretti",
+            "ejemplos": [
+                "Término médico: Otto Hernández Pieretti"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "Julián Pérez-Villacastín": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "revistas de cardiología como en JAMA Cardiology,​ Circulation​ y Journal of the American College of Cardiology,​ así como libros y guías para pacientes",
+            "variantes_incorrectas": [
+                "Julian Perez-Villacastin",
+                "Julian Peres-Villacastin",
+                "Julian Perez-Villa castin",
+                "Julian Perez-Villacastan",
+                "Julian Perez-Villacastin",
+                "Julian Perez-Villacastin",
+                "Juli an Perez-Villacastin",
+                "Julian Perez-Villacastin"
+            ],
+            "forma_correcta": "Julián Pérez-Villacastín",
+            "ejemplos": [
+                "Término médico: Julián Pérez-Villacastín"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "René Laënnec": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "MRI: Rene Laennec (1781–1826) and the invention of the stethoscope». Cardiology Journal 14 (5): 518-519. PMID 18651515.  «De L&#039;Auscultation Médiate; ou",
+            "variantes_incorrectas": [
+                "Re né La enec",
+                "Ren e La enec",
+                "René Lannec",
+                "René Lanec",
+                "Reñe Laënnec",
+                "René Laénnec",
+                "René Mac Burney",
+                "Re né Laénnec"
+            ],
+            "forma_correcta": "René Laënnec",
+            "ejemplos": [
+                "Término médico: René Laënnec"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "Luis de la Fuente (cardiólogo)": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "a nivel del grado en Medicina, a inagurarse en la carrera de Medicina de la Universidad Barceló. Junto al periodista de medicina Héctor de la Fuente,",
+            "variantes_incorrectas": [
+                "Luis de la Fuente (cardiologo)",
+                "Luis de la Fuente (cardiologo)",
+                "Luis de la Fuente (cardiologo)",
+                "Luis de la Fuente (cardiologo)",
+                "Luis de la Fuente (cardiologo)",
+                "Luis de la Fuente (cardiologo)",
+                "Luis de la Fuente (cardiologo)",
+                "Luis de la Fuente (cardiologo)"
+            ],
+            "forma_correcta": "Luis de la Fuente (cardiólogo)",
+            "ejemplos": [
+                "Término médico: Luis de la Fuente (cardiólogo)"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "Albrecht Fleckenstein": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "2004). «Albrecht Fleckenstein: Father of calcium antagonism». Clinical Cardiology 27 (12): 710-711. PMC 6654477. doi:10.1002/clc.4960271213.  Nayler, Winifred",
+            "variantes_incorrectas": [
+                "Albrekht Flecken stein",
+                "Albrekht Fleck en stein",
+                "Albrekht Fleckenstein",
+                "Albrekht Fleckenstein",
+                "Albrecht Fleck en stein",
+                "Albrekht Fleckenstein",
+                "Albrecht Flecken stein",
+                "Albrekht Fleckenstein"
+            ],
+            "forma_correcta": "Albrecht Fleckenstein",
+            "ejemplos": [
+                "Término médico: Albrecht Fleckenstein"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "Clasificación de Forrester": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "function after acute myocardial infarction». The American Journal of Cardiology (en inglés) 39 (2): 137-145. PMID 835473.  |fechaacceso= requiere |url=",
+            "variantes_incorrectas": [
+                "Clasifi cación de For rester",
+                "Clasif cación de For rester",
+                "Clasificación de For re ster",
+                "Clasificación de Fordester",
+                "Clasificación de Forsester",
+                "Clasificación de Forpester",
+                "Clasif cación de Forrester",
+                "Clasificación de ForTester"
+            ],
+            "forma_correcta": "Clasificación de Forrester",
+            "ejemplos": [
+                "Término médico: Clasificación de Forrester"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "John Michael Criley": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "valva, lo que causaba el trastorno. Fellow of the American College of Cardiology Miembro, American College of Physicians HISTORY OF EMS IN LEXINGTON COUNTY",
+            "variantes_incorrectas": [
+                "Jhon Micael Crelie",
+                "Jon Micael Ceriley",
+                "Jhon Micael Criley",
+                "Jon Micael Crelie",
+                "Micael Criley",
+                "Ceriley",
+                "Crelie",
+                "Jhon Micael Cerilea"
+            ],
+            "forma_correcta": "John Michael Criley",
+            "ejemplos": [
+                "Término médico: John Michael Criley"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "Scipione Riva-Rocci": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "hipertensión Mancia, G. (1997). «Profiles in Cardiology. Scipione Riva Rocci.» (pdf). Clinical Cardiology (en italiano) 20 (5). pp. 503-504.  F. Bazzi",
+            "variantes_incorrectas": [
+                "Sicpione Riva-Rocci",
+                "Scipión Riva-Rocci",
+                "Scipione Riva Rocci",
+                "Scipione Riba-Rocci",
+                "Scipione Riva-Rocca",
+                "Scipione Riva-Rocchi",
+                "Scipione Riva-Roczi",
+                "Scipione Riva-Rocce"
+            ],
+            "forma_correcta": "Scipione Riva-Rocci",
+            "ejemplos": [
+                "Término médico: Scipione Riva-Rocci"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "Aldo R. Castañeda": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "estudió medicina en la Universidad de San Carlos de Guatemala, la única escuela de medicina en el país en ese tiempo. Desde su segundo año de medicina, hasta",
+            "variantes_incorrectas": [
+                "Aldo E. Castaneda",
+                "Al do R. Castaneda",
+                "Aldo R. Castanyaeda",
+                "Aldo R. Castanieda",
+                "Aldo R. Castaneda",
+                "Aldo R. Castan e da",
+                "Aldo R. Castaneda",
+                "Aldo R. Castaneda"
+            ],
+            "forma_correcta": "Aldo R. Castañeda",
+            "ejemplos": [
+                "Término médico: Aldo R. Castañeda"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "Síndrome de QT corto": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "Death of the European Society of Cardiology (ESC)Endorsed by: Association for European Paediatric and Congenital Cardiology (AEPC)». Europace 17 (11): 1601-87",
+            "variantes_incorrectas": [
+                "Síndrome de Q T corto",
+                "Síndrome de QT cor to",
+                "Síndrome de Q T cor to",
+                "Síndrome de QC corto",
+                "Síndrome de QT cor to",
+                "Síndrome de Q T corto",
+                "Síndrome de QC corto",
+                "Síndrome de QT cor to"
+            ],
+            "forma_correcta": "Síndrome de QT corto",
+            "ejemplos": [
+                "Término médico: Síndrome de QT corto"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "Rubidio-82": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "Absolute reduction of cation uptake in ischemia». American Journal of Cardiology 50 (1): 112-121. doi:10.1016/0002-9149(82)90016-9.  Polte, CL; Burck,",
+            "variantes_incorrectas": [
+                "Rubidio-882",
+                "Rubidio-282",
+                "Rubidio82",
+                "Rubidico-82",
+                "Rubidio-822",
+                "Rubi dio-82",
+                "Rudidio-82",
+                "Rubicdio-82"
+            ],
+            "forma_correcta": "Rubidio-82",
+            "ejemplos": [
+                "Término médico: Rubidio-82"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "Frank H. Netter": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "Service Award, American College of Cardiology 1981, Honorary Degree, Doctor of Science, New Jersey College of Medicine and Dentistry 1985, Honorary Degree",
+            "variantes_incorrectas": [
+                "Franks H. Netter",
+                "Frank H. Ne tter",
+                "Frank H. Natter",
+                "Frank H. Netcher",
+                "Fronk H. Netter",
+                "Frank Hache Netter",
+                "Frank Netter",
+                "Frank H. Natter"
+            ],
+            "forma_correcta": "Frank H. Netter",
+            "ejemplos": [
+                "Término médico: Frank H. Netter"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "Miguel Ángel García Fernández": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "médico y cardiólogo español, catedrático del Departamento de Medicina de la Facultad de Medicina de la Universidad Complutense de Madrid (UCM)​ y pionero",
+            "variantes_incorrectas": [
+                "Miguel Ángel Gar cía Fernández",
+                "Miguel Ángel García Fer nández",
+                "Miguel Ángel Garza Fernández",
+                "Miguel Ángel García Fernánez",
+                "Miguell Ángel García Fernández",
+                "Miguel Ángel García Fernándezs",
+                "Miguel Ángel García Ferndez",
+                "Miguel Ángel García Fernández de"
+            ],
+            "forma_correcta": "Miguel Ángel García Fernández",
+            "ejemplos": [
+                "Término médico: Miguel Ángel García Fernández"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
+        },
+        "Lorenzo Bellini": {
+            "tipo": "termino_medico",
+            "categoria": "cardiology",
+            "definicion": "dominio público.  Fye, W B (Feb de 1997). «Lorenzo Bellini». Clinical cardiology 20 (2): 181-2. PMID 9034650.  Klass, G M (Dec de 1974). «Bellini&#039;s concept",
+            "variantes_incorrectas": [
+                "Loren zo Bellini",
+                "Lorencio Bellini",
+                "Lorenzo Bell ini",
+                "Lorenzo Bellido",
+                "Lorenzo Bellene",
+                "Lorenzo Bellani",
+                "Larena Bellini",
+                "Lorenzo Bellini"
+            ],
+            "forma_correcta": "Lorenzo Bellini",
+            "ejemplos": [
+                "Término médico: Lorenzo Bellini"
+            ],
+            "contextos_relacionados": [
+                "cardiology"
+            ]
         }
     },
     "categorias": {
         "marcas_tecnologia": [
-            "ChatGPT", "YouTube", "TikTok", "Instagram", "WhatsApp", "Google",
-            "Facebook", "Twitter", "LinkedIn", "Spotify", "Netflix", "Amazon", "Apple", "Microsoft"
+            "ChatGPT",
+            "YouTube",
+            "TikTok",
+            "Instagram",
+            "WhatsApp",
+            "Google",
+            "Facebook",
+            "Twitter",
+            "LinkedIn",
+            "Spotify",
+            "Netflix",
+            "Amazon",
+            "Apple",
+            "Microsoft"
         ],
         "acronimos_tecnologia": [
-            "IA", "API", "URL", "HTTP", "HTTPS", "HTML", "CSS", "JSON", "XML", "SQL", "NoSQL", "AWS", "GPU", "CPU"
+            "IA",
+            "API",
+            "URL",
+            "HTTP",
+            "HTTPS",
+            "HTML",
+            "CSS",
+            "JSON",
+            "XML",
+            "SQL",
+            "NoSQL",
+            "AWS",
+            "GPU",
+            "CPU"
         ],
         "acronimos_negocios": [
-            "CEO", "CFO", "CTO", "CMO", "COO", "SEO", "SEM", "ROI", "KPI", "B2B", "B2C"
+            "CEO",
+            "CFO",
+            "CTO",
+            "CMO",
+            "COO",
+            "SEO",
+            "SEM",
+            "ROI",
+            "KPI",
+            "B2B",
+            "B2C"
         ],
         "regionalismos_mx": [
-            "güey", "chido", "neta", "órale", "chamba", "morro", "chale", "fresa", "no manches", "qué onda"
+            "güey",
+            "chido",
+            "neta",
+            "órale",
+            "chamba",
+            "morro",
+            "chale",
+            "fresa",
+            "no manches",
+            "qué onda"
         ],
         "marcas_farmaceuticas": [
-            "Acxion", "Diety", "Lose", "Ifentil", "Ifor", "Glucophage", "Ifecin", "Advil", "Motrin",
-            "Tempra", "Voltaren", "Rivotril", "Losec", "Tylenol", "Aspirina"
+            "Acxion",
+            "Diety",
+            "Lose",
+            "Ifentil",
+            "Ifor",
+            "Glucophage",
+            "Ifecin",
+            "Advil",
+            "Motrin",
+            "Tempra",
+            "Voltaren",
+            "Rivotril",
+            "Losec",
+            "Tylenol",
+            "Aspirina"
         ],
         "principios_activos": [
-            "fentermina", "fenproporex", "mazindol", "ibuprofeno", "metformina", "ifosfamida", "ampicilina",
-            "paracetamol", "omeprazol", "atorvastatina", "losartán", "enalapril", "metoprolol",
-            "ceftriaxona", "ciprofloxacino", "amoxicilina", "diclofenaco", "clonazepam", "alprazolam",
-            "ácido acetilsalicílico", "prednisona", "dexametasona", "insulina", "levotiroxina"
+            "fentermina",
+            "fenproporex",
+            "mazindol",
+            "ibuprofeno",
+            "metformina",
+            "ifosfamida",
+            "ampicilina",
+            "paracetamol",
+            "omeprazol",
+            "atorvastatina",
+            "losartán",
+            "enalapril",
+            "metoprolol",
+            "ceftriaxona",
+            "ciprofloxacino",
+            "amoxicilina",
+            "diclofenaco",
+            "clonazepam",
+            "alprazolam",
+            "ácido acetilsalicílico",
+            "prednisona",
+            "dexametasona",
+            "insulina",
+            "levotiroxina"
         ],
         "acronimos_medicos": [
-            "AINE", "COFEPRIS", "PLM", "SSA", "IMSS", "ISSSTE", "CENETEC", "CONAMED", "ENARM", "CIFRHS",
-            "ECG", "BH", "QS", "PFH", "EGO", "TAC", "RMN", "USG", "TP", "TTPa", "INR", "BUN", "TFG",
-            "CPRE", "EPOC", "IAMCEST", "IAMSEST", "NIHSS", "APACHE", "SOFA", "qSOFA", "CURB-65", "NYHA",
-            "CHA2DS2-VASc", "HAS-BLED", "APGAR", "MELD", "NAC", "ERC", "IRA", "TVP", "TEP", "EVC", "FA"
+            "AINE",
+            "COFEPRIS",
+            "PLM",
+            "SSA",
+            "IMSS",
+            "ISSSTE",
+            "CENETEC",
+            "CONAMED",
+            "ENARM",
+            "CIFRHS",
+            "ECG",
+            "BH",
+            "QS",
+            "PFH",
+            "EGO",
+            "TAC",
+            "RMN",
+            "USG",
+            "TP",
+            "TTPa",
+            "INR",
+            "BUN",
+            "TFG",
+            "CPRE",
+            "EPOC",
+            "IAMCEST",
+            "IAMSEST",
+            "NIHSS",
+            "APACHE",
+            "SOFA",
+            "qSOFA",
+            "CURB-65",
+            "NYHA",
+            "CHA2DS2-VASc",
+            "HAS-BLED",
+            "APGAR",
+            "MELD",
+            "NAC",
+            "ERC",
+            "IRA",
+            "TVP",
+            "TEP",
+            "EVC",
+            "FA"
         ],
         "laboratorios_mx": [
-            "Investigación Farmacéutica", "IFA Celtics", "Productos Medix", "Dinafarma",
-            "Laboratorios Pisa", "BIOMEP", "Pisa Farmacéutica", "Sanfer", "Senosiain", "Silanes",
-            "Liomont", "Rimsa", "Sophia", "Armstrong", "BIRMEX", "Genomma Lab"
+            "Investigación Farmacéutica",
+            "IFA Celtics",
+            "Productos Medix",
+            "Dinafarma",
+            "Laboratorios Pisa",
+            "BIOMEP",
+            "Pisa Farmacéutica",
+            "Sanfer",
+            "Senosiain",
+            "Silanes",
+            "Liomont",
+            "Rimsa",
+            "Sophia",
+            "Armstrong",
+            "BIRMEX",
+            "Genomma Lab"
         ],
         "signos_eponimos": [
-            "McBurney", "Blumberg", "Murphy", "Rovsing", "Cullen", "Grey-Turner", "Courvoisier-Terrier",
-            "Kehr", "psoas", "obturador", "Kernig", "Brudzinski", "Babinski", "Chvostek", "Trousseau",
-            "Giordano", "Homans"
+            "McBurney",
+            "Blumberg",
+            "Murphy",
+            "Rovsing",
+            "Cullen",
+            "Grey-Turner",
+            "Courvoisier-Terrier",
+            "Kehr",
+            "psoas",
+            "obturador",
+            "Kernig",
+            "Brudzinski",
+            "Babinski",
+            "Chvostek",
+            "Trousseau",
+            "Giordano",
+            "Homans"
         ],
         "escalas_clinicas": [
-            "Child-Pugh", "MELD", "Ranson", "Forrest", "Clavien-Dindo", "Glasgow", "NIHSS",
-            "APACHE", "SOFA", "qSOFA", "CURB-65", "Wells", "CHA2DS2-VASc", "HAS-BLED",
-            "NYHA", "Killip", "APGAR", "Silverman-Andersen", "TIMI", "GRACE", "GOLD", "Wagner"
+            "Child-Pugh",
+            "MELD",
+            "Ranson",
+            "Forrest",
+            "Clavien-Dindo",
+            "Glasgow",
+            "NIHSS",
+            "APACHE",
+            "SOFA",
+            "qSOFA",
+            "CURB-65",
+            "Wells",
+            "CHA2DS2-VASc",
+            "HAS-BLED",
+            "NYHA",
+            "Killip",
+            "APGAR",
+            "Silverman-Andersen",
+            "TIMI",
+            "GRACE",
+            "GOLD",
+            "Wagner"
         ],
         "sindromes_eponimos": [
-            "Mallory-Weiss", "Wernicke-Korsakoff", "Guillain-Barré", "Parkinson", "Alzheimer",
-            "Cushing", "Addison", "Graves", "Hashimoto"
+            "Mallory-Weiss",
+            "Wernicke-Korsakoff",
+            "Guillain-Barré",
+            "Parkinson",
+            "Alzheimer",
+            "Cushing",
+            "Addison",
+            "Graves",
+            "Hashimoto"
         ],
         "especialidades_medicas": [
-            "gastroenterologia", "cirugia", "cardiologia", "neumologia", "nefrologia",
-            "neurologia", "endocrinologia", "hematologia", "infectologia", "neonatologia",
-            "medicina_critica", "imagenologia", "laboratorio"
+            "gastroenterologia",
+            "cirugia",
+            "cardiologia",
+            "neumologia",
+            "nefrologia",
+            "neurologia",
+            "endocrinologia",
+            "hematologia",
+            "infectologia",
+            "neonatologia",
+            "medicina_critica",
+            "imagenologia",
+            "laboratorio"
         ],
         "normativas_mexicanas": [
-            "NOM-004", "NOM-015", "NOM-030", "NOM-007", "NOM-006", "NOM-010"
+            "NOM-004",
+            "NOM-015",
+            "NOM-030",
+            "NOM-007",
+            "NOM-006",
+            "NOM-010"
         ],
         "errores_whisper_frecuentes": [
-            "hema tocrito", "para cetamol", "instabáquico", "frecuencia carrera",
-            "índice de más a corporal", "hepato megalia", "electro cardiograma",
-            "acto homogramosafía", "colecisto ectomía"
+            "hema tocrito",
+            "para cetamol",
+            "instabáquico",
+            "frecuencia carrera",
+            "índice de más a corporal",
+            "hepato megalia",
+            "electro cardiograma",
+            "acto homogramosafía",
+            "colecisto ectomía"
         ]
     },
     "reglas_contextuales": {

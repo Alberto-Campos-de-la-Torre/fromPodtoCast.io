@@ -80,10 +80,13 @@ class PodcastProcessor:
         )
         
         # Usar dispositivo de GPUManager para Whisper
+        # Configuración de idioma forzado para evitar falsos positivos catalán/gallego
+        force_language = config.get('force_language', True)  # Por defecto, forzar idioma
         self.transcriber = AudioTranscriber(
             model_name=config.get('whisper_model', 'base'),
             device=whisper_device if gpu_config.get('enabled') else config.get('device'),
-            language=config.get('language', None)
+            language=config.get('language', 'es'),  # Por defecto español
+            force_language=force_language
         )
         
         # Banco de voces (opcional)

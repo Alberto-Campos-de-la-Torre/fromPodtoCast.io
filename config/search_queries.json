@@ -21,7 +21,10 @@
         "ENARM urgencias médicas",
         "ENARM diagnóstico diferencial",
         "preguntas ENARM comentadas",
-        "simulacro ENARM explicado"
+        "simulacro ENARM explicado",
+        "ENARM cuadro básico sector salud",
+        "ENARM medicina familiar México",
+        "ENARM normas oficiales mexicanas salud"
       ],
       "exclude_keywords": ["shorts", "resumen 1 minuto", "meme"]
     },
@@ -37,7 +40,10 @@
         "reumatología diagnóstico diferencial",
         "infectología casos clínicos",
         "hematología casos clínicos español",
-        "neumología casos complejos"
+        "neumología casos complejos",
+        "diabetes mellitus manejo México",
+        "hipertensión arterial guías mexicanas",
+        "insuficiencia renal crónica IMSS"
       ],
       "exclude_keywords": ["remedios caseros", "cura milagrosa", "shorts"]
     },
@@ -51,7 +57,9 @@
         "cirugía laparoscópica técnicas",
         "urgencias quirúrgicas explicadas",
         "manejo politraumatizado",
-        "complicaciones postoperatorias"
+        "complicaciones postoperatorias",
+        "apendicitis aguda protocolo México",
+        "colecistitis manejo quirúrgico México"
       ],
       "exclude_keywords": ["shorts", "animación simple"]
     },
@@ -64,7 +72,10 @@
         "emergencias pediátricas",
         "diagnóstico diferencial pediatría",
         "enfermedades raras pediatría",
-        "reanimación neonatal avanzada"
+        "reanimación neonatal avanzada",
+        "esquema vacunación México actualizado",
+        "desnutrición infantil México casos",
+        "cardiopatías congénitas México"
       ],
       "exclude_keywords": ["consejos mamás", "remedios caseros", "shorts"]
     },
@@ -77,7 +88,10 @@
         "emergencias obstétricas",
         "diagnóstico diferencial ginecología",
         "patología cervical casos",
-        "complicaciones embarazo"
+        "complicaciones embarazo",
+        "preeclampsia eclampsia manejo México",
+        "parto prematuro protocolo mexicano",
+        "muerte materna prevención México"
       ],
       "exclude_keywords": ["remedios naturales", "shorts"]
     },
@@ -90,7 +104,9 @@
         "resonancia magnética casos clínicos",
         "ultrasonido diagnóstico casos",
         "radiografía tórax casos complejos",
-        "imagenología diagnóstico diferencial"
+        "imagenología diagnóstico diferencial",
+        "mastografía interpretación casos México",
+        "ultrasonido obstétrico México"
       ],
       "exclude_keywords": ["shorts", "básico"]
     },
@@ -104,7 +120,10 @@
         "shock casos clínicos",
         "intoxicaciones casos clínicos",
         "urgencias cardiovasculares",
-        "manejo vía aérea difícil"
+        "manejo vía aérea difícil",
+        "código infarto protocolo México",
+        "picadura alacrán manejo México",
+        "mordedura serpiente casos México"
       ],
       "exclude_keywords": ["shorts", "primeros auxilios básicos"]
     },
@@ -116,9 +135,100 @@
         "interacciones medicamentosas complejas",
         "antibióticos casos clínicos",
         "farmacocinética clínica",
-        "reacciones adversas medicamentos"
+        "reacciones adversas medicamentos",
+        "cuadro básico medicamentos IMSS",
+        "cuadro básico ISSSTE actualizado",
+        "genéricos intercambiables México"
       ],
       "exclude_keywords": ["shorts", "remedios"]
+    },
+    {
+      "name": "regionalismo_medico_mexicano",
+      "enabled": true,
+      "queries": [
+        "términos médicos mexicanos regionalismos",
+        "jerga médica México hospitales",
+        "modismos medicina México",
+        "slang médico mexicano",
+        "lenguaje médico coloquial México",
+        "términos médicos populares México",
+        "expresiones médicas regionales México",
+        "vocabulario clínico México IMSS ISSSTE"
+      ],
+      "exclude_keywords": ["shorts", "meme", "broma"]
+    },
+    {
+      "name": "sistema_salud_mexicano",
+      "enabled": true,
+      "queries": [
+        "sistema salud México explicado",
+        "IMSS funcionamiento médicos",
+        "ISSSTE sistema atención",
+        "Seguro Popular INSABI cambios",
+        "sector salud México organización",
+        "medicina privada vs pública México",
+        "residencias médicas México sistema",
+        "guardias médicas México legislación"
+      ],
+      "exclude_keywords": ["shorts", "quejas", "rant"]
+    },
+    {
+      "name": "enfermedades_prevalentes_mexico",
+      "enabled": true,
+      "queries": [
+        "diabetes México epidemiología casos",
+        "obesidad México manejo clínico",
+        "hipertensión arterial México prevalencia",
+        "dengue casos clínicos México",
+        "tuberculosis México casos",
+        "VIH SIDA México casos clínicos",
+        "enfermedad renal crónica México",
+        "cáncer cervicouterino México casos",
+        "enfermedad cardiovascular México"
+      ],
+      "exclude_keywords": ["remedios caseros", "shorts"]
+    },
+    {
+      "name": "normas_oficiales_mexicanas",
+      "enabled": true,
+      "queries": [
+        "NOM salud México explicadas",
+        "NOM diabetes mellitus aplicación",
+        "NOM hipertensión arterial México",
+        "NOM expediente clínico actualizado",
+        "NOM atención materna perinatal",
+        "normas oficiales urgencias médicas",
+        "guías práctica clínica México CENETEC",
+        "protocolos atención médica México"
+      ],
+      "exclude_keywords": ["shorts", "resumen corto"]
+    },
+    {
+      "name": "medicamentos_comerciales_mexico",
+      "enabled": true,
+      "queries": [
+        "nombres comerciales medicamentos México",
+        "marcas medicamentos México vs genéricos",
+        "antibióticos nombres comerciales México",
+        "antihipertensivos marcas México",
+        "antidiabéticos orales México marcas",
+        "analgésicos nombres comerciales México",
+        "medicamentos controlados México legislación"
+      ],
+      "exclude_keywords": ["publicidad", "promoción", "shorts"]
+    },
+    {
+      "name": "especialidades_medicas_mexico",
+      "enabled": true,
+      "queries": [
+        "especialidades médicas demanda México",
+        "residencias médicas más competidas México",
+        "subespecialidades medicina México",
+        "medicina familiar México casos",
+        "urgencias médicas especialidad México",
+        "anestesiología casos México"
+      ],
+      "exclude_keywords": ["shorts", "vlog"]
     },
     {
       "name": "podcasts_medicina_especializada",
@@ -129,7 +239,9 @@
         "podcast médicos especialistas español",
         "podcast medicina basada evidencia",
         "podcast residentes médicos español",
-        "discusión casos clínicos podcast"
+        "discusión casos clínicos podcast",
+        "podcast medicina México",
+        "podcast médicos mexicanos experiencias"
       ],
       "exclude_keywords": ["remedios caseros", "milagro", "shorts"]
     },
@@ -142,7 +254,9 @@
         "conferencia medicina español",
         "grand rounds español",
         "ateneo médico casos",
-        "sesión bibliográfica medicina"
+        "sesión bibliográfica medicina",
+        "congreso medicina México",
+        "simposio médico México ponencias"
       ],
       "exclude_keywords": ["shorts", "trailer"]
     },
@@ -155,7 +269,9 @@
         "podcast marketing digital español",
         "podcast startups español",
         "podcast finanzas personales español",
-        "podcast inversión español"
+        "podcast inversión español",
+        "podcast emprendimiento México",
+        "podcast negocios México economía"
       ],
       "exclude_keywords": ["shorts", "reacción", "meme"]
     },
@@ -167,7 +283,9 @@
         "podcast inteligencia artificial español",
         "podcast programación español",
         "podcast ciberseguridad español",
-        "podcast innovación tecnológica"
+        "podcast innovación tecnológica",
+        "podcast tech México",
+        "podcast desarrollo software español"
       ],
       "exclude_keywords": ["tutorial", "curso básico", "shorts"]
     },
@@ -178,9 +296,38 @@
         "entrevista podcast español largo",
         "charla emprendedores español",
         "conversaciones profundas podcast",
-        "entrevista médicos especialistas"
+        "entrevista médicos especialistas",
+        "entrevista doctores México experiencias",
+        "plática médicos especialistas México"
       ],
       "exclude_keywords": ["corto", "resumen", "clip", "shorts"]
+    },
+    {
+      "name": "vida_medico_mexico",
+      "enabled": true,
+      "queries": [
+        "vida médico residente México",
+        "guardias médicas México experiencias",
+        "médico general México día a día",
+        "especialista México rutina",
+        "consultorio privado México consejos",
+        "médico rural México experiencias",
+        "servicio social medicina México"
+      ],
+      "exclude_keywords": ["shorts", "vlog corto", "drama"]
+    },
+    {
+      "name": "educacion_medica_continua",
+      "enabled": true,
+      "queries": [
+        "educación médica continua México",
+        "cursos actualización médica México",
+        "certificación especialidades México",
+        "recertificación médica México proceso",
+        "actualización guías clínicas México",
+        "diplomados medicina México"
+      ],
+      "exclude_keywords": ["shorts", "publicidad"]
     },
     {
       "name": "podcasts_educacion",
