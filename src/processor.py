@@ -130,7 +130,9 @@ class PodcastProcessor:
                 max_speakers_per_segment=config.get('review_max_speakers', 1),
                 transcriber=self.transcriber,
                 retranscribe_split=config.get('review_retranscribe', False),
-                min_speaker_purity=config.get('review_min_speaker_purity', 0.8)
+                min_speaker_purity=config.get('review_min_speaker_purity', 0.8),
+                use_energy_analysis=config.get('use_energy_analysis', True),
+                max_overlap_ratio=config.get('max_overlap_ratio', 0.25)
             )
         else:
             self.segment_reviewer = None
@@ -193,8 +195,24 @@ class PodcastProcessor:
                     verification_config=verification_config
                 )
                 self.llm_min_confidence = llm_config.get('min_confidence', 0.7)
-                
+
+                # Configurar dual-model si está habilitado
+                dual_config = llm_config.get('dual_model', {})
+                if dual_config.get('enabled', False):
+                    self.llm_corrector.configure_dual_model(
+                        local_host=dual_config.get('local_host', 'http://localhost:11434'),
+                        local_model=dual_config.get('local_model', 'qwen3:14b'),
+                        local_timeout=dual_config.get('local_timeout', 120),
+                        local_batch_size=dual_config.get('local_batch_size', 8),
+                        difficulty_threshold=dual_config.get('difficulty_threshold', 0.40),
+                        unknown_word_threshold=dual_config.get('unknown_word_threshold', 0.25),
+                        min_words_for_hard=dual_config.get('min_words_for_hard', 5),
+                        fallback_to_remote=dual_config.get('fallback_to_remote', True)
+                    )
+
                 mode = "batch" if self.llm_use_batch else ("paralelo" if self.llm_use_parallel else "secuencial")
+                if getattr(self.llm_corrector, 'dual_model_enabled', False):
+                    mode = f"dual-model ({dual_config.get('local_model', 'qwen3:14b')}+{llm_config.get('model', 'qwen3:14b')})"
                 cache_status = f", caché={'ON' if cache_enabled else 'OFF'}"
                 verify_status = f", verificación={'ON' if enable_verification else 'OFF'}"
                 print(f"✓ Corrector LLM inicializado ({llm_config.get('model', 'qwen3:14b')}, modo={mode}{cache_status}{verify_status})")
@@ -547,6 +565,16 @@ class PodcastProcessor:
                 print(f"   ✓ Llamadas batch: {llm_stats.get('batch_calls', 0)}")
             if llm_stats.get('pydantic_validations', 0) > 0:
                 print(f"   🔷 Pydantic: {llm_stats.get('pydantic_validations', 0)} respuestas validadas")
+            # Dual-model stats
+            if llm_stats.get('easy_count', 0) > 0 or llm_stats.get('hard_count', 0) > 0:
+                easy_c = llm_stats.get('easy_count', 0)
+                hard_c = llm_stats.get('hard_count', 0)
+                easy_t = llm_stats.get('easy_time', 0)
+                hard_t = llm_stats.get('hard_time', 0)
+                print(f"   🔀 Dual-model: {easy_c} easy ({easy_t:.1f}s), {hard_c} hard ({hard_t:.1f}s)")
+                if llm_stats.get('local_failures', 0) > 0:
+                    print(f"   ⚠️  Local failures: {llm_stats['local_failures']} "
+                          f"({llm_stats.get('local_fallback_to_remote', 0)} fallback)")
             if llm_failed_count > 0:
                 print(f"   ⚠️  Fallaron {llm_failed_count} correcciones\n")
             else:
@@ -563,7 +591,16 @@ class PodcastProcessor:
                 'batch_calls': llm_stats.get('batch_calls', 0),
                 'pydantic_validations': llm_stats.get('pydantic_validations', 0),
                 'processing_time': round(llm_elapsed, 2),
-                'mode': 'batch' if self.llm_use_batch else ('parallel' if self.llm_use_parallel else 'sequential')
+                'mode': 'batch' if self.llm_use_batch else ('parallel' if self.llm_use_parallel else 'sequential'),
+                'dual_model': {
+                    'enabled': llm_stats.get('easy_count', 0) > 0 or llm_stats.get('hard_count', 0) > 0,
+                    'easy_count': llm_stats.get('easy_count', 0),
+                    'hard_count': llm_stats.get('hard_count', 0),
+                    'easy_time': llm_stats.get('easy_time', 0),
+                    'hard_time': llm_stats.get('hard_time', 0),
+                    'local_failures': llm_stats.get('local_failures', 0),
+                    'local_fallback_to_remote': llm_stats.get('local_fallback_to_remote', 0)
+                }
             }
         else:
             metrics['llm_correction'] = {'enabled': False}
