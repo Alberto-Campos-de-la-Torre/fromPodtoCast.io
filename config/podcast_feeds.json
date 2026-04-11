@@ -1,0 +1,2699 @@
+{
+    "feeds": [
+        {
+            "name": "La Cotorrisa",
+            "url": "https://feeds.simplecast.com/xE9e0As4",
+            "type": "comedia_charla",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Leyendas Legendarias",
+            "url": "https://feeds.simplecast.com/TjkG2gz_",
+            "type": "true_crime_charla",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "CREATIVO Roberto Mtz",
+            "url": "https://anchor.fm/s/fdd14414/podcast/rss",
+            "type": "entrevista",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Se Regalan Dudas",
+            "url": "https://feeds.acast.com/public/shows/617c0d208afe370012ddf145",
+            "type": "conversacion_profunda",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "El Podcast de Alex Fernández",
+            "url": "https://rss.libsyn.com/shows/137555/destinations/854750.xml",
+            "type": "comedia_entrevista",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "UNSCHOOL x DEMENTES",
+            "url": "https://feeds.acast.com/public/shows/6903cfa2a749a247c2564fb1",
+            "type": "entrevista_emprendedores",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Relatos de la Noche",
+            "url": "https://www.omnycontent.com/d/playlist/fb589704-0e24-4d6c-ac3c-b31a007240af/5f4a7db8-432b-47e0-b660-b32301294e59/2ae1d699-9ba8-455b-898a-b32301294e7d/podcast.rss",
+            "type": "narrativa_charla",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Estirando el Chicle",
+            "url": "https://www.omnycontent.com/d/playlist/2446592a-b80e-4d28-a4fd-ae4c0140ac11/42658bb8-4afa-4449-9c7a-aea9010e5b53/5942eb19-73a6-4772-8093-aea9010e5b61/podcast.rss",
+            "type": "comedia_charla",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Cosas de Internet",
+            "url": "https://rss.pdrl.fm/7d84ad/feeds.libsyn.com/120287/rss/?redirect=false",
+            "type": "charla_grupo",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "El Potrero",
+            "url": "https://feeds.simplecast.com/Z5bumMjf",
+            "type": "entrevista",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "WEREVERTUMORRO PODCAST",
+            "url": "https://anchor.fm/s/151116dc/podcast/rss",
+            "type": "comedia_entrevista",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Alt.Latino",
+            "url": "https://feeds.npr.org/510305/podcast.xml",
+            "type": "cultura_charla",
+            "language": "es",
+            "multi_speaker": true
+        },
+        {
+            "name": "Comedia en Español",
+            "url": "https://www.spreaker.com/show/6877077/episodes/feed",
+            "type": "comedia",
+            "language": "es",
+            "multi_speaker": true
+        },
+        {
+            "name": "Entre Ceja y Ceja",
+            "url": "https://anchor.fm/s/5accbb90/podcast/rss",
+            "type": "charla",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Adictos a la Ciudad",
+            "url": "https://feeds.simplecast.com/TSj1_qvr",
+            "type": "charla_ciudad",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Bendita Nutrición",
+            "url": "https://feeds.megaphone.fm/BBMUNDO5300186059",
+            "type": "salud_charla",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "ImagenPuebla",
+            "url": "https://feeds.ivoox.com/feed_fg_f1280197_filtro_1.xml",
+            "type": "noticias_debate",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Dimes y Billetes",
+            "url": "https://feeds.megaphone.fm/TMVAM8830138018",
+            "type": "negocios_finanzas",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Cracks Podcast con Oso Trava",
+            "url": "https://rss.buzzsprout.com/1682368.rss",
+            "type": "negocios_entrevista",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Startupeable",
+            "url": "https://feeds.captivate.fm/startupeable/",
+            "type": "emprendimiento_tech",
+            "language": "es",
+            "multi_speaker": true
+        },
+        {
+            "name": "Finanzas desde cero",
+            "url": "https://anchor.fm/s/10d27a980/podcast/rss",
+            "type": "finanzas_educacion",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Contabilidad y Finanzas Públicas en México",
+            "url": "https://anchor.fm/s/54963364/podcast/rss",
+            "type": "finanzas_mexico",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Emprendimiento en Mexico",
+            "url": "https://anchor.fm/s/380d040c/podcast/rss",
+            "type": "emprendimiento",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "DelfinoCo Negocios Market Brief",
+            "url": "https://anchor.fm/s/313fd64/podcast/rss",
+            "type": "negocios_mercados",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Medicina Viral con Doctor Vic",
+            "url": "https://feeds.acast.com/public/shows/659d9bb31e5c9b0018410a3",
+            "type": "medicina_charla",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "La Salud Mental en México",
+            "url": "https://anchor.fm/s/18948b04/podcast/rss",
+            "type": "salud_mental",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Salud Mental En México",
+            "url": "https://anchor.fm/s/30047d58/podcast/rss",
+            "type": "psicologia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "IBKR Podcasts en Español",
+            "url": "https://feed.podbean.com/interactive-brokers-podcast-espanol",
+            "type": "inversiones",
+            "language": "es",
+            "multi_speaker": true
+        },
+        {
+            "name": "Ciencia por México",
+            "url": "https://anchor.fm/s/1057f1808/podcast/rss",
+            "type": "ciencia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "El Colmex - conocimiento, ciencia y cultura",
+            "url": "https://anchor.fm/s/4d1696b0/podcast/rss",
+            "type": "ciencia_cultura",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Peor Ciencia - Astronomía, Física",
+            "url": "https://anchor.fm/s/d9488f1c/podcast/rss",
+            "type": "astronomia_ciencia",
+            "language": "es",
+            "multi_speaker": true
+        },
+        {
+            "name": "Los desafíos de México en ciencia y tecnología",
+            "url": "https://anchor.fm/s/23009628/podcast/rss",
+            "type": "ciencia_tecnologia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Conclusiones",
+            "url": "https://feeds.megaphone.fm/WMHY7152026350",
+            "type": "noticias_analisis",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Super Health Podcast PNI Living en Español",
+            "url": "https://feeds.ivoox.com/feed_fg_f11891798_filtro_1.xml",
+            "type": "salud_ciencia",
+            "language": "es",
+            "multi_speaker": true
+        },
+        {
+            "name": "Cultura De Negocios: México-Colombia",
+            "url": "https://anchor.fm/s/453a27e0/podcast/rss",
+            "type": "Noticias de negocios",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Real Estate y Negocios en México con Dolores Pérez Islas",
+            "url": "https://anchor.fm/s/4a056870/podcast/rss",
+            "type": "Emprendimiento",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "La Llave Maestra de Negocios",
+            "url": "https://anchor.fm/s/4c86e7e0/podcast/rss",
+            "type": "Economía y empresa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Mas Ideas Para tu negocio y Noticias de México y el Mundo",
+            "url": "https://anchor.fm/s/567013e4/podcast/rss",
+            "type": "Marketing",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Territorio Negocios",
+            "url": "https://mdstrm.com/feeds/6684494be41e64f69993fb98/66b52edce639f680a4b5017b?property=itunes",
+            "type": "Emprendimiento",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Emprendimiento Latino en América",
+            "url": "https://rss.buzzsprout.com/2444019.rss",
+            "type": "Emprendimiento",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Startup México Nuevo Laredo",
+            "url": "https://feeds.ivoox.com/feed_fg_f11030317_filtro_1.xml",
+            "type": "Economía y empresa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Advanced Spanish Podcast - Español Avanzado",
+            "url": "https://rss.buzzsprout.com/2531655.rss",
+            "type": "Aprendizaje de idiomas",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Finanzas en un Ibiza",
+            "url": "https://feeds.ivoox.com/feed_fg_f11193016_filtro_1.xml",
+            "type": "Emprendimiento",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Lana & Podcast",
+            "url": "https://rss.libsyn.com/shows/131596/destinations/802219.xml",
+            "type": "Inversiones",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "INPower Podcast con Irene Núñez",
+            "url": "https://anchor.fm/s/e400b38/podcast/rss",
+            "type": "Superación personal",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Aristegui Noticias Podcast",
+            "url": "https://feeds.simplecast.com/Vxw2Ix0E",
+            "type": "Noticias diarias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Oso Trava Podcast",
+            "url": "https://rss.buzzsprout.com/1595866.rss",
+            "type": "Emprendimiento",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "BBVA Desde la banca",
+            "url": "https://rss.libsyn.com/shows/169688/destinations/1135094.xml",
+            "type": "Economía y empresa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Billetazos Podcast",
+            "url": "https://anchor.fm/s/1e9e8f7c/podcast/rss",
+            "type": "Inversiones",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Es la Hora de Opinar",
+            "url": "https://anchor.fm/s/103bdba88/podcast/rss",
+            "type": "Política",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Economía México",
+            "url": "https://anchor.fm/s/5cdfccb0/podcast/rss",
+            "type": "Historia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "PODCAST: ¡Descubramos México y su economía!",
+            "url": "https://anchor.fm/s/422795c4/podcast/rss",
+            "type": "Administración",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "¿CÓMO FUNCIONA LA ECONOMÍA EN MÉXICO?",
+            "url": "https://anchor.fm/s/57b9ac74/podcast/rss",
+            "type": "Gobierno",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "La Economía En México",
+            "url": "https://anchor.fm/s/584c2f18/podcast/rss",
+            "type": "Literatura",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "El mercado negro y su impacto en la economía de México",
+            "url": "https://anchor.fm/s/6164f198/podcast/rss",
+            "type": "Ciencias sociales",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Podcast de Liderazgo de ICFM",
+            "url": "https://rss.buzzsprout.com/1858404.rss",
+            "type": "Cristianismo",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Podcast de Liderazgo - VividLife Church",
+            "url": "https://feed.podbean.com/podcastdeliderazgodevividlifechurch/feed.xml",
+            "type": "Cristianismo",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "PPC Marketing | Google Ads & Marketing Digital en Español",
+            "url": "https://feedpress.me/ppcmarketing",
+            "type": "Profesiones",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Marketing Digital & Mindset en Español by Mikel Ansoleaga",
+            "url": "https://anchor.fm/s/e8cd6ca0/podcast/rss",
+            "type": "Economía y empresa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Smart Spanish for Business Success. El pódcast para aprender español de negocios.",
+            "url": "https://anchor.fm/s/f4735ad8/podcast/rss",
+            "type": "Aprendizaje de idiomas",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Podcast THE ECOMMERCE EDGE con Jason Greenwood - Edición en Español",
+            "url": "https://anchor.fm/s/501225c8/podcast/rss",
+            "type": "Tecnología",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Inbound en español",
+            "url": "https://feeds.soundcloud.com/users/soundcloud:users:168436091/sounds.rss",
+            "type": "Educación",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "You Turn Podcast w/ Ashley Stahl (Español)",
+            "url": "https://rss.libsyn.com/shows/536007/destinations/4613417.xml",
+            "type": "Profesiones",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Hablando de Tecnología con Orlando Mergal | Podcast En Español | Puerto Rico | Discusión inteligente Una Vez Por Semana",
+            "url": "https://hablandodetecnologia.com/feed/podcast/",
+            "type": "Noticias de negocios",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Marketing Inmobiliario con Yamily Figueroa Podcast",
+            "url": "https://anchor.fm/s/3c03fe08/podcast/rss",
+            "type": "Marketing",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Bienes Raíces con Juan Carlos Zamora",
+            "url": "https://feeds.ivoox.com/feed_fg_f1627321_filtro_1.xml",
+            "type": "Inversiones",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Más Allá de Marte Podcast",
+            "url": "https://anchor.fm/s/d3df2388/podcast/rss",
+            "type": "Sociedad y cultura",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Sonoro Podcast",
+            "url": "https://feeds.megaphone.fm/SONORO3323051093",
+            "type": "Sociedad y cultura",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Dinero en Español",
+            "url": "https://www.spreaker.com/show/2021131/episodes/feed",
+            "type": "Inversiones",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "El Show De Piolín",
+            "url": "https://feeds.simplecast.com/kAl8Plz_",
+            "type": "Sociedad y cultura",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Criptomonedas, mercados, empresas, evolución, mindset ... ¡Un podcast de todo para todxs!",
+            "url": "https://anchor.fm/s/4cc230d4/podcast/rss",
+            "type": "Economía y empresa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Lo de las cryptos | Podcast de Criptomonedas",
+            "url": "https://anchor.fm/s/58fb8b48/podcast/rss",
+            "type": "Tecnología",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "₿itcoin y Criptos en español",
+            "url": "https://anchor.fm/s/58d4e9d4/podcast/rss",
+            "type": "Tecnología",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "ACCIÓN! Podcast con Paul Guerra",
+            "url": "https://anchor.fm/s/24153a14/podcast/rss",
+            "type": "Relaciones",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Las cuentas claras - Podcast de Economía de EL MUNDO",
+            "url": "https://www.omnycontent.com/d/playlist/4ac2c3a8-bb0c-499b-bf22-ac8400df1983/e8b8ca57-3f5a-4aba-83cc-ac9e00d27f69/21279065-a4ee-42cf-a1b8-ac9e00d27f77/podcast.rss",
+            "type": "Noticias de negocios",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Tertulia y Dinero",
+            "url": "https://anchor.fm/s/5c896208/podcast/rss",
+            "type": "Economía y empresa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Finanzas con Rey Podcast",
+            "url": "https://anchor.fm/s/7941f310/podcast/rss",
+            "type": "Economía y empresa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Mentores Emprendedores",
+            "url": "https://anchor.fm/s/d6262330/podcast/rss",
+            "type": "Economía y empresa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Mexico Business Now Podcast Expert Contributor Audio Articles",
+            "url": "https://anchor.fm/s/920ec328/podcast/rss",
+            "type": "Economía y empresa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "The American Express Business Class Podcast Series",
+            "url": "https://anchor.fm/s/4d495ac8/podcast/rss",
+            "type": "Economía y empresa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Yehiibhii Estudio",
+            "url": "https://anchor.fm/s/286ff400/podcast/rss",
+            "type": "Tecnología",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Forbes México Podcast",
+            "url": "https://rss.buzzsprout.com/1737409.rss",
+            "type": "Tecnología",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "El dato peque del trueque - El podcast de comercio exterior",
+            "url": "https://www.spreaker.com/show/4935905/episodes/feed",
+            "type": "Economía y empresa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "A Sigún con Carlos Sánchez",
+            "url": "https://www.spreaker.com/show/4991535/episodes/feed",
+            "type": "Diarios personales",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Celee Cultural",
+            "url": "https://www.spreaker.com/show/2905187/episodes/feed",
+            "type": "Educación",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "La Incubadora Podcast",
+            "url": "https://feed.podbean.com/laincuabadorapodcast/feed.xml",
+            "type": "Emprendimiento",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Transmisión Qualia",
+            "url": "https://anchor.fm/s/29d636d8/podcast/rss",
+            "type": "Sociedad y cultura",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Líderes en Acción Podcast con Eduardo Vásquez",
+            "url": "https://anchor.fm/s/f6d77994/podcast/rss",
+            "type": "Economía y empresa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Programación en español",
+            "url": "https://anchor.fm/s/d89f86d8/podcast/rss",
+            "type": "Tecnología",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Lean Six Sigma Books en Español",
+            "url": "https://anchor.fm/s/10965c304/podcast/rss",
+            "type": "Economía y empresa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Naguara e'Podcast En Español",
+            "url": "https://anchor.fm/s/29155454/podcast/rss",
+            "type": "Comedia ficción",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Serious Sellers Podcast en Español: Aprende a Vender en Amazon",
+            "url": "https://feed.podbean.com/ssp-espanol/feed.xml",
+            "type": "Emprendimiento",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Wacom Cast Español",
+            "url": "https://anchor.fm/s/5a44096c/podcast/rss",
+            "type": "Arte",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Datademia - Tu academia de datos en español",
+            "url": "https://anchor.fm/s/d98dfc8c/podcast/rss",
+            "type": "Cursos",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "FREELANCER Casos de la vida real",
+            "url": "https://feeds.simplecast.com/LwkYMKPG",
+            "type": "Marketing",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Podqueens Latinas",
+            "url": "https://rss.libsyn.com/shows/184409/destinations/1265717.xml",
+            "type": "Emprendimiento",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "El poder de ser mujer - Por Laura Orozco",
+            "url": "https://anchor.fm/s/4c50539c/podcast/rss",
+            "type": "Superación personal",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "La Ventana",
+            "url": "https://fapi-top.prisasd.com/podcast/playser/la_ventana/itunestfp/podcast.xml",
+            "type": "Noticias de entretenimiento",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Customer Experience en español - El Foro",
+            "url": "https://anchor.fm/s/1d219054/podcast/rss",
+            "type": "Emprendimiento",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Nevada BizLife Podcast en Español",
+            "url": "https://anchor.fm/s/83d60898/podcast/rss",
+            "type": "Economía y empresa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "AMASING FIELD PODCAST (Español)",
+            "url": "https://anchor.fm/s/10c168ea8/podcast/rss",
+            "type": "Emprendimiento",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Perfectly Imperfect with Leslie Regalado",
+            "url": "https://anchor.fm/s/b37ff40/podcast/rss",
+            "type": "Sociedad y cultura",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "The YLAI PODCAST con Amy Campos",
+            "url": "https://anchor.fm/s/6c882824/podcast/rss",
+            "type": "Emprendimiento",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Mirrorminds el Podcast",
+            "url": "https://www.spreaker.com/show/6477218/episodes/feed",
+            "type": "Medicina",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Dermatólogos, El Podcast",
+            "url": "https://anchor.fm/s/6c94d380/podcast/rss",
+            "type": "Medicina",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "JAPSUN Medicina Tradicional Mexicana y herbolaria JAPSUN",
+            "url": "https://anchor.fm/s/411486ec/podcast/rss",
+            "type": "Medicina alternativa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Bienvenida al canal de podcast ENARM y salud en México",
+            "url": "https://anchor.fm/s/168f5b68/podcast/rss",
+            "type": "Medicina",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Pediatría México",
+            "url": "https://anchor.fm/s/19be8b4c/podcast/rss",
+            "type": "Medicina",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "En Consulta con el Dr. Huerta",
+            "url": "https://feeds.megaphone.fm/WMHY3996043034",
+            "type": "Noticias diarias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Libido Lounge en español",
+            "url": "https://feeds.podcastai.com/OQSIj7lafHCNrSafY40PE4.xml",
+            "type": "Sexualidad",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Moor of the Word (en español)",
+            "url": "https://podcasts.subsplash.com/p73jrq4/podcast.rss",
+            "type": "Cristianismo",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Doctora Zaira - Español",
+            "url": "https://anchor.fm/s/18534b80/podcast/rss",
+            "type": "Salud y fitness",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Heal Thy Self Espanol",
+            "url": "https://anchor.fm/s/10070e404/podcast/rss",
+            "type": "Medicina alternativa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Enfermería - Española",
+            "url": "https://nettop.guru/wordpress/category/enfermeria_es/feed/podcast/",
+            "type": "Cursos",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "PANORAMA NUTRICIONAL EN MEXICO",
+            "url": "https://anchor.fm/s/44b9b510/podcast/rss",
+            "type": "Profesiones",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Nutricion Y MÉXICO",
+            "url": "https://anchor.fm/s/3a22dd48/podcast/rss",
+            "type": "Historia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Problemas de Nutrición en México",
+            "url": "https://anchor.fm/s/5609f618/podcast/rss",
+            "type": "Nutrición",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Bindi México",
+            "url": "https://anchor.fm/s/10d35f350/podcast/rss",
+            "type": "Sociedad y cultura",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Radio SEPL - Psiquiatría Legal, Ética y Humanidades",
+            "url": "https://anchor.fm/s/5e8d70f8/podcast/rss",
+            "type": "Salud mental",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "CardioPODCAST",
+            "url": "https://www.omnycontent.com/d/playlist/f319a7e7-5d1f-4475-a8be-b0a000cdb7a3/1d56d888-62ec-4f24-9044-b0a000f768e8/a4756032-04ef-4b93-90fd-b0a000f76925/podcast.rss",
+            "type": "Ciencias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Podcast Pediatría",
+            "url": "https://anchor.fm/s/d80f41a4/podcast/rss",
+            "type": "Medicina",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Parálisis Cerebral Respuestas",
+            "url": "https://feed.podbean.com/paralisiscerebralrespuestas/feed.xml",
+            "type": "Medicina",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "EgunOn Magazine",
+            "url": "https://radiopopular.com/xml/egunon-magazine",
+            "type": "Noticias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Charting Pediatrics",
+            "url": "https://rss.libsyn.com/shows/101020/destinations/533132.xml",
+            "type": "Medicina",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "La Salud Pública en México: Hacia un concepto de Salud Colectiva",
+            "url": "https://anchor.fm/s/3f1c3a24/podcast/rss",
+            "type": "Salud y fitness",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "LA DIABETES EN MEXICO",
+            "url": "https://anchor.fm/s/3d593e94/podcast/rss",
+            "type": "Salud y fitness",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Sociedad Española de Farmacia Hospitalaria (SEFH)",
+            "url": "https://feeds.acast.com/public/shows/6419a7275ed66f0011e90d34",
+            "type": "Salud y fitness",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Salud y bienestar",
+            "url": "https://apis.rfi.fr/products/get_product/rfi_getpodcast_by_nid?token_application=975d23b8-7a07-11e8-9f62-005056a90194&program.entrepriseId=WB168004-RFI-ES-20141205",
+            "type": "Salud y fitness",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Su Atención, Por Favor",
+            "url": "https://anchor.fm/s/6dda6084/podcast/rss",
+            "type": "Sociedad y cultura",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Meditación Profunda",
+            "url": "https://www.spreaker.com/show/6681254/episodes/feed",
+            "type": "Economía y empresa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "OSHO en español - Podcast",
+            "url": "https://anchor.fm/s/4930e3c0/podcast/rss",
+            "type": "Espiritualidad",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Luis Perla podcast",
+            "url": "https://www.spreaker.com/show/5838712/episodes/feed",
+            "type": "Salud mental",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Biblioteca Cochrane: Podcasts (Español)",
+            "url": "http://feeds.feedburner.com/CochranePodcastsES",
+            "type": "Salud y fitness",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Podcast ProEpi (en español)",
+            "url": "https://anchor.fm/s/19f3e6ac/podcast/rss",
+            "type": "Salud y fitness",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Coronavirus en Español - Noticias, alertas y actualizaciones - Podcast",
+            "url": "https://kronek.com/rss/apple-coronavirus.xml",
+            "type": "Salud y fitness",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Con el fonendo en la maleta",
+            "url": "https://anchor.fm/s/5109cb70/podcast/rss",
+            "type": "Medicina",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Salud para todos podcast",
+            "url": "https://anchor.fm/s/c80e6dc/podcast/rss",
+            "type": "Salud y fitness",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Vititalks",
+            "url": "https://anchor.fm/s/e88981e8/podcast/rss",
+            "type": "Salud mental",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Radio Club Tenerife",
+            "url": "https://fapi-top.prisasd.com/podcast/playser/radio_club_tenerife/itunestfp/podcast.xml",
+            "type": "Noticias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Rompiendo El Molde",
+            "url": "https://feeds.ivoox.com/feed_fg_f12823395_filtro_1.xml",
+            "type": "Economía y empresa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Podcast SEOR",
+            "url": "https://www.spreaker.com/show/5589512/episodes/feed",
+            "type": "Medicina",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "ScienceLink",
+            "url": "https://anchor.fm/s/d4c43cc/podcast/rss",
+            "type": "Medicina",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Juntos Radio",
+            "url": "https://feed.podbean.com/juntosradio/feed.xml",
+            "type": "Medicina",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Emigrante Podcast",
+            "url": "https://anchor.fm/s/fe4af3a4/podcast/rss",
+            "type": "Diarios personales",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Psicoterapia Conforma",
+            "url": "https://anchor.fm/s/4334fcf4/podcast/rss",
+            "type": "Superación personal",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "The Ana Cruz Show",
+            "url": "https://feeds.megaphone.fm/SONORO5192546051",
+            "type": "Sociedad y cultura",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Que Onda!",
+            "url": "https://feeds.accessmedia.nz/V2/itunes/b4b14e72-5f06-43de-8ee6-2cd5c1348492",
+            "type": "Sociedad y cultura",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Etfasis Podcast: El programa sobre Terapia Familiar Sistémica en español.",
+            "url": "https://feeds.feedburner.com/EtfasisPodcast",
+            "type": "Educación",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Radio Terapias ® en Español",
+            "url": "https://anchor.fm/s/77c63b4/podcast/rss",
+            "type": "Medicina alternativa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Podcast de Ideant Veterinaria",
+            "url": "https://feeds.ivoox.com/feed_fg_f1710865_filtro_1.xml",
+            "type": "Ciencias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Diario Veterinario Podcasts",
+            "url": "https://feeds.soundcloud.com/users/soundcloud:users:1129875394/sounds.rss",
+            "type": "Noticias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "La vida de Héctor - Viajes, comida y cultura en español comprensible",
+            "url": "https://api.substack.com/feed/podcast/8093579.rss",
+            "type": "Aprendizaje de idiomas",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Accordion 2 Me",
+            "url": "https://anchor.fm/s/425d1c1c/podcast/rss",
+            "type": "Arte",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "GandM - AI Deep Dives - Español",
+            "url": "https://anchor.fm/s/fe1cf698/podcast/rss",
+            "type": "Sociedad y cultura",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Charlas Hispanas: Aprende Español | Learn Spanish",
+            "url": "https://charlashispanas.com/feed/podcast/",
+            "type": "Aprendizaje de idiomas",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "No solo perros y gatos",
+            "url": "https://feeds.ivoox.com/feed_fg_f1844310_filtro_1.xml",
+            "type": "Improvisación",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "CONTACTO UNIVERSITARIO UADY",
+            "url": "https://anchor.fm/s/6976d39c/podcast/rss",
+            "type": "Noticias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "A Diario Live Tenerife",
+            "url": "https://feeds.ivoox.com/feed_fg_f149499_filtro_1.xml",
+            "type": "Noticias deportivas",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "La hora de la salud y ocio, turismo, deporte. Sabrán mas de la mano de especialistas reconocidos.",
+            "url": "https://anchor.fm/s/140a3e30/podcast/rss",
+            "type": "Salud y fitness",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "SER Almadén",
+            "url": "https://fapi-top.prisasd.com/podcast/playser/ser_almaden/itunestfp/podcast.xml",
+            "type": "Noticias diarias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Belleza Capital",
+            "url": "https://feeds.ivoox.com/feed_fg_f1448819_filtro_1.xml",
+            "type": "Moda y belleza",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Radio Valladolid",
+            "url": "https://fapi-top.prisasd.com/podcast/playser/radio_valladolid.xml",
+            "type": "Noticias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Español para Erasmus y Expatriados German Support",
+            "url": "https://feeds.captivate.fm/espanol-para-erasmus-y-expatriados/",
+            "type": "Aprendizaje de idiomas",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Programa Buenos Días - Héctor Martínez Serrano",
+            "url": "https://anchor.fm/s/df76d920/podcast/rss",
+            "type": "Noticias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Next Level Soul Español con Alex Ferrari",
+            "url": "https://www.spreaker.com/show/6139533/episodes/feed",
+            "type": "Espiritualidad",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Hablamos español",
+            "url": "https://anchor.fm/s/4cc531f8/podcast/rss",
+            "type": "Aprendizaje de idiomas",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Informativo fin de semana",
+            "url": "https://feeds.acast.com/public/shows/616770cef024950014e3897d",
+            "type": "Noticias diarias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Ciencia y Tecnología",
+            "url": "https://apis.france24.com/products/get_product/f24_getpodcast_audio_by_nid?token_application=33d60288-7e20-11e9-884b-005056a9c687&program.entrepriseId=WB5785843-F24-ES-20171028",
+            "type": "Tecnología",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Mundo Ciencia",
+            "url": "https://apis.rfi.fr/products/get_product/rfi_getpodcast_by_nid?token_application=975d23b8-7a07-11e8-9f62-005056a90194&program.entrepriseId=WB168005-RFI-ES-20141205",
+            "type": "Ciencias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "AWR Spanish/Español: Cultura - A la luz de la Ciencia",
+            "url": "https://feeds.feedburner.com/SPASG_CLT",
+            "type": "Sociedad y cultura",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "RCI | Español : Cerebros latino-canadienses para la ciencia",
+            "url": "https://www.rcinet.ca/es/category/podcasts/cerebros-latino-canadienses-para-la-ciencia-podcast/feed/podcast/",
+            "type": "Ciencias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Proyecto Física, Español, Historia",
+            "url": "https://anchor.fm/s/4bf88ce8/podcast/rss",
+            "type": "Aprendizaje de idiomas",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "The Making of KOLs: The New Chemist Podcast’s Global Journey in Science, Pharma, and Education",
+            "url": "https://rss.amperwave.net/v2/feed/podcorn/065cbf9bce9a68c5b54b2770d4ac451e",
+            "type": "Química",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "The New Student Pharmacist's Podcast Experience",
+            "url": "https://feed.cdnstream1.com/zjb/feed/download/5a/3a/a8/5a3aa87e-afd4-4dcc-b862-24f139b19083.xml",
+            "type": "Química",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Don Cuevas Al Micrófono",
+            "url": "https://anchor.fm/s/46376590/podcast/rss",
+            "type": "Improvisación",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "SBS Spanish - SBS en español",
+            "url": "https://sbs-ondemand.streamguys1.com/sbs-spanish/",
+            "type": "Comentarios de noticias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "EN CONTEXTO",
+            "url": "https://rss.buzzsprout.com/330251.rss",
+            "type": "Arte",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "VO Noticias Podcast",
+            "url": "https://anchor.fm/s/6a965018/podcast/rss",
+            "type": "Noticias diarias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Cultura editorial en México. Historias sonoras",
+            "url": "https://anchor.fm/s/1e09f54c/podcast/rss",
+            "type": "Historia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "RAIZ DE 5 - El podcast más hipotenuso",
+            "url": "https://feeds.ivoox.com/feed_fg_f1399486_filtro_1.xml",
+            "type": "Ciencias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Preguntas que buscan respuestas - Podcast de educación",
+            "url": "https://anchor.fm/s/677743d8/podcast/rss",
+            "type": "Educación",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Tres Puntos Podcast",
+            "url": "https://anchor.fm/s/efdf724/podcast/rss",
+            "type": "Sociedad y cultura",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Enfoques educativos",
+            "url": "https://anchor.fm/s/b61fa714/podcast/rss",
+            "type": "Educación",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Ask Julie Ryan Español",
+            "url": "https://rss.art19.com/ask-julie-ryan-espanol",
+            "type": "Espiritualidad",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "DESPIERTA TU CURIOSIDAD",
+            "url": "https://feeds.megaphone.fm/ESP3000329196",
+            "type": "Historia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "El Desguace: un podcast de Star Citizen en español",
+            "url": "https://anchor.fm/s/6b4eeab0/podcast/rss",
+            "type": "Videojuegos",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Conecta Ingeniería",
+            "url": "https://rss.capitalradio.es/programas/conecta-ingenieria/podcasts-rss.xml",
+            "type": "Noticias de negocios",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "freeCodeCamp Podcast en Español",
+            "url": "https://anchor.fm/s/ff0092f4/podcast/rss",
+            "type": "Tecnología",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Problemas de medio ambiente en mexico",
+            "url": "https://anchor.fm/s/1ee72a98/podcast/rss",
+            "type": "Tutoriales",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Movimiento Social Del Medio Ambiente En México",
+            "url": "https://anchor.fm/s/4de7e6ac/podcast/rss",
+            "type": "Diarios personales",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Podcast Parques",
+            "url": "https://feeds.captivate.fm/parques/",
+            "type": "Sin fines de lucro",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Podcast de La Hora de Walter",
+            "url": "https://feeds.ivoox.com/feed_fg_f179870_filtro_1.xml",
+            "type": "Fútbol",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "RoR en español",
+            "url": "https://feeds.ivoox.com/feed_fg_f1732207_filtro_1.xml",
+            "type": "Religión y espiritualidad",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Aprendiendo Español con Alejandro (Podcast to learn Spanish)",
+            "url": "https://feeds.acast.com/public/shows/6575bcfc862cec001296bf52",
+            "type": "Aprendizaje de idiomas",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "En Foco",
+            "url": "https://apis.france24.com/products/get_product/f24_getpodcast_by_nid?token_application=33d60288-7e20-11e9-884b-005056a9c687&program.entrepriseId=WB5780842-F24-ES-20170717",
+            "type": "Noticias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Entrevoces",
+            "url": "https://anchor.fm/s/170d1364/podcast/rss",
+            "type": "Ciencias sociales",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Doble Hélice 3.0",
+            "url": "https://feeds.ivoox.com/feed_fg_f160690_filtro_1.xml",
+            "type": "Ciencias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "GeoCastAway | GeoNáufragos",
+            "url": "https://feeds.feedburner.com/geocastawaypodcast",
+            "type": "Ciencias de la Tierra",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Enciende STEM Podcast",
+            "url": "https://anchor.fm/s/4ea946f8/podcast/rss",
+            "type": "Educación",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "El colegio invisible",
+            "url": "https://feeds.megaphone.fm/colegio-invisible",
+            "type": "Historia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Descubriendo Desescolarización",
+            "url": "https://anchor.fm/s/f204e08c/podcast/rss",
+            "type": "Para toda la familia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Fósil Lab",
+            "url": "https://feeds.ivoox.com/feed_fg_f11174780_filtro_1.xml",
+            "type": "Ciencias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Hasta Aqui mí Reporte",
+            "url": "https://anchor.fm/s/df1748ac/podcast/rss",
+            "type": "Comentarios de noticias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Aire Fresco",
+            "url": "https://mdstrm.com/feeds/65ea0c645728c0087b186ba5/67f55da90335fdc3ae6e11c3?property=itunes",
+            "type": "Política",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "CGA-IGC Podcast Series",
+            "url": "https://cga-igc.podomatic.com/rss2.xml",
+            "type": "Educación",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Easy Spanish.",
+            "url": "https://anchor.fm/s/a5108b0/podcast/rss",
+            "type": "Educación",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "De Chícharos y Habas: Conversaciones en Genética Humana",
+            "url": "https://feeds.acast.com/public/shows/622613ef7dc417001331ab05",
+            "type": "Educación",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "El Exportador – ICEX España Exportación e Inversiones",
+            "url": "https://feeds.feedburner.com/AudiopodcastIcex",
+            "type": "Gobierno",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Pi Elef x 1000 - El Podcast de Judaísmo en Español.",
+            "url": "https://anchor.fm/s/58ef6e8/podcast/rss",
+            "type": "Judaísmo",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Masa crítica - Pensamiento crítico para las masas. El podcast ateo en español.",
+            "url": "https://anchor.fm/s/c0e3394/podcast/rss",
+            "type": "Comentarios de noticias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "SER Canarias",
+            "url": "https://fapi-top.prisasd.com/podcast/playser/ser_canarias.xml",
+            "type": "Noticias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "SER Lanzarote",
+            "url": "https://fapi-top.prisasd.com/podcast/playser/ser_lanzarote/itunestfp/podcast.xml",
+            "type": "Noticias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "La evolución de la lengua: Español o Castellano",
+            "url": "https://anchor.fm/s/132e8f20/podcast/rss",
+            "type": "Educación",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "TED en Español",
+            "url": "https://feeds.acast.com/public/shows/c7c8d4c1-dcdb-4ed7-95e9-1aade928b5f9",
+            "type": "Sociedad y cultura",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Sadhguru Español",
+            "url": "https://feeds.megaphone.fm/ISHAFOUNDATIONINC8489911171",
+            "type": "Religión",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "ADOLESCENTES, RECURSOS NATURALES Y LA TECNOLOGÍA EN MÉXICO.",
+            "url": "https://anchor.fm/s/24f9fa3c/podcast/rss",
+            "type": "Educación",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Tecnología con Impacto Social",
+            "url": "https://feed.podbean.com/spmx/feed.xml",
+            "type": "Administración",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "La Saga Podcasts",
+            "url": "https://feeds.simplecast.com/VoyVGqII",
+            "type": "Noticias de entretenimiento",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Cubi: el podcast sobre innovación en español",
+            "url": "https://anchor.fm/s/3e5811bc/podcast/rss",
+            "type": "Economía y empresa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Clonadora: Innovación, IA y Estrategia en Español",
+            "url": "https://anchor.fm/s/105dad8b4/podcast/rss",
+            "type": "Emprendimiento",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Pioneras en Salud",
+            "url": "https://anchor.fm/s/10fd0fa4c/podcast/rss",
+            "type": "Medicina",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Podcast Historia De La Metalurgia En México Prehispánico",
+            "url": "https://anchor.fm/s/3a06cdb0/podcast/rss",
+            "type": "Cursos",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Historia De México Un Podcast Mas",
+            "url": "https://anchor.fm/s/4b342600/podcast/rss",
+            "type": "Historia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "REVISTAS Y PODCASTS-EL MUNDO DE LA HISTORIA UNIVERSAL Y DE MÉXICO Y OTROS TEMAS DE INTERES GENERAL",
+            "url": "https://anchor.fm/s/5d0dcc14/podcast/rss",
+            "type": "Sociedad y cultura",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Mi Historia México",
+            "url": "https://anchor.fm/s/3e2173b4/podcast/rss",
+            "type": "Historia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Revolución Mexicana",
+            "url": "https://anchor.fm/s/577b4a88/podcast/rss",
+            "type": "Historia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Transportista: Who Murdered Captain Coral?",
+            "url": "https://www.omnycontent.com/d/playlist/e73c998e-6e60-432f-8610-ae210140c5b1/a5ae7f32-33d0-49e3-bff7-ae3c00090de4/03167906-531b-4721-a471-ae3c00090df2/podcast.rss",
+            "type": "Documentales",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "cultura mexicana",
+            "url": "https://anchor.fm/s/35b87eac/podcast/rss",
+            "type": "Historia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Cultura mexicana",
+            "url": "https://anchor.fm/s/5af1318c/podcast/rss",
+            "type": "Historia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Gastronomía de México",
+            "url": "https://anchor.fm/s/602f8ce8/podcast/rss",
+            "type": "Gastronomía",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Gastronomía De México",
+            "url": "https://anchor.fm/s/6210ada8/podcast/rss",
+            "type": "Gastronomía",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Gastronomía:Los Mejores Sitios Para Comer En El Estado De México Y La Ciudad De México",
+            "url": "https://anchor.fm/s/57723074/podcast/rss",
+            "type": "Gastronomía",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Mestizaje de México en su gastronomía",
+            "url": "https://anchor.fm/s/5328dc70/podcast/rss",
+            "type": "Historia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Cocina Mexicana",
+            "url": "https://anchor.fm/s/49b72ac0/podcast/rss",
+            "type": "Gastronomía",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "LA COCINA Mexicana En El Virreinato",
+            "url": "https://anchor.fm/s/1dcc88b0/podcast/rss",
+            "type": "Historia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Datos curiosos de la cocina Mexicana",
+            "url": "https://anchor.fm/s/69c2b49c/podcast/rss",
+            "type": "Gastronomía",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Parte 1 Libro De La Cocina Mexicana",
+            "url": "https://anchor.fm/s/392665a4/podcast/rss",
+            "type": "Gastronomía",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Divas & Divos del Cine Mexicano",
+            "url": "https://feeds.ivoox.com/feed_fg_f1490518_filtro_1.xml",
+            "type": "Cine y TV",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "El Cine Mexicano",
+            "url": "https://anchor.fm/s/35a80388/podcast/rss",
+            "type": "Artes visuales",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Diego Orozco Podcast - Música, arte y cultura de México y el Mundo",
+            "url": "https://anchor.fm/s/1fceb91c/podcast/rss",
+            "type": "Arte",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Podcast de Música Clásica  en México",
+            "url": "https://feeds.soundcloud.com/users/soundcloud:users:92756800/sounds.rss",
+            "type": "Música",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Jazz Podcast en Español",
+            "url": "https://feeds.ivoox.com/feed_fg_f11463670_filtro_1.xml",
+            "type": "Historia de la música",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Judas Priest Fans México: El Podcast",
+            "url": "https://anchor.fm/s/4f1fed94/podcast/rss",
+            "type": "Música",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Toliman,Taller De Otate \"Mun'kamui\"",
+            "url": "https://anchor.fm/s/15a79f94/podcast/rss",
+            "type": "Destinos y viajes",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Arte y Revolución en México",
+            "url": "http://www.itunes.unam.mx/itunesXML/Charlas/5demayoArteRevolucionMexico.xml",
+            "type": "Historia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Arte En México",
+            "url": "https://anchor.fm/s/53c580d4/podcast/rss",
+            "type": "Historia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Voces de la literatura mexicana",
+            "url": "https://feeds.simplecast.com/9munKsxw",
+            "type": "Sociedad y cultura",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Literatura Mexicana",
+            "url": "https://anchor.fm/s/5e56f744/podcast/rss",
+            "type": "Literatura",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Tradiciones Y Costumbres De La Región Norte De México.",
+            "url": "https://anchor.fm/s/3a0d6b0c/podcast/rss",
+            "type": "Destinos y viajes",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Costumbres y Tradiciones Navideñas en Mexico. RADIO CEDAT.",
+            "url": "https://anchor.fm/s/44352778/podcast/rss",
+            "type": "Pasatiempos",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Historia 5. México y la tradición mediterránea II",
+            "url": "http://www.itunes.unam.mx/itunesXML/VocesBachillerato/historia5.xml",
+            "type": "Historia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Yalta Podcast",
+            "url": "https://anchor.fm/s/3ee4076c/podcast/rss",
+            "type": "Política",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "¿Conservar o renovar el patrimonio arquitectónico en México?",
+            "url": "https://anchor.fm/s/52732164/podcast/rss",
+            "type": "Educación",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "10 curiosidades del patrimonio turístico en México.",
+            "url": "https://anchor.fm/s/d511ec4/podcast/rss",
+            "type": "Educación",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Patrimonio Histórico en México",
+            "url": "https://anchor.fm/s/4013b6c8/podcast/rss",
+            "type": "Historia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Hinchas: Futbol Mexicano y su Liga de Tronos Mx",
+            "url": "https://feeds.soundcloud.com/users/soundcloud:users:303623423/sounds.rss",
+            "type": "Deportes",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Mother Soccer El Podcast",
+            "url": "https://feeds.megaphone.fm/IMP6052622243",
+            "type": "Fútbol",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "TheBeerBox's Podcast",
+            "url": "https://thebeerbox.podomatic.com/rss2.xml",
+            "type": "Educación",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Cuéntame Tu Historia, Desde Zacatecas, México",
+            "url": "https://anchor.fm/s/b2f06c4/podcast/rss",
+            "type": "Ciencia ficción",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "México Es Deporte",
+            "url": "https://anchor.fm/s/f66db18/podcast/rss",
+            "type": "Deportes",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Deporte En México",
+            "url": "https://anchor.fm/s/af04fb0/podcast/rss",
+            "type": "Deportes",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Noticias Deportes Y CDMX",
+            "url": "https://anchor.fm/s/293438ec/podcast/rss",
+            "type": "Noticias diarias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "MassiveBall (Tu Podcast NBA en Español)",
+            "url": "https://feeds.ivoox.com/feed_fg_f1583803_filtro_1.xml",
+            "type": "Basquetbol",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Cancha Abierta: Podcast de NBA en Español",
+            "url": "https://anchor.fm/s/ec4fd34/podcast/rss",
+            "type": "Basquetbol",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Boxing with Mannix and Mora",
+            "url": "https://feeds.megaphone.fm/GEMINIMEDIA8912957151",
+            "type": "Deportes",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "V9 - Fórmula 1 en español",
+            "url": "https://feeds.ivoox.com/feed_fg_f11207615_filtro_1.xml",
+            "type": "Deportes",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Sin Freno",
+            "url": "https://anchor.fm/s/b21c3b8c/podcast/rss",
+            "type": "Deportes",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Decime Mae!! Un Podcast Entre Compas.",
+            "url": "https://anchor.fm/s/4e3eafdc/podcast/rss",
+            "type": "Cine y TV",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Houston Dynamo podcast",
+            "url": "https://feeds.megaphone.fm/dynamo-theory",
+            "type": "Fútbol",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Español Intermedio / Intermediate Spanish",
+            "url": "https://anchor.fm/s/3a651b7c/podcast/rss",
+            "type": "Aprendizaje de idiomas",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Noticias En Español De Utah Public Radio",
+            "url": "https://www.upr.org/podcast/noticias-en-espanol-de-utah-public-radio/rss.xml",
+            "type": "Noticias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "CRIS NB podcast de los famosos",
+            "url": "https://anchor.fm/s/231b2d94/podcast/rss",
+            "type": "Noticias de entretenimiento",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Entrevistas de Jessie Cervantes en EXA",
+            "url": "https://www.omnycontent.com/d/playlist/a586ab2b-f2d1-4bc7-abd8-affd00c083a1/c3bc5254-5105-4938-a340-b00b006a2b7a/2d0b19ba-90f0-496a-8390-b02701846dd9/podcast.rss",
+            "type": "Música",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Jessie en Exa",
+            "url": "https://www.omnycontent.com/d/playlist/a586ab2b-f2d1-4bc7-abd8-affd00c083a1/c3bc5254-5105-4938-a340-b00b006a2b7a/eb51b4bd-ba36-437f-973a-b00b006a2bc5/podcast.rss",
+            "type": "Música",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Contrapoder, con Jorge Ramos",
+            "url": "https://feeds.simplecast.com/kHfdi0l8",
+            "type": "Noticias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Estrategia, Negocios y Dinero Podcast",
+            "url": "https://feed.podbean.com/estrategianegociosydinero/feed.xml",
+            "type": "Administración",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "La Estrategia del Día México",
+            "url": "https://anchor.fm/s/69d7ddcc/podcast/rss",
+            "type": "Noticias de negocios",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "EL PODCAST #2",
+            "url": "https://anchor.fm/s/f2e53380/podcast/rss",
+            "type": "Comedia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Podcast El AJo",
+            "url": "https://feeds.ivoox.com/feed_fg_f12458_filtro_1.xml",
+            "type": "Documentales",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Whatever Podcast /// Dating Talk",
+            "url": "https://anchor.fm/s/73a131dc/podcast/rss",
+            "type": "Relaciones",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Tertulia tecnológica",
+            "url": "https://feeds.ivoox.com/feed_fg_f143916_filtro_1.xml",
+            "type": "Tecnología",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Radio MARCA Valencia",
+            "url": "https://www.omnycontent.com/d/playlist/4ac2c3a8-bb0c-499b-bf22-ac8400df1983/5b6911ad-d770-4db3-af9f-acd4011b011e/96dbc2e7-4e1d-40b5-a1ac-acd4011b013a/podcast.rss",
+            "type": "Fútbol",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "El Balance",
+            "url": "https://rss.capitalradio.es/programas/el-balance/podcasts-rss.xml",
+            "type": "Noticias de negocios",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "La Tertulia",
+            "url": "https://mdstrm.com/feeds/6271a4d5d206c3172f3c9a9c/66f31ff32bf921fc6dec6d0d?property=itunes",
+            "type": "Noticias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Algo Diferente con Rafa",
+            "url": "https://algodiferenteconrafa.libsyn.com/rss",
+            "type": "Comedia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Podcast de comédia - What's in the bowl, bitch?",
+            "url": "https://anchor.fm/s/a783d04/podcast/rss",
+            "type": "Comedia en vivo",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Viviendo Pacheco - Podcast",
+            "url": "https://anchor.fm/s/1cf5a9a8/podcast/rss",
+            "type": "Comedia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "How to Spanish Podcast",
+            "url": "https://anchor.fm/s/10594f934/podcast/rss",
+            "type": "Aprendizaje de idiomas",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Julio Patán y Juan Ignacio Zavala en El Heraldo Radio",
+            "url": "https://feeds.acast.com/public/shows/6167715af024950014e3897f",
+            "type": "Comentarios de noticias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Pin Pon",
+            "url": "https://anchor.fm/s/25642c90/podcast/rss",
+            "type": "Política",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Learn Spanish and Go",
+            "url": "https://rss.buzzsprout.com/1040905.rss",
+            "type": "Aprendizaje de idiomas",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Entrevistando A Jóvenes INFLUENCER De México",
+            "url": "https://anchor.fm/s/5f816a00/podcast/rss",
+            "type": "Historia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Todolux Podcast",
+            "url": "https://feeds.ivoox.com/feed_fg_f11160462_filtro_1.xml",
+            "type": "Economía y empresa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "El Despelote podcast",
+            "url": "https://feeds.simplecast.com/WQsrdEkE",
+            "type": "Entrevistas de comedia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Top 10 youtubers mas famosos de México.",
+            "url": "https://anchor.fm/s/4bf13dd0/podcast/rss",
+            "type": "Noticias de entretenimiento",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Top 10 De Los Youtubers Más Famosos De México 🇲🇽",
+            "url": "https://anchor.fm/s/9758c68/podcast/rss",
+            "type": "Comedia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Podcast RiChArD  salsa cumbiando sonideros",
+            "url": "https://feeds.ivoox.com/feed_fg_f156158_filtro_1.xml",
+            "type": "Música",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Puerto Vallarta Travel  Show Podcast",
+            "url": "https://rss.libsyn.com/shows/91553/destinations/457803.xml",
+            "type": "Destinos y viajes",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Juventudes Feministas",
+            "url": "https://anchor.fm/s/10ad3768c/podcast/rss",
+            "type": "Sociedad y cultura",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Feminismo En México",
+            "url": "https://anchor.fm/s/5db4d180/podcast/rss",
+            "type": "Noticias diarias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Feminismo y aborto en mexico",
+            "url": "https://anchor.fm/s/5c6834ac/podcast/rss",
+            "type": "Noticias diarias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "El Feminismo En México",
+            "url": "https://anchor.fm/s/375c7ab0/podcast/rss",
+            "type": "Superación personal",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Libertad en proceso",
+            "url": "https://feed.podbean.com/abdiaspedroza/feed.xml",
+            "type": "Educación",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Naciones Unidas México",
+            "url": "https://hearthis.at/cinumexico/podcast/",
+            "type": "Noticias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Noticias El Heraldo de México",
+            "url": "https://feeds.acast.com/public/shows/6168800db567570014734b8c",
+            "type": "Noticias diarias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Penitencia",
+            "url": "https://feeds.simplecast.com/PY7fZS0V",
+            "type": "Sociedad y cultura",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "La Gran BaTalla",
+            "url": "https://feeds.simplecast.com/Q4zbSatT",
+            "type": "Relaciones",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Temas de Nuestra Historia",
+            "url": "https://anchor.fm/s/65cd6b70/podcast/rss",
+            "type": "Historia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Como la Política Mexicana Influye en los Mexicanos",
+            "url": "https://anchor.fm/s/1defbb3c/podcast/rss",
+            "type": "Gobierno",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Soberanía: The Mexican Politics Podcast",
+            "url": "https://anchor.fm/s/f14df0e8/podcast/rss",
+            "type": "Política",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Mexican In The Alamo Podcast",
+            "url": "https://anchor.fm/s/4176a1c4/podcast/rss",
+            "type": "Política",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Constitución Política de los Estados Unidos Mexicanos",
+            "url": "https://anchor.fm/s/5241f0d0/podcast/rss",
+            "type": "Profesiones",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Hechos Podcast: Noticias con Javier Alatorre",
+            "url": "https://rss.buzzsprout.com/1722970.rss",
+            "type": "Noticias diarias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "La Pinche Complejidad con Nicolás Alvarado",
+            "url": "https://feeds.simplecast.com/bPASQQQz",
+            "type": "Sociedad y cultura",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Periodismo en riesgo",
+            "url": "https://feeds.acast.com/public/shows/e8b85ab3-d014-5549-ad1f-b6c96d9aaf4a",
+            "type": "Comentarios de noticias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Al habla... con Warkentin",
+            "url": "https://www.omnycontent.com/d/playlist/26708dff-8243-49e4-a5b6-adb700ec9cae/5d3ee604-0fc5-4039-bf9d-adf20108cfb6/79b3ff9b-76ce-4ef3-ae9a-adf20108cfce/podcast.rss",
+            "type": "Noticias diarias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Secuestro y Crimen ( Mexico )",
+            "url": "https://feeds.ivoox.com/feed_fg_f1901227_filtro_1.xml",
+            "type": "Noticias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Crímenes de Terror",
+            "url": "https://feeds.simplecast.com/BwwwDoLf",
+            "type": "Crímenes reales",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "10 de febrero no se olvida: El crimen del periodista oaxaqueño Heber López que reorganizó a su gremio",
+            "url": "https://feeds.acast.com/public/shows/67366f2d84d1e023f7c74383",
+            "type": "Documentales",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Podcasts Problemática en la educación de México",
+            "url": "https://beszqaa-01.podomatic.com/rss2.xml",
+            "type": "Educación",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "La Reforma Integral de la Educación Básica en México (RIEB) en la educación primaria: desafíos para",
+            "url": "https://anchor.fm/s/52a95018/podcast/rss",
+            "type": "Educación",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Historia De La EDUCACIÓN en México I",
+            "url": "https://anchor.fm/s/696c366c/podcast/rss",
+            "type": "Cursos",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Sociología De La Educación En México Y La Política",
+            "url": "https://anchor.fm/s/1b7785ec/podcast/rss",
+            "type": "Historia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Revista de la Universidad de México No. 117",
+            "url": "http://www.itunes.unam.mx/itunesXML/RevistaUniversidad/RevistaUniversidad117Noviembre.xml",
+            "type": "Podcasts",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Revista de la Universidad de México No. 138",
+            "url": "http://www.itunes.unam.mx/itunesXML/RevistaUniversidad/revuniv138.xml",
+            "type": "Podcasts",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Universidad Pontificia de México",
+            "url": "https://anchor.fm/s/1b17dcdc/podcast/rss",
+            "type": "Educación",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Revista de la Universidad de México",
+            "url": "https://www.spreaker.com/show/3196843/episodes/feed",
+            "type": "Sociedad y cultura",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "InfoViajes México",
+            "url": "https://www.spreaker.com/show/5345622/episodes/feed",
+            "type": "Destinos y viajes",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Entre viajes y recuerdos",
+            "url": "https://anchor.fm/s/1d5bd00c/podcast/rss",
+            "type": "Destinos y viajes",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "México en viajes... y otros lugares",
+            "url": "https://anchor.fm/s/1b7bf320/podcast/rss",
+            "type": "Destinos y viajes",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Vi Magazine presenta Viajes, Estilo de Vida, Tragos Coquetos, Glotonería y mucho rock!!!",
+            "url": "https://anchor.fm/s/2ee24860/podcast/rss",
+            "type": "Destinos y viajes",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Jalisco Radio 2019 -2024",
+            "url": "https://anchor.fm/s/ca83b9c/podcast/rss",
+            "type": "Noticias diarias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Honest AF Show",
+            "url": "https://feeds.megaphone.fm/JJW3833192863",
+            "type": "Moda y belleza",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "RSL Random Fan Podcast. The most fan centric Real Salt Lake podcast.",
+            "url": "https://feeds.megaphone.fm/RPPSG9066979030",
+            "type": "Fútbol",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Going Big! with Kevin Gentry",
+            "url": "https://feed.podbean.com/GoingBig/feed.xml",
+            "type": "Sin fines de lucro",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "MM México Moda",
+            "url": "https://anchor.fm/s/cfa5d384/podcast/rss",
+            "type": "Moda y belleza",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Legados de la moda y su impacto en México",
+            "url": "https://anchor.fm/s/57ef1fa8/podcast/rss",
+            "type": "Diseño",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "El Llamado de la Moda | VOGUE",
+            "url": "https://anchor.fm/s/20f90f54/podcast/rss",
+            "type": "Moda y belleza",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Hablemos de Moda: ELLE Podcast",
+            "url": "https://anchor.fm/s/1ebb9590/podcast/rss",
+            "type": "Moda y belleza",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Duro y a la cabeza",
+            "url": "https://www.omnycontent.com/d/playlist/a586ab2b-f2d1-4bc7-abd8-affd00c083a1/2ff02b15-ad7e-42d5-b1ff-b00b011b0115/13786f92-1f1a-4dc9-8197-b00b011b0143/podcast.rss",
+            "type": "Comedia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Crianza Reverente: Tú y tus hijos delante de Dios",
+            "url": "https://anchor.fm/s/b52e210/podcast/rss",
+            "type": "Cristianismo",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Health Radio - El podcast de la salud",
+            "url": "https://healthradio.care/feed/podcast/todos-los-episodios/",
+            "type": "Medicina alternativa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Predicaciones Iglesia Bautista de Córdoba",
+            "url": "http://feeds.feedburner.com/iebcordoba/predicaciones",
+            "type": "Cristianismo",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "La Meta Taberna",
+            "url": "https://anchor.fm/s/13866f38/podcast/rss",
+            "type": "Cine y TV",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "High Talk ❄️",
+            "url": "https://anchor.fm/s/107272894/podcast/rss",
+            "type": "Salud mental",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Épicamente con Pavo Gómez Orea",
+            "url": "https://feeds.megaphone.fm/GENUINAPERSONASAPIDECV6652764240",
+            "type": "Emprendimiento",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Elocuente",
+            "url": "https://anchor.fm/s/a1867e2c/podcast/rss",
+            "type": "Comedia ficción",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Superación Personal | Motivación personal | Impacto poderoso | Podcast motivacionales",
+            "url": "https://www.spreaker.com/show/4735383/episodes/feed",
+            "type": "Superación personal",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Podcast de Superación personal, liderazgo, finanzas personales y entre otros by Mack Thomas",
+            "url": "https://anchor.fm/s/1e983230/podcast/rss",
+            "type": "Superación personal",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Motivación y reflexiones | Corazón Positivo | Podcast Motivacionales | Superación Personal",
+            "url": "https://www.spreaker.com/show/3181874/episodes/feed",
+            "type": "Salud mental",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Superación Personal - PODCAST 1 • 21/10/2020",
+            "url": "https://anchor.fm/s/3c7ea1bc/podcast/rss",
+            "type": "Comedia en vivo",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Retrobits Podcast",
+            "url": "https://retrobits.es/wp-content/uploads/retrobits2.xml",
+            "type": "Videojuegos",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Historia de los Viciojuegos",
+            "url": "https://feeds.ivoox.com/feed_fg_f12399077_filtro_1.xml",
+            "type": "Videojuegos",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Girlvengers Podcast (Gaming En Español)",
+            "url": "https://anchor.fm/s/ef679c20/podcast/rss",
+            "type": "Videojuegos",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "ARC Raiders Podcast – Guías, Builds y Estrategias en Español | KANNEDA",
+            "url": "https://anchor.fm/s/10c26d830/podcast/rss",
+            "type": "Videojuegos",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Nuevebits - Podcast de videojuegos en español",
+            "url": "https://anchor.fm/s/6a058808/podcast/rss",
+            "type": "Videojuegos",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Podcast AWS LATAM",
+            "url": "https://rss.art19.com/podcast-aws-latam",
+            "type": "Tecnología",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Charlas técnicas de AWS (AWS en Español)",
+            "url": "https://rss.buzzsprout.com/932377.rss",
+            "type": "Tecnología",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Coldwell Banker México",
+            "url": "https://anchor.fm/s/eda7358/podcast/rss",
+            "type": "Economía y empresa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "El Podcast BNI México",
+            "url": "https://feeds.ivoox.com/feed_fg_f1998053_filtro_1.xml",
+            "type": "Marketing",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Mister Franquicias Podcast",
+            "url": "https://anchor.fm/s/fb5e14b4/podcast/rss",
+            "type": "Emprendimiento",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Doctor Ventas México",
+            "url": "https://feeds.ivoox.com/feed_fg_f1922054_filtro_1.xml",
+            "type": "Economía y empresa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "CIFNOBA PODCAST",
+            "url": "https://anchor.fm/s/6158e538/podcast/rss",
+            "type": "Sin fines de lucro",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Top Expansión",
+            "url": "https://feeds.megaphone.fm/SONORO9205862054",
+            "type": "Economía y empresa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "CIFRAS",
+            "url": "https://anchor.fm/s/f27d1854/podcast/rss",
+            "type": "Noticias de negocios",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "En Línea Deportiva",
+            "url": "https://anchor.fm/s/ebbeb540/podcast/rss",
+            "type": "Fútbol",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Substantial Matters: Life & Science of Parkinson's",
+            "url": "https://parkinson.libsyn.com/rss",
+            "type": "Salud y fitness",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Spanish For Neurospicy Brains (The Spanish on The Road)",
+            "url": "https://anchor.fm/s/a2a68d24/podcast/rss",
+            "type": "Aprendizaje de idiomas",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Vive! Radio Soria",
+            "url": "https://anchor.fm/s/dd57f1ec/podcast/rss",
+            "type": "Comentarios de noticias",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "WINANETA",
+            "url": "https://feeds.podcastics.com/podcastics/podcasts/rss/6177_fefea80e42692566d49205ff9f8c1171.rss",
+            "type": "Fútbol",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "El podcast de La Maestra Viajera",
+            "url": "https://feeds.ivoox.com/feed_fg_f1926384_filtro_1.xml",
+            "type": "Destinos y viajes",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "La Maestra Viajera. Educación y viajes.",
+            "url": "https://www.spreaker.com/show/4948048/episodes/feed",
+            "type": "Destinos y viajes",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Relatos Y Relajo",
+            "url": "https://anchor.fm/s/756c50a0/podcast/rss",
+            "type": "Comedia",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "The Medical Podcast: The podcast for resident doctors",
+            "url": "https://feeds.transistor.fm/the-medical-podcast-the-podcast-for-resident-doctors",
+            "type": "Medicina",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Evaluación En La Residencia Médica.",
+            "url": "https://anchor.fm/s/1d413d50/podcast/rss",
+            "type": "Medicina",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Residencias Médicas Argentina",
+            "url": "https://anchor.fm/s/3ec90d2c/podcast/rss",
+            "type": "Medicina",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Evaluación en la Residencia Medica",
+            "url": "https://anchor.fm/s/2fafec20/podcast/rss",
+            "type": "Educación",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Behind The Knife: The Surgery Podcast",
+            "url": "https://audioboom.com/channels/5046960.rss",
+            "type": "Medicina",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "ASMR en Español | Leslie ASMR",
+            "url": "https://feeds.redcircle.com/5c9a0b90-8b80-4870-91d4-7edda223a357",
+            "type": "Medicina alternativa",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Los Pódcast de Redacción Médica",
+            "url": "https://feeds.ivoox.com/feed_fg_f11507578_filtro_1.xml",
+            "type": "Salud y fitness",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Cuida Tu Mente",
+            "url": "https://mdstrm.com/feeds/6684494be41e64f69993fb98/66b52edce639f680a4b50169?property=itunes",
+            "type": "Superación personal",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Ola De Salud",
+            "url": "https://mdstrm.com/feeds/6684494be41e64f69993fb98/66b52edce639f680a4b50179?property=itunes",
+            "type": "Medicina",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "InnovaTED",
+            "url": "https://mdstrm.com/feeds/6684494be41e64f69993fb98/6976fb6b6aaa3609e07db4b6?property=itunes",
+            "type": "Cursos",
+            "language": "es-MX",
+            "multi_speaker": true
+        },
+        {
+            "name": "Con Su Permiso",
+            "url": "https://mdstrm.com/feeds/6684494be41e64f69993fb98/66b52cad5c0120a9863397bd?property=itunes",
+            "type": "Economía y empresa",
+            "language": "es-MX",
+            "multi_speaker": true
+        }
+    ],
+    "settings": {
+        "max_episodes_per_feed": 50,
+        "min_duration_minutes": 20,
+        "max_duration_minutes": 180,
+        "output_dir": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/input",
+        "download_delay_seconds": 2
+    }
+}

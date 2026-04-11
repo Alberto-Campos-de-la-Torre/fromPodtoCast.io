@@ -49,8 +49,49 @@ class AudioTranscriber:
         # Cargar modelo
         lang_msg = f", idioma={'forzado: ' + self.language if self.force_language else 'auto-detectar'}"
         print(f"Cargando modelo Whisper '{model_name}' en {self.device}{lang_msg}...")
-        self.model = whisper.load_model(model_name, device=self.device)
-        print("Modelo cargado exitosamente.")
+        
+        self.use_hf = False
+        if os.path.isdir(model_name):
+            print(f"📂 Detectado modelo local Hugging Face: {model_name}")
+            try:
+                from transformers import pipeline as hf_pipeline
+                
+                # Configurar tipo de dato para torch
+                torch_dtype = torch.float16 if self.device == "cuda" else torch.float32
+                
+                self.pipeline = hf_pipeline(
+                    "automatic-speech-recognition",
+                    model=model_name,
+                    device=self.device,
+                    torch_dtype=torch_dtype,
+                    chunk_length_s=30,
+                )
+                self.use_hf = True
+                print("✓ Modelo HF cargado exitosamente.")
+            except ImportError as e:
+                print(f"❌ Error: transformers no está instalado. Ejecuta: pip install transformers")
+                raise RuntimeError(f"transformers es requerido para modelos HF locales: {e}")
+            except Exception as e:
+                print(f"⚠️  Error cargando modelo HF local: {e}")
+                print("   Intentando cargar con validación safetensors relajada...")
+                try:
+                    from transformers import pipeline as hf_pipeline
+                    # Intento secundario desactivando safetensors si falla
+                    self.pipeline = hf_pipeline(
+                        "automatic-speech-recognition",
+                        model=model_name,
+                        device=self.device,
+                        torch_dtype=torch_dtype,
+                        chunk_length_s=30,
+                        model_kwargs={"use_safetensors": False}
+                    )
+                    self.use_hf = True
+                    print("✓ Modelo HF cargado exitosamente (sin safetensors).")
+                except Exception as e2:
+                    raise RuntimeError(f"No se pudo cargar el modelo HF: {e2}")
+        else:
+            self.model = whisper.load_model(model_name, device=self.device)
+            print("Modelo cargado exitosamente.")
     
     def _prepare_audio_path(self, audio_path: str) -> tuple:
         """
@@ -87,23 +128,61 @@ class AudioTranscriber:
         working_path, is_temp = self._prepare_audio_path(audio_path)
         
         try:
-            # Configuración por defecto
-            transcribe_options = {
-                'language': self.language,
-                'task': 'transcribe',
-                'fp16': self.device == 'cuda',
-                **kwargs
-            }
-            
-            # Transcribir
-            result = self.model.transcribe(working_path, **transcribe_options)
-            
-            return {
-                'text': result['text'].strip(),
-                'language': result.get('language', 'unknown'),
-                'segments': result.get('segments', []),
-                'audio_path': audio_path
-            }
+            if self.use_hf:
+                # --- Lógica para Hugging Face Pipeline ---
+                generate_kwargs = {"task": "transcribe"}
+                if self.language:
+                    generate_kwargs["language"] = self.language
+                
+                # Ejecutar pipeline
+                result = self.pipeline(
+                    working_path, 
+                    return_timestamps=True, 
+                    generate_kwargs=generate_kwargs
+                )
+                
+                # Adaptar formato de segmentos (HF chunks -> Whisper segments)
+                segments = []
+                for chunk in result.get('chunks', []):
+                    # timestamp puede ser (start, end) o None
+                    ts = chunk.get('timestamp', (0.0, 0.0))
+                    if isinstance(ts, (list, tuple)) and len(ts) == 2:
+                        start, end = ts
+                    else:
+                        start, end = 0.0, 0.0
+                        
+                    segments.append({
+                        'start': start if start is not None else 0.0,
+                        'end': end if end is not None else 0.0,
+                        'text': chunk.get('text', ''),
+                        'seek': 0
+                    })
+                
+                return {
+                    'text': result['text'].strip(),
+                    'language': self.language if self.language else 'unknown',
+                    'segments': segments,
+                    'audio_path': audio_path
+                }
+            else:
+                # --- Lógica original OpenAI Whisper ---
+                # Configuración por defecto
+                transcribe_options = {
+                    'language': self.language,
+                    'task': 'transcribe',
+                    'fp16': self.device == 'cuda',
+                    **kwargs
+                }
+                
+                # Transcribir
+                result = self.model.transcribe(working_path, **transcribe_options)
+                
+                return {
+                    'text': result['text'].strip(),
+                    'language': result.get('language', 'unknown'),
+                    'segments': result.get('segments', []),
+                    'audio_path': audio_path
+                }
         finally:
             # Limpiar archivo temporal
             if is_temp and os.path.exists(working_path):

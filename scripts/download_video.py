@@ -6,6 +6,8 @@ Soporta YouTube, Vimeo, y otras plataformas compatibles con yt-dlp.
 import argparse
 import sys
 import os
+# Ensure deno is in PATH for yt-dlp JavaScript runtime
+os.environ["PATH"] = os.path.expanduser("~/.deno/bin") + ":" + os.environ.get("PATH", "")
 import shutil
 import time
 import re
@@ -19,6 +21,9 @@ from typing import Optional, Tuple
 # Agregar src al path si es necesario
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root / 'src'))
+
+# Resolver path de yt-dlp (puede no estar en PATH si se invoca sin activar venv)
+YTDLP_PATH = shutil.which('yt-dlp') or str(project_root / 'venv' / 'bin' / 'yt-dlp')
 
 # Colores ANSI para terminal
 class Colors:
@@ -201,7 +206,7 @@ def check_ytdlp():
     log_status("Verificando yt-dlp...", "INFO")
     try:
         result = subprocess.run(
-            ['yt-dlp', '--version'], 
+            [YTDLP_PATH, '--version'], 
             capture_output=True, 
             text=True, 
             check=True,
@@ -346,7 +351,7 @@ def update_ytdlp():
         
         # Verificar nueva versión
         check_result = subprocess.run(
-            ['yt-dlp', '--version'],
+            [YTDLP_PATH, '--version'],
             capture_output=True,
             text=True,
             timeout=10
@@ -459,7 +464,7 @@ def download_video(url: str, output_dir: str, audio_only: bool = True,
             log_status("Continuando sin ffmpeg (puede fallar la conversión)", "WARNING")
     
     # Construir comando yt-dlp
-    cmd = ['yt-dlp']
+    cmd = [YTDLP_PATH]
     
     # Agregar opciones para manejar timeouts y conexiones lentas
     cmd.extend([
@@ -469,21 +474,38 @@ def download_video(url: str, output_dir: str, audio_only: bool = True,
         '--file-access-retries', '3',  # Reintentar acceso a archivos
         '--extractor-retries', '3',  # Reintentar extractores
         '--no-check-certificate',  # En algunos casos ayuda con conexiones lentas
-        # Usar cookies del navegador para evitar bloqueo de YouTube
-        '--cookies-from-browser', 'chrome',
+        # Cookies disabled - YouTube flags the Chrome session as bot
+        # '--cookies-from-browser', 'chrome',
+        '--remote-components', 'ejs:github',
+        '--no-check-formats',  # Skip format validation to avoid 'format not available' errors
         '--no-warnings',  # Suprimir warnings de formatos faltantes
+        '--restrict-filenames', # ASCII filenames para evitar problemas de filesystem/ffmpeg
+        '--sleep-requests', '3',  # Delay between requests to avoid rate limiting
+        '--sleep-interval', '5',  # Wait before downloading
     ])
     
     if audio_only:
+        # Evitar post-procesamiento de ffmpeg dentro de yt-dlp que está fallando por permisos/rutas
+        # Descargar simplemente el mejor audio disponible
         cmd.extend([
-            '--extract-audio',
-            '--audio-format', audio_format,
-            '--audio-quality', audio_quality
+            '-f', 'bestaudio/best',
+            # '--extract-audio', # Deshabilitado para evitar fallo de ffmpeg interno
+            # '--audio-format', audio_format,
+            # '--audio-quality', audio_quality
         ])
-        log_status(f"Modo: Solo audio ({audio_format}, calidad: {audio_quality})", "INFO")
+        log_status(f"Modo: Mejor audio disponible (sin conversión forzada)", "INFO")
     
     # Configuración de salida
-    output_template = str(output_path / '%(title)s.%(ext)s')
+    import tempfile
+    
+    # Usar directorio temporal local para descarga y conversión
+    # Esto evita problemas de permisos en unidades externas (/media) y mejora velocidad
+    temp_dir_obj = tempfile.TemporaryDirectory(prefix="ytdlp_temp_")
+    temp_output_path = Path(temp_dir_obj.name)
+    log_status(f"Usando directorio temporal: {temp_output_path}", "DEBUG")
+    
+    # Incluir ID para evitar problemas con títulos duplicados o caracteres especiales
+    output_template = str(temp_output_path / '%(title)s [%(id)s].%(ext)s')
     cmd.extend(['-o', output_template])
     
     # Limpiar URL si tiene parámetros de playlist (solo usar el video específico)
@@ -500,10 +522,12 @@ def download_video(url: str, output_dir: str, audio_only: bool = True,
     # Obtener información del video sin descargar con retry
     # Usar comando base sin opciones de audio para obtener info
     info_cmd = [
-        'yt-dlp',
+        YTDLP_PATH,
         '--socket-timeout', '60',
         '--no-check-certificate',
-        '--cookies-from-browser', 'chrome',
+        # '--cookies-from-browser', 'chrome',  # Disabled - flagged by YouTube
+        '--remote-components', 'ejs:github',
+        '--no-check-formats',
         '--no-warnings',
         '--dump-json',
         '--no-download',
@@ -698,40 +722,52 @@ def download_video(url: str, output_dir: str, audio_only: bool = True,
         log_error("Error inesperado durante la descarga", e)
         return {'success': False, 'url': url, 'error': f'Download error: {str(e)}'}
     
-    # Encontrar el archivo descargado
-    log_status("Buscando archivo descargado...", "INFO")
-    files_after = set(output_path.glob("*"))
-    new_files = files_after - files_before
+    # Encontrar el archivo descargado en el directorio temporal
+    log_status("Buscando archivo descargado en temporal...", "INFO")
     
-    downloaded_file = None
-    title_safe = video_info.get('title', 'video')
+    # En temp dir, todo archivo es nuevo porque estaba vacío
+    # Buscar por ID para mayor seguridad
+    video_id = video_info.get('id')
+    temp_files = []
     
-    # Buscar por nombre del archivo esperado
-    if new_files:
-        # Ordenar por tiempo de modificación (más reciente primero)
-        new_files_sorted = sorted(new_files, key=lambda p: p.stat().st_mtime, reverse=True)
-        downloaded_file = str(new_files_sorted[0])
-        log_status(f"Archivo nuevo encontrado: {Path(downloaded_file).name}", "SUCCESS")
-    else:
-        # Buscar archivos con el título (yt-dlp puede haber limpiado caracteres)
-        log_status("Buscando archivo por título...", "DEBUG")
-        for ext in [audio_format, 'mp3', 'm4a', 'webm', 'opus', 'ogg', 'wav']:
-            pattern = f"*{title_safe[:30]}*.{ext}"
-            files = list(output_path.glob(pattern))
-            if files:
-                downloaded_file = str(files[0])
-                log_status(f"Archivo encontrado por patrón: {Path(downloaded_file).name}", "SUCCESS")
-                break
+    if video_id:
+        # Priorizar archivo con ID
+        temp_files.extend(list(temp_output_path.glob(f"*[{video_id}]*")))
+        if not temp_files:
+            temp_files.extend(list(temp_output_path.glob(f"*{video_id}*")))
+    
+    # Si no encuentra por ID, listar todo (debe ser el único archivo ahí)
+    if not temp_files:
+        temp_files = list(temp_output_path.glob("*"))
         
-        if not downloaded_file:
-            # Buscar el archivo más reciente en el directorio
-            log_status("Buscando archivo más reciente...", "DEBUG")
-            for ext in [audio_format, 'mp3', 'm4a', 'webm', 'opus', 'ogg', 'wav']:
-                files = list(output_path.glob(f"*.{ext}"))
-                if files:
-                    downloaded_file = str(max(files, key=lambda p: p.stat().st_mtime))
-                    log_status(f"Archivo más reciente encontrado: {Path(downloaded_file).name}", "SUCCESS")
-                    break
+    downloaded_file = None
+    
+    if temp_files:
+        # Ordenar por tiempo de modificación (más reciente primero)
+        temp_files_sorted = sorted(temp_files, key=lambda p: p.stat().st_mtime, reverse=True)
+        temp_file = str(temp_files_sorted[0])
+        log_status(f"Archivo temporal encontrado: {Path(temp_file).name}", "SUCCESS")
+        
+        # Mover al destino final
+        try:
+            dest_file = output_path / Path(temp_file).name
+            shutil.move(temp_file, str(dest_file))
+            downloaded_file = str(dest_file)
+            log_status(f"Archivo movido a destino final: {Path(downloaded_file).name}", "SUCCESS")
+        except Exception as e:
+            log_error(f"Error moviendo archivo desde temporal: {e}")
+            return {'success': False, 'url': url, 'error': f'Failed to move file: {str(e)}'}
+            
+    else:
+        log_error("No se encontró ningún archivo en el directorio temporal")
+        return {'success': False, 'url': url, 'error': 'File not found in temp dir'}
+    
+    # Limpieza manual del directorio temporal (aunque el obj lo hace al final)
+    try:
+        temp_dir_obj.cleanup()
+    except:
+        pass
+
     
     if downloaded_file and os.path.exists(downloaded_file):
         try:

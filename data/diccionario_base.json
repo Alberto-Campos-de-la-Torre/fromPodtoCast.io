@@ -2337,35 +2337,6 @@
                 "síntomas"
             ]
         },
-        "Listado de enfermedades del aparato digestivo": {
-            "tipo": "termino_medico",
-            "categoria": "gastroenterología",
-            "definicion": "Enumeración sistemática de patologías que afectan al sistema digestivo, incluyendo enfermedades del esófago, estómago, intestino, hígado, páncreas y vesícula biliar.",
-            "variantes_incorrectas": [
-                "lista",
-                "de",
-                "enfermedades",
-                "del",
-                "aparato",
-                "digestivo",
-                "listado",
-                "de",
-                "enfermedades",
-                "del",
-                "sistema",
-                "digestivo"
-            ],
-            "forma_correcta": "Listado de enfermedades del aparato digestivo",
-            "ejemplos": [
-                "El médico proporcionó un listado de enfermedades del aparato digestivo durante la consulta de gastroenterología."
-            ],
-            "contextos_relacionados": [
-                "gastroenterología",
-                "sistema digestivo",
-                "trastornos digestivos",
-                "diagnóstico diferencial"
-            ]
-        },
         "SINDROMES": {
             "tipo": "termino_medico",
             "categoria": "cardiología, neurología, gastroenterología",
@@ -4153,6 +4124,52 @@
             ],
             "contextos_relacionados": [
                 "cardiology"
+            ]
+        },
+        "Cadereyta": {
+            "tipo": "nombre_propio",
+            "categoria": "lugares_mx",
+            "definicion": "Centro de Reinserción Social en Nuevo León, México",
+            "variantes_incorrectas": [
+                "cadera",
+                "caderaita",
+                "cadereita",
+                "cadera ita",
+                "encaderaíta"
+            ],
+            "forma_correcta": "Cadereyta",
+            "ejemplos": [
+                "Estuve cuatro años en Cadereyta",
+                "El penal de Cadereyta está en Nuevo León"
+            ],
+            "contextos_relacionados": [
+                "penal",
+                "cárcel",
+                "prisión",
+                "Nuevo León",
+                "Topo Chico"
+            ]
+        },
+        "Topo Chico": {
+            "tipo": "nombre_propio",
+            "categoria": "lugares_mx",
+            "definicion": "Centro de Reinserción Social Topo Chico en Monterrey, Nuevo León",
+            "variantes_incorrectas": [
+                "topo chico",
+                "Topo chico",
+                "el topo"
+            ],
+            "forma_correcta": "Topo Chico",
+            "ejemplos": [
+                "Estuve en el Topo Chico dos años",
+                "El motín del Topo Chico fue en 2016"
+            ],
+            "contextos_relacionados": [
+                "penal",
+                "cárcel",
+                "prisión",
+                "Monterrey",
+                "Cadereyta"
             ]
         }
     },

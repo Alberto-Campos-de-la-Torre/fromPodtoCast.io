@@ -1,0 +1,435 @@
+# Segmentos con repeticiones reales (críticas + altas): 72
+# Escucha cada .wav para verificar si la repetición es fiel al audio
+
+❌ [ 1] critical  67.8% (3x)
+    Archivo: 10_CONSEJOS_PARA_SER_EL_MEJOR_ESTUDIANTE_DE_MEDICI.json  entry#14
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/10_CONSEJOS_PARA_SER_EL_MEJOR_ESTUDIANTE_DE_MEDICI/seg_0014_SPK_00.wav
+    Frase:   "estudiar, practicar, repetir. Lee..."
+    Texto:   "estudiar, practicar, repetir. Leer, poner atención, estudiar, practicar, repetir. Leer, poner atención, estudiar, practi..."
+
+❌ [ 2] critical  60.3% (3x)
+    Archivo: C_mo_DEJAR_de_COMER_por_ANSIEDAD___-_Pamela_Berron.json  entry#216
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/C_mo_DEJAR_de_COMER_por_ANSIEDAD___-_Pamela_Berron/seg_0216_SPK_01.wav
+    Frase:   "no es lo mismo dos personas que tienen..."
+    Texto:   "Porque no es lo mismo dos personas que tienen resistencia a la insulina, no es lo mismo dos personas que tienen diabetes..."
+
+❌ [ 3] critical  59.1% (3x)
+    Archivo: V__Completa__La_ciencia_de_la_vida_cotidiana__Dieg.json  entry#195
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/V__Completa__La_ciencia_de_la_vida_cotidiana__Dieg/seg_0195_SPK_10.wav
+    Frase:   "¿Cómo es el mundo para un..."
+    Texto:   "¿Cómo es el mundo para un murciélago? ¿Cómo es el mundo para una bacteria? ¿Cómo es el mundo para una hormiga, para una ..."
+
+❌ [ 4] critical  56.4% (3x)
+    Archivo: GU_A_COMPLETA__INTELIGENCIA_ARTIFICIAL_para_EMPREN.json  entry#146
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/GU_A_COMPLETA__INTELIGENCIA_ARTIFICIAL_para_EMPREN/seg_0146_SPK_00.wav
+    Frase:   "lo efímero que pueden ser..."
+    Texto:   "Pero también lo efímero que pueden ser los los excesos, lo efímero que pueden ser los logros, lo efímero que pueden ser ..."
+
+❌ [ 5] critical  56.0% (3x)
+    Archivo: Reuni_n_Privada_de_CEO_s__LATAM__Heineken__Prodac_.json  entry#224
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/Reuni_n_Privada_de_CEO_s__LATAM__Heineken__Prodac_/seg_0224_SPK_06.wav
+    Frase:   "que puede ser a través de..."
+    Texto:   "que puede ser a través de un menor costo, que puede ser a través de más market share, que puede ser a través de una mejo..."
+
+❌ [ 6] critical  55.8% (3x)
+    Archivo: Nueva_Guia_Hipertension_Arterial_ESC_2024_AlDiaCon.json  entry#254
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/Nueva_Guia_Hipertension_Arterial_ESC_2024_AlDiaCon/seg_0254_SPK_00.wav
+    Frase:   "llévelo a lo más bajo posible..."
+    Texto:   "Pues llévelo a lo más bajo posible, llévelo a lo más bajo posible. Ojalá por lo menos por debajo de 140, pero llévelo a ..."
+
+❌ [ 7] critical  50.3% (3x)
+    Archivo: Como_fue_el_ENARM_2020_Una_historia_de_muchas_____.json  entry#43
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/Como_fue_el_ENARM_2020_Una_historia_de_muchas_____/seg_0043_SPK_01.wav
+    Frase:   "esta es típica pregunta en..."
+    Texto:   "seis años de la carrera, todo el mundo te dice como, ah, esta es típica pregunta en arme, esta es típica pregunta en arm..."
+
+⚠️ [ 8] high      49.3% (3x)
+    Archivo: Experto_en_Ganar_Musculo_-_Habitos_para_Ganar_Masa.json  entry#423
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/Experto_en_Ganar_Musculo_-_Habitos_para_Ganar_Masa/seg_0423_SPK_00.wav
+    Frase:   "es un suplemento que se..."
+    Texto:   "O sea, no es un suplemento que se descanse, no es un suplemento que se utilice solamente cuando entrenas, es un suplemen..."
+
+⚠️ [ 9] high      48.0% (3x)
+    Archivo: Inmortalidad_Tecnol_gica__Meta-Humanos__GPT5_y_el_.json  entry#13
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/Inmortalidad_Tecnol_gica__Meta-Humanos__GPT5_y_el_/seg_0013_SPK_02.wav
+    Frase:   "¿Cómo vamos a confiar en..."
+    Texto:   "¿Cómo vamos a confiar en que la gente haga buen uso de esta herramienta? ¿Cómo vamos a confiar en la humanidad? ¿Cómo va..."
+
+⚠️ [10] high      46.3% (3x)
+    Archivo: Arturo_El_as_Ayub__Lecciones_de_Negocios__Dinero_y.json  entry#319
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/Arturo_El_as_Ayub__Lecciones_de_Negocios__Dinero_y/seg_0319_SPK_01.wav
+    Frase:   "que han hecho las cosas mal..."
+    Texto:   "Ahora, pues si hay casos, si hay casos que han hecho las cosas mal, como en todo, como hay futbolistas que han hecho las..."
+
+⚠️ [11] high      45.9% (3x)
+    Archivo: COMO_PASAR_EL_ENARM_TE_EXPLICO_MI_EXPERIENCIA___wH.json  entry#45
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/COMO_PASAR_EL_ENARM_TE_EXPLICO_MI_EXPERIENCIA___wH/seg_0045_SPK_00.wav
+    Frase:   "el curso de tal persona,..."
+    Texto:   "personalmente te recomiendo que no empieces a divagar con que el curso de tal persona, el curso de tal persona, el curso..."
+
+⚠️ [12] high      45.5% (3x)
+    Archivo: VIVI_UN_INFIERNO_EN_LA_CARCEL_EL_TOPO_CHICO_Y_ME_H.json  entry#233
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/VIVI_UN_INFIERNO_EN_LA_CARCEL_EL_TOPO_CHICO_Y_ME_H/seg_0233_SPK_01.wav
+    Frase:   "a uno que sí se dedica..."
+    Texto:   "a uno que sí se dedica a secuestrar, a uno que sí se dedica a matar, a uno que sí se dedica a violar, y a que es malandr..."
+
+⚠️ [13] high      45.0% (3x)
+    Archivo: 1_CLASE_GRATUITA_DIPLOMADO_ESPECIALIZADO_EN_SEGURI.json  entry#286
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/1_CLASE_GRATUITA_DIPLOMADO_ESPECIALIZADO_EN_SEGURI/seg_0286_SPK_02.wav
+    Frase:   "a través de los..."
+    Texto:   "por ejemplo, a través de los correos, a través de los whatsapps, a través de los periódicos morales...."
+
+⚠️ [14] high      44.1% (3x)
+    Archivo: Hacker_Profesional__Ciberdelincuencia_y_los_Secret.json  entry#51
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/Hacker_Profesional__Ciberdelincuencia_y_los_Secret/seg_0051_SPK_02.wav
+    Frase:   "puedes ser usuario de..."
+    Texto:   "obliga a todas las grandes compañías, es decir, tú puedes ser usuario de Google, puedes ser usuario de Facebook, puedes ..."
+
+⚠️ [15] high      43.1% (3x)
+    Archivo: Andres_Cota_Hiriart_-_Conocer_la_naturaleza_el_pri.json  entry#79
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/Andres_Cota_Hiriart_-_Conocer_la_naturaleza_el_pri/seg_0079_SPK_00.wav
+    Frase:   "los hijos de los hijos de..."
+    Texto:   "Una colonia que sigue ahorita activa. O sea, los hijos de los hijos de los hijos de los hijos de los hijos de los hijos ..."
+
+⚠️ [16] high      42.3% (3x)
+    Archivo: Nueva_Guia_Hipertension_Arterial_ESC_2024_AlDiaCon.json  entry#93
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/Nueva_Guia_Hipertension_Arterial_ESC_2024_AlDiaCon/seg_0093_SPK_00.wav
+    Frase:   "va a tomar la tensión arterial..."
+    Texto:   "¿Cuál de ellas sobre todo? Es que me va a tomar la tensión arterial en la noche. ¿Listo? Me va a tomar la tensión arteri..."
+
+⚠️ [17] high      42.2% (3x)
+    Archivo: 61_HISTORIAS_ATERRADORAS_del_METRO_de_la_CDMX___FT.json  entry#217
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/61_HISTORIAS_ATERRADORAS_del_METRO_de_la_CDMX___FT/seg_0217_SPK_01.wav
+    Frase:   "era un trabajo para..."
+    Texto:   "Si era un trabajo para privar de la vida a alguien, si era un trabajo para asustar a alguien, si era un trabajo para ama..."
+
+⚠️ [18] high      42.2% (3x)
+    Archivo: REPASO_ENARM_2O25_-_CIRUGIA.json  entry#38
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/REPASO_ENARM_2O25_-_CIRUGIA/seg_0038_SPK_00.wav
+    Frase:   "te estoy diciendo que está..."
+    Texto:   "No te estoy diciendo que está infectada, no te estoy diciendo que está inflamada, no te estoy diciendo que está rota o p..."
+
+⚠️ [19] high      41.8% (3x)
+    Archivo: C_mo_DEJAR_de_COMER_por_ANSIEDAD___-_Pamela_Berron.json  entry#36
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/C_mo_DEJAR_de_COMER_por_ANSIEDAD___-_Pamela_Berron/seg_0036_SPK_01.wav
+    Frase:   "afecta a la salud..."
+    Texto:   "A toda la salud, afecta a la salud mental, afecta a la salud hormonal, afecta a la salud en general, salud cardiovascula..."
+
+⚠️ [20] high      41.6% (3x)
+    Archivo: COMO_DESAYUNAR_ALMORZAR_y_CENAR_SALUDABLEMENTE__qo.json  entry#38
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/COMO_DESAYUNAR_ALMORZAR_y_CENAR_SALUDABLEMENTE__qo/seg_0038_SPK_00.wav
+    Frase:   "va a ser impresionantemente alto..."
+    Texto:   "luego el pico de glucosa va a ser impresionantemente alto y el pico de insulina posterior va a ser impresionantemente al..."
+
+⚠️ [21] high      40.9% (3x)
+    Archivo: GU_A_COMPLETA__INTELIGENCIA_ARTIFICIAL_para_EMPREN.json  entry#73
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/GU_A_COMPLETA__INTELIGENCIA_ARTIFICIAL_para_EMPREN/seg_0073_SPK_00.wav
+    Frase:   "a la puerta del..."
+    Texto:   "Llego ahí a la puerta del aeropuerto, a la puerta del avión, pues nos dejaron subir hasta la puerta del avión...."
+
+⚠️ [22] high      40.4% (3x)
+    Archivo: El_Ministerio_41_-_Reggaeton_en_Veracruz_Fullbrand.json  entry#110
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/El_Ministerio_41_-_Reggaeton_en_Veracruz_Fullbrand/seg_0110_SPK_01.wav
+    Frase:   "yo te quiero a..."
+    Texto:   "empieza el yo te quiero a ti, yo te quiero acá, yo te quiero acá, empiezan las fotos, empieza el revolú...."
+
+⚠️ [23] high      39.1% (3x)
+    Archivo: Maestr_a_Completa_en_Gesti_n_Comercial__con_Gerent.json  entry#292
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/Maestr_a_Completa_en_Gesti_n_Comercial__con_Gerent/seg_0292_SPK_00.wav
+    Frase:   "la gente se quiere..."
+    Texto:   "O sea, la gente se quiere ver, la gente se quiere tocar, la gente se quiere mirar, la gente quiere experiencias y quiere..."
+
+⚠️ [24] high      39.0% (3x)
+    Archivo: CiberMexico_-_Exitos_y_retos_con_Eleazar_Aguirre_R.json  entry#76
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/CiberMexico_-_Exitos_y_retos_con_Eleazar_Aguirre_R/seg_0076_SPK_02.wav
+    Frase:   "una entidad como un..."
+    Texto:   "Debemos de tener como país, o sea, una entidad como una escuela, una entidad como una industria, una empresa, una entida..."
+
+⚠️ [25] high      38.3% (3x)
+    Archivo: DESPERT__DESPU_S_DE_8_A_OS_EN_COMA__CON__JENNIFER_.json  entry#567
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/DESPERT__DESPU_S_DE_8_A_OS_EN_COMA__CON__JENNIFER_/seg_0567_SPK_00.wav
+    Frase:   "que hay alguien que..."
+    Texto:   "Yo no puedo negar que hay alguien que maneja mi agenda, que hay alguien que propone personas, que hay alguien que dispon..."
+
+⚠️ [26] high      38.1% (3x)
+    Archivo: TODO_LO_QUE_HE_VISTO_EN_LOS_Investigador_Forense_5.json  entry#129
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/TODO_LO_QUE_HE_VISTO_EN_LOS_Investigador_Forense_5/seg_0129_SPK_00.wav
+    Frase:   "no, no, no, no, no, no,..."
+    Texto:   "Sí hay un sospechoso. Yo pienso que fue mi vecino. A ver, me paga el vecino. A ver, a ver. Y así fue él. Como no, no, no..."
+
+⚠️ [27] high      37.8% (3x)
+    Archivo: QUIERO_SER_RESIDENTE_-_URGENCIAS_MEDICO_QUIRURGICA.json  entry#117
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/QUIERO_SER_RESIDENTE_-_URGENCIAS_MEDICO_QUIRURGICA/seg_0117_SPK_01.wav
+    Frase:   "te da tiempo de..."
+    Texto:   "Claramente sí, que en el R1 no te da tiempo de comer, es cierto, no te da tiempo de comer, te da tiempo de salir y tal...."
+
+⚠️ [28] high      37.7% (3x)
+    Archivo: _He_le_do__1_000_libros_sobre__xito___Estas_son_la.json  entry#293
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/_He_le_do__1_000_libros_sobre__xito___Estas_son_la/seg_0293_SPK_02.wav
+    Frase:   "o lo voy a hacer con..."
+    Texto:   "Y tú dices, hostia, pues lo voy a hacer con Sergio, o lo voy a hacer con mi pareja, o lo voy a hacer con mi madre, o lo ..."
+
+⚠️ [29] high      37.5% (3x)
+    Archivo: Experta_en_Emociones__C_mo_Salir_de_un_Bucle_Negat.json  entry#107
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/Experta_en_Emociones__C_mo_Salir_de_un_Bucle_Negat/seg_0107_SPK_00.wav
+    Frase:   "lo que nos genera..."
+    Texto:   "Es lo que nos genera ansiedad, es lo que nos genera la rumia, es lo que nos genera el insomnio, que no nos deja dormir p..."
+
+⚠️ [30] high      37.3% (3x)
+    Archivo: C_mo_Conseguir_Trabajo_en_Tecnolog_a_y_Startups___.json  entry#118
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/C_mo_Conseguir_Trabajo_en_Tecnolog_a_y_Startups___/seg_0118_SPK_01.wav
+    Frase:   "gente que va más hacia..."
+    Texto:   "La gente que va más hacia SEO, la gente que va más hacia orgánico, la gente que va más hacia viralidad. Entonces ahí tam..."
+
+⚠️ [31] high      36.9% (3x)
+    Archivo: Avances_Cientificos_Cambiaran_el_Mundo_en_2024_-_C.json  entry#98
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/Avances_Cientificos_Cambiaran_el_Mundo_en_2024_-_C/seg_0098_SPK_00.wav
+    Frase:   "no me cabe en la cabeza...."
+    Texto:   "No sé qué... O sea, no me cabe en la cabeza. La verdad es que no me cabe en la cabeza. Pero entiendo que es un número gi..."
+
+⚠️ [32] high      36.7% (4x)
+    Archivo: V__Completa__La_ciencia_de_la_vida_cotidiana__Dieg.json  entry#207
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/V__Completa__La_ciencia_de_la_vida_cotidiana__Dieg/seg_0207_SPK_10.wav
+    Frase:   "lo que traes de fábrica..."
+    Texto:   "Claro, eso es lo que traes de fábrica. Falta lo que hacés con lo que traes de fábrica, lo que uno podría llamar ambiente..."
+
+⚠️ [33] high      35.7% (4x)
+    Archivo: 13_Years_of_Marketing_Advice_in_85_Mins.json  entry#303
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/13_Years_of_Marketing_Advice_in_85_Mins/seg_0303_SPK_00.wav
+    Frase:   "no funcionan para nosotros, las noticias..."
+    Texto:   "la mayoría de las veces, harás dinero en el mercado. Advice número 12. Todo el publicidad funciona, es solo una cuestión..."
+
+⚠️ [34] high      35.0% (3x)
+    Archivo: _ENTENDER_S_La_DIABETES_con_este_PODCAST____Da_por.json  entry#47
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/_ENTENDER_S_La_DIABETES_con_este_PODCAST____Da_por/seg_0047_SPK_00.wav
+    Frase:   "tengo que ir a..."
+    Texto:   "O dicen tengo que ir al médico general, tengo que ir a un especialista, un internista o tengo que ir a un endocrinólogo...."
+
+⚠️ [35] high      34.2% (3x)
+    Archivo: Preguntas_del_Examen_de_Ingreso_para_Residencia_Me.json  entry#12
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/Preguntas_del_Examen_de_Ingreso_para_Residencia_Me/seg_0012_SPK_00.wav
+    Frase:   "el bloque de pediatría..."
+    Texto:   "Esta pregunta en el examen está dentro del bloque de pediatría, sí está dentro del bloque de pediatría, pero recuerden u..."
+
+⚠️ [36] high      33.9% (3x)
+    Archivo: Marketing_Godfather__How_To_Build_An_Audience_That.json  entry#206
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/Marketing_Godfather__How_To_Build_An_Audience_That/seg_0206_SPK_01.wav
+    Frase:   "cómo se construye un..."
+    Texto:   "Pero así es como se construye una religión, cómo se construye un partido político, cómo se construye una compañía de caf..."
+
+⚠️ [37] high      33.6% (3x)
+    Archivo: C_mo_DEJAR_de_COMER_por_ANSIEDAD___-_Pamela_Berron.json  entry#133
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/C_mo_DEJAR_de_COMER_por_ANSIEDAD___-_Pamela_Berron/seg_0133_SPK_05.wav
+    Frase:   "y la dieta de..."
+    Texto:   "Y quieres las calorías y la dieta de la luna y la dieta del kiwi y la dieta de no sé qué. Y las dietas no funcionan...."
+
+⚠️ [38] high      33.5% (3x)
+    Archivo: 7_H_bitos_para_Mejorar_tu_Salud_y_Transformar_tu_V.json  entry#87
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/7_H_bitos_para_Mejorar_tu_Salud_y_Transformar_tu_V/seg_0087_SPK_00.wav
+    Frase:   "muy buena cantidad de..."
+    Texto:   "Pero en general un plato saludable, independientemente del momento del día, debe tener muy buena cantidad de proteína, m..."
+
+⚠️ [39] high      33.3% (3x)
+    Archivo: UPC_Adrian_Marcelo_y_Martin_Eastwood__JT7ao8fo4iw_.json  entry#212
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/UPC_Adrian_Marcelo_y_Martin_Eastwood__JT7ao8fo4iw_/seg_0212_SPK_00.wav
+    Frase:   "es un delfín de..."
+    Texto:   "me puse a decirle, eso es un delfín de Isreboté, y este es un delfín de este, este es un delfín del río Yancé, esta es u..."
+
+⚠️ [40] high      33.3% (3x)
+    Archivo: V__Completa__Ciencia_fascinante_para_personas_curi.json  entry#131
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/V__Completa__Ciencia_fascinante_para_personas_curi/seg_0131_SPK_01.wav
+    Frase:   "a la velocidad de la luz..."
+    Texto:   "Dentro de la nave espacial, ese rayo láser va a la velocidad de la luz y alguien en Tierra que ve pasar la nave espacial..."
+
+⚠️ [41] high      33.0% (3x)
+    Archivo: PONENCIA_ENARM__Ginecolog_a_y_obstetricia.json  entry#161
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/PONENCIA_ENARM__Ginecolog_a_y_obstetricia/seg_0161_SPK_00.wav
+    Frase:   "asociada a la lactancia..."
+    Texto:   "y la mastitis no asociada a la lactancia. La mastitis asociada a la lactancia se asocia siempre a un pobre drenaje lácte..."
+
+⚠️ [42] high      32.8% (3x)
+    Archivo: _225_-_Las_10_Claves_para_Vivir_120_A_OS_SIN_ENFER.json  entry#221
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/_225_-_Las_10_Claves_para_Vivir_120_A_OS_SIN_ENFER/seg_0221_SPK_00.wav
+    Frase:   "de la medicina china..."
+    Texto:   "Es que realmente forma parte de la medicina china. Dentro de la medicina china decimos que no hay que ingerir alimento c..."
+
+⚠️ [43] high      32.6% (3x)
+    Archivo: _225_-_Las_10_Claves_para_Vivir_120_A_OS_SIN_ENFER.json  entry#49
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/_225_-_Las_10_Claves_para_Vivir_120_A_OS_SIN_ENFER/seg_0049_SPK_00.wav
+    Frase:   "construye una casa de..."
+    Texto:   "Bueno, pues en el cuento, háblate que hay tres cerditos. Uno construye una casa de baja, otro construye una casa de made..."
+
+⚠️ [44] high      32.4% (3x)
+    Archivo: C_mo_Conseguir_Trabajo_en_Tecnolog_a_y_Startups___.json  entry#370
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/C_mo_Conseguir_Trabajo_en_Tecnolog_a_y_Startups___/seg_0370_SPK_01.wav
+    Frase:   "que se va a motivar por..."
+    Texto:   "Quiero saber si eres el tipo de personas que se va a motivar porque puede crecer dentro de la empresa o si es una person..."
+
+⚠️ [45] high      32.3% (3x)
+    Archivo: Mesa_redonda_-_Divulgacion_de_la_ciencia_en_la_era.json  entry#145
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/Mesa_redonda_-_Divulgacion_de_la_ciencia_en_la_era/seg_0145_SPK_01.wav
+    Frase:   "implica el riesgo de..."
+    Texto:   "Crear la propia forma de comunicar implica el riesgo de equivocarnos, implica el riesgo de recomponer el modelo, implica..."
+
+⚠️ [46] high      32.1% (3x)
+    Archivo: PONENCIA_ENARM__Ginecolog_a_y_obstetricia.json  entry#200
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/PONENCIA_ENARM__Ginecolog_a_y_obstetricia/seg_0200_SPK_00.wav
+    Frase:   "a partir de los..."
+    Texto:   "a partir de los 18 años. Segundo, un examen clínico mamario anual, a partir de los 25 años. Y a partir de los 40 años, l..."
+
+⚠️ [47] high      31.8% (3x)
+    Archivo: Mesa_redonda_Ciencia_y_Arte__FGrxfKZeuWk_.json  entry#80
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/Mesa_redonda_Ciencia_y_Arte__FGrxfKZeuWk_/seg_0080_SPK_03.wav
+    Frase:   "hay una serie de..."
+    Texto:   "uno va aprendiendo que hay una serie de reglas, evidentemente hay una ecuación que las gobierna, hay una serie de reglas..."
+
+⚠️ [48] high      31.4% (3x)
+    Archivo: PERSUADE_Y_LIDERA_Las_Claves_del_LIDERAZGO_CARISMA.json  entry#47
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/PERSUADE_Y_LIDERA_Las_Claves_del_LIDERAZGO_CARISMA/seg_0047_SPK_00.wav
+    Frase:   "yo soy responsable de que..."
+    Texto:   "Eso no es ser héroe. Héroe es decir, yo soy responsable de tener a esta persona en el equipo, yo soy responsable de que ..."
+
+⚠️ [49] high      31.4% (3x)
+    Archivo: _He_le_do__1_000_libros_sobre__xito___Estas_son_la.json  entry#208
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/_He_le_do__1_000_libros_sobre__xito___Estas_son_la/seg_0208_SPK_02.wav
+    Frase:   "a tu jefe de seguros de..."
+    Texto:   "Una marca personal ejecutiva es, por ejemplo, yo me voy a MAFRE y le digo, voy a pillar a tu jefe de seguros de vida, a ..."
+
+⚠️ [50] high      31.0% (3x)
+    Archivo: V__Completa___En_la_vida_act_as_un_personaje__aunq.json  entry#47
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/V__Completa___En_la_vida_act_as_un_personaje__aunq/seg_0047_SPK_01.wav
+    Frase:   "y con tal de que no..."
+    Texto:   "Con tal de que no me abandones y con tal de que no te vayas y con tal de que no me critiques y con tal de que no me rech..."
+
+⚠️ [51] high      30.8% (3x)
+    Archivo: La_importancia_de_la_certificacion_y_recertificaci.json  entry#4
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/La_importancia_de_la_certificacion_y_recertificaci/seg_0004_SPK_00.wav
+    Frase:   "que es un médico..."
+    Texto:   "Bueno, ¿por qué es importante esto? Porque como ya lo dijimos, nos habla de que es un médico actual, que es un médico ac..."
+
+⚠️ [52] high      30.5% (3x)
+    Archivo: Experto_en_IA__El_Lado_Oscuro__Novias_Virtuales__D.json  entry#82
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/Experto_en_IA__El_Lado_Oscuro__Novias_Virtuales__D/seg_0082_SPK_00.wav
+    Frase:   "todo el trabajo que hace..."
+    Texto:   "todo el trabajo que tú haces, todo el trabajo que yo hago, todo el trabajo que hacen los cámaras, todo el trabajo que ha..."
+
+⚠️ [53] high      30.5% (3x)
+    Archivo: Mesa_Redonda_AIQ2025_Ano_Internacional_de_la_Cienc.json  entry#72
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/Mesa_Redonda_AIQ2025_Ano_Internacional_de_la_Cienc/seg_0072_SPK_05.wav
+    Frase:   "en la página de la UNESCO,..."
+    Texto:   "el año internacional de la ciencia y tecnología cuántica, pero una de las razones principales y que uno puede ver en la ..."
+
+⚠️ [54] high      30.2% (3x)
+    Archivo: Experto_en_Cerebro__3_h_bitos_que_transforman_un_C.json  entry#240
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/Experto_en_Cerebro__3_h_bitos_que_transforman_un_C/seg_0240_SPK_01.wav
+    Frase:   "hay una serie de..."
+    Texto:   "¿Por qué estoy vivo? Estoy vivo porque hay una serie de comportamientos, hay una serie de conductas, hay una serie de co..."
+
+⚠️ [55] high      29.7% (3x)
+    Archivo: CiberMexico_-_Exitos_y_retos_con_Eleazar_Aguirre_R.json  entry#128
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/CiberMexico_-_Exitos_y_retos_con_Eleazar_Aguirre_R/seg_0128_SPK_01.wav
+    Frase:   "para utilizar esa tecnología..."
+    Texto:   "nos están moldeando para utilizar esa tecnología, para utilizar esa tecnología. Y al final de cuentas, seamos expertos o..."
+
+⚠️ [56] high      29.4% (3x)
+    Archivo: PREGUNTAS_Y_RESPUESTAS_3_-_CARDIOLOG_A_-_VILLAMEDI.json  entry#49
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/PREGUNTAS_Y_RESPUESTAS_3_-_CARDIOLOG_A_-_VILLAMEDI/seg_0049_SPK_01.wav
+    Frase:   "la activación del sistema..."
+    Texto:   "Se desencadenan unas respuestas, respuestas neuromorales. Estas respuestas neuromorales es la activación del sistema de ..."
+
+⚠️ [57] high      28.7% (3x)
+    Archivo: La_EXISTENCIA_y_ENCUENTROS_EXTRATERRESTRES_FEPO_PO.json  entry#364
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/La_EXISTENCIA_y_ENCUENTROS_EXTRATERRESTRES_FEPO_PO/seg_0364_SPK_01.wav
+    Frase:   "Porque lo está modificando en la..."
+    Texto:   "¿Cómo puede Pachita generar un corazón? Porque lo está modificando en la pre-realidad. ¿Cómo puede ser esta persona que ..."
+
+⚠️ [58] high      28.4% (4x)
+    Archivo: GU_A_COMPLETA__INTELIGENCIA_ARTIFICIAL_para_EMPREN.json  entry#361
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/GU_A_COMPLETA__INTELIGENCIA_ARTIFICIAL_para_EMPREN/seg_0361_SPK_00.wav
+    Frase:   "la calidad de la pregunta..."
+    Texto:   "Eso habla de la calidad de la pregunta. Eso, la calidad de la pregunta, si lo utilizamos en temas individuales, sí. Si l..."
+
+⚠️ [59] high      28.0% (3x)
+    Archivo: El_gen_emprendedor___Luis_Ramos___TEDxPlazaFundado.json  entry#51
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/El_gen_emprendedor___Luis_Ramos___TEDxPlazaFundado/seg_0051_SPK_00.wav
+    Frase:   "invertir en tu empresa..."
+    Texto:   "¿Tienes que invertir en tu empresa? Sí, hay que invertir. Sí, sorry, hay que invertir en tu empresa. Pero invertir en tu..."
+
+⚠️ [60] high      27.8% (3x)
+    Archivo: Experto_en_Ganar_Musculo_-_Habitos_para_Ganar_Masa.json  entry#252
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/Experto_en_Ganar_Musculo_-_Habitos_para_Ganar_Masa/seg_0252_SPK_00.wav
+    Frase:   "un día muy específico para..."
+    Texto:   "O sea, un día muy específico para todo el tren superior, un día muy específico para todo el tren inferior y un día muy e..."
+
+⚠️ [61] high      27.6% (3x)
+    Archivo: Los_Secretos_de_la_Inteligencia_Artificial________.json  entry#439
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/Los_Secretos_de_la_Inteligencia_Artificial________/seg_0439_SPK_00.wav
+    Frase:   "en la evolución de la..."
+    Texto:   "Sí, yo creo que lo que él dice es que nos solemos basar en la evolución de la especie humana y deberíamos habernos basad..."
+
+⚠️ [62] high      27.4% (3x)
+    Archivo: 526__Las_4_claves_para_mejorar_tus_finanzas_person.json  entry#133
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/526__Las_4_claves_para_mejorar_tus_finanzas_person/seg_0133_SPK_01.wav
+    Frase:   "de mínimo tienes que..."
+    Texto:   "Si le crees o no a estos porcentajes de mínimo tienes que ahorrar tanto o de mínimo tienes que tener un colchón de tanto..."
+
+⚠️ [63] high      27.3% (6x)
+    Archivo: V__Completa__Ciencia_fascinante_para_personas_curi.json  entry#127
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/V__Completa__Ciencia_fascinante_para_personas_curi/seg_0127_SPK_01.wav
+    Frase:   "que la velocidad de la luz..."
+    Texto:   "Pero esta velocidad de la luz resultaba ser absoluta, no era relativa a nada. Esto parece que contradecía el principio d..."
+
+⚠️ [64] high      27.3% (3x)
+    Archivo: _56_-_Experto_en_IA__Co_mo_Sobrevivir_a_la_Intelig.json  entry#75
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/_56_-_Experto_en_IA__Co_mo_Sobrevivir_a_la_Intelig/seg_0075_SPK_01.wav
+    Frase:   "lo mismo está pasando con los..."
+    Texto:   "que compren imágenes de fotógrafos. Pero lo mismo está pasando con los traductores, lo mismo está pasando con los actore..."
+
+⚠️ [65] high      26.9% (3x)
+    Archivo: C_mo_Invertir_en_Bienes_Ra_ces_en_2026__Paso_a_Pas.json  entry#234
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/C_mo_Invertir_en_Bienes_Ra_ces_en_2026__Paso_a_Pas/seg_0234_SPK_00.wav
+    Frase:   "la tasa de referencia..."
+    Texto:   "realmente si tú me preguntas a cuánto puede alcanzar, pues sería a la tasa de referencia, que hoy creo que la tasa de re..."
+
+⚠️ [66] high      26.8% (3x)
+    Archivo: 7_H_bitos_para_Mejorar_tu_Salud_y_Transformar_tu_V.json  entry#285
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/7_H_bitos_para_Mejorar_tu_Salud_y_Transformar_tu_V/seg_0285_SPK_00.wav
+    Frase:   "se prensa en frío..."
+    Texto:   "de mínimo proceso, como es el aceite de oliva, que simplemente la oliva se prensa en frío y eso es lo que se obtiene, co..."
+
+⚠️ [67] high      26.3% (3x)
+    Archivo: Quebr__su_empresa__fue_taxista_y_volvi__a_empezar_.json  entry#123
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/Quebr__su_empresa__fue_taxista_y_volvi__a_empezar_/seg_0123_SPK_01.wav
+    Frase:   "no te hablaría de..."
+    Texto:   "lo pondría sobre la mesa, por encima de cualquier otro, no te hablaría de la calidad del producto, no te hablaría del ta..."
+
+⚠️ [68] high      26.2% (3x)
+    Archivo: Casos_Clinicos_GOB_I_DPPNI__Inminencia_Ruptura_Ute.json  entry#66
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/Casos_Clinicos_GOB_I_DPPNI__Inminencia_Ruptura_Ute/seg_0066_SPK_01.wav
+    Frase:   "se salió a cavidad..."
+    Texto:   "Y en la ruptura uterina consumada, el útero ya se rompió, las membranas se rompieron, el líquido amniótico se salió a ca..."
+
+⚠️ [69] high      26.0% (3x)
+    Archivo: SECRETOS_para_avanzar_en_PROGRAMACI_N___Con__midud.json  entry#62
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/SECRETOS_para_avanzar_en_PROGRAMACI_N___Con__midud/seg_0062_SPK_00.wav
+    Frase:   "no me chafes la guitarra,..."
+    Texto:   "A ver, yo no quiero ser aquí el que... Hay una expresión en catalán que dice no me chafes la guitarra, que quiere decir ..."
+
+⚠️ [70] high      25.7% (3x)
+    Archivo: 7_H_bitos_para_Mejorar_tu_Salud_y_Transformar_tu_V.json  entry#102
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/7_H_bitos_para_Mejorar_tu_Salud_y_Transformar_tu_V/seg_0102_SPK_00.wav
+    Frase:   "para el control de la..."
+    Texto:   "Hay beneficios hormonales para el control de la insulina, para el control de la leptina, para el control de la grelina, ..."
+
+⚠️ [71] high      25.6% (4x)
+    Archivo: Experto_en_IA__C_mo_Usar_la_Inteligencia_Artificia.json  entry#384
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/Experto_en_IA__C_mo_Usar_la_Inteligencia_Artificia/seg_0384_SPK_00.wav
+    Frase:   "todos los libros de..."
+    Texto:   "pídeselo a la IA, a ver, recordemos lo que dijimos al principio, ¿cómo aprendió toda la IA? la IA ya leyó todos los libr..."
+
+⚠️ [72] high      25.6% (3x)
+    Archivo: VALVULOPATIAS_-_ENARM__I3ADwc2foHs_.json  entry#81
+    Audio:   /media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/normalized/VALVULOPATIAS_-_ENARM__I3ADwc2foHs_/seg_0081_SPK_00.wav
+    Frase:   "de la tensión arterial..."
+    Texto:   "Sucede cuando la medición de la tensión arterial puede incluir un aumento de la tensión arterial sistólica poplitea mayo..."
+

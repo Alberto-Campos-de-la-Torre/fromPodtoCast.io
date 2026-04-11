@@ -26,12 +26,13 @@ if PYDANTIC_AVAILABLE:
     class VerificationDetails(BaseModel):
         """Detalles de la verificación con validación Pydantic."""
         model_config = ConfigDict(extra='allow')
-        
+
         llm_confidence: float = Field(default=1.0, ge=0.0, le=1.0)
         length_ratio: Optional[float] = Field(default=None, ge=0.0)
         word_preservation: Optional[float] = Field(default=None, ge=0.0, le=1.0)
         new_word_ratio: Optional[float] = Field(default=None, ge=0.0, le=1.0)
         sequence_similarity: Optional[float] = Field(default=None, ge=0.0, le=1.0)
+        char_expansion_ratio: Optional[float] = Field(default=None, ge=0.0)
         missing_words: List[str] = Field(default_factory=list)
         potential_hallucinations: List[str] = Field(default_factory=list)
         no_changes: bool = Field(default=False)
@@ -74,6 +75,7 @@ else:
         word_preservation: Optional[float] = None
         new_word_ratio: Optional[float] = None
         sequence_similarity: Optional[float] = None
+        char_expansion_ratio: Optional[float] = None
         missing_words: List[str] = field(default_factory=list)
         potential_hallucinations: List[str] = field(default_factory=list)
         no_changes: bool = False
@@ -128,11 +130,13 @@ class TranscriptionVerifier:
     
     def __init__(
         self,
-        min_length_ratio: float = 0.70,
-        max_length_ratio: float = 1.40,
-        min_word_preservation: float = 0.80,
-        max_new_word_ratio: float = 0.25,
-        min_sequence_similarity: float = 0.60,
+        min_length_ratio: float = 0.85,
+        max_length_ratio: float = 1.20,
+        min_word_preservation: float = 0.90,
+        max_new_word_ratio: float = 0.15,
+        min_sequence_similarity: float = 0.75,
+        max_checks_failed: int = 0,
+        min_confidence_score: float = 0.75,
         enable_semantic_check: bool = False,
         logger: Optional[logging.Logger] = None
     ):
@@ -153,6 +157,8 @@ class TranscriptionVerifier:
         self.min_word_preservation = min_word_preservation
         self.max_new_word_ratio = max_new_word_ratio
         self.min_sequence_similarity = min_sequence_similarity
+        self.max_checks_failed = max_checks_failed
+        self.min_confidence_score = min_confidence_score
         self.enable_semantic_check = enable_semantic_check
         self.logger = logger or logging.getLogger(__name__)
         
@@ -256,14 +262,44 @@ class TranscriptionVerifier:
             list(missing)
         )
     
+    def _check_char_expansion(
+        self,
+        original: str,
+        corrected: str,
+        max_expansion: float = 1.30
+    ) -> Tuple[bool, float, str]:
+        """
+        Detecta expansión excesiva por número de caracteres.
+        Una expansión >30% suele indicar alucinación.
+
+        Returns:
+            Tuple (passed, char_ratio, message)
+        """
+        orig_len = len(original.strip())
+        corr_len = len(corrected.strip())
+
+        if orig_len == 0:
+            return False, 0.0, "Texto original vacío"
+
+        char_ratio = corr_len / orig_len
+
+        if char_ratio > max_expansion:
+            return (
+                False,
+                char_ratio,
+                f"Expansión excesiva de caracteres ({char_ratio:.1%} del original)"
+            )
+
+        return True, char_ratio, f"Expansión de caracteres aceptable ({char_ratio:.1%})"
+
     def _check_hallucination(
-        self, 
-        original: str, 
+        self,
+        original: str,
         corrected: str
     ) -> Tuple[bool, float, str, List[str]]:
         """
         Detecta posibles alucinaciones (palabras nuevas no presentes).
-        
+
         Returns:
             Tuple (passed, new_word_ratio, message, new_words)
         """
@@ -453,21 +489,37 @@ class TranscriptionVerifier:
         else:
             checks_failed.append('sequence_similarity')
             warnings.append(seq_msg)
-        
+
+        # 5. Check de expansión de caracteres (detecta alucinaciones largas)
+        char_ok, char_ratio, char_msg = self._check_char_expansion(original, corrected)
+        if PYDANTIC_AVAILABLE:
+            details.char_expansion_ratio = char_ratio
+        else:
+            details['char_expansion_ratio'] = char_ratio
+        if char_ok:
+            checks_passed.append('char_expansion')
+        else:
+            checks_failed.append('char_expansion')
+            warnings.append(char_msg)
+
         # Calcular score final
-        # Ponderación: length(0.2), words(0.3), hallucination(0.25), sequence(0.25)
+        # Ponderación: length(0.15), words(0.25), hallucination(0.20), sequence(0.25), char_expansion(0.15)
         confidence_score = (
-            (0.2 * (1.0 if length_ok else 0.5)) +
-            (0.3 * word_ratio) +
-            (0.25 * (1.0 - halluc_ratio)) +
-            (0.25 * seq_ratio)
+            (0.15 * (1.0 if length_ok else 0.3)) +
+            (0.25 * word_ratio) +
+            (0.20 * (1.0 - halluc_ratio)) +
+            (0.25 * seq_ratio) +
+            (0.15 * (1.0 if char_ok else 0.2))
         )
         
         # Multiplicar por confianza del LLM
         confidence_score *= min(llm_confidence, 1.0)
         
-        # Determinar si es válido (al menos 3 de 4 checks pasan)
-        is_valid = len(checks_failed) <= 1 and confidence_score >= 0.6
+        # Determinar si es válido usando umbrales configurables (más estricto)
+        is_valid = (
+            len(checks_failed) <= self.max_checks_failed and
+            confidence_score >= self.min_confidence_score
+        )
         
         if is_valid:
             self.stats['passed'] += 1

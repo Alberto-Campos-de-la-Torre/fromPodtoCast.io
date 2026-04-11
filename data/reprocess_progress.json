@@ -1,0 +1,2291 @@
+{
+  "completed": [
+    {
+      "file": "COMO_VIVI_MI_SERVICIO_SOCIAL_EN_MEDICINA_PUEBLO_DE.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/COMO_VIVI_MI_SERVICIO_SOCIAL_EN_MEDICINA_PUEBLO_DE.json",
+      "timestamp": "2026-02-23T14:30:00",
+      "entries": 89,
+      "corrected": 85
+    },
+    {
+      "file": "Diagnostico_Diferencial__Sindrome_TORCH__kWQOpfbhp.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Diagnostico_Diferencial__Sindrome_TORCH__kWQOpfbhp.json",
+      "timestamp": "2026-02-23T15:45:00",
+      "entries": 0,
+      "corrected": 0
+    },
+    {
+      "file": "10_CONSEJOS_PARA_SER_EL_MEJOR_ESTUDIANTE_DE_MEDICI.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/10_CONSEJOS_PARA_SER_EL_MEJOR_ESTUDIANTE_DE_MEDICI.json",
+      "timestamp": "2026-02-23T19:22:02.326518",
+      "entries": 57,
+      "corrected": 57,
+      "detected_by": "scan"
+    },
+    {
+      "file": "5_H_bitos_para_Dormir_Mejor_y_Transformar_tu_Salud.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/5_H_bitos_para_Dormir_Mejor_y_Transformar_tu_Salud.json",
+      "timestamp": "2026-02-23T19:22:02.326535",
+      "entries": 157,
+      "corrected": 157,
+      "detected_by": "scan"
+    },
+    {
+      "file": "7_H_bitos_para_Mejorar_tu_Salud_y_Transformar_tu_V.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/7_H_bitos_para_Mejorar_tu_Salud_y_Transformar_tu_V.json",
+      "timestamp": "2026-02-23T19:22:02.326536",
+      "entries": 353,
+      "corrected": 353,
+      "detected_by": "scan"
+    },
+    {
+      "file": "C_mo_hacer_Marketing_Digital_en_2025__7_Estrategia.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/C_mo_hacer_Marketing_Digital_en_2025__7_Estrategia.json",
+      "timestamp": "2026-02-23T19:22:02.326544",
+      "entries": 216,
+      "corrected": 216,
+      "detected_by": "scan"
+    },
+    {
+      "file": "C_mo_superar_el_miedo_a_emprender____Sebasti_n_Gut.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/C_mo_superar_el_miedo_a_emprender____Sebasti_n_Gut.json",
+      "timestamp": "2026-02-23T19:22:02.326545",
+      "entries": 26,
+      "corrected": 26,
+      "detected_by": "scan"
+    },
+    {
+      "file": "Co_mo_tener_conversaciones__ntimas_y_profundas.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Co_mo_tener_conversaciones__ntimas_y_profundas.json",
+      "timestamp": "2026-02-23T19:22:02.326547",
+      "entries": 54,
+      "corrected": 54,
+      "detected_by": "scan"
+    },
+    {
+      "file": "EL_SERVICIO_SOCIAL_EN_MEDICINA__Su_origen_y_modali.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/EL_SERVICIO_SOCIAL_EN_MEDICINA__Su_origen_y_modali.json",
+      "timestamp": "2026-02-23T19:22:02.326549",
+      "entries": 50,
+      "corrected": 50,
+      "detected_by": "scan"
+    },
+    {
+      "file": "Experta_en_Emociones__C_mo_Salir_de_un_Bucle_Negat.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Experta_en_Emociones__C_mo_Salir_de_un_Bucle_Negat.json",
+      "timestamp": "2026-02-23T19:22:02.326552",
+      "entries": 340,
+      "corrected": 340,
+      "detected_by": "scan"
+    },
+    {
+      "file": "Historia_de_un_emprendedor___Carlos_Bremer___TEDxY.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Historia_de_un_emprendedor___Carlos_Bremer___TEDxY.json",
+      "timestamp": "2026-02-23T19:22:02.326557",
+      "entries": 78,
+      "corrected": 78,
+      "detected_by": "scan"
+    },
+    {
+      "file": "Las_5_leyes_biologicas_-_Dr__Nirdosh_Kohra_-_Ep_12.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Las_5_leyes_biologicas_-_Dr__Nirdosh_Kohra_-_Ep_12.json",
+      "timestamp": "2026-02-23T19:22:02.326561",
+      "entries": 277,
+      "corrected": 277,
+      "detected_by": "scan"
+    },
+    {
+      "file": "PALOMA_NICOLE_-_NINA_de_14_anos_MUERE_por_CIRUGIA_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/PALOMA_NICOLE_-_NINA_de_14_anos_MUERE_por_CIRUGIA_.json",
+      "timestamp": "2026-02-23T19:22:02.326564",
+      "entries": 325,
+      "corrected": 325,
+      "detected_by": "scan"
+    },
+    {
+      "file": "PODCAST_-_GESTION_DE_PROYECTOS_EN_INNOVACION_TECNO.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/PODCAST_-_GESTION_DE_PROYECTOS_EN_INNOVACION_TECNO.json",
+      "timestamp": "2026-02-23T19:22:02.326565",
+      "entries": 37,
+      "corrected": 37,
+      "detected_by": "scan"
+    },
+    {
+      "file": "PREGUNTAS_ENAM_DE_DIABETES_MELLITUS_PRIMERA_PARTE_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/PREGUNTAS_ENAM_DE_DIABETES_MELLITUS_PRIMERA_PARTE_.json",
+      "timestamp": "2026-02-23T19:22:02.326566",
+      "entries": 167,
+      "corrected": 167,
+      "detected_by": "scan"
+    },
+    {
+      "file": "P_simas_conversaciones__p_simas_relaciones_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/P_simas_conversaciones__p_simas_relaciones_.json",
+      "timestamp": "2026-02-23T19:22:02.326567",
+      "entries": 41,
+      "corrected": 41,
+      "detected_by": "scan"
+    },
+    {
+      "file": "Podcast_-_Para_abordar_el_cambio_climatico_es_fund.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Podcast_-_Para_abordar_el_cambio_climatico_es_fund.json",
+      "timestamp": "2026-02-23T19:22:02.326568",
+      "entries": 41,
+      "corrected": 41,
+      "detected_by": "scan"
+    },
+    {
+      "file": "SESIONES_VIRTUALES_DIPLOMADO_MEDICINA_SALUD_PUBLIC.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/SESIONES_VIRTUALES_DIPLOMADO_MEDICINA_SALUD_PUBLIC.json",
+      "timestamp": "2026-02-23T19:22:02.326571",
+      "entries": 298,
+      "corrected": 298,
+      "detected_by": "scan"
+    },
+    {
+      "file": "Una_CLASE_MAGISTRAL_sobre_la_VIDA__la_MUERTE_y_el_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Una_CLASE_MAGISTRAL_sobre_la_VIDA__la_MUERTE_y_el_.json",
+      "timestamp": "2026-02-23T19:22:02.326575",
+      "entries": 149,
+      "corrected": 149,
+      "detected_by": "scan"
+    },
+    {
+      "file": "V__Completa__El_lenguaje_que_une_a_la_humanidad__Y.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/V__Completa__El_lenguaje_que_une_a_la_humanidad__Y.json",
+      "timestamp": "2026-02-23T19:22:02.326576",
+      "entries": 166,
+      "corrected": 166,
+      "detected_by": "scan"
+    },
+    {
+      "file": "V__Completa__Neuropsicolog_a_de_la_vida_cotidiana_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/V__Completa__Neuropsicolog_a_de_la_vida_cotidiana_.json",
+      "timestamp": "2026-02-23T19:22:02.326577",
+      "entries": 39,
+      "corrected": 39,
+      "detected_by": "scan"
+    },
+    {
+      "file": "V__Completa___En_la_vida_act_as_un_personaje__aunq.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/V__Completa___En_la_vida_act_as_un_personaje__aunq.json",
+      "timestamp": "2026-02-23T19:22:02.326578",
+      "entries": 98,
+      "corrected": 98,
+      "detected_by": "scan"
+    },
+    {
+      "file": "_43_-__La_DIETA_CARN_VORA_es_La_CLAVE____Juan_Bola.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_43_-__La_DIETA_CARN_VORA_es_La_CLAVE____Juan_Bola.json",
+      "timestamp": "2026-02-23T19:22:02.326582",
+      "entries": 432,
+      "corrected": 432,
+      "detected_by": "scan"
+    },
+    {
+      "file": "_Cardiologia_V___Banco_de_preguntas_ENARM.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_Cardiologia_V___Banco_de_preguntas_ENARM.json",
+      "timestamp": "2026-02-23T19:22:02.326583",
+      "entries": 69,
+      "corrected": 69,
+      "detected_by": "scan"
+    },
+    {
+      "file": "_La_nueva_cara_de_la_belleza___-__El_boom_del__cid.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_La_nueva_cara_de_la_belleza___-__El_boom_del__cid.json",
+      "timestamp": "2026-02-23T19:22:02.326585",
+      "entries": 161,
+      "corrected": 161,
+      "detected_by": "scan"
+    },
+    {
+      "file": "Experto_en_IA__El_Lado_Oscuro__Novias_Virtuales__D.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Experto_en_IA__El_Lado_Oscuro__Novias_Virtuales__D.json",
+      "timestamp": "2026-02-23T23:54:32.046367",
+      "entries": 613,
+      "corrected": 361
+    },
+    {
+      "file": "Sesion_-_Casos_clinicos_en_imagen__wyw_AVmr6uE_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Sesion_-_Casos_clinicos_en_imagen__wyw_AVmr6uE_.json",
+      "timestamp": "2026-02-24T01:02:02.349889",
+      "entries": 226,
+      "corrected": 56
+    },
+    {
+      "file": "PODCAST_Medio_ambiente_en_Puebla_-_que_estamos_hac.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/PODCAST_Medio_ambiente_en_Puebla_-_que_estamos_hac.json",
+      "timestamp": "2026-02-24T02:09:20.736759",
+      "entries": 175,
+      "corrected": 59
+    },
+    {
+      "file": "1_HORA_DE_HISTORIAS_DE_TERROR_DE_GUANAJUATO_MEXICO.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/1_HORA_DE_HISTORIAS_DE_TERROR_DE_GUANAJUATO_MEXICO.json",
+      "timestamp": "2026-02-24T02:15:06.683435",
+      "entries": 58,
+      "corrected": 2
+    },
+    {
+      "file": "Jornadas_Pre_ENARM__Medicina_de_Urgencias.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Jornadas_Pre_ENARM__Medicina_de_Urgencias.json",
+      "timestamp": "2026-02-24T02:43:38.380804",
+      "entries": 99,
+      "corrected": 31
+    },
+    {
+      "file": "Residentes_de_Medicina_Interna_Caso_clinico_-_Canc.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Residentes_de_Medicina_Interna_Caso_clinico_-_Canc.json",
+      "timestamp": "2026-02-24T03:22:30.266664",
+      "entries": 118,
+      "corrected": 35
+    },
+    {
+      "file": "ASI_Viven_los_Vaqueros_del_Norte_de_Mexico__R_vkw9.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/ASI_Viven_los_Vaqueros_del_Norte_de_Mexico__R_vkw9.json",
+      "timestamp": "2026-02-24T04:31:01.165444",
+      "entries": 159,
+      "corrected": 58
+    },
+    {
+      "file": "Mesa_redonda_-_Divulgacion_de_la_ciencia_en_la_era.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Mesa_redonda_-_Divulgacion_de_la_ciencia_en_la_era.json",
+      "timestamp": "2026-02-24T05:38:31.905160",
+      "entries": 152,
+      "corrected": 35
+    },
+    {
+      "file": "Webinar__ENARM___Casos_cl_nicos_-_Infectolog_a_jul.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Webinar__ENARM___Casos_cl_nicos_-_Infectolog_a_jul.json",
+      "timestamp": "2026-02-24T05:52:07.886378",
+      "entries": 116,
+      "corrected": 21
+    },
+    {
+      "file": "La_importancia_de_la_certificacion_y_recertificaci.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/La_importancia_de_la_certificacion_y_recertificaci.json",
+      "timestamp": "2026-02-24T09:41:17.794804",
+      "entries": 20,
+      "corrected": 5
+    },
+    {
+      "file": "Como_fue_el_ENARM_2020_Una_historia_de_muchas_____.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Como_fue_el_ENARM_2020_Una_historia_de_muchas_____.json",
+      "timestamp": "2026-02-24T10:16:59.880697",
+      "entries": 181,
+      "corrected": 29
+    },
+    {
+      "file": "El_poder_de_las_emociones___ANSIEDAD__ESTR_S__MENT.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/El_poder_de_las_emociones___ANSIEDAD__ESTR_S__MENT.json",
+      "timestamp": "2026-02-24T10:18:41.772475",
+      "entries": 365,
+      "corrected": 4
+    },
+    {
+      "file": "526__Las_4_claves_para_mejorar_tus_finanzas_person.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/526__Las_4_claves_para_mejorar_tus_finanzas_person.json",
+      "timestamp": "2026-02-24T12:41:50.246688",
+      "entries": 299,
+      "corrected": 182
+    },
+    {
+      "file": "ENARM_ENARM2020_Como_destruir_el_ENARM_-_Entrevist.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/ENARM_ENARM2020_Como_destruir_el_ENARM_-_Entrevist.json",
+      "timestamp": "2026-02-24T13:06:05.988939",
+      "entries": 68,
+      "corrected": 20
+    },
+    {
+      "file": "Preguntas_del_Examen_de_Ingreso_para_Residencia_Me.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Preguntas_del_Examen_de_Ingreso_para_Residencia_Me.json",
+      "timestamp": "2026-02-24T15:16:48.771993",
+      "entries": 273,
+      "corrected": 84
+    },
+    {
+      "file": "_Mi_SUE_O_era_SER_PROGRAMADOR____La_enTECHvista__3.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_Mi_SUE_O_era_SER_PROGRAMADOR____La_enTECHvista__3.json",
+      "timestamp": "2026-02-24T19:06:18.401961",
+      "entries": 395,
+      "corrected": 230
+    },
+    {
+      "file": "COMO_PASAR_EL_ENARM_TE_EXPLICO_MI_EXPERIENCIA___wH.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/COMO_PASAR_EL_ENARM_TE_EXPLICO_MI_EXPERIENCIA___wH.json",
+      "timestamp": "2026-02-24T19:21:48.596692",
+      "entries": 47,
+      "corrected": 9
+    },
+    {
+      "file": "_He_le_do__1_000_libros_sobre__xito___Estas_son_la.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_He_le_do__1_000_libros_sobre__xito___Estas_son_la.json",
+      "timestamp": "2026-02-24T21:23:22.951039",
+      "entries": 436,
+      "corrected": 5
+    },
+    {
+      "file": "PREGUNTAS_OBLIGADAS_ENARM_P1__d1e7YsH9GFY_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/PREGUNTAS_OBLIGADAS_ENARM_P1__d1e7YsH9GFY_.json",
+      "timestamp": "2026-02-24T21:47:05.764041",
+      "entries": 134,
+      "corrected": 32
+    },
+    {
+      "file": "VALVULOPATIAS_-_ENARM__I3ADwc2foHs_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/VALVULOPATIAS_-_ENARM__I3ADwc2foHs_.json",
+      "timestamp": "2026-02-24T22:21:01.033517",
+      "entries": 154,
+      "corrected": 54
+    },
+    {
+      "file": "Podcast_-_El_cambio_climatico__7lD7fnOd9u4_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Podcast_-_El_cambio_climatico__7lD7fnOd9u4_.json",
+      "timestamp": "2026-02-24T23:08:20.567093",
+      "entries": 105,
+      "corrected": 46
+    },
+    {
+      "file": "Neumonia_2022_Diplomado_Medicina_Interna__5G3aGFme.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Neumonia_2022_Diplomado_Medicina_Interna__5G3aGFme.json",
+      "timestamp": "2026-02-25T01:15:37.939142",
+      "entries": 225,
+      "corrected": 138
+    },
+    {
+      "file": "Alfredo_Cuaron_biologo__Cozumel_la_isla_que_enamor.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Alfredo_Cuaron_biologo__Cozumel_la_isla_que_enamor.json",
+      "timestamp": "2026-02-25T03:30:45.572554",
+      "entries": 201,
+      "corrected": 80
+    },
+    {
+      "file": "Estandarizacion_en_certificacion_de_especialistas_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Estandarizacion_en_certificacion_de_especialistas_.json",
+      "timestamp": "2026-02-25T03:45:47.439758",
+      "entries": 42,
+      "corrected": 18
+    },
+    {
+      "file": "5_tips_para_empezar_tu_consultorio_online_como_psi.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/5_tips_para_empezar_tu_consultorio_online_como_psi.json",
+      "timestamp": "2026-02-25T04:14:29.977799",
+      "entries": 55,
+      "corrected": 30
+    },
+    {
+      "file": "Guias_SCA_2025_-_Cambios_Clave_Explicados_en_20_Mi.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Guias_SCA_2025_-_Cambios_Clave_Explicados_en_20_Mi.json",
+      "timestamp": "2026-02-25T04:39:22.140124",
+      "entries": 71,
+      "corrected": 41
+    },
+    {
+      "file": "MAURICIO_HOYOS___Mejores_consejos_de_Negocios___xi.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/MAURICIO_HOYOS___Mejores_consejos_de_Negocios___xi.json",
+      "timestamp": "2026-02-25T04:41:46.050631",
+      "entries": 255,
+      "corrected": 4
+    },
+    {
+      "file": "La_Mejor_CIRUJANA_PLASTICA_ESTUDIE_16_ANOS_7_Medic.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/La_Mejor_CIRUJANA_PLASTICA_ESTUDIE_16_ANOS_7_Medic.json",
+      "timestamp": "2026-02-25T06:37:40.792231",
+      "entries": 262,
+      "corrected": 128
+    },
+    {
+      "file": "URGENCIAS__REPASO_ENARM_2017_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/URGENCIAS__REPASO_ENARM_2017_.json",
+      "timestamp": "2026-02-25T08:09:25.241418",
+      "entries": 195,
+      "corrected": 164
+    },
+    {
+      "file": "Nutrici_n_Deportiva__Absorci_n_de_Prote_na__Entren.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Nutrici_n_Deportiva__Absorci_n_de_Prote_na__Entren.json",
+      "timestamp": "2026-02-25T08:28:46.970697",
+      "entries": 83,
+      "corrected": 6
+    },
+    {
+      "file": "COMO_DESAYUNAR_ALMORZAR_y_CENAR_SALUDABLEMENTE__qo.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/COMO_DESAYUNAR_ALMORZAR_y_CENAR_SALUDABLEMENTE__qo.json",
+      "timestamp": "2026-02-25T08:44:43.148349",
+      "entries": 52,
+      "corrected": 24
+    },
+    {
+      "file": "Casos_cl_nicos_-_Gastro_Cirug_a_General_ENARM_sept.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Casos_cl_nicos_-_Gastro_Cirug_a_General_ENARM_sept.json",
+      "timestamp": "2026-02-25T09:22:50.362808",
+      "entries": 83,
+      "corrected": 41
+    },
+    {
+      "file": "Newton_y_la_motivacion_que_todos_necesitamos_-_CIE.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Newton_y_la_motivacion_que_todos_necesitamos_-_CIE.json",
+      "timestamp": "2026-02-25T10:14:01.685653",
+      "entries": 138,
+      "corrected": 69
+    },
+    {
+      "file": "How_to_Raise_Startup_Funding__EVERYTHING_You_Need_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/How_to_Raise_Startup_Funding__EVERYTHING_You_Need_.json",
+      "timestamp": "2026-02-25T10:55:26.765475",
+      "entries": 47,
+      "corrected": 39
+    },
+    {
+      "file": "Como_escoger_una_especialidad_en_medicina__J_7j29Z.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Como_escoger_una_especialidad_en_medicina__J_7j29Z.json",
+      "timestamp": "2026-02-25T11:26:11.055206",
+      "entries": 46,
+      "corrected": 14
+    },
+    {
+      "file": "MEXICO_celebra_a_los_MUERTOS_Documental_4K__lraohD.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/MEXICO_celebra_a_los_MUERTOS_Documental_4K__lraohD.json",
+      "timestamp": "2026-02-25T11:49:21.062154",
+      "entries": 60,
+      "corrected": 28
+    },
+    {
+      "file": "Emprender__todo_lo_que_debes_saber_para_triunfar__.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Emprender__todo_lo_que_debes_saber_para_triunfar__.json",
+      "timestamp": "2026-02-25T11:49:21.062793",
+      "entries": 0,
+      "corrected": 0
+    },
+    {
+      "file": "Mi_plan_de_estudio_con_el_que_saque_80_en_el_ENARM.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Mi_plan_de_estudio_con_el_que_saque_80_en_el_ENARM.json",
+      "timestamp": "2026-02-25T12:06:53.109186",
+      "entries": 95,
+      "corrected": 35
+    },
+    {
+      "file": "El_intestino_-_Un_centro_de_control_subestimado___.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/El_intestino_-_Un_centro_de_control_subestimado___.json",
+      "timestamp": "2026-02-25T13:07:32.671684",
+      "entries": 158,
+      "corrected": 88
+    },
+    {
+      "file": "Especiales_del_Once_-_Hospital_General_de_Mexico__.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Especiales_del_Once_-_Hospital_General_de_Mexico__.json",
+      "timestamp": "2026-02-25T13:48:08.214615",
+      "entries": 97,
+      "corrected": 38
+    },
+    {
+      "file": "Asi_suena_el_regional_MEXICANO_en_NAHUATL__3owMlWU.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Asi_suena_el_regional_MEXICANO_en_NAHUATL__3owMlWU.json",
+      "timestamp": "2026-02-25T14:11:20.372579",
+      "entries": 138,
+      "corrected": 31
+    },
+    {
+      "file": "El_arte_de_ahorrar_bien__ft__Finamex____Dimes_y_bi.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/El_arte_de_ahorrar_bien__ft__Finamex____Dimes_y_bi.json",
+      "timestamp": "2026-02-25T14:12:55.723235",
+      "entries": 251,
+      "corrected": 5
+    },
+    {
+      "file": "EL__LTIMO_Consejo_de_Jack_Ma_para_emprendedores__q.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/EL__LTIMO_Consejo_de_Jack_Ma_para_emprendedores__q.json",
+      "timestamp": "2026-02-25T14:19:57.750815",
+      "entries": 21,
+      "corrected": 13
+    },
+    {
+      "file": "Armas_de_destrucci_n_masiva__Qu_mica_y_Experimento.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Armas_de_destrucci_n_masiva__Qu_mica_y_Experimento.json",
+      "timestamp": "2026-02-25T21:50:02.358712",
+      "entries": 326,
+      "corrected": 284
+    },
+    {
+      "file": "processed_videos.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/processed_videos.json",
+      "timestamp": "2026-02-25T21:50:02.360034",
+      "entries": 1,
+      "corrected": 0
+    },
+    {
+      "file": "La_EXISTENCIA_y_ENCUENTROS_EXTRATERRESTRES_FEPO_PO.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/La_EXISTENCIA_y_ENCUENTROS_EXTRATERRESTRES_FEPO_PO.json",
+      "timestamp": "2026-02-26T00:56:53.383739",
+      "entries": 447,
+      "corrected": 263
+    },
+    {
+      "file": "Certificacion_medica_250318__BYAQmSiaTDU_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Certificacion_medica_250318__BYAQmSiaTDU_.json",
+      "timestamp": "2026-02-26T01:49:33.760738",
+      "entries": 58,
+      "corrected": 18
+    },
+    {
+      "file": "Emprender_es_f_cil_si_pasas_a_la_acci_n___Luis_Ram.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Emprender_es_f_cil_si_pasas_a_la_acci_n___Luis_Ram.json",
+      "timestamp": "2026-02-26T02:09:11.336081",
+      "entries": 45,
+      "corrected": 38
+    },
+    {
+      "file": "V__Completa__Historias_asombrosas_sobre_la_ciencia.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/V__Completa__Historias_asombrosas_sobre_la_ciencia.json",
+      "timestamp": "2026-02-26T03:19:20.293250",
+      "entries": 207,
+      "corrected": 87
+    },
+    {
+      "file": "La_Gran_Mentira_de_la_Inteligencia_Artificial_Que_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/La_Gran_Mentira_de_la_Inteligencia_Artificial_Que_.json",
+      "timestamp": "2026-02-26T03:24:15.325534",
+      "entries": 267,
+      "corrected": 7
+    },
+    {
+      "file": "Experto_en_Cerebro__3_h_bitos_que_transforman_un_C.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Experto_en_Cerebro__3_h_bitos_que_transforman_un_C.json",
+      "timestamp": "2026-02-26T08:27:36.071293",
+      "entries": 424,
+      "corrected": 320
+    },
+    {
+      "file": "Entrevista_La_Certificacion_de_Especialistas_Medic.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Entrevista_La_Certificacion_de_Especialistas_Medic.json",
+      "timestamp": "2026-02-26T08:46:59.894382",
+      "entries": 59,
+      "corrected": 22
+    },
+    {
+      "file": "Arturo_El_as_Ayub__Lecciones_de_Negocios__Dinero_y.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Arturo_El_as_Ayub__Lecciones_de_Negocios__Dinero_y.json",
+      "timestamp": "2026-02-26T10:59:33.006402",
+      "entries": 346,
+      "corrected": 143
+    },
+    {
+      "file": "Cuando_me_maltrataron_en_urgencias_Mi_experiencia_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Cuando_me_maltrataron_en_urgencias_Mi_experiencia_.json",
+      "timestamp": "2026-02-26T11:35:36.373721",
+      "entries": 47,
+      "corrected": 24
+    },
+    {
+      "file": "The_Commit_Show__3_ft__s4vitar_____Qu__significa_s.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/The_Commit_Show__3_ft__s4vitar_____Qu__significa_s.json",
+      "timestamp": "2026-02-26T20:52:42.160366",
+      "entries": 443,
+      "corrected": 404
+    },
+    {
+      "file": "Focus_Group_ENARM_2025_Consejos_experiencias_y_tip.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Focus_Group_ENARM_2025_Consejos_experiencias_y_tip.json",
+      "timestamp": "2026-02-26T21:05:57.008324",
+      "entries": 107,
+      "corrected": 17
+    },
+    {
+      "file": "Nueva_Guia_EPOC_GOLD_2025_en_25_minutos_AlDiaconla.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Nueva_Guia_EPOC_GOLD_2025_en_25_minutos_AlDiaconla.json",
+      "timestamp": "2026-02-26T21:54:10.599018",
+      "entries": 116,
+      "corrected": 64
+    },
+    {
+      "file": "Taller_de_casos_clinicos_ENARM__1.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Taller_de_casos_clinicos_ENARM__1.json",
+      "timestamp": "2026-02-26T23:42:37.918625",
+      "entries": 301,
+      "corrected": 106
+    },
+    {
+      "file": "PREGUNTAS_y_RESPUESTAS_comentadas_del_examen_MIR_2.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/PREGUNTAS_y_RESPUESTAS_comentadas_del_examen_MIR_2.json",
+      "timestamp": "2026-02-26T23:44:22.014693",
+      "entries": 79,
+      "corrected": 19
+    },
+    {
+      "file": "As__es_como_recuerdo_TODO_lo_que_aprendo_en_Medici.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/As__es_como_recuerdo_TODO_lo_que_aprendo_en_Medici.json",
+      "timestamp": "2026-02-26T23:57:26.559113",
+      "entries": 85,
+      "corrected": 38
+    },
+    {
+      "file": "Finanzas_personales_en_Estados_Unidos___Dimes_y_Bi.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Finanzas_personales_en_Estados_Unidos___Dimes_y_Bi.json",
+      "timestamp": "2026-02-26T23:57:31.479362",
+      "entries": 340,
+      "corrected": 0
+    },
+    {
+      "file": "EVC_Isquemico_GPC_102_114_331_Podcast_ENARM_2025_M.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/EVC_Isquemico_GPC_102_114_331_Podcast_ENARM_2025_M.json",
+      "timestamp": "2026-02-26T23:57:32.183266",
+      "entries": 53,
+      "corrected": 0
+    },
+    {
+      "file": "Casos_clinicos_-_Gastroenterolog_a_y_Cirug_a_Gener.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Casos_clinicos_-_Gastroenterolog_a_y_Cirug_a_Gener.json",
+      "timestamp": "2026-02-26T23:57:32.856648",
+      "entries": 48,
+      "corrected": 0
+    },
+    {
+      "file": "Avances_Cientificos_Cambiaran_el_Mundo_en_2024_-_C.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Avances_Cientificos_Cambiaran_el_Mundo_en_2024_-_C.json",
+      "timestamp": "2026-02-26T23:57:34.503995",
+      "entries": 116,
+      "corrected": 0
+    },
+    {
+      "file": "Repaso_de_Casos_Cl_nicos___ENARM_2025__.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Repaso_de_Casos_Cl_nicos___ENARM_2025__.json",
+      "timestamp": "2026-02-26T23:57:40.272325",
+      "entries": 404,
+      "corrected": 0
+    },
+    {
+      "file": "Estrategias_para_Administrar_tu_Consultorio_o_Clin.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Estrategias_para_Administrar_tu_Consultorio_o_Clin.json",
+      "timestamp": "2026-02-26T23:57:42.875194",
+      "entries": 182,
+      "corrected": 0
+    },
+    {
+      "file": "Casos_Cl_nicos_Pediatr_a_Cardioacademic_2020.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Casos_Cl_nicos_Pediatr_a_Cardioacademic_2020.json",
+      "timestamp": "2026-02-26T23:57:45.543527",
+      "entries": 190,
+      "corrected": 0
+    },
+    {
+      "file": "CASOS_CL_NICOS_CIRUGIA_-_REPASO_ENARM.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/CASOS_CL_NICOS_CIRUGIA_-_REPASO_ENARM.json",
+      "timestamp": "2026-02-26T23:57:47.658319",
+      "entries": 170,
+      "corrected": 0
+    },
+    {
+      "file": "Asi_es_mi_rutina_como_Medico_Pasante_de_Servicio_S.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Asi_es_mi_rutina_como_Medico_Pasante_de_Servicio_S.json",
+      "timestamp": "2026-02-26T23:57:48.863509",
+      "entries": 84,
+      "corrected": 0
+    },
+    {
+      "file": "Entramos_a_las_Favelas_de_Ecatepec_Documental_Yula.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Entramos_a_las_Favelas_de_Ecatepec_Documental_Yula.json",
+      "timestamp": "2026-02-26T23:57:49.627710",
+      "entries": 54,
+      "corrected": 0
+    },
+    {
+      "file": "C_mo_Invertir_en_Bienes_Ra_ces_en_2026__Paso_a_Pas.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/C_mo_Invertir_en_Bienes_Ra_ces_en_2026__Paso_a_Pas.json",
+      "timestamp": "2026-02-26T23:57:49.881359",
+      "entries": 361,
+      "corrected": 0
+    },
+    {
+      "file": "Preguntas_y_respuestas_sobre_URGENCIAS_M_DICAS___R.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Preguntas_y_respuestas_sobre_URGENCIAS_M_DICAS___R.json",
+      "timestamp": "2026-02-26T23:57:50.569707",
+      "entries": 48,
+      "corrected": 0
+    },
+    {
+      "file": "Perfil_del_Medico_General_Mexicano_-_Martha_D__Cer.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Perfil_del_Medico_General_Mexicano_-_Martha_D__Cer.json",
+      "timestamp": "2026-02-26T23:57:53.799652",
+      "entries": 226,
+      "corrected": 0
+    },
+    {
+      "file": "Preguntas_de_FARMACOLOG_A_lecci_n_oral.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Preguntas_de_FARMACOLOG_A_lecci_n_oral.json",
+      "timestamp": "2026-02-26T23:57:54.234848",
+      "entries": 32,
+      "corrected": 0
+    },
+    {
+      "file": "Descubrete__Podcast_25_Construyendo_el_ecosistema_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Descubrete__Podcast_25_Construyendo_el_ecosistema_.json",
+      "timestamp": "2026-02-26T23:57:56.116585",
+      "entries": 137,
+      "corrected": 5
+    },
+    {
+      "file": "The_Wild_Project__172_ft_Antonio_Fernandes__Hacker.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/The_Wild_Project__172_ft_Antonio_Fernandes__Hacker.json",
+      "timestamp": "2026-02-26T23:58:06.712960",
+      "entries": 705,
+      "corrected": 0
+    },
+    {
+      "file": "_212_-_Tus_DATOS_est_n_en_la_Dark_Web__Experto_en_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_212_-_Tus_DATOS_est_n_en_la_Dark_Web__Experto_en_.json",
+      "timestamp": "2026-02-26T23:58:06.997360",
+      "entries": 275,
+      "corrected": 0
+    },
+    {
+      "file": "El_Ministerio_41_-_Reggaeton_en_Veracruz_Fullbrand.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/El_Ministerio_41_-_Reggaeton_en_Veracruz_Fullbrand.json",
+      "timestamp": "2026-02-26T23:58:09.658852",
+      "entries": 192,
+      "corrected": 0
+    },
+    {
+      "file": "Experto_en_Nutrici_n__7_Comidas_m_s_Saludables_par.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Experto_en_Nutrici_n__7_Comidas_m_s_Saludables_par.json",
+      "timestamp": "2026-02-26T23:58:09.894216",
+      "entries": 360,
+      "corrected": 0
+    },
+    {
+      "file": "Qu__es_Marketing__Con_un_Verdadero_Experto__Roland.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Qu__es_Marketing__Con_un_Verdadero_Experto__Roland.json",
+      "timestamp": "2026-02-26T23:58:15.606315",
+      "entries": 404,
+      "corrected": 0
+    },
+    {
+      "file": "Hacker_Profesional__Ciberdelincuencia_y_los_Secret.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Hacker_Profesional__Ciberdelincuencia_y_los_Secret.json",
+      "timestamp": "2026-02-26T23:58:15.735032",
+      "entries": 250,
+      "corrected": 0
+    },
+    {
+      "file": "10_Poderosos_Tips_de_HEALTH_MARKETING_que_te_ayuda.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/10_Poderosos_Tips_de_HEALTH_MARKETING_que_te_ayuda.json",
+      "timestamp": "2026-02-26T23:58:16.508011",
+      "entries": 53,
+      "corrected": 0
+    },
+    {
+      "file": "TODA_LA_VERDAD_sobre_el_MARKETING_DIGITAL_2025_-_B.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/TODA_LA_VERDAD_sobre_el_MARKETING_DIGITAL_2025_-_B.json",
+      "timestamp": "2026-02-26T23:58:19.502555",
+      "entries": 239,
+      "corrected": 0
+    },
+    {
+      "file": "Experto_en_Ciberseguridad__Google_y_Alexa_TE_ESCUC.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Experto_en_Ciberseguridad__Google_y_Alexa_TE_ESCUC.json",
+      "timestamp": "2026-02-26T23:58:19.660973",
+      "entries": 297,
+      "corrected": 0
+    },
+    {
+      "file": "UPC_Adrian_Marcelo_y_Martin_Eastwood__JT7ao8fo4iw_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/UPC_Adrian_Marcelo_y_Martin_Eastwood__JT7ao8fo4iw_.json",
+      "timestamp": "2026-02-26T23:58:26.224526",
+      "entries": 447,
+      "corrected": 0
+    },
+    {
+      "file": "Clases_de_Ciberseguridad__Ep__18___AS__COMO_SUENA_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Clases_de_Ciberseguridad__Ep__18___AS__COMO_SUENA_.json",
+      "timestamp": "2026-02-26T23:58:29.401007",
+      "entries": 204,
+      "corrected": 0
+    },
+    {
+      "file": "El_gen_emprendedor___Luis_Ramos___TEDxPlazaFundado.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/El_gen_emprendedor___Luis_Ramos___TEDxPlazaFundado.json",
+      "timestamp": "2026-02-26T23:58:29.593547",
+      "entries": 84,
+      "corrected": 0
+    },
+    {
+      "file": "Neurobiologia_del_Amor_Eduardo_Arizaga_TEDxUSFQ__k.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Neurobiologia_del_Amor_Eduardo_Arizaga_TEDxUSFQ__k.json",
+      "timestamp": "2026-02-26T23:58:30.518572",
+      "entries": 56,
+      "corrected": 0
+    },
+    {
+      "file": "all_tts_manifest.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/all_tts_manifest.json",
+      "timestamp": "2026-02-27T02:16:35.828109",
+      "entries": 46977,
+      "corrected": 3651
+    },
+    {
+      "file": "Making_____with_MicroSaaS__I_might_delete_this_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Making_____with_MicroSaaS__I_might_delete_this_.json",
+      "timestamp": "2026-02-27T02:16:37.988114",
+      "entries": 146,
+      "corrected": 0
+    },
+    {
+      "file": "Una_Conversaci_n_Sin_Filtros_con_Mauricio_Fern_nde.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Una_Conversaci_n_Sin_Filtros_con_Mauricio_Fern_nde.json",
+      "timestamp": "2026-02-27T02:16:37.990229",
+      "entries": 0,
+      "corrected": 0
+    },
+    {
+      "file": "C_mo_Conseguir_Trabajo_en_Tecnolog_a_y_Startups___.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/C_mo_Conseguir_Trabajo_en_Tecnolog_a_y_Startups___.json",
+      "timestamp": "2026-02-27T02:16:38.135169",
+      "entries": 443,
+      "corrected": 0
+    },
+    {
+      "file": "Peter_Thiel__Going_from_Zero_to_One.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Peter_Thiel__Going_from_Zero_to_One.json",
+      "timestamp": "2026-02-27T02:16:38.365517",
+      "entries": 76,
+      "corrected": 0
+    },
+    {
+      "file": "PODCAST_-_PERSPECTIVAS_PSICOPATOLOGICAS_ANALICIS_C.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/PODCAST_-_PERSPECTIVAS_PSICOPATOLOGICAS_ANALICIS_C.json",
+      "timestamp": "2026-02-27T02:16:40.781714",
+      "entries": 175,
+      "corrected": 0
+    },
+    {
+      "file": "MEDICINA_INTERNA_TEMAS_NUEVOS_SOLUCION_BANCO_DE_PR.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/MEDICINA_INTERNA_TEMAS_NUEVOS_SOLUCION_BANCO_DE_PR.json",
+      "timestamp": "2026-02-27T02:16:44.015547",
+      "entries": 246,
+      "corrected": 2
+    },
+    {
+      "file": "Un_Viaje_EXCEPCIONAL_al_SISTEMA_SOLAR_Documental_E.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Un_Viaje_EXCEPCIONAL_al_SISTEMA_SOLAR_Documental_E.json",
+      "timestamp": "2026-02-27T02:16:49.239306",
+      "entries": 363,
+      "corrected": 0
+    },
+    {
+      "file": "CiberMexico_-_Exitos_y_retos_con_Eleazar_Aguirre_R.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/CiberMexico_-_Exitos_y_retos_con_Eleazar_Aguirre_R.json",
+      "timestamp": "2026-02-27T02:16:51.961349",
+      "entries": 211,
+      "corrected": 3
+    },
+    {
+      "file": "C_mo_Lograr_la_Libertad_Financiera_y_Aumentar_tu_R.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/C_mo_Lograr_la_Libertad_Financiera_y_Aumentar_tu_R.json",
+      "timestamp": "2026-02-27T02:16:52.353165",
+      "entries": 519,
+      "corrected": 0
+    },
+    {
+      "file": "El_descubrimiento_que_nos_cambio_la_vida_-_Cosmos_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/El_descubrimiento_que_nos_cambio_la_vida_-_Cosmos_.json",
+      "timestamp": "2026-02-27T02:16:53.017609",
+      "entries": 46,
+      "corrected": 0
+    },
+    {
+      "file": "_225_-_Las_10_Claves_para_Vivir_120_A_OS_SIN_ENFER.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_225_-_Las_10_Claves_para_Vivir_120_A_OS_SIN_ENFER.json",
+      "timestamp": "2026-02-27T02:16:53.562030",
+      "entries": 366,
+      "corrected": 0
+    },
+    {
+      "file": "_Investigo_muertes_para_hacer_justicia__Soy_Perito.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_Investigo_muertes_para_hacer_justicia__Soy_Perito.json",
+      "timestamp": "2026-02-27T02:16:53.689284",
+      "entries": 240,
+      "corrected": 0
+    },
+    {
+      "file": "Az_car_y_aditivos_-_El_lado_oscuro_de_la_industria.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Az_car_y_aditivos_-_El_lado_oscuro_de_la_industria.json",
+      "timestamp": "2026-02-27T02:16:55.399768",
+      "entries": 114,
+      "corrected": 0
+    },
+    {
+      "file": "Reuni_n_Privada_de_CEO_s__LATAM__Heineken__Prodac_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Reuni_n_Privada_de_CEO_s__LATAM__Heineken__Prodac_.json",
+      "timestamp": "2026-02-27T02:17:02.732376",
+      "entries": 471,
+      "corrected": 0
+    },
+    {
+      "file": "C_mo_Mantener_Conversaciones_Interesantes__Gu_a_De.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/C_mo_Mantener_Conversaciones_Interesantes__Gu_a_De.json",
+      "timestamp": "2026-02-27T02:17:03.398410",
+      "entries": 46,
+      "corrected": 0
+    },
+    {
+      "file": "PERSUADE_Y_LIDERA_Las_Claves_del_LIDERAZGO_CARISMA.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/PERSUADE_Y_LIDERA_Las_Claves_del_LIDERAZGO_CARISMA.json",
+      "timestamp": "2026-02-27T02:17:04.838712",
+      "entries": 103,
+      "corrected": 0
+    },
+    {
+      "file": "PODCAST_-_PROGRAMACI_N__BASES_Y_FUNDAMENTOS.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/PODCAST_-_PROGRAMACI_N__BASES_Y_FUNDAMENTOS.json",
+      "timestamp": "2026-02-27T02:17:07.842367",
+      "entries": 207,
+      "corrected": 0
+    },
+    {
+      "file": "_M_DICO_cuenta_c_mo_es_trabajar_en_TERAPIA_INTENSI.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_M_DICO_cuenta_c_mo_es_trabajar_en_TERAPIA_INTENSI.json",
+      "timestamp": "2026-02-27T02:17:07.997706",
+      "entries": 484,
+      "corrected": 0
+    },
+    {
+      "file": "voice_bank.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/voice_bank.json",
+      "timestamp": "2026-02-27T02:17:08.001756",
+      "entries": 0,
+      "corrected": 0
+    },
+    {
+      "file": "V__Completa__La_ciencia_de_la_vida_cotidiana__Dieg.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/V__Completa__La_ciencia_de_la_vida_cotidiana__Dieg.json",
+      "timestamp": "2026-02-27T02:17:13.105104",
+      "entries": 391,
+      "corrected": 9
+    },
+    {
+      "file": "GU_A_COMPLETA__INTELIGENCIA_ARTIFICIAL_para_EMPREN.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/GU_A_COMPLETA__INTELIGENCIA_ARTIFICIAL_para_EMPREN.json",
+      "timestamp": "2026-02-27T02:17:21.367946",
+      "entries": 548,
+      "corrected": 0
+    },
+    {
+      "file": "Mesa_Redonda_AIQ2025_Ano_Internacional_de_la_Cienc.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Mesa_Redonda_AIQ2025_Ano_Internacional_de_la_Cienc.json",
+      "timestamp": "2026-02-27T02:17:24.851626",
+      "entries": 187,
+      "corrected": 0
+    },
+    {
+      "file": "_Negligencias_en_el_hospital_e_historias_que_se_pr.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_Negligencias_en_el_hospital_e_historias_que_se_pr.json",
+      "timestamp": "2026-02-27T02:17:25.143116",
+      "entries": 288,
+      "corrected": 0
+    },
+    {
+      "file": "3_PILARES_para_Administrar_un_Consultorio_Medico__.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/3_PILARES_para_Administrar_un_Consultorio_Medico__.json",
+      "timestamp": "2026-02-27T02:17:26.217114",
+      "entries": 44,
+      "corrected": 0
+    },
+    {
+      "file": "An_lisis_de_casos_cl_nicos_Ginecolog_a_y_Obstetric.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/An_lisis_de_casos_cl_nicos_Ginecolog_a_y_Obstetric.json",
+      "timestamp": "2026-02-27T02:17:30.388639",
+      "entries": 189,
+      "corrected": 0
+    },
+    {
+      "file": "Todo_Reborujado_T1_E6_Regionalismos__3D43nMck54g_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Todo_Reborujado_T1_E6_Regionalismos__3D43nMck54g_.json",
+      "timestamp": "2026-02-27T02:17:32.743506",
+      "entries": 176,
+      "corrected": 2
+    },
+    {
+      "file": "Optimiza_TU_CUERPO__nutrici_n_y_entrenamiento_INTE.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Optimiza_TU_CUERPO__nutrici_n_y_entrenamiento_INTE.json",
+      "timestamp": "2026-02-27T02:17:38.026312",
+      "entries": 363,
+      "corrected": 0
+    },
+    {
+      "file": "TODO_sobre_HIGIENE_Basica_en_el_HOMBRE_DrPoloGuerr.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/TODO_sobre_HIGIENE_Basica_en_el_HOMBRE_DrPoloGuerr.json",
+      "timestamp": "2026-02-27T02:17:38.918443",
+      "entries": 59,
+      "corrected": 0
+    },
+    {
+      "file": "TIPS_BASICOS_PARA_DAR_UNA_CONSULTA_MEDICA_AL__Jdwe.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/TIPS_BASICOS_PARA_DAR_UNA_CONSULTA_MEDICA_AL__Jdwe.json",
+      "timestamp": "2026-02-27T02:17:38.919768",
+      "entries": 46,
+      "corrected": 0
+    },
+    {
+      "file": "Tijuana_Streets_at_Night_Zona_Norte_4K__Z79LTTa85p.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Tijuana_Streets_at_Night_Zona_Norte_4K__Z79LTTa85p.json",
+      "timestamp": "2026-02-27T02:17:38.920604",
+      "entries": 0,
+      "corrected": 0
+    },
+    {
+      "file": "_Realizo_NECROPSIAS___mis_experiencias_paranormale.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_Realizo_NECROPSIAS___mis_experiencias_paranormale.json",
+      "timestamp": "2026-02-27T02:17:42.214945",
+      "entries": 226,
+      "corrected": 0
+    },
+    {
+      "file": "1_CLASE_GRATUITA_DIPLOMADO_ESPECIALIZADO_EN_SEGURI.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/1_CLASE_GRATUITA_DIPLOMADO_ESPECIALIZADO_EN_SEGURI.json",
+      "timestamp": "2026-02-27T02:17:47.468428",
+      "entries": 367,
+      "corrected": 0
+    },
+    {
+      "file": "TODA_LA_VERDAD_MEDICO_PASANTE_SERVICIO_SOCIAL_EN_M.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/TODA_LA_VERDAD_MEDICO_PASANTE_SERVICIO_SOCIAL_EN_M.json",
+      "timestamp": "2026-02-27T02:17:48.235243",
+      "entries": 54,
+      "corrected": 0
+    },
+    {
+      "file": "LIVE_Webinar___Casos_Cli_nicos_Ortopedia_062923.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/LIVE_Webinar___Casos_Cli_nicos_Ortopedia_062923.json",
+      "timestamp": "2026-02-27T02:17:49.073843",
+      "entries": 61,
+      "corrected": 0
+    },
+    {
+      "file": "The_Truth_About_Building_AI_Startups_Today.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/The_Truth_About_Building_AI_Startups_Today.json",
+      "timestamp": "2026-02-27T02:17:49.189789",
+      "entries": 140,
+      "corrected": 0
+    },
+    {
+      "file": "ECO-MENTES_-_El_podcast_de_ECOCE_sobre_reciclaje_s.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/ECO-MENTES_-_El_podcast_de_ECOCE_sobre_reciclaje_s.json",
+      "timestamp": "2026-02-27T02:17:51.866163",
+      "entries": 189,
+      "corrected": 0
+    },
+    {
+      "file": "Primer_ano_de_residencia_medica_R1_ventajas_desven.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Primer_ano_de_residencia_medica_R1_ventajas_desven.json",
+      "timestamp": "2026-02-27T02:17:52.985878",
+      "entries": 86,
+      "corrected": 1
+    },
+    {
+      "file": "Experto_en_Programaci_n__Inteligencia_Artificial_y.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Experto_en_Programaci_n__Inteligencia_Artificial_y.json",
+      "timestamp": "2026-02-27T02:17:53.125259",
+      "entries": 275,
+      "corrected": 0
+    },
+    {
+      "file": "Casos_Clinicos_GOB_I_DPPNI__Inminencia_Ruptura_Ute.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Casos_Clinicos_GOB_I_DPPNI__Inminencia_Ruptura_Ute.json",
+      "timestamp": "2026-02-27T02:17:54.145389",
+      "entries": 69,
+      "corrected": 0
+    },
+    {
+      "file": "Inmortalidad_Tecnol_gica__Meta-Humanos__GPT5_y_el_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Inmortalidad_Tecnol_gica__Meta-Humanos__GPT5_y_el_.json",
+      "timestamp": "2026-02-27T02:17:57.728528",
+      "entries": 250,
+      "corrected": 0
+    },
+    {
+      "file": "V__Completa__Ciencia_fascinante_para_personas_curi.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/V__Completa__Ciencia_fascinante_para_personas_curi.json",
+      "timestamp": "2026-02-27T02:18:02.252841",
+      "entries": 313,
+      "corrected": 0
+    },
+    {
+      "file": "LO_QUE_PIENSO_DE_LOS_MEDICOS_MILITARES_STORYTIME_D.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/LO_QUE_PIENSO_DE_LOS_MEDICOS_MILITARES_STORYTIME_D.json",
+      "timestamp": "2026-02-27T02:18:03.047191",
+      "entries": 55,
+      "corrected": 0
+    },
+    {
+      "file": "V__Completa__Grandes_preguntas_sobre_el_dormir_y_e.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/V__Completa__Grandes_preguntas_sobre_el_dormir_y_e.json",
+      "timestamp": "2026-02-27T02:18:05.895879",
+      "entries": 199,
+      "corrected": 0
+    },
+    {
+      "file": "481__Preguntas_para_tener_conversaciones_profundas.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/481__Preguntas_para_tener_conversaciones_profundas.json",
+      "timestamp": "2026-02-27T02:18:07.343011",
+      "entries": 100,
+      "corrected": 0
+    },
+    {
+      "file": "Episodio_1990_Comer_Antes_O_Despues_Del_Ejercicio_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Episodio_1990_Comer_Antes_O_Despues_Del_Ejercicio_.json",
+      "timestamp": "2026-02-27T02:18:07.774102",
+      "entries": 27,
+      "corrected": 0
+    },
+    {
+      "file": "Reorientacion_de_los_Medicos_Generales_a_Medicos_F.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Reorientacion_de_los_Medicos_Generales_a_Medicos_F.json",
+      "timestamp": "2026-02-27T02:18:08.917776",
+      "entries": 77,
+      "corrected": 0
+    },
+    {
+      "file": "REPASO_ENARM_2025_-_GINECOLOGIA_Y_OBTETRICIA.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/REPASO_ENARM_2025_-_GINECOLOGIA_Y_OBTETRICIA.json",
+      "timestamp": "2026-02-27T02:18:13.895642",
+      "entries": 341,
+      "corrected": 0
+    },
+    {
+      "file": "Choque_en_urgencias__c_mo_reconocerlo_y_tratarlo__.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Choque_en_urgencias__c_mo_reconocerlo_y_tratarlo__.json",
+      "timestamp": "2026-02-27T02:18:14.283640",
+      "entries": 45,
+      "corrected": 0
+    },
+    {
+      "file": "Quiero_ser_residente_Traumatologia_y_ortopedia_2_0.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Quiero_ser_residente_Traumatologia_y_ortopedia_2_0.json",
+      "timestamp": "2026-02-27T02:18:16.119550",
+      "entries": 144,
+      "corrected": 1
+    },
+    {
+      "file": "V__Completa__Historias__mitos_y_contradicciones_de.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/V__Completa__Historias__mitos_y_contradicciones_de.json",
+      "timestamp": "2026-02-27T02:18:20.849437",
+      "entries": 322,
+      "corrected": 0
+    },
+    {
+      "file": "EL_SERVICIO_SOCIAL_EN_MEDICINA_EN_MEXICO__qnGN-iy-.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/EL_SERVICIO_SOCIAL_EN_MEDICINA_EN_MEXICO__qnGN-iy-.json",
+      "timestamp": "2026-02-27T02:18:21.412090",
+      "entries": 38,
+      "corrected": 0
+    },
+    {
+      "file": "Podcast_Medio_Ambiente__yqFYm7xAIT8_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Podcast_Medio_Ambiente__yqFYm7xAIT8_.json",
+      "timestamp": "2026-02-27T02:18:22.314099",
+      "entries": 58,
+      "corrected": 0
+    },
+    {
+      "file": "Experto_en_IA__C_mo_Usar_la_Inteligencia_Artificia.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Experto_en_IA__C_mo_Usar_la_Inteligencia_Artificia.json",
+      "timestamp": "2026-02-27T02:18:29.105113",
+      "entries": 468,
+      "corrected": 0
+    },
+    {
+      "file": "Innovacion_en_la_Certificacion_de_Establecimientos.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Innovacion_en_la_Certificacion_de_Establecimientos.json",
+      "timestamp": "2026-02-27T02:18:32.755357",
+      "entries": 249,
+      "corrected": 0
+    },
+    {
+      "file": "CREATIVO__505_-_FILOSOFANDO_CON_UNA_IA_A_LAS_2AM__.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/CREATIVO__505_-_FILOSOFANDO_CON_UNA_IA_A_LAS_2AM__.json",
+      "timestamp": "2026-02-27T02:18:32.880937",
+      "entries": 238,
+      "corrected": 0
+    },
+    {
+      "file": "Startups__Tendencias__Claves_de__xito_y_Opiniones_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Startups__Tendencias__Claves_de__xito_y_Opiniones_.json",
+      "timestamp": "2026-02-27T02:18:39.553457",
+      "entries": 458,
+      "corrected": 0
+    },
+    {
+      "file": "Nueva_Guia_Hipertension_Arterial_ESC_2024_AlDiaCon.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Nueva_Guia_Hipertension_Arterial_ESC_2024_AlDiaCon.json",
+      "timestamp": "2026-02-27T02:18:45.014341",
+      "entries": 378,
+      "corrected": 0
+    },
+    {
+      "file": "La_HISTORIA_de_BIMBO___Don_ROBERTO_SERVITJE__262.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/La_HISTORIA_de_BIMBO___Don_ROBERTO_SERVITJE__262.json",
+      "timestamp": "2026-02-27T02:18:48.537941",
+      "entries": 244,
+      "corrected": 0
+    },
+    {
+      "file": "Hablemos__SERIAMENTE__sobre_EL_AMOR_y_las_RELACION.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Hablemos__SERIAMENTE__sobre_EL_AMOR_y_las_RELACION.json",
+      "timestamp": "2026-02-27T02:18:51.739323",
+      "entries": 217,
+      "corrected": 0
+    },
+    {
+      "file": "Nacido_para_emprender_Marcus_Dantus_TEDxUniversida.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Nacido_para_emprender_Marcus_Dantus_TEDxUniversida.json",
+      "timestamp": "2026-02-27T02:18:52.168991",
+      "entries": 25,
+      "corrected": 0
+    },
+    {
+      "file": "HAZ_ESTO_Y_CONTESTAR_S_TU_CASO_CLINICO_EN_30seg__U.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/HAZ_ESTO_Y_CONTESTAR_S_TU_CASO_CLINICO_EN_30seg__U.json",
+      "timestamp": "2026-02-27T02:18:52.955913",
+      "entries": 50,
+      "corrected": 0
+    },
+    {
+      "file": "Controversias_en_la_certificacion_de_especialidade.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Controversias_en_la_certificacion_de_especialidade.json",
+      "timestamp": "2026-02-27T02:18:53.628040",
+      "entries": 43,
+      "corrected": 0
+    },
+    {
+      "file": "Mesa_redonda_Ciencia_y_Arte__FGrxfKZeuWk_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Mesa_redonda_Ciencia_y_Arte__FGrxfKZeuWk_.json",
+      "timestamp": "2026-02-27T02:18:57.261167",
+      "entries": 279,
+      "corrected": 1
+    },
+    {
+      "file": "MEDICINA_ESTETICA_buena_opcion_Dr_Merced_Serrano_n.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/MEDICINA_ESTETICA_buena_opcion_Dr_Merced_Serrano_n.json",
+      "timestamp": "2026-02-27T02:19:01.254188",
+      "entries": 275,
+      "corrected": 0
+    },
+    {
+      "file": "Podcast_-_Como_afrontar_las_crisis_migratorias_ori.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Podcast_-_Como_afrontar_las_crisis_migratorias_ori.json",
+      "timestamp": "2026-02-27T02:19:02.038332",
+      "entries": 53,
+      "corrected": 0
+    },
+    {
+      "file": "llm_cache.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/llm_cache.json",
+      "timestamp": "2026-02-27T02:19:02.068574",
+      "entries": 1,
+      "corrected": 0
+    },
+    {
+      "file": "_Las_AUTOPSIAS_m_s_dif_ciles__Fetos__Negligencias_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_Las_AUTOPSIAS_m_s_dif_ciles__Fetos__Negligencias_.json",
+      "timestamp": "2026-02-27T02:19:06.412970",
+      "entries": 317,
+      "corrected": 1
+    },
+    {
+      "file": "Secretos_de_la_neurociencia__Ana_Ibanez__rRFR6hqoJ.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Secretos_de_la_neurociencia__Ana_Ibanez__rRFR6hqoJ.json",
+      "timestamp": "2026-02-27T02:19:08.324537",
+      "entries": 132,
+      "corrected": 0
+    },
+    {
+      "file": "61_HISTORIAS_ATERRADORAS_del_METRO_de_la_CDMX___FT.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/61_HISTORIAS_ATERRADORAS_del_METRO_de_la_CDMX___FT.json",
+      "timestamp": "2026-02-27T02:19:11.616542",
+      "entries": 230,
+      "corrected": 0
+    },
+    {
+      "file": "TEC_Podcast_E20_-__Valen_la_pena_los__smartphones_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/TEC_Podcast_E20_-__Valen_la_pena_los__smartphones_.json",
+      "timestamp": "2026-02-27T02:19:14.344110",
+      "entries": 189,
+      "corrected": 0
+    },
+    {
+      "file": "Certificacion_y_Recertificacion_en_Neumologia_2021.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Certificacion_y_Recertificacion_en_Neumologia_2021.json",
+      "timestamp": "2026-02-27T02:19:21.353701",
+      "entries": 483,
+      "corrected": 0
+    },
+    {
+      "file": "SINCOPE___ECG_ANALIZANDO_CASOS_CLINICOS__4Shtq4GT2.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/SINCOPE___ECG_ANALIZANDO_CASOS_CLINICOS__4Shtq4GT2.json",
+      "timestamp": "2026-02-27T02:19:21.936401",
+      "entries": 48,
+      "corrected": 0
+    },
+    {
+      "file": "V__Completa__Una_clase_magistral_del_pionero_de_la.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/V__Completa__Una_clase_magistral_del_pionero_de_la.json",
+      "timestamp": "2026-02-27T02:19:24.102154",
+      "entries": 147,
+      "corrected": 0
+    },
+    {
+      "file": "_Una_NUEVA_VISI_N_de_la_PROGRAMACI_N____La_enTECHv.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_Una_NUEVA_VISI_N_de_la_PROGRAMACI_N____La_enTECHv.json",
+      "timestamp": "2026-02-27T02:19:29.199755",
+      "entries": 357,
+      "corrected": 1
+    },
+    {
+      "file": "SECRETOS_para_avanzar_en_PROGRAMACI_N___Con__midud.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/SECRETOS_para_avanzar_en_PROGRAMACI_N___Con__midud.json",
+      "timestamp": "2026-02-27T02:19:29.605843",
+      "entries": 558,
+      "corrected": 0
+    },
+    {
+      "file": "Los_puntos_claves_para_empezar_un_negocio_con_Carl.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Los_puntos_claves_para_empezar_un_negocio_con_Carl.json",
+      "timestamp": "2026-02-27T02:19:33.131027",
+      "entries": 243,
+      "corrected": 0
+    },
+    {
+      "file": "10_consejos_para_tener_conversaciones_incre_bles.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/10_consejos_para_tener_conversaciones_incre_bles.json",
+      "timestamp": "2026-02-27T02:19:34.115913",
+      "entries": 66,
+      "corrected": 0
+    },
+    {
+      "file": "PONENCIA_ENARM__Ginecolog_a_y_obstetricia.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/PONENCIA_ENARM__Ginecolog_a_y_obstetricia.json",
+      "timestamp": "2026-02-27T02:19:37.638319",
+      "entries": 245,
+      "corrected": 0
+    },
+    {
+      "file": "C_mo_reconfigurar_nuestro_cerebro_con_Marian_Rojas.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/C_mo_reconfigurar_nuestro_cerebro_con_Marian_Rojas.json",
+      "timestamp": "2026-02-27T02:19:40.862832",
+      "entries": 229,
+      "corrected": 0
+    },
+    {
+      "file": "Quebr__su_empresa__fue_taxista_y_volvi__a_empezar_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Quebr__su_empresa__fue_taxista_y_volvi__a_empezar_.json",
+      "timestamp": "2026-02-27T02:19:44.357118",
+      "entries": 243,
+      "corrected": 0
+    },
+    {
+      "file": "REPASO_ENARM_2O25_-_MEDICINA_INTERNA.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/REPASO_ENARM_2O25_-_MEDICINA_INTERNA.json",
+      "timestamp": "2026-02-27T02:19:50.635538",
+      "entries": 440,
+      "corrected": 0
+    },
+    {
+      "file": "_Vale_la_pena_ser_Programador_en_2025____Podcast__.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_Vale_la_pena_ser_Programador_en_2025____Podcast__.json",
+      "timestamp": "2026-02-27T02:19:50.761649",
+      "entries": 471,
+      "corrected": 0
+    },
+    {
+      "file": "_Qu__es_la_Psicolog_a_Positiva___Podcast__1_-_Prac.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_Qu__es_la_Psicolog_a_Positiva___Podcast__1_-_Prac.json",
+      "timestamp": "2026-02-27T02:19:52.916654",
+      "entries": 145,
+      "corrected": 0
+    },
+    {
+      "file": "C_mo_DEJAR_de_COMER_por_ANSIEDAD___-_Pamela_Berron.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/C_mo_DEJAR_de_COMER_por_ANSIEDAD___-_Pamela_Berron.json",
+      "timestamp": "2026-02-27T02:19:58.073290",
+      "entries": 360,
+      "corrected": 0
+    },
+    {
+      "file": "The_Commit_Show__1_ft__midudev____Qu__significa_se.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/The_Commit_Show__1_ft__midudev____Qu__significa_se.json",
+      "timestamp": "2026-02-27T02:20:06.816628",
+      "entries": 597,
+      "corrected": 0
+    },
+    {
+      "file": "MEGAREPASO_MEDICINA_INTERNA_10_10.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/MEGAREPASO_MEDICINA_INTERNA_10_10.json",
+      "timestamp": "2026-02-27T02:20:11.294727",
+      "entries": 305,
+      "corrected": 0
+    },
+    {
+      "file": "LIVE_ENARM__Casos_cli_nicos_-_Ginecologi_a_041824.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/LIVE_ENARM__Casos_cli_nicos_-_Ginecologi_a_041824.json",
+      "timestamp": "2026-02-27T02:20:11.415557",
+      "entries": 75,
+      "corrected": 0
+    },
+    {
+      "file": "50_Entrepreneurs_share_priceless_advice.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/50_Entrepreneurs_share_priceless_advice.json",
+      "timestamp": "2026-02-27T02:20:12.649179",
+      "entries": 85,
+      "corrected": 0
+    },
+    {
+      "file": "Traumatismo_Craneoencef_lico__ATLS__-_MedicMaps_-_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Traumatismo_Craneoencef_lico__ATLS__-_MedicMaps_-_.json",
+      "timestamp": "2026-02-27T02:20:13.548713",
+      "entries": 61,
+      "corrected": 0
+    },
+    {
+      "file": "Tumor_de_Wilms_GPC_304_Podcast_ENARM_2025_Mexico__.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Tumor_de_Wilms_GPC_304_Podcast_ENARM_2025_Mexico__.json",
+      "timestamp": "2026-02-27T02:20:14.139046",
+      "entries": 42,
+      "corrected": 0
+    },
+    {
+      "file": "Tutorial_de_inteligencia_artificial_para_cualquier.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Tutorial_de_inteligencia_artificial_para_cualquier.json",
+      "timestamp": "2026-02-27T02:20:15.358635",
+      "entries": 85,
+      "corrected": 0
+    },
+    {
+      "file": "Pericarditis_GPC_463_Podcast_ENARM_2025_Mexico__Nj.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Pericarditis_GPC_463_Podcast_ENARM_2025_Mexico__Nj.json",
+      "timestamp": "2026-02-27T02:20:16.047489",
+      "entries": 49,
+      "corrected": 1
+    },
+    {
+      "file": "Experto_en_Ganar_Musculo_-_Habitos_para_Ganar_Masa.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Experto_en_Ganar_Musculo_-_Habitos_para_Ganar_Masa.json",
+      "timestamp": "2026-02-27T02:20:22.354445",
+      "entries": 439,
+      "corrected": 0
+    },
+    {
+      "file": "Claro_que_se_puede_frenar_la_maquina_de_bulos_del_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Claro_que_se_puede_frenar_la_maquina_de_bulos_del_.json",
+      "timestamp": "2026-02-27T02:20:24.967384",
+      "entries": 180,
+      "corrected": 0
+    },
+    {
+      "file": "Everything_We_Teach_at_YCombinator_in_10_Minutes.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Everything_We_Teach_at_YCombinator_in_10_Minutes.json",
+      "timestamp": "2026-02-27T02:20:25.521998",
+      "entries": 37,
+      "corrected": 0
+    },
+    {
+      "file": "13_Years_of_Marketing_Advice_in_85_Mins.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/13_Years_of_Marketing_Advice_in_85_Mins.json",
+      "timestamp": "2026-02-27T02:20:30.717603",
+      "entries": 357,
+      "corrected": 0
+    },
+    {
+      "file": "Experto_en_Publicidad_explica_c_mo_Crear_una_Marca.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Experto_en_Publicidad_explica_c_mo_Crear_una_Marca.json",
+      "timestamp": "2026-02-27T02:20:30.719751",
+      "entries": 0,
+      "corrected": 0
+    },
+    {
+      "file": "COMO_PASAR_EL_ENARM_5_PASOS_CLAVE_MI_EXPERIENCIA__.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/COMO_PASAR_EL_ENARM_5_PASOS_CLAVE_MI_EXPERIENCIA__.json",
+      "timestamp": "2026-02-27T02:20:31.414265",
+      "entries": 50,
+      "corrected": 0
+    },
+    {
+      "file": "ESTRATEGIAS_para_salir_de_DEUDAS_y_empezar_a_ahorr.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/ESTRATEGIAS_para_salir_de_DEUDAS_y_empezar_a_ahorr.json",
+      "timestamp": "2026-02-27T02:20:36.078161",
+      "entries": 323,
+      "corrected": 0
+    },
+    {
+      "file": "CURSOS_GRATIS_ONLINE_Con_CERTIFICADO_DE_LAS_MEJORE.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/CURSOS_GRATIS_ONLINE_Con_CERTIFICADO_DE_LAS_MEJORE.json",
+      "timestamp": "2026-02-27T02:20:36.725335",
+      "entries": 42,
+      "corrected": 0
+    },
+    {
+      "file": "Taller_Easy-Enarm__medicina_interna_ENARM___casos_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Taller_Easy-Enarm__medicina_interna_ENARM___casos_.json",
+      "timestamp": "2026-02-27T02:20:44.100981",
+      "entries": 507,
+      "corrected": 0
+    },
+    {
+      "file": "5_H_bitos_para_tener_una_Salud_Mental_del_1__-_Dr_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/5_H_bitos_para_tener_una_Salud_Mental_del_1__-_Dr_.json",
+      "timestamp": "2026-02-27T02:20:47.070393",
+      "entries": 205,
+      "corrected": 0
+    },
+    {
+      "file": "CARRERA_DE_MEDICINA_MI_EXPERIENCIA_Y_UNOS_CONSEJOS.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/CARRERA_DE_MEDICINA_MI_EXPERIENCIA_Y_UNOS_CONSEJOS.json",
+      "timestamp": "2026-02-27T02:20:47.864154",
+      "entries": 55,
+      "corrected": 0
+    },
+    {
+      "file": "Soy_M_DICO_de_URGENCIAS__SALVO_VIDAS_pero__NO_TENG.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Soy_M_DICO_de_URGENCIAS__SALVO_VIDAS_pero__NO_TENG.json",
+      "timestamp": "2026-02-27T02:20:55.625836",
+      "entries": 536,
+      "corrected": 0
+    },
+    {
+      "file": "TODO_ESTO_PASARA_con_la_Inteligencia_Artificial_en.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/TODO_ESTO_PASARA_con_la_Inteligencia_Artificial_en.json",
+      "timestamp": "2026-02-27T02:20:57.218216",
+      "entries": 105,
+      "corrected": 0
+    },
+    {
+      "file": "QUIERO_SER_ESPECIALISTA_OFTALMOLOGIA_ft__Dr__Jorge.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/QUIERO_SER_ESPECIALISTA_OFTALMOLOGIA_ft__Dr__Jorge.json",
+      "timestamp": "2026-02-27T02:20:58.861845",
+      "entries": 121,
+      "corrected": 0
+    },
+    {
+      "file": "Sam_Altman_-_How_to_Succeed_with_a_Startup.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Sam_Altman_-_How_to_Succeed_with_a_Startup.json",
+      "timestamp": "2026-02-27T02:20:59.858656",
+      "entries": 66,
+      "corrected": 0
+    },
+    {
+      "file": "Pasantes_y_pacientes_-_victimas_del_sistema_de_sal.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Pasantes_y_pacientes_-_victimas_del_sistema_de_sal.json",
+      "timestamp": "2026-02-27T02:21:00.530431",
+      "entries": 46,
+      "corrected": 0
+    },
+    {
+      "file": "QUIERO_SER_RESIDENTE_-_URGENCIAS_MEDICO_QUIRURGICA.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/QUIERO_SER_RESIDENTE_-_URGENCIAS_MEDICO_QUIRURGICA.json",
+      "timestamp": "2026-02-27T02:21:03.050775",
+      "entries": 193,
+      "corrected": 2
+    },
+    {
+      "file": "Una_Terapia_Completa_con_Marian_Rojas__la_Psiquiat.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Una_Terapia_Completa_con_Marian_Rojas__la_Psiquiat.json",
+      "timestamp": "2026-02-27T02:21:03.296602",
+      "entries": 215,
+      "corrected": 0
+    },
+    {
+      "file": "Ignacio_March_biologo__La_gran_aventura_de_cruzar_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Ignacio_March_biologo__La_gran_aventura_de_cruzar_.json",
+      "timestamp": "2026-02-27T02:21:08.525805",
+      "entries": 363,
+      "corrected": 0
+    },
+    {
+      "file": "Versi_n_Completa___Ser_una_persona_sana_empieza_po.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Versi_n_Completa___Ser_una_persona_sana_empieza_po.json",
+      "timestamp": "2026-02-27T02:21:08.710732",
+      "entries": 219,
+      "corrected": 0
+    },
+    {
+      "file": "Certificacion_y_recertificacion_de_especialistas_-.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Certificacion_y_recertificacion_de_especialistas_-.json",
+      "timestamp": "2026-02-27T02:21:09.957079",
+      "entries": 88,
+      "corrected": 0
+    },
+    {
+      "file": "5_Tips_antes_de_entrar_a_la_residencia__39b6PVduh-.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/5_Tips_antes_de_entrar_a_la_residencia__39b6PVduh-.json",
+      "timestamp": "2026-02-27T02:21:10.767565",
+      "entries": 63,
+      "corrected": 2
+    },
+    {
+      "file": "MI_EXPERIENCIA_EN_EL_INTERNADO_LO_HICE_EN_ELMISMO_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/MI_EXPERIENCIA_EN_EL_INTERNADO_LO_HICE_EN_ELMISMO_.json",
+      "timestamp": "2026-02-27T02:21:11.469557",
+      "entries": 47,
+      "corrected": 0
+    },
+    {
+      "file": "Platicando_sobre_comida_ngiwa_o_popoloca_con_el_ch.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Platicando_sobre_comida_ngiwa_o_popoloca_con_el_ch.json",
+      "timestamp": "2026-02-27T02:21:13.820103",
+      "entries": 183,
+      "corrected": 1
+    },
+    {
+      "file": "TUBERCULOSIS__REPASO_ENARM_2020_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/TUBERCULOSIS__REPASO_ENARM_2020_.json",
+      "timestamp": "2026-02-27T02:21:14.038860",
+      "entries": 10,
+      "corrected": 0
+    },
+    {
+      "file": "C_mo_un_CFO_financia_una_startup_-_Podcast_103.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/C_mo_un_CFO_financia_una_startup_-_Podcast_103.json",
+      "timestamp": "2026-02-27T02:21:16.095285",
+      "entries": 239,
+      "corrected": 0
+    },
+    {
+      "file": "TODO_LO_QUE_HE_VISTO_EN_LOS_Investigador_Forense_5.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/TODO_LO_QUE_HE_VISTO_EN_LOS_Investigador_Forense_5.json",
+      "timestamp": "2026-02-27T02:21:22.339706",
+      "entries": 427,
+      "corrected": 0
+    },
+    {
+      "file": "REPASO_ENARM_2O25_-_CIRUGIA.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/REPASO_ENARM_2O25_-_CIRUGIA.json",
+      "timestamp": "2026-02-27T02:21:26.917449",
+      "entries": 328,
+      "corrected": 0
+    },
+    {
+      "file": "_56_-_Experto_en_IA__Co_mo_Sobrevivir_a_la_Intelig.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_56_-_Experto_en_IA__Co_mo_Sobrevivir_a_la_Intelig.json",
+      "timestamp": "2026-02-27T02:21:32.889078",
+      "entries": 409,
+      "corrected": 0
+    },
+    {
+      "file": "PREGUNTAS_Y_RESPUESTAS_3_-_CARDIOLOG_A_-_VILLAMEDI.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/PREGUNTAS_Y_RESPUESTAS_3_-_CARDIOLOG_A_-_VILLAMEDI.json",
+      "timestamp": "2026-02-27T02:21:33.883944",
+      "entries": 69,
+      "corrected": 0
+    },
+    {
+      "file": "C_mo_verse_m_s_joven__retrasar_la_vejez_y_alimento.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/C_mo_verse_m_s_joven__retrasar_la_vejez_y_alimento.json",
+      "timestamp": "2026-02-27T02:21:34.259591",
+      "entries": 346,
+      "corrected": 0
+    },
+    {
+      "file": "QUIERO_SER_RESIDENTE_-_PSIQUIATRIA__wggtFmwOmOA_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/QUIERO_SER_RESIDENTE_-_PSIQUIATRIA__wggtFmwOmOA_.json",
+      "timestamp": "2026-02-27T02:21:37.194292",
+      "entries": 230,
+      "corrected": 1
+    },
+    {
+      "file": "Medico_Forense__Las_Autopsias_que_me_hicieron_llor.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Medico_Forense__Las_Autopsias_que_me_hicieron_llor.json",
+      "timestamp": "2026-02-27T02:21:40.359537",
+      "entries": 221,
+      "corrected": 0
+    },
+    {
+      "file": "La_Teoria_de_la_Evolucion_es_SOLO_UNA_TEORIA_-_CIE.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/La_Teoria_de_la_Evolucion_es_SOLO_UNA_TEORIA_-_CIE.json",
+      "timestamp": "2026-02-27T02:21:42.131894",
+      "entries": 121,
+      "corrected": 0
+    },
+    {
+      "file": "Trabajadores_de_datos_-_el_costo_humano_de_la_inte.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Trabajadores_de_datos_-_el_costo_humano_de_la_inte.json",
+      "timestamp": "2026-02-27T02:21:42.912418",
+      "entries": 49,
+      "corrected": 0
+    },
+    {
+      "file": "Andres_Cota_Hiriart_-_Conocer_la_naturaleza_el_pri.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Andres_Cota_Hiriart_-_Conocer_la_naturaleza_el_pri.json",
+      "timestamp": "2026-02-27T02:21:45.975923",
+      "entries": 209,
+      "corrected": 0
+    },
+    {
+      "file": "VIVI_UN_INFIERNO_EN_LA_CARCEL_EL_TOPO_CHICO_Y_ME_H.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/VIVI_UN_INFIERNO_EN_LA_CARCEL_EL_TOPO_CHICO_Y_ME_H.json",
+      "timestamp": "2026-02-27T02:21:53.919790",
+      "entries": 551,
+      "corrected": 0
+    },
+    {
+      "file": "Ser_el_MEJOR_Estudiante_de_Medicina_Te_doy_La_Guia.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Ser_el_MEJOR_Estudiante_de_Medicina_Te_doy_La_Guia.json",
+      "timestamp": "2026-02-27T02:21:54.832703",
+      "entries": 63,
+      "corrected": 0
+    },
+    {
+      "file": "_C_mo_empezar_de_cero_muchas_veces__-_Mentores_Emp.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_C_mo_empezar_de_cero_muchas_veces__-_Mentores_Emp.json",
+      "timestamp": "2026-02-27T02:21:57.620971",
+      "entries": 197,
+      "corrected": 0
+    },
+    {
+      "file": "Gu_a_COMPLETA_de_INTELIGENCIA_Artificial___JUAN_LO.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Gu_a_COMPLETA_de_INTELIGENCIA_Artificial___JUAN_LO.json",
+      "timestamp": "2026-02-27T02:22:06.084400",
+      "entries": 557,
+      "corrected": 0
+    },
+    {
+      "file": "Retinopatia_Diabetica_GPC_171_735_Podcast_ENARM_20.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Retinopatia_Diabetica_GPC_171_735_Podcast_ENARM_20.json",
+      "timestamp": "2026-02-27T02:22:06.777285",
+      "entries": 53,
+      "corrected": 0
+    },
+    {
+      "file": "Marketing_Godfather__How_To_Build_An_Audience_That.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Marketing_Godfather__How_To_Build_An_Audience_That.json",
+      "timestamp": "2026-02-27T02:22:07.028008",
+      "entries": 240,
+      "corrected": 0
+    },
+    {
+      "file": "La_Historia_del_ING__CARLOS_SLIM__Primera_parte___.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/La_Historia_del_ING__CARLOS_SLIM__Primera_parte___.json",
+      "timestamp": "2026-02-27T02:22:12.088297",
+      "entries": 345,
+      "corrected": 0
+    },
+    {
+      "file": "31_100_TORCH_PARTE_1__ENARM.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/31_100_TORCH_PARTE_1__ENARM.json",
+      "timestamp": "2026-02-27T02:22:13.818667",
+      "entries": 120,
+      "corrected": 0
+    },
+    {
+      "file": "11_-_Intoxicaciones__aqVTrHNnucc_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/11_-_Intoxicaciones__aqVTrHNnucc_.json",
+      "timestamp": "2026-02-27T02:22:14.867787",
+      "entries": 73,
+      "corrected": 1
+    },
+    {
+      "file": "DESPERT__DESPU_S_DE_8_A_OS_EN_COMA__CON__JENNIFER_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/DESPERT__DESPU_S_DE_8_A_OS_EN_COMA__CON__JENNIFER_.json",
+      "timestamp": "2026-02-27T02:22:23.613613",
+      "entries": 603,
+      "corrected": 5
+    },
+    {
+      "file": "Soy_Genetista_Estas_son_las_enfermedades_mas_raras.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Soy_Genetista_Estas_son_las_enfermedades_mas_raras.json",
+      "timestamp": "2026-02-27T02:22:28.575742",
+      "entries": 339,
+      "corrected": 0
+    },
+    {
+      "file": "MEDICASOS__URGENCIAS__ENARM_2021.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/MEDICASOS__URGENCIAS__ENARM_2021.json",
+      "timestamp": "2026-02-27T02:22:29.254183",
+      "entries": 41,
+      "corrected": 0
+    },
+    {
+      "file": "Toda_la_ciencia_de_INTERSTELLAR_explicada__ErMdJzz.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Toda_la_ciencia_de_INTERSTELLAR_explicada__ErMdJzz.json",
+      "timestamp": "2026-02-27T02:22:32.080025",
+      "entries": 194,
+      "corrected": 0
+    },
+    {
+      "file": "GPC_Bronquiolitis_aguda_en_pediatricos__kYYKgZoMYZ.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/GPC_Bronquiolitis_aguda_en_pediatricos__kYYKgZoMYZ.json",
+      "timestamp": "2026-02-27T02:22:32.981243",
+      "entries": 60,
+      "corrected": 0
+    },
+    {
+      "file": "_202_-_Experto_en_Nutrici_n___Estos_H_bitos_te_Est.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_202_-_Experto_en_Nutrici_n___Estos_H_bitos_te_Est.json",
+      "timestamp": "2026-02-27T02:22:33.229812",
+      "entries": 303,
+      "corrected": 0
+    },
+    {
+      "file": "_Trabajo_en_Sala_de_Urgencias__los_casos_que_nunca.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_Trabajo_en_Sala_de_Urgencias__los_casos_que_nunca.json",
+      "timestamp": "2026-02-27T02:22:36.130698",
+      "entries": 203,
+      "corrected": 0
+    },
+    {
+      "file": "La_inteligencia_artificial_y_la_educacion_Sang_Gun.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/La_inteligencia_artificial_y_la_educacion_Sang_Gun.json",
+      "timestamp": "2026-02-27T02:22:37.043260",
+      "entries": 79,
+      "corrected": 0
+    },
+    {
+      "file": "_Doctor_narra_LOS_CASOS_M_S_EXTRA_OS_dentro_del_Ho.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_Doctor_narra_LOS_CASOS_M_S_EXTRA_OS_dentro_del_Ho.json",
+      "timestamp": "2026-02-27T02:22:41.136526",
+      "entries": 283,
+      "corrected": 0
+    },
+    {
+      "file": "Los_Secretos_de_la_Inteligencia_Artificial________.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Los_Secretos_de_la_Inteligencia_Artificial________.json",
+      "timestamp": "2026-02-27T02:22:50.524859",
+      "entries": 637,
+      "corrected": 0
+    },
+    {
+      "file": "T__X_E__40__Gastronomia_mexicana__vCeLH7ZUMwo_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/T__X_E__40__Gastronomia_mexicana__vCeLH7ZUMwo_.json",
+      "timestamp": "2026-02-27T02:22:51.852924",
+      "entries": 103,
+      "corrected": 4
+    },
+    {
+      "file": "_ENTENDER_S_La_DIABETES_con_este_PODCAST____Da_por.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_ENTENDER_S_La_DIABETES_con_este_PODCAST____Da_por.json",
+      "timestamp": "2026-02-27T02:22:54.249774",
+      "entries": 163,
+      "corrected": 0
+    },
+    {
+      "file": "Salud_mental_la_clase_que_nadie_nos_dio_Fernando_L.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Salud_mental_la_clase_que_nadie_nos_dio_Fernando_L.json",
+      "timestamp": "2026-02-27T02:22:54.359376",
+      "entries": 7,
+      "corrected": 0
+    },
+    {
+      "file": "Claude_Skills_Built_Me_an_AI_Agent_Army__They_Run_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Claude_Skills_Built_Me_an_AI_Agent_Army__They_Run_.json",
+      "timestamp": "2026-02-27T02:22:56.418361",
+      "entries": 143,
+      "corrected": 0
+    },
+    {
+      "file": "Maestr_a_Completa_en_Gesti_n_Comercial__con_Gerent.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Maestr_a_Completa_en_Gesti_n_Comercial__con_Gerent.json",
+      "timestamp": "2026-02-27T02:23:03.979202",
+      "entries": 517,
+      "corrected": 0
+    },
+    {
+      "file": "Ep16_Renunciar_a_la_especialidad_medica_no_es_el_f.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Ep16_Renunciar_a_la_especialidad_medica_no_es_el_f.json",
+      "timestamp": "2026-02-27T02:23:09.786087",
+      "entries": 437,
+      "corrected": 10
+    },
+    {
+      "file": "Meningitis_ENARM.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Meningitis_ENARM.json",
+      "timestamp": "2026-02-27T02:23:10.917249",
+      "entries": 76,
+      "corrected": 0
+    },
+    {
+      "file": "Mis_PEORES_EXPERIENCIAS_siendo_MEDICO_de_FARMACIAS.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Mis_PEORES_EXPERIENCIAS_siendo_MEDICO_de_FARMACIAS.json",
+      "timestamp": "2026-02-27T02:23:18.352138",
+      "entries": 508,
+      "corrected": 0
+    }
+  ],
+  "failed": [
+    {
+      "file": "FUI_A_UNA_ENTREVISTA_DE_TRABAJO_Y_TERMINE_EN_MANOS.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/FUI_A_UNA_ENTREVISTA_DE_TRABAJO_Y_TERMINE_EN_MANOS.json",
+      "timestamp": "2026-02-27T02:22:32.982441",
+      "error": "load_failed"
+    }
+  ],
+  "started_at": "2026-02-23T14:12:55",
+  "updated_at": "2026-02-27T02:23:18.353174",
+  "note": "Seeded from nohup.out log of successful 'Metadata guardado' entries",
+  "partial": [
+    {
+      "file": "An_lisis_de_casos_cl_nicos_Ginecolog_a_y_Obstetric.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/An_lisis_de_casos_cl_nicos_Ginecolog_a_y_Obstetric.json",
+      "timestamp": "2026-02-23T19:22:02.326538",
+      "total_entries": 189,
+      "corrected_entries": 138,
+      "pct_corrected": 73.0,
+      "status": "partial"
+    },
+    {
+      "file": "CASOS_CL_NICOS_CIRUGIA_-_REPASO_ENARM.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/CASOS_CL_NICOS_CIRUGIA_-_REPASO_ENARM.json",
+      "timestamp": "2026-02-23T19:22:02.326539",
+      "total_entries": 170,
+      "corrected_entries": 116,
+      "pct_corrected": 68.2,
+      "status": "partial"
+    },
+    {
+      "file": "CREATIVO__505_-_FILOSOFANDO_CON_UNA_IA_A_LAS_2AM__.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/CREATIVO__505_-_FILOSOFANDO_CON_UNA_IA_A_LAS_2AM__.json",
+      "timestamp": "2026-02-23T19:22:02.326541",
+      "total_entries": 238,
+      "corrected_entries": 232,
+      "pct_corrected": 97.5,
+      "status": "partial"
+    },
+    {
+      "file": "C_mo_Conseguir_Trabajo_en_Tecnolog_a_y_Startups___.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/C_mo_Conseguir_Trabajo_en_Tecnolog_a_y_Startups___.json",
+      "timestamp": "2026-02-23T19:22:02.326541",
+      "total_entries": 443,
+      "corrected_entries": 440,
+      "pct_corrected": 99.3,
+      "status": "partial"
+    },
+    {
+      "file": "C_mo_Invertir_en_Bienes_Ra_ces_en_2026__Paso_a_Pas.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/C_mo_Invertir_en_Bienes_Ra_ces_en_2026__Paso_a_Pas.json",
+      "timestamp": "2026-02-23T19:22:02.326542",
+      "total_entries": 361,
+      "corrected_entries": 346,
+      "pct_corrected": 95.8,
+      "status": "partial"
+    },
+    {
+      "file": "C_mo_Lograr_la_Libertad_Financiera_y_Aumentar_tu_R.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/C_mo_Lograr_la_Libertad_Financiera_y_Aumentar_tu_R.json",
+      "timestamp": "2026-02-23T19:22:02.326543",
+      "total_entries": 519,
+      "corrected_entries": 503,
+      "pct_corrected": 96.9,
+      "status": "partial"
+    },
+    {
+      "file": "C_mo_verse_m_s_joven__retrasar_la_vejez_y_alimento.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/C_mo_verse_m_s_joven__retrasar_la_vejez_y_alimento.json",
+      "timestamp": "2026-02-23T19:22:02.326546",
+      "total_entries": 346,
+      "corrected_entries": 326,
+      "pct_corrected": 94.2,
+      "status": "partial"
+    },
+    {
+      "file": "Choque_en_urgencias__c_mo_reconocerlo_y_tratarlo__.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Choque_en_urgencias__c_mo_reconocerlo_y_tratarlo__.json",
+      "timestamp": "2026-02-23T19:22:02.326546",
+      "total_entries": 45,
+      "corrected_entries": 31,
+      "pct_corrected": 68.9,
+      "status": "partial"
+    },
+    {
+      "file": "El_arte_de_ahorrar_bien__ft__Finamex____Dimes_y_bi.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/El_arte_de_ahorrar_bien__ft__Finamex____Dimes_y_bi.json",
+      "timestamp": "2026-02-23T19:22:02.326549",
+      "total_entries": 251,
+      "corrected_entries": 248,
+      "pct_corrected": 98.8,
+      "status": "partial"
+    },
+    {
+      "file": "El_gen_emprendedor___Luis_Ramos___TEDxPlazaFundado.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/El_gen_emprendedor___Luis_Ramos___TEDxPlazaFundado.json",
+      "timestamp": "2026-02-23T19:22:02.326550",
+      "total_entries": 84,
+      "corrected_entries": 80,
+      "pct_corrected": 95.2,
+      "status": "partial"
+    },
+    {
+      "file": "El_poder_de_las_emociones___ANSIEDAD__ESTR_S__MENT.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/El_poder_de_las_emociones___ANSIEDAD__ESTR_S__MENT.json",
+      "timestamp": "2026-02-23T19:22:02.326551",
+      "total_entries": 365,
+      "corrected_entries": 361,
+      "pct_corrected": 98.9,
+      "status": "partial"
+    },
+    {
+      "file": "Experto_en_Ciberseguridad__Google_y_Alexa_TE_ESCUC.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Experto_en_Ciberseguridad__Google_y_Alexa_TE_ESCUC.json",
+      "timestamp": "2026-02-23T19:22:02.326553",
+      "total_entries": 297,
+      "corrected_entries": 283,
+      "pct_corrected": 95.3,
+      "status": "partial"
+    },
+    {
+      "file": "Experto_en_IA__El_Lado_Oscuro__Novias_Virtuales__D.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Experto_en_IA__El_Lado_Oscuro__Novias_Virtuales__D.json",
+      "timestamp": "2026-02-23T19:22:02.326554",
+      "total_entries": 613,
+      "corrected_entries": 203,
+      "pct_corrected": 33.1,
+      "status": "partial"
+    },
+    {
+      "file": "Experto_en_Nutrici_n__7_Comidas_m_s_Saludables_par.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Experto_en_Nutrici_n__7_Comidas_m_s_Saludables_par.json",
+      "timestamp": "2026-02-23T19:22:02.326554",
+      "total_entries": 360,
+      "corrected_entries": 352,
+      "pct_corrected": 97.8,
+      "status": "partial"
+    },
+    {
+      "file": "Experto_en_Programaci_n__Inteligencia_Artificial_y.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Experto_en_Programaci_n__Inteligencia_Artificial_y.json",
+      "timestamp": "2026-02-23T19:22:02.326555",
+      "total_entries": 275,
+      "corrected_entries": 272,
+      "pct_corrected": 98.9,
+      "status": "partial"
+    },
+    {
+      "file": "Gu_a_COMPLETA_de_INTELIGENCIA_Artificial___JUAN_LO.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Gu_a_COMPLETA_de_INTELIGENCIA_Artificial___JUAN_LO.json",
+      "timestamp": "2026-02-23T19:22:02.326556",
+      "total_entries": 557,
+      "corrected_entries": 545,
+      "pct_corrected": 97.8,
+      "status": "partial"
+    },
+    {
+      "file": "Hacker_Profesional__Ciberdelincuencia_y_los_Secret.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Hacker_Profesional__Ciberdelincuencia_y_los_Secret.json",
+      "timestamp": "2026-02-23T19:22:02.326557",
+      "total_entries": 250,
+      "corrected_entries": 246,
+      "pct_corrected": 98.4,
+      "status": "partial"
+    },
+    {
+      "file": "LIVE_ENARM__Casos_cli_nicos_-_Ginecologi_a_041824.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/LIVE_ENARM__Casos_cli_nicos_-_Ginecologi_a_041824.json",
+      "timestamp": "2026-02-23T19:22:02.326558",
+      "total_entries": 75,
+      "corrected_entries": 72,
+      "pct_corrected": 96.0,
+      "status": "partial"
+    },
+    {
+      "file": "La_Gran_Mentira_de_la_Inteligencia_Artificial_Que_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/La_Gran_Mentira_de_la_Inteligencia_Artificial_Que_.json",
+      "timestamp": "2026-02-23T19:22:02.326559",
+      "total_entries": 267,
+      "corrected_entries": 259,
+      "pct_corrected": 97.0,
+      "status": "partial"
+    },
+    {
+      "file": "La_inteligencia_artificial_y_la_educacion_Sang_Gun.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/La_inteligencia_artificial_y_la_educacion_Sang_Gun.json",
+      "timestamp": "2026-02-23T19:22:02.326560",
+      "total_entries": 79,
+      "corrected_entries": 59,
+      "pct_corrected": 74.7,
+      "status": "partial"
+    },
+    {
+      "file": "MAURICIO_HOYOS___Mejores_consejos_de_Negocios___xi.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/MAURICIO_HOYOS___Mejores_consejos_de_Negocios___xi.json",
+      "timestamp": "2026-02-23T19:22:02.326561",
+      "total_entries": 255,
+      "corrected_entries": 252,
+      "pct_corrected": 98.8,
+      "status": "partial"
+    },
+    {
+      "file": "Marketing_Godfather__How_To_Build_An_Audience_That.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Marketing_Godfather__How_To_Build_An_Audience_That.json",
+      "timestamp": "2026-02-23T19:22:02.326562",
+      "total_entries": 240,
+      "corrected_entries": 228,
+      "pct_corrected": 95.0,
+      "status": "partial"
+    },
+    {
+      "file": "Nutrici_n_Deportiva__Absorci_n_de_Prote_na__Entren.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Nutrici_n_Deportiva__Absorci_n_de_Prote_na__Entren.json",
+      "timestamp": "2026-02-23T19:22:02.326563",
+      "total_entries": 83,
+      "corrected_entries": 77,
+      "pct_corrected": 92.8,
+      "status": "partial"
+    },
+    {
+      "file": "Peter_Thiel__Going_from_Zero_to_One.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Peter_Thiel__Going_from_Zero_to_One.json",
+      "timestamp": "2026-02-23T19:22:02.326568",
+      "total_entries": 76,
+      "corrected_entries": 67,
+      "pct_corrected": 88.2,
+      "status": "partial"
+    },
+    {
+      "file": "SECRETOS_para_avanzar_en_PROGRAMACI_N___Con__midud.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/SECRETOS_para_avanzar_en_PROGRAMACI_N___Con__midud.json",
+      "timestamp": "2026-02-23T19:22:02.326570",
+      "total_entries": 558,
+      "corrected_entries": 545,
+      "pct_corrected": 97.7,
+      "status": "partial"
+    },
+    {
+      "file": "SINCOPE___ECG_ANALIZANDO_CASOS_CLINICOS__4Shtq4GT2.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/SINCOPE___ECG_ANALIZANDO_CASOS_CLINICOS__4Shtq4GT2.json",
+      "timestamp": "2026-02-23T19:22:02.326571",
+      "total_entries": 48,
+      "corrected_entries": 30,
+      "pct_corrected": 62.5,
+      "status": "partial"
+    },
+    {
+      "file": "TODA_LA_VERDAD_sobre_el_MARKETING_DIGITAL_2025_-_B.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/TODA_LA_VERDAD_sobre_el_MARKETING_DIGITAL_2025_-_B.json",
+      "timestamp": "2026-02-23T19:22:02.326572",
+      "total_entries": 239,
+      "corrected_entries": 185,
+      "pct_corrected": 77.4,
+      "status": "partial"
+    },
+    {
+      "file": "The_Truth_About_Building_AI_Startups_Today.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/The_Truth_About_Building_AI_Startups_Today.json",
+      "timestamp": "2026-02-23T19:22:02.326573",
+      "total_entries": 140,
+      "corrected_entries": 137,
+      "pct_corrected": 97.9,
+      "status": "partial"
+    },
+    {
+      "file": "Una_Terapia_Completa_con_Marian_Rojas__la_Psiquiat.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Una_Terapia_Completa_con_Marian_Rojas__la_Psiquiat.json",
+      "timestamp": "2026-02-23T19:22:02.326575",
+      "total_entries": 215,
+      "corrected_entries": 204,
+      "pct_corrected": 94.9,
+      "status": "partial"
+    },
+    {
+      "file": "Versi_n_Completa___Ser_una_persona_sana_empieza_po.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Versi_n_Completa___Ser_una_persona_sana_empieza_po.json",
+      "timestamp": "2026-02-23T19:22:02.326579",
+      "total_entries": 219,
+      "corrected_entries": 213,
+      "pct_corrected": 97.3,
+      "status": "partial"
+    },
+    {
+      "file": "Webinar__ENARM___Casos_cl_nicos_-_Infectolog_a_jul.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/Webinar__ENARM___Casos_cl_nicos_-_Infectolog_a_jul.json",
+      "timestamp": "2026-02-23T19:22:02.326580",
+      "total_entries": 116,
+      "corrected_entries": 87,
+      "pct_corrected": 75.0,
+      "status": "partial"
+    },
+    {
+      "file": "_202_-_Experto_en_Nutrici_n___Estos_H_bitos_te_Est.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_202_-_Experto_en_Nutrici_n___Estos_H_bitos_te_Est.json",
+      "timestamp": "2026-02-23T19:22:02.326580",
+      "total_entries": 303,
+      "corrected_entries": 294,
+      "pct_corrected": 97.0,
+      "status": "partial"
+    },
+    {
+      "file": "_212_-_Tus_DATOS_est_n_en_la_Dark_Web__Experto_en_.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_212_-_Tus_DATOS_est_n_en_la_Dark_Web__Experto_en_.json",
+      "timestamp": "2026-02-23T19:22:02.326581",
+      "total_entries": 275,
+      "corrected_entries": 263,
+      "pct_corrected": 95.6,
+      "status": "partial"
+    },
+    {
+      "file": "_225_-_Las_10_Claves_para_Vivir_120_A_OS_SIN_ENFER.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_225_-_Las_10_Claves_para_Vivir_120_A_OS_SIN_ENFER.json",
+      "timestamp": "2026-02-23T19:22:02.326581",
+      "total_entries": 366,
+      "corrected_entries": 339,
+      "pct_corrected": 92.6,
+      "status": "partial"
+    },
+    {
+      "file": "_He_le_do__1_000_libros_sobre__xito___Estas_son_la.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_He_le_do__1_000_libros_sobre__xito___Estas_son_la.json",
+      "timestamp": "2026-02-23T19:22:02.326584",
+      "total_entries": 436,
+      "corrected_entries": 427,
+      "pct_corrected": 97.9,
+      "status": "partial"
+    },
+    {
+      "file": "_Investigo_muertes_para_hacer_justicia__Soy_Perito.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_Investigo_muertes_para_hacer_justicia__Soy_Perito.json",
+      "timestamp": "2026-02-23T19:22:02.326585",
+      "total_entries": 240,
+      "corrected_entries": 234,
+      "pct_corrected": 97.5,
+      "status": "partial"
+    },
+    {
+      "file": "_M_DICO_cuenta_c_mo_es_trabajar_en_TERAPIA_INTENSI.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_M_DICO_cuenta_c_mo_es_trabajar_en_TERAPIA_INTENSI.json",
+      "timestamp": "2026-02-23T19:22:02.326586",
+      "total_entries": 484,
+      "corrected_entries": 477,
+      "pct_corrected": 98.6,
+      "status": "partial"
+    },
+    {
+      "file": "_Negligencias_en_el_hospital_e_historias_que_se_pr.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_Negligencias_en_el_hospital_e_historias_que_se_pr.json",
+      "timestamp": "2026-02-23T19:22:02.326587",
+      "total_entries": 288,
+      "corrected_entries": 282,
+      "pct_corrected": 97.9,
+      "status": "partial"
+    },
+    {
+      "file": "_Vale_la_pena_ser_Programador_en_2025____Podcast__.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/metadata/_Vale_la_pena_ser_Programador_en_2025____Podcast__.json",
+      "timestamp": "2026-02-23T19:22:02.326588",
+      "total_entries": 471,
+      "corrected_entries": 469,
+      "pct_corrected": 99.6,
+      "status": "partial"
+    },
+    {
+      "file": "all_tts_manifest.json",
+      "path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/all_tts_manifest.json",
+      "timestamp": "2026-02-23T19:22:02.326588",
+      "total_entries": 46977,
+      "corrected_entries": 11440,
+      "pct_corrected": 24.4,
+      "status": "partial"
+    }
+  ],
+  "scan_timestamp": "2026-02-23T19:22:02.326590",
+  "scan_summary": {
+    "pending": 196,
+    "completed": 25,
+    "empty": 7,
+    "partial": 40,
+    "error": 1
+  }
+}

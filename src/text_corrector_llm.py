@@ -81,51 +81,44 @@ class TextCorrectorLLM:
     """
     
     # Master prompt para el modelo (individual) - OPTIMIZADO CON FORZADO DE IDIOMA
-    SYSTEM_PROMPT = """Eres un corrector experto de transcripciones de audio en español con 20 años de experiencia en podcasts.
+    SYSTEM_PROMPT = """Eres un corrector de transcripciones de audio en español especializado en preservar la correspondencia EXACTA entre audio y texto.
 
-## TU ROL
-Actúas como un editor profesional especializado en transcripciones automáticas de Whisper para podcasts EN ESPAÑOL.
+## ⚠️ REGLA FUNDAMENTAL: ALINEACIÓN AUDIO↔TEXTO
+Este texto se usará para entrenamiento de modelos de voz (TTS).
+El texto corregido DEBE representar EXACTAMENTE lo que el hablante dijo en el audio.
+Si modificas palabras, orden o agregas contenido, el entrenamiento será INÚTIL.
 
 ## ⚠️ IDIOMA OBJETIVO: ESPAÑOL (SIEMPRE)
-- El idioma de salida SIEMPRE debe ser ESPAÑOL
-- El transcriptor a veces detecta erróneamente español como catalán (ca) o gallego (gl)
+- El transcriptor (Whisper) a veces detecta erróneamente español como catalán (ca) o gallego (gl)
 - Si ves texto que parece catalán/gallego pero el contexto sugiere español, NORMALIZA AL ESPAÑOL
 - Ejemplos: "És per la corazon" → "Es por el corazón", "hagam" → "hagamos"
 
-## TAREA PRINCIPAL
-Corregir ÚNICAMENTE errores de transcripción, preservando el contenido exacto del hablante.
-
-## ⚠️ REGLA CRÍTICA: NO AGREGAR NI ELIMINAR CONTENIDO
-- NUNCA agregues información que no está en el texto original
-- NUNCA elimines palabras o frases del original
-- NUNCA cambies el significado o intención del hablante
-- NUNCA parafrasees o resumas el contenido
-- El texto corregido DEBE tener aproximadamente la misma longitud que el original
-
-## CORRECCIONES PERMITIDAS (SOLO ESTAS)
-
-### ✅ CORREGIR:
-1. **Ortografía**: tildes (qué, cómo, más), letras incorrectas
+## ✅ CORRECCIONES PERMITIDAS (no alteran lo que se dijo):
+1. **Tildes/acentos**: mas → más, como → cómo, el → él (según contexto)
 2. **Puntuación**: agregar ¿?, ¡!, comas, puntos donde faltan
-3. **Mayúsculas**: nombres propios, inicio de oración
-4. **Nombres de marcas**: YouTube, TikTok, Instagram, ChatGPT, Google, WhatsApp
-5. **Acrónimos**: IA, SEO, API, URL, PDF, CEO, NFT
-6. **Errores comunes de Whisper**:
-   - "gemina" → "Gemini"
-   - "chat gpt" → "ChatGPT"
-   - "ai" → "IA"
-   - "que es" (al inicio) → "¿Qué es"
-   - "por que" (pregunta) → "por qué"
-7. **Texto mal transcrito como catalán/gallego**: normalizar al español correcto
+3. **Mayúsculas**: inicio de oración, nombres propios
+4. **Nombres de marcas/tecnología**: chat gpt → ChatGPT, youtube → YouTube
+5. **Acrónimos escritos mal**: ai → IA (si el hablante dijo "IA")
+6. **Palabras mal transcritas fonéticamente**: si Whisper escribió mal una palabra pero la fonética apunta claramente a otra, corregir a la palabra que SUENA IGUAL
+   - "febidisminoida" → "FEVI disminuida" (misma fonética)
+   - "gemina" → "Gemini" (misma fonética)
+7. **Catalán/gallego falso**: normalizar al español que realmente se habló
 
-### ❌ NO CORREGIR (MANTENER TAL CUAL):
-- Regionalismos: güey, chido, neta, órale, chamba, morro, chale, fresa
-- Muletillas: pues, este, o sea, bueno, ¿no?, ¿verdad?
-- Expresiones coloquiales: no manches, qué onda, está cañón, ni modo
-- Estilo informal del hablante
-- Repeticiones intencionales
-- Pausas o titubeos representados
-- NO traducir español a catalán/gallego
+## ❌ PROHIBIDO (rompe la alineación audio↔texto):
+1. **NO expandir abreviaturas**: si el hablante dijo "FEVI", NO escribir "fracción de eyección"
+2. **NO reemplazar con sinónimos**: si dijo "menos caro", NO escribir "más barato"
+3. **NO agregar palabras**: si dijo "llegaba", NO escribir "llegaba otro"
+4. **NO reordenar palabras**: si dijo "les quiero hacer", NO escribir "quiero hacerles"
+5. **NO completar frases truncadas**: si el hablante se cortó, dejar cortado
+6. **NO embellecer ni mejorar estilo**: el texto debe sonar como habla natural
+7. **NO cambiar regionalismos**: güey, chido, neta, órale, chamba, morro
+8. **NO eliminar muletillas**: pues, este, o sea, bueno, ¿no?
+
+## PRINCIPIO GUÍA
+Pregúntate: "¿El hablante DIJO esta palabra en el audio?"
+- Si SÍ → mantenerla (corrigiendo solo ortografía)
+- Si NO → no agregarla
+- Si Whisper la transcribió mal → corregir a lo que SUENA, no a lo que "debería decir"
 
 ## GLOSARIO ESPECÍFICO
 {glosario_context}
@@ -138,11 +131,6 @@ Responde ÚNICAMENTE con este JSON, sin texto antes ni después:
   "confianza": 0.95
 }}
 
-### Reglas del JSON:
-- `texto_corregido`: Texto final (misma longitud aproximada del original)
-- `cambios`: Lista de hasta 5 correcciones principales aplicadas
-- `confianza`: Número entre 0.0 y 1.0
-
 ### Si el texto está correcto:
 {{
   "texto_corregido": "[mismo texto sin cambios]",
@@ -153,67 +141,62 @@ Responde ÚNICAMENTE con este JSON, sin texto antes ni después:
 RESPONDE SOLO JSON. NO EXPLIQUES."""
 
     # Prompt para batch processing - OPTIMIZADO CON FORZADO DE IDIOMA
-    BATCH_SYSTEM_PROMPT = """Eres un corrector experto de transcripciones de audio en español.
+    BATCH_SYSTEM_PROMPT = """Eres un corrector de transcripciones de audio en español para entrenamiento de modelos de voz (TTS).
 
-## ROL
-Editor profesional especializado en corrección de transcripciones automáticas de podcasts EN ESPAÑOL.
+## ⚠️ REGLA FUNDAMENTAL: ALINEACIÓN AUDIO↔TEXTO
+El texto corregido DEBE representar EXACTAMENTE lo que el hablante dijo.
+Estos textos son un lote de una misma conversación — usa el CONTEXTO para entender el tema,
+pero NUNCA para agregar, expandir o reformular lo que se transcribió.
 
-## ⚠️ IDIOMA OBJETIVO: ESPAÑOL (SIEMPRE)
-- El idioma de salida SIEMPRE debe ser ESPAÑOL
-- El transcriptor a veces detecta erróneamente español como catalán (ca) o gallego (gl)
-- Si ves texto que parece catalán/gallego pero el contexto sugiere español, NORMALIZA AL ESPAÑOL
-- Usa el CONTEXTO del lote (todos los textos juntos son una conversación) para inferir el idioma real
-- Ejemplos de errores comunes de transcripción a corregir:
-  * "És per la corazon" → "Es por el corazón" (catalán falso → español)
-  * "Estic deseant" → "Estoy deseando" (catalán falso → español)
-  * "hagam" → "hagamos" (NO traducir al catalán)
-  * "nutrició" → "nutrición" (NO traducir al catalán)
+## ⚠️ IDIOMA: ESPAÑOL (SIEMPRE)
+- Whisper a veces transcribe español como catalán/gallego — normaliza al español hablado
+- Usa el CONTEXTO del lote para inferir el idioma real
+- "És per la corazon" → "Es por el corazón" (catalán falso → español)
 
-## ⚠️ REGLA CRÍTICA: PRESERVAR EL CONTENIDO ORIGINAL
-- NUNCA agregues información nueva
-- NUNCA elimines contenido del original  
-- NUNCA cambies el significado
-- La longitud de cada texto corregido debe ser similar al original
-- Solo corrige errores de ortografía, puntuación y formato
-- Si el texto está muy corrupto (parece otro idioma), intenta reconstruir el español original
+## ✅ PERMITIDO (no altera lo dicho):
+- **Tildes/acentos**: mas → más, que → qué (según contexto)
+- **Puntuación**: agregar ¿?, ¡!, comas, puntos
+- **Mayúsculas**: inicio de oración, nombres propios
+- **Marcas/tecnología**: chat gpt → ChatGPT, youtube → YouTube
+- **Fonética**: corregir a la palabra que SUENA IGUAL (Whisper mal transcribió)
+  - "febidisminoida" → "FEVI disminuida" ✅ (misma fonética)
+- **Catalán/gallego falso** → español hablado
 
-## CORRECCIONES PERMITIDAS
+## ❌ PROHIBIDO (destruye correspondencia audio↔texto):
+- **NO expandir abreviaturas**: "FEVI" ≠ "fracción de eyección" ❌
+- **NO sinónimos**: "menos caro" ≠ "más barato" ❌
+- **NO agregar palabras no dichas**: "llegaba" ≠ "llegaba otro" ❌
+- **NO reordenar**: "les quiero hacer" ≠ "quiero hacerles" ❌
+- **NO completar frases truncadas**
+- **NO embellecer estilo**
+- **NO tocar regionalismos ni muletillas**
 
-### ✅ CORREGIR:
-- Tildes y ortografía
-- Puntuación (¿?, ¡!, comas, puntos)
-- Mayúsculas (nombres propios, inicio de oración)
-- Marcas: YouTube, TikTok, Instagram, ChatGPT, Google
-- Acrónimos: IA, SEO, API, URL
-- Texto erróneamente transcrito como catalán/gallego → español correcto
-
-### ❌ NO CORREGIR:
-- Regionalismos mexicanos (güey, chido, neta, órale)
-- Muletillas naturales (pues, este, o sea)
-- Expresiones coloquiales
-- NO traducir español a catalán/gallego (error común del transcriptor)
+## PRINCIPIO: ¿El hablante DIJO esta palabra?
+- SÍ → mantenerla (solo corregir ortografía)
+- NO → no agregarla
+- Whisper la escribió mal → corregir a lo que SUENA, no a lo que "debería decir"
 
 ## GLOSARIO
 {glosario_context}
 
-## EJEMPLOS DE CORRECCIÓN CORRECTA
+## EJEMPLOS CORRECTOS
 
 Entrada 0: "que es el marketing digital y por que es importante"
 Salida 0: {{"id": 0, "texto_corregido": "¿Qué es el marketing digital y por qué es importante?", "cambios": ["Añadido ¿", "qué con tilde", "por qué separado"], "confianza": 0.95}}
 
-Entrada 1: "vamos a hablar de chat gpt y de youtube"
-Salida 1: {{"id": 1, "texto_corregido": "Vamos a hablar de ChatGPT y de YouTube.", "cambios": ["ChatGPT", "YouTube", "punto final"], "confianza": 0.92}}
+Entrada 1: "pues si guey esta bien chido el podcast"
+Salida 1: {{"id": 1, "texto_corregido": "Pues sí güey, está bien chido el podcast.", "cambios": ["sí con tilde", "güey ortografía", "coma"], "confianza": 0.90}}
 
-Entrada 2: "pues si guey esta bien chido el podcast"
-Salida 2: {{"id": 2, "texto_corregido": "Pues sí güey, está bien chido el podcast.", "cambios": ["sí con tilde", "Mayúscula inicial", "coma después de güey"], "confianza": 0.90}}
+Entrada 2: "la febidisminoida es menor al 40 porciento"
+Salida 2: {{"id": 2, "texto_corregido": "La FEVI disminuida es menor al 40 por ciento.", "cambios": ["febidisminoida → FEVI disminuida (fonética)"], "confianza": 0.88}}
 
-Entrada 3: "És per la corazon que et canviat"
-Salida 3: {{"id": 3, "texto_corregido": "Es por el corazón que te ha cambiado.", "cambios": ["normalizado de catalán falso a español"], "confianza": 0.85}}
+## EJEMPLO INCORRECTO (NO hacer esto):
+Entrada: "es menos caro que el otro"
+❌ MAL: "es más barato que el otro" (sinónimo — el hablante NO dijo "más barato")
+✅ BIEN: "Es menos caro que el otro." (solo mayúscula y punto)
 
-## FORMATO DE RESPUESTA (CRÍTICO)
-Responde ÚNICAMENTE con JSON válido. NINGÚN texto antes ni después.
-
-Estructura EXACTA:
+## FORMATO JSON (CRÍTICO)
+Responde ÚNICAMENTE con JSON válido:
 {{
   "correcciones": [
     {{"id": 0, "texto_corregido": "texto1", "cambios": ["cambio1"], "confianza": 0.95}},
@@ -222,11 +205,10 @@ Estructura EXACTA:
 }}
 
 ## REGLAS JSON
-- Usa COMA entre objetos del array (excepto el último)
 - IDs consecutivos de 0 a N-1
 - confianza es NÚMERO (0.0-1.0), NO string
 - Solo comillas dobles
-- Escapa comillas internas: \\"
+- Escapa comillas internas: \\\\"
 
 RESPONDE SOLO JSON."""
 
@@ -767,6 +749,13 @@ Reconstruye el significado probable. Responde SOLO con JSON."""
         self.min_words_for_hard = min_words_for_hard
         self.fallback_to_remote = fallback_to_remote
 
+        # Contadores de fallos consecutivos por host para auto-fallback
+        self._host_consecutive_failures = {
+            local_host: 0,
+            self.ollama_host: 0
+        }
+        self._host_fallback_threshold = 1  # Tras 1 fallo completo → probar otro host
+
         # Stats para dual-model
         self.stats.update({
             'easy_count': 0,
@@ -774,7 +763,9 @@ Reconstruye el significado probable. Responde SOLO con JSON."""
             'easy_time': 0.0,
             'hard_time': 0.0,
             'local_failures': 0,
-            'local_fallback_to_remote': 0
+            'local_fallback_to_remote': 0,
+            'remote_fallback_to_local': 0,
+            'auto_server_switches': 0
         })
 
         self.logger.info(
@@ -1731,8 +1722,9 @@ IMPORTANTE:
             return elapsed
 
         def _worker_hard():
-            """Procesa textos difíciles en el modelo remoto."""
+            """Procesa textos difíciles en el modelo remoto, con fallback a local."""
             t0 = time_module.time()
+            hard_failures = []  # (pos, text) que fallaron en remoto
             for batch_start in range(0, len(hard_items), batch_size):
                 batch = hard_items[batch_start:batch_start + batch_size]
                 batch_texts = [text for _, text in batch]
@@ -1743,11 +1735,34 @@ IMPORTANTE:
                         batch_texts, self.ollama_host, self.model, self.timeout
                     )
                     for pos, result in zip(batch_positions, batch_results):
-                        all_results[pos] = result
+                        if 'error' in result[1]:
+                            hard_failures.append((pos, uncached_texts[pos]))
+                        else:
+                            all_results[pos] = result
                 except Exception as e:
                     self.logger.warning(f"Worker hard falló en batch: {e}")
                     for pos, text in batch:
-                        all_results[pos] = (text, {'error': f'hard_worker_failed: {e}'})
+                        hard_failures.append((pos, text))
+
+            # Fallback: reintentar fallos del remoto en el local
+            if hard_failures and self.dual_model_enabled:
+                self.logger.info(f"🔄 Hard→Local fallback: reintentando {len(hard_failures)} textos en {self.local_model}")
+                print(f"   🔄 Reintentando {len(hard_failures)} textos hard en local ({self.local_model})...")
+                for fb_start in range(0, len(hard_failures), self.local_batch_size):
+                    fb_batch = hard_failures[fb_start:fb_start + self.local_batch_size]
+                    fb_texts = [text for _, text in fb_batch]
+                    fb_positions = [pos for pos, _ in fb_batch]
+                    try:
+                        fb_results = self._process_batch_on_host(
+                            fb_texts, self.local_host, self.local_model, self.local_timeout
+                        )
+                        for pos, result in zip(fb_positions, fb_results):
+                            all_results[pos] = result
+                            self.stats['remote_fallback_to_local'] = self.stats.get('remote_fallback_to_local', 0) + 1
+                    except Exception as e2:
+                        self.logger.warning(f"Hard→Local fallback también falló: {e2}")
+                        for pos, text in fb_batch:
+                            all_results[pos] = (text, {'error': f'hard_and_fallback_failed: {e2}'})
 
             elapsed = time_module.time() - t0
             self.stats['hard_time'] += elapsed
@@ -1952,6 +1967,10 @@ IMPORTANTE:
 
                 if response.status_code == 200:
                     data = response.json()
+                    
+                    # Resetear contador de fallos al tener éxito
+                    if hasattr(self, '_host_consecutive_failures'):
+                        self._host_consecutive_failures[host] = 0
 
                     if is_qwen3:
                         # /api/chat: content is in message.content, thinking in message.thinking
@@ -2007,25 +2026,100 @@ IMPORTANTE:
                 )
                 # Aumentar timeout progresivamente
                 actual_timeout = int(actual_timeout * 1.5)
+                # Registrar fallo consecutivo
+                if hasattr(self, '_host_consecutive_failures'):
+                    self._host_consecutive_failures[host] = self._host_consecutive_failures.get(host, 0) + 1
                 continue
                 
             except requests.exceptions.ConnectionError as e:
                 self.logger.error(f"Error de conexión con Ollama: {e}")
+                if hasattr(self, '_host_consecutive_failures'):
+                    self._host_consecutive_failures[host] = self._host_consecutive_failures.get(host, 0) + 1
                 # Verificar si Ollama está corriendo
                 if attempt == 0:
                     self.logger.info("Verificando estado de Ollama...")
                     if not self._verify_connection():
                         self.logger.error("Ollama no está disponible")
-                        return None
+                        break  # Salir del loop para intentar fallback
                 wait_time = (2 ** attempt) * 2
                 time_module.sleep(wait_time)
                 continue
                 
             except requests.exceptions.RequestException as e:
                 self.logger.error(f"Error en request: {e}")
-                return None
+                if hasattr(self, '_host_consecutive_failures'):
+                    self._host_consecutive_failures[host] = self._host_consecutive_failures.get(host, 0) + 1
+                break  # Salir para intentar fallback
         
-        self.logger.error(f"Falló después de {max_retries} intentos")
+        # === AUTO-FALLBACK: intentar en el otro servidor ===
+        if hasattr(self, 'dual_model_enabled') and self.dual_model_enabled:
+            alt_host = self.local_host if host == self.ollama_host else self.ollama_host
+            alt_model = self.local_model if host == self.ollama_host else self.model
+            alt_timeout = self.local_timeout if host == self.ollama_host else self.timeout
+            
+            consecutive = self._host_consecutive_failures.get(host, 0)
+            if consecutive >= self._host_fallback_threshold:
+                self.logger.warning(
+                    f"🔄 Auto-fallback: {host} falló {consecutive}x seguidas, "
+                    f"intentando en {alt_host} ({alt_model})"
+                )
+                print(f"   🔄 Auto-fallback: {consecutive}x timeout en {host.split('//')[1]}, probando {alt_host.split('//')[1]}...")
+                self.stats['auto_server_switches'] = self.stats.get('auto_server_switches', 0) + 1
+                
+                try:
+                    is_qwen3_alt = 'qwen3' in alt_model.lower()
+                    num_predict_alt = 16384 if is_qwen3_alt else 2048
+                    
+                    if is_qwen3_alt:
+                        response = requests.post(
+                            f"{alt_host}/api/chat",
+                            json={
+                                "model": alt_model,
+                                "messages": [
+                                    {"role": "system", "content": system_prompt},
+                                    {"role": "user", "content": user_prompt}
+                                ],
+                                "stream": False,
+                                "options": {"temperature": 0.3, "top_p": 0.9, "num_predict": num_predict_alt}
+                            },
+                            timeout=alt_timeout
+                        )
+                    else:
+                        response = requests.post(
+                            f"{alt_host}/api/generate",
+                            json={
+                                "model": alt_model,
+                                "prompt": user_prompt,
+                                "system": system_prompt,
+                                "stream": False,
+                                "options": {"temperature": 0.3, "top_p": 0.9, "num_predict": num_predict_alt}
+                            },
+                            timeout=alt_timeout
+                        )
+                    
+                    if response.status_code == 200:
+                        data = response.json()
+                        if is_qwen3_alt:
+                            msg = data.get('message', {})
+                            result = msg.get('content', '')
+                            if not result:
+                                thinking = msg.get('thinking', '')
+                                if thinking:
+                                    json_match = re.search(r'\{[\s\S]*\}', thinking)
+                                    if json_match:
+                                        result = json_match.group(0)
+                        else:
+                            result = data.get('response', '')
+                        
+                        # Éxito en fallback — resetear contadores
+                        self._host_consecutive_failures[alt_host] = 0
+                        self.logger.info(f"✓ Fallback exitoso en {alt_host}")
+                        return result
+                        
+                except Exception as e_fb:
+                    self.logger.warning(f"Fallback a {alt_host} también falló: {e_fb}")
+        
+        self.logger.error(f"Falló después de {max_retries} intentos (sin fallback exitoso)")
         return None
     
     def _preload_model(self) -> bool:

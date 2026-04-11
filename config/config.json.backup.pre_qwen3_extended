@@ -1,0 +1,69 @@
+{
+  "min_duration": 5.0,
+  "max_duration": 15.0,
+  "silence_thresh": -40.0,
+  "min_silence_len": 500,
+  "target_sr": 22050,
+  "target_lufs": -23.0,
+  "normalize_peak": true,
+  "whisper_model": "base",
+  "device": null,
+  "language": null,
+  "use_diarization": true,
+  "segment_by_diarization": true,
+  "hf_token": "HF_TOKEN_PLACEHOLDER",
+  "use_voice_bank": true,
+  "voice_bank_path": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/voice_bank.json",
+  "voice_match_threshold": 0.85,
+  "use_segment_review": true,
+  "review_min_duration": 5.0,
+  "review_max_speakers": 1,
+  "review_min_speaker_purity": 0.8,
+  "review_retranscribe": true,
+  "gpu_config": {
+    "enabled": true,
+    "ollama_gpu": 0,
+    "whisper_gpu": 1,
+    "diarization_gpu": 1,
+    "embeddings_gpu": 1
+  },
+  "text_preprocessing": {
+    "enabled": true,
+    "fix_punctuation": true,
+    "normalize_numbers": true,
+    "fix_spacing": true,
+    "fix_capitalization": true,
+    "glosario_path": "./config/glosario_terminos.json"
+  },
+  "llm_correction": {
+    "enabled": true,
+    "ollama_host": "http://localhost:11434",
+    "model": "qwen3:14b",
+    "min_confidence": 0.7,
+    "timeout": 180,
+    "max_retries": 2,
+    "use_batch": true,
+    "batch_size": 2,
+    "use_parallel": false,
+    "max_workers": 2,
+    "enable_cache": true,
+    "cache_file": "/media/ttech-main/8464b39b-ba5b-49c5-9e05-010122b9874d/llm_cache.json",
+    "cache_max_entries": 10000,
+    "cache_expire_days": 30,
+    "enable_verification": true,
+    "verification": {
+      "min_length_ratio": 0.70,
+      "max_length_ratio": 1.40,
+      "min_word_preservation": 0.80,
+      "max_new_word_ratio": 0.25,
+      "min_sequence_similarity": 0.60
+    },
+    "mcp_verification": {
+      "enabled": true,
+      "model": "qwen3:14b",
+      "dictionary_path": "./data/diccionario_base.json",
+      "timeout": 60,
+      "confidence_threshold": 0.80
+    }
+  }
+}

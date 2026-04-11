@@ -18,15 +18,11 @@ Uso:
 import argparse
 import json
 import os
-# Ensure deno is in PATH for yt-dlp JavaScript runtime
-os.environ["PATH"] = os.path.expanduser("~/.deno/bin") + ":" + os.environ.get("PATH", "")
 import sys
 import subprocess
 import hashlib
 import re
 import select
-import tempfile
-import shutil
 from pathlib import Path
 from datetime import datetime, timedelta
 from typing import List, Dict, Optional, Tuple
@@ -94,88 +90,16 @@ def load_config(config_path: str) -> Dict:
 def load_processed_registry(registry_path: str) -> Dict:
     """Carga registro de videos ya procesados."""
     if os.path.exists(registry_path):
-        try:
-            with open(registry_path, 'r', encoding='utf-8') as f:
-                return json.load(f)
-        except json.JSONDecodeError as e:
-            log(f"¡ERROR CRÍTICO! El archivo de registro está corrupto: {registry_path}", "ERROR")
-            log(f"Detalle: {e}", "ERROR")
-            log("Se iniciará con un registro vacío. Considere restaurar un backup o reparar el archivo.", "WARNING")
-            # Opcional: renombrar el corrupto para no sobrescribirlo
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            corrupt_path = f"{registry_path}.corrupt.{timestamp}"
-            try:
-                shutil.copy(registry_path, corrupt_path)
-                log(f"Backup del archivo corrupto guardado en: {corrupt_path}", "INFO")
-            except:
-                pass
-            return {"processed": {}, "failed": {}, "skipped": {}}
+        with open(registry_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
     return {"processed": {}, "failed": {}, "skipped": {}}
 
 
 def save_processed_registry(registry: Dict, registry_path: str):
-    """
-    Guarda registro de videos procesados de forma atómica.
-    Escribe en temporal y luego renombra para evitar corrupción si se cancela el proceso.
-    """
-    path_obj = Path(registry_path)
-    path_obj.parent.mkdir(parents=True, exist_ok=True)
-    
-    # Escribir a archivo temporal en el mismo directorio (para que el rename sea atómico)
-    try:
-        with tempfile.NamedTemporaryFile('w', dir=path_obj.parent, delete=False, encoding='utf-8') as tf:
-            json.dump(registry, tf, indent=2, ensure_ascii=False)
-            temp_name = tf.name
-        
-        # Sincronizar disco
-        os.sync()
-        
-        # Renombrar atómico
-        os.replace(temp_name, registry_path)
-        
-    except Exception as e:
-        log(f"Error guardando registro: {e}", "ERROR")
-        if 'temp_name' in locals() and os.path.exists(temp_name):
-            os.remove(temp_name)
-
-
-def remove_queries_from_config(config_path: str, queries_to_remove: List[Dict]):
-    """
-    Elimina queries del archivo de configuración.
-    
-    Args:
-        config_path: Ruta al archivo JSON
-        queries_to_remove: Lista de dicts {'category': str, 'query': str}
-    """
-    if not queries_to_remove or not os.path.exists(config_path):
-        return
-
-    try:
-        # Cargar config actual por si hubo cambios externos
-        with open(config_path, 'r', encoding='utf-8') as f:
-            current_config = json.load(f)
-        
-        removed_count = 0
-        
-        for item in queries_to_remove:
-            cat_target = item['category']
-            query_target = item['query']
-            
-            for category in current_config.get('categories', []):
-                if category.get('name') == cat_target:
-                    if query_target in category.get('queries', []):
-                        category['queries'].remove(query_target)
-                        removed_count += 1
-                        log(f"   🗑️ Eliminado query agotado: '{query_target}' ({cat_target})", "WARNING")
-        
-        if removed_count > 0:
-            with open(config_path, 'w', encoding='utf-8') as f:
-                json.dump(current_config, f, indent=2, ensure_ascii=False)
-            log(f"Se eliminaron {removed_count} queries del archivo de configuración", "SUCCESS")
-            
-    except Exception as e:
-        log(f"Error actualizando configuración: {e}", "ERROR")
-
+    """Guarda registro de videos procesados."""
+    Path(registry_path).parent.mkdir(parents=True, exist_ok=True)
+    with open(registry_path, 'w', encoding='utf-8') as f:
+        json.dump(registry, f, indent=2, ensure_ascii=False)
 
 
 def get_video_id(url: str) -> Optional[str]:
@@ -194,8 +118,7 @@ def get_video_id(url: str) -> Optional[str]:
 
 def search_youtube(query: str, max_results: int = 5, 
                    min_duration: int = 600, max_duration: int = 10800,
-                   upload_date: str = None,
-                   allowed_languages: List[str] = None) -> List[Dict]:
+                   upload_date: str = None) -> List[Dict]:
     """
     Busca videos en YouTube usando yt-dlp.
     
@@ -211,31 +134,41 @@ def search_youtube(query: str, max_results: int = 5,
     """
     log(f"Buscando: '{query}'", "SEARCH")
     
-    # Resolver path de yt-dlp desde el venv del proyecto
-    ytdlp_path = shutil.which('yt-dlp') or str(PROJECT_ROOT / 'venv' / 'bin' / 'yt-dlp')
-
     # Construir comando yt-dlp para búsqueda (flat-playlist ya incluye duración)
     cmd = [
-        ytdlp_path,
+        'yt-dlp',
         f'ytsearch{max_results * 4}:{query}',  # Buscar más para compensar unavailable
         '--dump-json',
         '--flat-playlist',
         '--no-warnings',
         '--ignore-errors',
-        # '--cookies-from-browser', 'chrome',  # Disabled - flagged by YouTube
-        '--remote-components', 'ejs:github',
-        '--socket-timeout', '30',
-        '--retries', '5',
-        '--sleep-requests', '2',
+        '--socket-timeout', '30',  # Timeout por socket
+        '--retries', '3',  # Reintentar 3 veces
+        '--sleep-requests', '1',  # Esperar 1s entre requests
     ]
     
-    try:
-        result = subprocess.run(
-            cmd,
-            capture_output=True,
-            text=True,
-            timeout=300
-        )
+    # Intentar con cookies de Chrome primero, si falla intentar sin cookies
+    for attempt in range(2):
+        try:
+            if attempt == 0:
+                # Intento 1: Con cookies de Chrome
+                cmd_with_cookies = cmd + ['--cookies-from-browser', 'chrome']
+                log(f"   Intento {attempt + 1}/2: Con cookies de Chrome", "INFO")
+                current_cmd = cmd_with_cookies
+            else:
+                # Intento 2: Sin cookies
+                log(f"   Intento {attempt + 1}/2: Sin cookies", "INFO")
+                current_cmd = cmd
+            
+            result = subprocess.run(
+                current_cmd,
+                capture_output=True,
+                text=True,
+                timeout=180  # 3 minutos (aumentado de 120s)
+            )
+            
+            # Si funcionó, continuar con el parseo
+            if result.returncode == 0 or result.stdout.strip():
         
         # Parsear resultados directamente (flat-playlist ya incluye duración)
         valid_videos = []
@@ -257,22 +190,6 @@ def search_youtube(query: str, max_results: int = 5,
                     continue
                 if live_status and live_status != 'not_live':
                     continue
-                
-                # Filtrar por idioma
-                if allowed_languages:
-                    video_lang = video.get('language', '') or ''
-                    title_text = video.get('title', '')
-                    # Check yt-dlp language field
-                    lang_ok = any(video_lang.startswith(lang) for lang in allowed_languages)
-                    # If no language metadata, use title heuristic
-                    if not video_lang:
-                        # Assume Spanish if title has Spanish characters/patterns
-                        has_spanish_chars = any(c in title_text for c in 'áéíóúñüÁÉÍÓÚÑÜ¿¡')
-                        english_indicators = ['the ', 'with ', 'how to ', 'what is ', 'why ', 'my ', 'our ', ' and ', ' for ', ' from ']
-                        has_english = any(ind in title_text.lower() for ind in english_indicators)
-                        lang_ok = has_spanish_chars or not has_english
-                    if not lang_ok:
-                        continue
                 
                 # Filtrar por duración directamente
                 if duration and min_duration <= duration <= max_duration:
@@ -367,22 +284,6 @@ def convert_to_wav(input_path: str, output_path: str) -> bool:
         return False
 
 
-def _is_valid_audio_file(file_path) -> bool:
-    """Verifica que un archivo de audio no esté vacío/corrupto (mínimo 10KB)."""
-    try:
-        size = Path(file_path).stat().st_size
-        if size < 10000:  # 10KB mínimo
-            log(f"   ⚠️ Archivo vacío/corrupto ({size} bytes), descartando: {Path(file_path).name}", "WARNING")
-            try:
-                Path(file_path).unlink()
-            except:
-                pass
-            return False
-        return True
-    except:
-        return False
-
-
 def cleanup_corrupt_files(output_dir: str) -> int:
     """
     Elimina archivos corruptos o incompletos del directorio.
@@ -401,16 +302,6 @@ def cleanup_corrupt_files(output_dir: str) -> int:
                 removed += 1
             except Exception as e:
                 log(f"   ⚠️ No se pudo eliminar {file_path.name}: {e}", "WARNING")
-    
-    # Also clean up empty/tiny WAV files
-    for file_path in Path(output_dir).glob('*.wav'):
-        try:
-            if file_path.stat().st_size < 10000:
-                file_path.unlink()
-                log(f"   🗑️ Eliminado WAV vacío: {file_path.name}", "WARNING")
-                removed += 1
-        except:
-            pass
     
     return removed
 
@@ -485,8 +376,6 @@ def download_audio(url: str, output_dir: str, video_title: str) -> Tuple[bool, s
         # 2. Buscar audio en archivos nuevos
         for f in new_files:
             if f.suffix.lower() in audio_extensions:
-                if not _is_valid_audio_file(f):
-                    continue
                 log(f"   ✅ {f.name[:60]}", "SUCCESS")
                 return True, str(f)
         
@@ -508,8 +397,6 @@ def download_audio(url: str, output_dir: str, video_title: str) -> Tuple[bool, s
             file_normalized = _normalize_title_for_search(f.stem)
             # Si el nombre del archivo contiene parte del título
             if title_normalized[:20] in file_normalized or file_normalized[:20] in title_normalized:
-                if not _is_valid_audio_file(f):
-                    continue
                 log(f"   ✅ {f.name[:60]}", "SUCCESS")
                 return True, str(f)
         
@@ -526,20 +413,11 @@ def download_audio(url: str, output_dir: str, video_title: str) -> Tuple[bool, s
                                 pass
                             log(f"   ✅ {wav_path.name[:60]}", "SUCCESS")
                             return True, str(wav_path)
-                    if not _is_valid_audio_file(f):
-                        continue
                     log(f"   ✅ {f.name[:60]}", "SUCCESS")
                     return True, str(f)
         
         # Solo si realmente no hay archivo
         log(f"   ❌ No se pudo descargar", "ERROR")
-        
-        # Mostrar las últimas líneas de salida para diagnóstico
-        if output_lines:
-            log("   🔍 Últimas líneas de salida del proceso de descarga:", "ERROR")
-            for line in output_lines[-15:]:
-                log(f"      {line}", "ERROR")
-                
         return False, "Archivo no encontrado"
             
     except subprocess.TimeoutExpired:
@@ -648,12 +526,10 @@ def process_audio(audio_path: str, output_dir: str, config_path: str,
         return False, str(e)
 
 
-
 def run_pipeline(config: Dict, registry: Dict, registry_path: str,
                  data_path: str, category_filter: str = None,
                  limit_per_category: int = None, dry_run: bool = False,
-                 process_only: bool = False, max_total_videos: int = 10,
-                 search_config_path: str = None) -> Dict:
+                 process_only: bool = False, max_total_videos: int = 10) -> Dict:
     """
     Ejecuta el pipeline completo de búsqueda, descarga y procesamiento.
     
@@ -681,7 +557,6 @@ def run_pipeline(config: Dict, registry: Dict, registry_path: str,
     min_duration = search_settings.get('min_duration_minutes', 10) * 60
     max_duration = search_settings.get('max_duration_minutes', 180) * 60
     upload_filter = search_settings.get('upload_date_filter', 'year')
-    allowed_languages = search_settings.get('preferred_languages', ['es'])
     
     channels_blacklist = config.get('channels_blacklist', [])
     
@@ -701,8 +576,6 @@ def run_pipeline(config: Dict, registry: Dict, registry_path: str,
     print(f"{Colors.MAGENTA}{'─'*60}{Colors.RESET}")
     
     categories = config.get('categories', [])
-    
-    queries_to_remove = []
     
     for category in categories:
         cat_name = category.get('name', 'unknown')
@@ -726,21 +599,14 @@ def run_pipeline(config: Dict, registry: Dict, registry_path: str,
         
         for query in queries:
             stats['searched'] += 1
-            query_new_videos_count = 0
             
             videos = search_youtube(
                 query,
                 max_results=max_results,
                 min_duration=min_duration,
                 max_duration=max_duration,
-                upload_date=upload_filter,
-                allowed_languages=allowed_languages
+                upload_date=upload_filter
             )
-            
-            # Si no devolvió videos tras la búsqueda, asumimos error o filtrado estricto por duración.
-            # No eliminamos el query para ser conservadores (podría ser fallo de red).
-            if not videos:
-                continue
             
             for video in videos:
                 video_id = video.get('id')
@@ -767,12 +633,6 @@ def run_pipeline(config: Dict, registry: Dict, registry_path: str,
                 
                 category_videos.append(video)
                 stats['found'] += 1
-                query_new_videos_count += 1
-            
-            # Si encontró videos pero TODOS eran conocidos/excluidos, el query está agotado
-            if query_new_videos_count == 0:
-                log(f"   ⚠️ Query agotado (sin nuevos videos): '{query}'", "WARNING")
-                queries_to_remove.append({'category': cat_name, 'query': query})
         
         # Eliminar duplicados
         seen_ids = set()
@@ -929,10 +789,6 @@ def run_pipeline(config: Dict, registry: Dict, registry_path: str,
             
             # Pequeña pausa entre videos para no sobrecargar
             time.sleep(2)
-    
-    # Eliminar queries agotados al final de la ejecución
-    if queries_to_remove and search_config_path:
-        remove_queries_from_config(search_config_path, queries_to_remove)
     
     stats['end_time'] = time.time()
     return stats
@@ -1418,8 +1274,7 @@ Ejemplos:
         limit_per_category=args.limit,
         dry_run=args.dry_run,
         process_only=args.download_only,
-        max_total_videos=args.videos,
-        search_config_path=args.config
+        max_total_videos=args.videos
     )
     
     # Mostrar resumen y generar gráfica

@@ -227,13 +227,14 @@ class PodcastProcessor:
             if MCP_VERIFIER_AVAILABLE:
                 try:
                     self.mcp_verifier = TextVerifierMCP(
-                        ollama_host=llm_config.get('ollama_host', 'http://localhost:11434'),
+                        ollama_host=mcp_config.get('ollama_host', llm_config.get('ollama_host', 'http://localhost:11434')),
                         model=mcp_config.get('model', llm_config.get('model', 'qwen3:14b')),
                         dictionary_path=mcp_config.get('dictionary_path'),
                         timeout=mcp_config.get('timeout', 60),
                         confidence_threshold=mcp_config.get('confidence_threshold', 0.80)
                     )
-                    print(f"✓ Verificador MCP inicializado (modelo={mcp_config.get('model', 'qwen3:14b')})")
+                    mcp_host = mcp_config.get('ollama_host', llm_config.get('ollama_host'))
+                    print(f"✓ Verificador MCP inicializado (modelo={mcp_config.get('model', 'qwen3:14b')}, host={mcp_host})")
                 except Exception as e:
                     print(f"⚠️  No se pudo inicializar verificador MCP: {e}")
                     self.mcp_verifier = None
@@ -749,6 +750,7 @@ class PodcastProcessor:
     def process_batch(self, input_audio_files: List[str], output_dir: str) -> List[Dict]:
         """
         Procesa múltiples archivos de podcast.
+        Salta archivos que ya tienen metadata JSON generado (resume-safe).
         
         Args:
             input_audio_files: Lista de rutas a archivos de podcast
@@ -760,8 +762,21 @@ class PodcastProcessor:
         import gc
         
         all_metadata = []
+        skipped = 0
+        metadata_dir = os.path.join(output_dir, 'metadata')
         
         for i, audio_file in enumerate(input_audio_files, 1):
+            # === SKIP YA PROCESADOS ===
+            podcast_name = Path(audio_file).stem
+            podcast_id_clean = re.sub(r'[^a-zA-Z0-9_-]', '_', podcast_name)[:50]
+            meta_json = os.path.join(metadata_dir, f"{podcast_id_clean}.json")
+            
+            if os.path.exists(meta_json):
+                skipped += 1
+                if skipped <= 5 or skipped % 100 == 0:
+                    print(f"[{i}/{len(input_audio_files)}] ⏭️  Ya procesado: {Path(audio_file).name} (skip #{skipped})")
+                continue
+            
             print(f"\n[{i}/{len(input_audio_files)}] Procesando: {Path(audio_file).name}")
             
             try:
@@ -775,6 +790,9 @@ class PodcastProcessor:
             print("   🧹 Limpiando memoria...")
             gc.collect()
             self.gpu_manager.cleanup_memory()
+        
+        if skipped > 0:
+            print(f"\n📊 Resumen: {skipped} podcasts ya procesados fueron saltados.")
         
         return all_metadata
     

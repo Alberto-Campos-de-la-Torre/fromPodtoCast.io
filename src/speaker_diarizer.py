@@ -3,6 +3,7 @@ Módulo para identificar y etiquetar diferentes narradores (speakers) en audio.
 """
 import os
 import re
+import tempfile
 from pathlib import Path
 from typing import List, Dict, Optional, Tuple
 import torch
@@ -112,6 +113,41 @@ class SpeakerDiarizer:
 
         self._init_embedding_model()
     
+    def _resample_to_16k(self, audio_path: str) -> Optional[str]:
+        """
+        Resamplea audio a exactamente 16kHz en un archivo temporal.
+        Esto previene errores de pyannote por sample-count mismatch.
+        
+        Returns:
+            Ruta al archivo temporal resampleado, o None si falla.
+        """
+        try:
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                try:
+                    waveform, sr = torchaudio.load_with_torchcodec(audio_path)
+                except (AttributeError, TypeError):
+                    waveform, sr = torchaudio.load(audio_path)
+            
+            # Convertir a mono
+            if waveform.shape[0] > 1:
+                waveform = torch.mean(waveform, dim=0, keepdim=True)
+            
+            # Resamplear a 16kHz si no lo es ya
+            if sr != 16000:
+                resampler = torchaudio.transforms.Resample(orig_freq=sr, new_freq=16000)
+                waveform = resampler(waveform)
+            
+            # Guardar en archivo temporal
+            tmp = tempfile.NamedTemporaryFile(suffix='.wav', delete=False)
+            tmp_path = tmp.name
+            tmp.close()
+            torchaudio.save(tmp_path, waveform, 16000)
+            return tmp_path
+        except Exception as e:
+            print(f"   ⚠️  Error resampleando audio: {e}")
+            return None
+
     def diarize(self, audio_path: str, min_speakers: Optional[int] = None,
                 max_speakers: Optional[int] = None) -> List[Dict]:
         """
@@ -129,10 +165,14 @@ class SpeakerDiarizer:
             # Método alternativo: asignar speaker_id basado en energía
             return self._simple_diarization(audio_path)
         
+        # Resamplear a 16kHz para evitar errores de pyannote
+        resampled_path = self._resample_to_16k(audio_path)
+        diarize_input = resampled_path if resampled_path else audio_path
+        
         # Usar pipeline de pyannote
         try:
             diarization = self.pipeline(
-                audio_path,
+                diarize_input,
                 min_speakers=min_speakers,
                 max_speakers=max_speakers
             )
@@ -168,6 +208,13 @@ class SpeakerDiarizer:
         except Exception as e:
             print(f"Error en diarización con pyannote: {e}")
             return self._simple_diarization(audio_path)
+        finally:
+            # Limpiar archivo temporal
+            if resampled_path and os.path.exists(resampled_path):
+                try:
+                    os.remove(resampled_path)
+                except OSError:
+                    pass
     
     def _simple_diarization(self, audio_path: str) -> List[Dict]:
         """

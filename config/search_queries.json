@@ -3,7 +3,9 @@
     "max_results_per_query": 5,
     "min_duration_minutes": 10,
     "max_duration_minutes": 180,
-    "preferred_languages": ["es", "en"],
+    "preferred_languages": [
+      "es"
+    ],
     "sort_by": "relevance",
     "upload_date_filter": "year"
   },
@@ -11,339 +13,1387 @@
     {
       "name": "enarm_preparacion",
       "enabled": true,
-      "queries": [
-        "ENARM casos clínicos resueltos",
-        "ENARM preguntas y respuestas explicadas",
-        "ENARM medicina interna casos",
-        "ENARM cirugía general casos clínicos",
-        "ENARM pediatría casos complejos",
-        "ENARM ginecología obstetricia casos",
-        "ENARM urgencias médicas",
-        "ENARM diagnóstico diferencial",
-        "preguntas ENARM comentadas",
-        "simulacro ENARM explicado",
-        "ENARM cuadro básico sector salud",
-        "ENARM medicina familiar México",
-        "ENARM normas oficiales mexicanas salud"
-      ],
-      "exclude_keywords": ["shorts", "resumen 1 minuto", "meme"]
+      "queries": [],
+      "exclude_keywords": [
+        "shorts",
+        "resumen 1 minuto",
+        "meme"
+      ]
     },
     {
       "name": "medicina_interna_avanzada",
       "enabled": true,
-      "queries": [
-        "medicina interna casos clínicos complejos",
-        "endocrinología casos clínicos español",
-        "cardiología avanzada español",
-        "nefrología casos clínicos",
-        "gastroenterología casos complejos",
-        "reumatología diagnóstico diferencial",
-        "infectología casos clínicos",
-        "hematología casos clínicos español",
-        "neumología casos complejos",
-        "diabetes mellitus manejo México",
-        "hipertensión arterial guías mexicanas",
-        "insuficiencia renal crónica IMSS"
-      ],
-      "exclude_keywords": ["remedios caseros", "cura milagrosa", "shorts"]
+      "queries": [],
+      "exclude_keywords": [
+        "remedios caseros",
+        "cura milagrosa",
+        "shorts"
+      ]
     },
     {
       "name": "cirugia_especializada",
       "enabled": true,
-      "queries": [
-        "cirugía general casos clínicos",
-        "abdomen agudo diagnóstico diferencial",
-        "trauma casos clínicos español",
-        "cirugía laparoscópica técnicas",
-        "urgencias quirúrgicas explicadas",
-        "manejo politraumatizado",
-        "complicaciones postoperatorias",
-        "apendicitis aguda protocolo México",
-        "colecistitis manejo quirúrgico México"
-      ],
-      "exclude_keywords": ["shorts", "animación simple"]
+      "queries": [],
+      "exclude_keywords": [
+        "shorts",
+        "animación simple"
+      ]
     },
     {
       "name": "pediatria_compleja",
       "enabled": true,
       "queries": [
-        "pediatría casos clínicos complejos",
-        "neonatología casos clínicos",
-        "emergencias pediátricas",
-        "diagnóstico diferencial pediatría",
-        "enfermedades raras pediatría",
-        "reanimación neonatal avanzada",
-        "esquema vacunación México actualizado",
-        "desnutrición infantil México casos",
-        "cardiopatías congénitas México"
+        "urgencias pediátricas manejo avanzado conferencia"
       ],
-      "exclude_keywords": ["consejos mamás", "remedios caseros", "shorts"]
+      "exclude_keywords": [
+        "consejos mamás",
+        "remedios caseros",
+        "shorts"
+      ]
     },
     {
       "name": "ginecologia_obstetricia",
       "enabled": true,
-      "queries": [
-        "ginecología casos clínicos complejos",
-        "obstetricia alto riesgo casos",
-        "emergencias obstétricas",
-        "diagnóstico diferencial ginecología",
-        "patología cervical casos",
-        "complicaciones embarazo",
-        "preeclampsia eclampsia manejo México",
-        "parto prematuro protocolo mexicano",
-        "muerte materna prevención México"
-      ],
-      "exclude_keywords": ["remedios naturales", "shorts"]
+      "queries": [],
+      "exclude_keywords": [
+        "remedios naturales",
+        "shorts"
+      ]
     },
     {
       "name": "diagnostico_imagenologia",
       "enabled": true,
-      "queries": [
-        "radiología casos clínicos español",
-        "interpretación TAC casos",
-        "resonancia magnética casos clínicos",
-        "ultrasonido diagnóstico casos",
-        "radiografía tórax casos complejos",
-        "imagenología diagnóstico diferencial",
-        "mastografía interpretación casos México",
-        "ultrasonido obstétrico México"
-      ],
-      "exclude_keywords": ["shorts", "básico"]
+      "queries": [],
+      "exclude_keywords": [
+        "shorts",
+        "básico"
+      ]
     },
     {
       "name": "medicina_urgencias",
       "enabled": true,
-      "queries": [
-        "medicina urgencias casos clínicos",
-        "ACLS casos clínicos español",
-        "trauma avanzado ATLS",
-        "shock casos clínicos",
-        "intoxicaciones casos clínicos",
-        "urgencias cardiovasculares",
-        "manejo vía aérea difícil",
-        "código infarto protocolo México",
-        "picadura alacrán manejo México",
-        "mordedura serpiente casos México"
-      ],
-      "exclude_keywords": ["shorts", "primeros auxilios básicos"]
+      "queries": [],
+      "exclude_keywords": [
+        "shorts",
+        "primeros auxilios básicos"
+      ]
     },
     {
       "name": "farmacologia_clinica",
       "enabled": true,
       "queries": [
-        "farmacología clínica casos",
-        "interacciones medicamentosas complejas",
-        "antibióticos casos clínicos",
-        "farmacocinética clínica",
-        "reacciones adversas medicamentos",
-        "cuadro básico medicamentos IMSS",
-        "cuadro básico ISSSTE actualizado",
-        "genéricos intercambiables México"
+        "nuevos medicamentos aprobación México entrevista"
       ],
-      "exclude_keywords": ["shorts", "remedios"]
+      "exclude_keywords": [
+        "shorts",
+        "remedios"
+      ]
     },
     {
       "name": "regionalismo_medico_mexicano",
       "enabled": true,
-      "queries": [
-        "términos médicos mexicanos regionalismos",
-        "jerga médica México hospitales",
-        "modismos medicina México",
-        "slang médico mexicano",
-        "lenguaje médico coloquial México",
-        "términos médicos populares México",
-        "expresiones médicas regionales México",
-        "vocabulario clínico México IMSS ISSSTE"
-      ],
-      "exclude_keywords": ["shorts", "meme", "broma"]
+      "queries": [],
+      "exclude_keywords": [
+        "shorts",
+        "meme",
+        "broma"
+      ]
     },
     {
       "name": "sistema_salud_mexicano",
       "enabled": true,
-      "queries": [
-        "sistema salud México explicado",
-        "IMSS funcionamiento médicos",
-        "ISSSTE sistema atención",
-        "Seguro Popular INSABI cambios",
-        "sector salud México organización",
-        "medicina privada vs pública México",
-        "residencias médicas México sistema",
-        "guardias médicas México legislación"
-      ],
-      "exclude_keywords": ["shorts", "quejas", "rant"]
+      "queries": [],
+      "exclude_keywords": [
+        "shorts",
+        "quejas",
+        "rant"
+      ]
     },
     {
       "name": "enfermedades_prevalentes_mexico",
       "enabled": true,
       "queries": [
-        "diabetes México epidemiología casos",
-        "obesidad México manejo clínico",
-        "hipertensión arterial México prevalencia",
-        "dengue casos clínicos México",
-        "tuberculosis México casos",
-        "VIH SIDA México casos clínicos",
-        "enfermedad renal crónica México",
-        "cáncer cervicouterino México casos",
-        "enfermedad cardiovascular México"
+        "obesidad México salud pública conferencia"
       ],
-      "exclude_keywords": ["remedios caseros", "shorts"]
+      "exclude_keywords": [
+        "remedios caseros",
+        "shorts"
+      ]
     },
     {
       "name": "normas_oficiales_mexicanas",
       "enabled": true,
       "queries": [
-        "NOM salud México explicadas",
-        "NOM diabetes mellitus aplicación",
-        "NOM hipertensión arterial México",
-        "NOM expediente clínico actualizado",
-        "NOM atención materna perinatal",
-        "normas oficiales urgencias médicas",
-        "guías práctica clínica México CENETEC",
-        "protocolos atención médica México"
+        "NOM 015 diabetes mellitus actualización médica"
       ],
-      "exclude_keywords": ["shorts", "resumen corto"]
+      "exclude_keywords": [
+        "shorts",
+        "resumen corto"
+      ]
     },
     {
       "name": "medicamentos_comerciales_mexico",
       "enabled": true,
-      "queries": [
-        "nombres comerciales medicamentos México",
-        "marcas medicamentos México vs genéricos",
-        "antibióticos nombres comerciales México",
-        "antihipertensivos marcas México",
-        "antidiabéticos orales México marcas",
-        "analgésicos nombres comerciales México",
-        "medicamentos controlados México legislación"
-      ],
-      "exclude_keywords": ["publicidad", "promoción", "shorts"]
+      "queries": [],
+      "exclude_keywords": [
+        "publicidad",
+        "promoción",
+        "shorts"
+      ]
     },
     {
       "name": "especialidades_medicas_mexico",
       "enabled": true,
       "queries": [
-        "especialidades médicas demanda México",
-        "residencias médicas más competidas México",
-        "subespecialidades medicina México",
-        "medicina familiar México casos",
-        "urgencias médicas especialidad México",
-        "anestesiología casos México"
+        "investigación médica México hospitales enseñanza"
       ],
-      "exclude_keywords": ["shorts", "vlog"]
+      "exclude_keywords": [
+        "shorts",
+        "vlog"
+      ]
     },
     {
       "name": "podcasts_medicina_especializada",
       "enabled": true,
       "queries": [
-        "podcast medicina interna español",
-        "podcast cardiología español",
-        "podcast médicos especialistas español",
-        "podcast medicina basada evidencia",
-        "podcast residentes médicos español",
-        "discusión casos clínicos podcast",
-        "podcast medicina México",
-        "podcast médicos mexicanos experiencias"
+        "conferencia médica actualización terapéutica español"
       ],
-      "exclude_keywords": ["remedios caseros", "milagro", "shorts"]
+      "exclude_keywords": [
+        "remedios caseros",
+        "milagro",
+        "shorts"
+      ]
     },
     {
       "name": "seminarios_medicos",
       "enabled": true,
-      "queries": [
-        "seminario medicina interna",
-        "sesión clínica casos complejos",
-        "conferencia medicina español",
-        "grand rounds español",
-        "ateneo médico casos",
-        "sesión bibliográfica medicina",
-        "congreso medicina México",
-        "simposio médico México ponencias"
-      ],
-      "exclude_keywords": ["shorts", "trailer"]
+      "queries": [],
+      "exclude_keywords": [
+        "shorts",
+        "trailer"
+      ]
     },
     {
       "name": "podcasts_negocios",
       "enabled": true,
       "queries": [
-        "podcast emprendimiento español",
-        "podcast negocios latinoamerica",
-        "podcast marketing digital español",
-        "podcast startups español",
-        "podcast finanzas personales español",
-        "podcast inversión español",
-        "podcast emprendimiento México",
-        "podcast negocios México economía"
+        "negocios startups latinoamérica conversación"
       ],
-      "exclude_keywords": ["shorts", "reacción", "meme"]
+      "exclude_keywords": [
+        "shorts",
+        "reacción",
+        "meme"
+      ]
     },
     {
       "name": "podcasts_tecnologia",
       "enabled": true,
       "queries": [
-        "podcast tecnología español",
-        "podcast inteligencia artificial español",
-        "podcast programación español",
-        "podcast ciberseguridad español",
-        "podcast innovación tecnológica",
-        "podcast tech México",
-        "podcast desarrollo software español"
+        "blockchain criptomonedas análisis profundo español"
       ],
-      "exclude_keywords": ["tutorial", "curso básico", "shorts"]
+      "exclude_keywords": [
+        "tutorial",
+        "curso básico",
+        "shorts"
+      ]
     },
     {
       "name": "entrevistas",
       "enabled": true,
       "queries": [
-        "entrevista podcast español largo",
-        "charla emprendedores español",
-        "conversaciones profundas podcast",
-        "entrevista médicos especialistas",
-        "entrevista doctores México experiencias",
-        "plática médicos especialistas México"
+        "entrevista artistas músicos mexicanos conversación"
       ],
-      "exclude_keywords": ["corto", "resumen", "clip", "shorts"]
+      "exclude_keywords": [
+        "corto",
+        "resumen",
+        "clip",
+        "shorts"
+      ]
     },
     {
       "name": "vida_medico_mexico",
       "enabled": true,
       "queries": [
-        "vida médico residente México",
-        "guardias médicas México experiencias",
-        "médico general México día a día",
-        "especialista México rutina",
-        "consultorio privado México consejos",
-        "médico rural México experiencias",
-        "servicio social medicina México"
+        "vida cotidiana médico residente México podcast",
+        "burnout médicos México salud mental entrevista"
       ],
-      "exclude_keywords": ["shorts", "vlog corto", "drama"]
+      "exclude_keywords": [
+        "shorts",
+        "vlog corto",
+        "drama"
+      ]
     },
     {
       "name": "educacion_medica_continua",
       "enabled": true,
       "queries": [
-        "educación médica continua México",
-        "cursos actualización médica México",
-        "certificación especialidades México",
-        "recertificación médica México proceso",
-        "actualización guías clínicas México",
-        "diplomados medicina México"
+        "bioética médica casos dilemas entrevista español"
       ],
-      "exclude_keywords": ["shorts", "publicidad"]
+      "exclude_keywords": [
+        "shorts",
+        "publicidad"
+      ]
+    },
+    {
+      "name": "conversaciones_cientificas_español",
+      "enabled": true,
+      "queries": [
+        "divulgación científica conversación investigadores español",
+        "genética genómica avances entrevista biólogo español"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "resumen corto",
+        "niños"
+      ]
+    },
+    {
+      "name": "podcasts_regionales_mexicanos",
+      "enabled": true,
+      "queries": [
+        "podcast Guanajuato bajío México",
+        "podcast Querétaro emprendimiento",
+        "conversación cultura mexicana regional",
+        "podcast gastronomía regional México"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "narco",
+        "violencia",
+        "nota roja"
+      ]
+    },
+    {
+      "name": "ciencia_mexico",
+      "enabled": true,
+      "queries": [
+        "podcast IPN ciencia tecnología",
+        "UNAM investigación científica entrevista",
+        "CONACYT ciencia México entrevista investigadores",
+        "divulgación ciencia México podcast largo"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "resumen",
+        "clip corto"
+      ]
+    },
+    {
+      "name": "oncologia_avances_tratamiento",
+      "enabled": true,
+      "queries": [
+        "oncología avances tratamiento cáncer entrevista español",
+        "inmunoterapia cáncer actualización conferencia médica",
+        "cáncer de mama diagnóstico tratamiento entrevista oncólogo",
+        "quimioterapia radioterapia avances podcast médico",
+        "cuidados paliativos oncología entrevista especialista"
+      ],
+      "exclude_keywords": [
+        "cura milagrosa",
+        "remedios caseros",
+        "alternativa natural",
+        "shorts"
+      ]
+    },
+    {
+      "name": "psiquiatria_salud_mental_clinica",
+      "enabled": true,
+      "queries": [
+        "esquizofrenia trastorno bipolar actualización psiquiatra",
+        "adicciones tratamiento entrevista psiquiatra México",
+        "psicofarmacología actualización terapéutica español"
+      ],
+      "exclude_keywords": [
+        "autoayuda básica",
+        "consejos vida",
+        "shorts"
+      ]
+    },
+    {
+      "name": "finanzas_inversiones_mexico",
+      "enabled": true,
+      "queries": [
+        "inversiones bolsa valores México podcast análisis",
+        "bienes raíces México mercado inmobiliario entrevista",
+        "AFORE SAR pensiones México explicación entrevista"
+      ],
+      "exclude_keywords": [
+        "hazte rico rápido",
+        "estafa",
+        "piramidal",
+        "shorts"
+      ]
+    },
+    {
+      "name": "tecnologia_ia_desarrollo",
+      "enabled": true,
+      "queries": [
+        "machine learning datos entrevista ingeniero español",
+        "ética inteligencia artificial regulación debate español"
+      ],
+      "exclude_keywords": [
+        "tutorial básico",
+        "instalar windows",
+        "shorts"
+      ]
+    },
+    {
+      "name": "entrevistas_ia_futuro",
+      "enabled": true,
+      "queries": [
+        "AGI inteligencia artificial general podcast",
+        "entrevista ingenieros IA deepmind openai español",
+        "futuro inteligencia artificial debate científicos español"
+      ],
+      "exclude_keywords": [
+        "tutorial",
+        "curso",
+        "shorts",
+        "hype"
+      ]
+    },
+    {
+      "name": "entrevistas_politica_geopolitica",
+      "enabled": true,
+      "queries": [
+        "política exterior méxico entrevista",
+        "orden mundial nuevo podcast español",
+        "geopolítica latinoamérica análisis profundo podcast",
+        "conflictos internacionales análisis experto español"
+      ],
+      "exclude_keywords": [
+        "noticias cortas",
+        "shorts",
+        "propaganda",
+        "fake news"
+      ]
+    },
+    {
+      "name": "entrevistas_economia_global",
+      "enabled": true,
+      "queries": [
+        "desigualdad económica debate expertos",
+        "economía global recesión análisis podcast español",
+        "comercio internacional tratados México entrevista"
+      ],
+      "exclude_keywords": [
+        "trading",
+        "forex",
+        "hazte rico",
+        "shorts"
+      ]
+    },
+    {
+      "name": "entrevistas_espacio_cosmos",
+      "enabled": true,
+      "queries": [
+        "telescopio james webb descubrimientos entrevista",
+        "vida extraterrestre debate científico español",
+        "agencia espacial mexicana AEM entrevista"
+      ],
+      "exclude_keywords": [
+        "ovni conspiración",
+        "aliens history channel",
+        "shorts",
+        "ficción"
+      ]
+    },
+    {
+      "name": "entrevistas_lideres_negocios",
+      "enabled": true,
+      "queries": [
+        "startups unicornio latinoamérica entrevista fundadores"
+      ],
+      "exclude_keywords": [
+        "vende humo",
+        "estafa",
+        "shorts",
+        "marketing multinivel"
+      ]
+    },
+    {
+      "name": "entrevistas_grandes_medicos",
+      "enabled": true,
+      "queries": [
+        "entrevista médico reconocido México trayectoria",
+        "historia medicina México entrevista catedráticos"
+      ],
+      "exclude_keywords": [
+        "consejos básicos",
+        "shorts"
+      ]
     },
     {
       "name": "podcasts_educacion",
-      "enabled": false,
+      "enabled": true,
       "queries": [
         "podcast educación español",
         "podcast ciencia español",
         "podcast historia español"
       ],
-      "exclude_keywords": ["shorts"]
+      "exclude_keywords": [
+        "shorts"
+      ]
+    },
+    {
+      "name": "entrevistas_historia_cultura",
+      "enabled": true,
+      "queries": [
+        "historia México prehispánica entrevista historiador",
+        "revolución mexicana análisis profundo conversación",
+        "arqueología descubrimientos México entrevista investigador",
+        "cultura prehispánica azteca maya entrevista antropólogo",
+        "historia colonial México entrevista académico",
+        "museos México patrimonio cultural entrevista director"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "resumen escolar",
+        "tarea"
+      ]
+    },
+    {
+      "name": "entrevistas_derecho_justicia",
+      "enabled": true,
+      "queries": [
+        "derechos humanos México entrevista activista",
+        "derecho penal juicios orales México podcast",
+        "corrupción México análisis entrevista experto",
+        "seguridad pública México entrevista criminólogo"
+      ],
+      "exclude_keywords": [
+        "nota roja",
+        "shorts",
+        "amarillismo"
+      ]
+    },
+    {
+      "name": "entrevistas_medio_ambiente",
+      "enabled": true,
+      "queries": [
+        "conservación biodiversidad México entrevista biólogo",
+        "energías renovables México transición entrevista"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "activismo radical",
+        "conspiración"
+      ]
+    },
+    {
+      "name": "entrevistas_deporte_alto_rendimiento",
+      "enabled": true,
+      "queries": [
+        "medicina deportiva rendimiento entrevista especialista",
+        "boxeo mexicano historia entrevista campeones"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "highlights",
+        "goles",
+        "compilación"
+      ]
+    },
+    {
+      "name": "entrevistas_gastronomia_chef",
+      "enabled": true,
+      "queries": [
+        "chef mexicano entrevista gastronomía alta cocina",
+        "cocina mexicana patrimonio UNESCO entrevista",
+        "industria restaurantera México entrevista empresario",
+        "cocina tradicional México regiones entrevista cocinera",
+        "mezcal tequila industria mexicana entrevista productor"
+      ],
+      "exclude_keywords": [
+        "receta rápida",
+        "shorts",
+        "mukbang"
+      ]
+    },
+    {
+      "name": "entrevistas_arquitectura_urbanismo",
+      "enabled": true,
+      "queries": [
+        "arquitectura mexicana contemporánea entrevista arquitecto",
+        "vivienda social México retos entrevista urbanista"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "house tour",
+        "decoración"
+      ]
+    },
+    {
+      "name": "entrevistas_psicologia_profunda",
+      "enabled": true,
+      "queries": [
+        "trauma psicológico tratamiento entrevista terapeuta español",
+        "psicología forense criminalística entrevista especialista",
+        "trastornos personalidad diagnóstico entrevista clínico"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "tips motivacionales",
+        "coaching vida"
+      ]
+    },
+    {
+      "name": "entrevistas_filosofia_pensamiento",
+      "enabled": true,
+      "queries": [
+        "ética moral dilemas entrevista filósofo español",
+        "pensamiento crítico universidad entrevista académico",
+        "existencialismo filosofía entrevista catedrático español",
+        "filosofía política justicia social debate español"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "frases motivacionales",
+        "resumen libro"
+      ]
+    },
+    {
+      "name": "entrevistas_migracion_sociedad",
+      "enabled": true,
+      "queries": [
+        "migración México entrevista sociólogo análisis",
+        "migrantes mexicanos Estados Unidos entrevista experiencia",
+        "frontera México Estados Unidos entrevista periodista",
+        "diáspora mexicana comunidades entrevista investigador"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "nota roja",
+        "xenofobia"
+      ]
+    },
+    {
+      "name": "entrevistas_emprendimiento_social",
+      "enabled": true,
+      "queries": [
+        "emprendimiento social México impacto entrevista fundador",
+        "ONGs organizaciones civiles México entrevista director",
+        "economía solidaria cooperativas México entrevista",
+        "microfinanzas inclusión financiera México entrevista"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "donaciones",
+        "estafa"
+      ]
+    },
+    {
+      "name": "entrevistas_cine_television",
+      "enabled": true,
+      "queries": [
+        "cine mexicano director entrevista producción película",
+        "actores mexicanos entrevista carrera trayectoria",
+        "guionistas mexicanos entrevista proceso creativo"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "trailer",
+        "chismes",
+        "farándula"
+      ]
+    },
+    {
+      "name": "entrevistas_musica_industria",
+      "enabled": true,
+      "queries": [
+        "música mexicana regional industria entrevista productor",
+        "compositores mexicanos entrevista proceso creativo",
+        "música clásica orquesta México entrevista director",
+        "rap hip hop México escena independiente entrevista"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "react",
+        "karaoke",
+        "cover"
+      ]
+    },
+    {
+      "name": "entrevistas_agricultura_campo",
+      "enabled": true,
+      "queries": [
+        "agricultura México campo retos entrevista productor",
+        "agroindustria México exportaciones entrevista empresario",
+        "tecnología agrícola innovación rural México entrevista"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "tutorial siembra",
+        "jardinería"
+      ]
+    },
+    {
+      "name": "entrevistas_periodismo_medios",
+      "enabled": true,
+      "queries": [
+        "medios comunicación México transformación entrevista",
+        "periodismo digital nuevos medios entrevista editor"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "clickbait",
+        "amarillismo"
+      ]
+    },
+    {
+      "name": "entrevistas_salud_publica_epidemiologia",
+      "enabled": true,
+      "queries": [
+        "epidemiología salud pública México entrevista investigador",
+        "pandemias preparación respuesta entrevista epidemiólogo",
+        "enfermedades emergentes vigilancia epidemiológica entrevista",
+        "determinantes sociales salud México análisis entrevista"
+      ],
+      "exclude_keywords": [
+        "antivacunas",
+        "conspiración",
+        "shorts"
+      ]
+    },
+    {
+      "name": "entrevistas_matematicas_ingenieria",
+      "enabled": true,
+      "queries": [
+        "matemáticas aplicadas entrevista investigador español",
+        "ingeniería mecatrónica robótica México entrevista"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "tutorial básico",
+        "tarea escolar"
+      ]
+    },
+    {
+      "name": "entrevistas_literatura_escritores",
+      "enabled": true,
+      "queries": [
+        "literatura latinoamericana conversación autor español",
+        "poesía mexicana entrevista poeta contemporáneo"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "resumen libro",
+        "audiolibro"
+      ]
+    },
+    {
+      "name": "podcasts_true_crime_mexico",
+      "enabled": true,
+      "queries": [
+        "true crime México casos reales podcast largo",
+        "casos criminales México análisis profundo podcast",
+        "justicia penal casos emblemáticos México podcast"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "nota roja",
+        "gore",
+        "morbo"
+      ]
+    },
+    {
+      "name": "podcasts_salud_nutricion",
+      "enabled": true,
+      "queries": [
+        "nutrición clínica entrevista nutriólogo México podcast",
+        "dieta cetogénica evidencia científica debate médicos",
+        "trastornos alimenticios tratamiento entrevista especialista",
+        "microbiota intestinal salud entrevista gastroenterólogo"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "batido mágico",
+        "baja 10 kilos"
+      ]
+    },
+    {
+      "name": "entrevistas_veterinaria",
+      "enabled": true,
+      "queries": [
+        "fauna silvestre conservación México entrevista veterinario",
+        "etología animal comportamiento entrevista biólogo español",
+        "ganadería salud animal México entrevista zootecnista"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "mascotas cute",
+        "compilación animales"
+      ]
+    },
+    {
+      "name": "podcasts_sudamerica_largo",
+      "enabled": true,
+      "queries": [
+        "podcast Colombia entrevista empresarios emprendedores"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "clip",
+        "resumen"
+      ]
+    },
+    {
+      "name": "podcasts_españa_conversacion",
+      "enabled": true,
+      "queries": [
+        "podcast español europeo análisis sociedad debate",
+        "entrevista científicos españoles investigación podcast",
+        "podcast cultura española contemporánea entrevista largo"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "clip",
+        "resumen rápido"
+      ]
+    },
+    {
+      "name": "entrevistas_odontologia",
+      "enabled": true,
+      "queries": [
+        "implantología dental avances entrevista periodoncista"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "blanqueamiento casero",
+        "remedios"
+      ]
+    },
+    {
+      "name": "entrevistas_dermatologia",
+      "enabled": true,
+      "queries": [
+        "enfermedades piel diagnóstico tratamiento conferencia",
+        "dermatología estética procedimientos entrevista especialista",
+        "psoriasis dermatitis tratamiento entrevista dermatólogo"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "rutina skincare",
+        "influencer belleza"
+      ]
+    },
+    {
+      "name": "podcasts_videojuegos_industria",
+      "enabled": true,
+      "queries": [
+        "historia videojuegos análisis profundo podcast español",
+        "esports competitivo profesional entrevista jugador español"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "gameplay",
+        "let's play",
+        "directo"
+      ]
+    },
+    {
+      "name": "entrevistas_oftalmologia",
+      "enabled": true,
+      "queries": [
+        "oftalmología casos clínicos cirugía ocular entrevista",
+        "glaucoma cataratas tratamiento entrevista oftalmólogo"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "ejercicios ojos",
+        "remedios caseros"
+      ]
+    },
+    {
+      "name": "podcasts_logistica_supply_chain",
+      "enabled": true,
+      "queries": [
+        "logística supply chain México entrevista director operaciones",
+        "comercio exterior aduanas México entrevista especialista",
+        "puertos marítimos México infraestructura entrevista",
+        "nearshoring cadena suministro México podcast análisis"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "tutorial",
+        "curso básico"
+      ]
+    },
+    {
+      "name": "podcasts_energia_petroleo",
+      "enabled": true,
+      "queries": [
+        "industria petrolera México Pemex entrevista ingeniero",
+        "ingeniería petrolera gas natural México podcast",
+        "electromovilidad vehículos eléctricos México entrevista"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "conspiración",
+        "propaganda"
+      ]
+    },
+    {
+      "name": "podcasts_parentalidad_familia",
+      "enabled": true,
+      "queries": [
+        "paternidad maternidad experiencia entrevista larga español",
+        "educación hijos disciplina positiva entrevista español"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "hack de mamá",
+        "reacción"
+      ]
+    },
+    {
+      "name": "podcasts_teologia_religion",
+      "enabled": true,
+      "queries": [
+        "teología entrevista sacerdote pastor reflexión profunda",
+        "historia religiones análisis académico español podcast",
+        "filosofía religión debate pensadores español",
+        "espiritualidad contemporánea entrevista teólogo español",
+        "biblia interpretación académica entrevista historiador"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "predicación",
+        "alabanza",
+        "secta"
+      ]
+    },
+    {
+      "name": "podcasts_mineria_geologia",
+      "enabled": true,
+      "queries": [
+        "minería México industria entrevista ingeniero geólogo",
+        "geología sismología México entrevista investigador",
+        "vulcanología volcanes México entrevista científico",
+        "agua subterránea hidrología México entrevista especialista"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "buscadores oro",
+        "aventura"
+      ]
+    },
+    {
+      "name": "entrevistas_geopolitica_mundial",
+      "enabled": true,
+      "queries": [
+        "geopolítica guerra Ucrania Rusia análisis experto español"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "propaganda",
+        "fake news",
+        "conspiración"
+      ]
+    },
+    {
+      "name": "entrevistas_historia_mundial",
+      "enabled": true,
+      "queries": [
+        "Segunda Guerra Mundial historia análisis profundo español",
+        "historia civilizaciones antiguas Egipto Mesopotamia podcast"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "resumen escolar",
+        "animación infantil"
+      ]
+    },
+    {
+      "name": "entrevistas_conflictos_militares",
+      "enabled": true,
+      "queries": [],
+      "exclude_keywords": [
+        "shorts",
+        "propaganda",
+        "glorificación violencia"
+      ]
+    },
+    {
+      "name": "entrevistas_biotecnologia_genomica",
+      "enabled": true,
+      "queries": [
+        "genómica medicina personalizada entrevista investigador español",
+        "terapia génica enfermedades raras entrevista médico español"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "antivacunas",
+        "conspiración",
+        "transgénico peligro"
+      ]
+    },
+    {
+      "name": "entrevistas_aeroespacial_aviacion",
+      "enabled": true,
+      "queries": [
+        "industria aeroespacial México Querétaro entrevista ingeniero",
+        "cohetes satélites tecnología espacial entrevista español",
+        "exploración Marte Luna programas espaciales entrevista"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "ovnis",
+        "conspiración NASA"
+      ]
+    },
+    {
+      "name": "entrevistas_industria_manufactura",
+      "enabled": true,
+      "queries": [
+        "manufactura aditiva impresión 3D industrial entrevista español"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "tutorial básico",
+        "DIY"
+      ]
+    },
+    {
+      "name": "entrevistas_ciberseguridad_hacking",
+      "enabled": true,
+      "queries": [
+        "ciberseguridad hacking ético entrevista pentester español",
+        "ataques cibernéticos ransomware análisis entrevista experto",
+        "privacidad digital datos personales debate entrevista español",
+        "forense digital investigación cibercrimen entrevista"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "tutorial hackear",
+        "ilegal"
+      ]
+    },
+    {
+      "name": "entrevistas_diplomacia_relaciones",
+      "enabled": true,
+      "queries": [
+        "diplomacia latinoamericana relaciones internacionales entrevista",
+        "tratados internacionales comercio T-MEC análisis entrevista"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "propaganda",
+        "teorías conspiración"
+      ]
+    },
+    {
+      "name": "entrevistas_economia_avanzada",
+      "enabled": true,
+      "queries": [
+        "criptomonedas regulación bancos centrales debate entrevista",
+        "desigualdad riqueza global entrevista economista análisis"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "forex",
+        "trading rápido",
+        "multinivel"
+      ]
+    },
+    {
+      "name": "entrevistas_antropologia_etnografia",
+      "enabled": true,
+      "queries": [
+        "lenguas indígenas México preservación entrevista lingüista"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "turismo superficial",
+        "folklorismo"
+      ]
+    },
+    {
+      "name": "entrevistas_oceanografia_marina",
+      "enabled": true,
+      "queries": [],
+      "exclude_keywords": [
+        "shorts",
+        "pesca deportiva",
+        "buceo turístico"
+      ]
+    },
+    {
+      "name": "entrevistas_energia_nuclear",
+      "enabled": true,
+      "queries": [
+        "fusión nuclear avances ITER entrevista científico español",
+        "energía nuclear debate pros contras entrevista español"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "Chernobyl ficción",
+        "conspiración"
+      ]
+    },
+    {
+      "name": "entrevistas_urbanismo_ciudades",
+      "enabled": true,
+      "queries": [
+        "espacios públicos parques diseño urbano entrevista arquitecto"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "vlog turístico",
+        "house tour"
+      ]
+    },
+    {
+      "name": "entrevistas_politica_publica",
+      "enabled": true,
+      "queries": [
+        "sistemas electorales democracia México análisis entrevista"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "propaganda partidista",
+        "insultos"
+      ]
+    },
+    {
+      "name": "entrevistas_integracion_latam",
+      "enabled": true,
+      "queries": [],
+      "exclude_keywords": [
+        "shorts",
+        "bolivarianismo extremo",
+        "propaganda"
+      ]
+    },
+    {
+      "name": "entrevistas_desastres_proteccion_civil",
+      "enabled": true,
+      "queries": [],
+      "exclude_keywords": [
+        "shorts",
+        "profecías",
+        "fin del mundo"
+      ]
+    },
+    {
+      "name": "entrevistas_materiales_nanotecnologia",
+      "enabled": true,
+      "queries": [
+        "nanotecnología aplicaciones medicina industria entrevista español"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "pseudociencia",
+        "magia cuántica"
+      ]
+    },
+    {
+      "name": "entrevistas_neurociencia_cerebro",
+      "enabled": true,
+      "queries": [
+        "neurotecnología interfaces cerebro computadora entrevista",
+        "enfermedades neurodegenerativas Alzheimer Parkinson entrevista"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "reprogramación mental",
+        "pseudociencia"
+      ]
+    },
+    {
+      "name": "entrevistas_agua_recursos_hidricos",
+      "enabled": true,
+      "queries": [
+        "contaminación agua ríos lagos México entrevista investigador"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "conspiración",
+        "alarmismo"
+      ]
+    },
+    {
+      "name": "entrevistas_entretenimiento_comedia",
+      "enabled": true,
+      "queries": [
+        "comediantes mexicanos entrevista stand up carrera podcast",
+        "creadores contenido influencers entrevista experiencia español"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "reacción",
+        "chismes",
+        "drama"
+      ]
+    },
+    {
+      "name": "entrevistas_farmacia_quimica",
+      "enabled": true,
+      "queries": [
+        "industria farmacéutica desarrollo medicamentos entrevista químico",
+        "cosméticos dermocosmética ciencia entrevista formulador español"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "remedios caseros",
+        "drogas recreativas"
+      ]
+    },
+    {
+      "name": "entrevistas_medicas_largas",
+      "enabled": true,
+      "queries": [
+        "entrevista reumatólogo enfermedades autoinmunes podcast"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "resumen",
+        "clip"
+      ]
+    },
+    {
+      "name": "conversaciones_academicas_español",
+      "enabled": true,
+      "queries": [
+        "conferencia magistral universidad español debate preguntas",
+        "coloquio académico investigación español conversación"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "resumen",
+        "clip"
+      ]
+    },
+    {
+      "name": "podcasts_conversacion_natural",
+      "enabled": true,
+      "queries": [],
+      "exclude_keywords": [
+        "shorts",
+        "música",
+        "karaoke"
+      ]
+    },
+    {
+      "name": "entrevistas_profesionales_mexico",
+      "enabled": true,
+      "queries": [
+        "entrevista profesor universitario UNAM experiencia podcast"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "tutorial",
+        "curso"
+      ]
+    },
+    {
+      "name": "debates_paneles_español",
+      "enabled": true,
+      "queries": [
+        "panel discusión tecnología México innovación largo"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "clip",
+        "resumen"
+      ]
+    },
+    {
+      "name": "podcasts_vida_cotidiana_español",
+      "enabled": true,
+      "queries": [
+        "podcast salud mental ansiedad depresión entrevista psicólogo",
+        "podcast emprendedor mexicano historia éxito entrevista larga"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "tips rápidos",
+        "hack"
+      ]
+    },
+    {
+      "name": "entrevistas_ciencia_tecnologia_español",
+      "enabled": true,
+      "queries": [
+        "entrevista científico mexicano investigación descubrimiento podcast",
+        "entrevista ingeniero software México desarrollo tecnología podcast",
+        "entrevista químico investigación laboratorio México podcast",
+        "entrevista matemático estadístico datos México podcast largo",
+        "entrevista geólogo vulcanólogo México terremotos podcast"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "tutorial",
+        "curso básico"
+      ]
+    },
+    {
+      "name": "podcasts_historia_español_largo",
+      "enabled": true,
+      "queries": [
+        "historia México podcast largo narración detallada conversación"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "resumen escolar",
+        "animación"
+      ]
+    },
+    {
+      "name": "tertulias_radiofonicas_español",
+      "enabled": true,
+      "queries": [
+        "tertulia radiofónica español debate actualidad larga",
+        "programa radio Argentina Chile entrevista larga español"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "música",
+        "jingle"
+      ]
+    },
+    {
+      "name": "entrevistas_deporte_español",
+      "enabled": true,
+      "queries": [
+        "entrevista futbolista mexicano carrera vida podcast largo",
+        "entrevista beisbolista mexicano MLB experiencia podcast largo",
+        "entrevista nadador clavadista olímpico México podcast largo",
+        "entrevista director técnico selección México podcast largo"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "highlights",
+        "goles",
+        "compilación"
+      ]
+    },
+    {
+      "name": "podcast_dos_conductores_mexico",
+      "enabled": true,
+      "queries": [
+        "podcast dos hosts México conversación entretenimiento",
+        "podcast compadres mexicanos charla profunda largo"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "clip",
+        "compilación",
+        "música"
+      ]
+    },
+    {
+      "name": "entrevistas_largas_famosos_español",
+      "enabled": true,
+      "queries": [],
+      "exclude_keywords": [
+        "shorts",
+        "clip",
+        "recap"
+      ]
+    },
+    {
+      "name": "mesas_debate_noticias_español",
+      "enabled": true,
+      "queries": [],
+      "exclude_keywords": [
+        "shorts",
+        "clip",
+        "resumen minuto"
+      ]
+    },
+    {
+      "name": "podcast_grupo_amigos_español",
+      "enabled": true,
+      "queries": [
+        "podcast tres amigos México charla entretenimiento largo",
+        "podcast pandilla amigos México podcast largo show",
+        "podcast squad amigos español historias anécdotas largo",
+        "podcast mesa redonda informal amigos español largo"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "música",
+        "karaoke",
+        "compilación"
+      ]
+    },
+    {
+      "name": "entrevistas_podcast_emprendedores_latam",
+      "enabled": true,
+      "queries": [
+        "entrevista inversor capital riesgo México podcast",
+        "podcast franquicias negocios México entrevista largo"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "tutorial rápido",
+        "cursillo"
+      ]
+    },
+    {
+      "name": "charlas_ted_conferencias_español",
+      "enabled": true,
+      "queries": [],
+      "exclude_keywords": [
+        "shorts",
+        "resumen",
+        "animación"
+      ]
+    },
+    {
+      "name": "podcast_parejas_relaciones_español",
+      "enabled": true,
+      "queries": [],
+      "exclude_keywords": [
+        "shorts",
+        "clip",
+        "tips 1 minuto"
+      ]
+    },
+    {
+      "name": "radionovelas_dramatizaciones_español",
+      "enabled": true,
+      "queries": [
+        "radionovela español completa varios personajes voces",
+        "podcast narrativo español varios narradores voces largo"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "trailer",
+        "adelanto"
+      ]
+    },
+    {
+      "name": "entrevistas_musicos_artistas_español",
+      "enabled": true,
+      "queries": [
+        "entrevista músico mexicano banda carrera podcast largo",
+        "entrevista artista plástico mexicano obra podcast largo",
+        "entrevista director cine mexicano película podcast largo",
+        "entrevista fotógrafo mexicano viajes podcast conversación",
+        "entrevista muralista mexicano arte urbano podcast largo"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "cover",
+        "karaoke",
+        "tutorial"
+      ]
+    },
+    {
+      "name": "podcast_crimen_misterio_español",
+      "enabled": true,
+      "queries": [
+        "podcast true crime español análisis caso dos presentadores"
+      ],
+      "exclude_keywords": [
+        "shorts",
+        "compilación",
+        "top 10"
+      ]
     }
   ],
-  "channels_whitelist": [
-    
-  ],
-  "channels_blacklist": [
-    
-  ]
+  "channels_whitelist": [],
+  "channels_blacklist": []
 }

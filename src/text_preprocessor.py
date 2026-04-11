@@ -208,19 +208,13 @@ class TextPreprocessor:
                 'netflix': 'Netflix',
                 'spotify': 'Spotify',
                 
-                # Acrónimos
-                'ia': 'IA',
+                # Acrónimos (solo palabras completas, no substrings)
+                # NOTA: 'ia', 'ai', 'api' removidos porque causan reemplazos dentro de palabras
+                # Ej: "terapia" → "terAPIA", "naividad" → "nIAvidad"
                 'i.a.': 'IA',
-                'ai': 'IA',
                 'a.i.': 'IA',
-                'seo': 'SEO',
-                'sem': 'SEM',
-                'roi': 'ROI',
-                'kpi': 'KPI',
-                'b2b': 'B2B',
-                'b2c': 'B2C',
-                'url': 'URL',
-                'api': 'API',
+                's.e.o.': 'SEO',
+                'k.p.i.': 'KPI',
                 
                 # Correcciones ortográficas comunes
                 'atraves': 'a través',
@@ -306,8 +300,10 @@ class TextPreprocessor:
         correcciones = self.glosario.get('correcciones', {})
         
         for error, correccion in correcciones.items():
-            # Búsqueda case-insensitive para la mayoría
-            pattern = re.compile(re.escape(error), re.IGNORECASE)
+            # FIX CRÍTICO: Usar \b para evitar reemplazos dentro de palabras.
+            # Sin \b, "de" matchea dentro de "donde", "puede", etc.,
+            # causando corrupción exponencial del texto.
+            pattern = re.compile(r'\b' + re.escape(error) + r'\b', re.IGNORECASE)
             if pattern.search(text):
                 # Preservar el caso cuando sea apropiado
                 if error.islower() and not correccion.isupper():

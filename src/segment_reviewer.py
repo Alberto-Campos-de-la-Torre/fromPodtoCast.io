@@ -1,6 +1,7 @@
 """
 Módulo para segunda etapa de revisión de segmentos de audio.
 Detecta múltiples hablantes en segmentos individuales y los divide si es necesario.
+Incluye análisis de energía para detectar sobreposición de voces.
 """
 import os
 from pathlib import Path
@@ -12,19 +13,30 @@ from tqdm import tqdm
 
 from speaker_diarizer import SpeakerDiarizer
 
+# Importar detector de sobreposición
+try:
+    from overlap_detector import OverlapDetector, OverlapAnalysis
+    OVERLAP_DETECTOR_AVAILABLE = True
+except ImportError:
+    OVERLAP_DETECTOR_AVAILABLE = False
+    OverlapDetector = None
+    OverlapAnalysis = None
+
 
 class SegmentReviewer:
     """Clase para revisar y refinar segmentos de audio detectando múltiples hablantes."""
-    
+
     def __init__(self, diarizer: Optional[SpeakerDiarizer] = None,
                  min_segment_duration: float = 5.0,
                  max_speakers_per_segment: int = 2,
                  transcriber: Optional[object] = None,
                  retranscribe_split: bool = False,
-                 min_speaker_purity: float = 0.8):
+                 min_speaker_purity: float = 0.8,
+                 use_energy_analysis: bool = True,
+                 max_overlap_ratio: float = 0.25):
         """
         Inicializa el revisor de segmentos.
-        
+
         Args:
             diarizer: Instancia de SpeakerDiarizer para detectar hablantes
             min_segment_duration: Duración mínima en segundos para mantener un segmento (default: 5.0)
@@ -32,6 +44,8 @@ class SegmentReviewer:
             transcriber: Instancia de AudioTranscriber para re-transcribir segmentos divididos (opcional)
             retranscribe_split: Si True, re-transcribe automáticamente los segmentos divididos (default: False)
             min_speaker_purity: Ratio mínimo de dominancia del speaker principal (default: 0.8 = 80%)
+            use_energy_analysis: Si True, usa análisis de energía para detectar sobreposición (default: True)
+            max_overlap_ratio: Ratio máximo de sobreposición permitido (default: 0.25 = 25%)
         """
         self.diarizer = diarizer
         self.min_segment_duration = min_segment_duration
@@ -39,6 +53,16 @@ class SegmentReviewer:
         self.transcriber = transcriber
         self.retranscribe_split = retranscribe_split
         self.min_speaker_purity = min_speaker_purity
+        self.use_energy_analysis = use_energy_analysis
+        self.max_overlap_ratio = max_overlap_ratio
+
+        # Inicializar detector de sobreposición si está disponible
+        self.overlap_detector = None
+        if use_energy_analysis and OVERLAP_DETECTOR_AVAILABLE:
+            self.overlap_detector = OverlapDetector(
+                overlap_threshold=max_overlap_ratio,
+                min_overlap_duration=0.3  # 300ms mínimo para considerar sobreposición
+            )
     
     def review_segments(self, metadata: List[Dict], 
                        normalized_dir: str,
@@ -71,10 +95,14 @@ class SegmentReviewer:
         print(f"  - Duración mínima: {self.min_segment_duration}s")
         print(f"  - Máximo hablantes por segmento: {self.max_speakers_per_segment}")
         print(f"  - Pureza mínima del speaker: {self.min_speaker_purity:.0%}")
-        
+        if self.overlap_detector:
+            print(f"  - Análisis de energía: ACTIVO (máx sobreposición: {self.max_overlap_ratio:.0%})")
+        else:
+            print(f"  - Análisis de energía: {'NO DISPONIBLE' if self.use_energy_analysis else 'DESACTIVADO'}")
+
         global_diarization_available = bool(diarization_result)
         diarization_ready = self._is_diarization_ready()
-        
+
         if global_diarization_available:
             print("  - Usando resultados de diarización global para la revisión")
         elif diarization_ready:
@@ -224,15 +252,39 @@ class SegmentReviewer:
                 except:
                     pass
             return []
-        
-        # Si tiene 2 o menos hablantes y pasa el filtro de pureza, mantener el segmento
+
+        # Verificar sobreposición de voces usando análisis de energía
+        overlap_ratio = 0.0
+        overlap_detected = False
+        if self.overlap_detector:
+            try:
+                overlap_analysis = self.overlap_detector.analyze_array(audio, sr)
+                overlap_ratio = overlap_analysis.overlap_ratio
+                overlap_detected = overlap_analysis.has_overlap
+
+                if overlap_detected and overlap_ratio > self.max_overlap_ratio:
+                    severity = self.overlap_detector.get_overlap_severity(overlap_analysis)
+                    print(f"   ✗ Segmento {Path(segment_path).name} descartado (sobreposición {overlap_ratio:.1%}, severidad: {severity})")
+                    # Eliminar archivo si tiene mucha sobreposición
+                    if os.path.exists(segment_path):
+                        try:
+                            os.remove(segment_path)
+                        except:
+                            pass
+                    return []
+            except Exception as e:
+                # Si falla el análisis de sobreposición, continuar sin él
+                pass
+
+        # Si tiene 2 o menos hablantes y pasa los filtros, mantener el segmento
         speaker_id = self.diarizer.get_speaker_id(dominant_speaker) if self.diarizer else segment_meta.get('speaker', 0)
-        
+
         segment_meta_copy = segment_meta.copy()
         segment_meta_copy['speaker'] = speaker_id
         segment_meta_copy['speaker_label'] = dominant_speaker
         segment_meta_copy['speaker_purity'] = round(purity_ratio, 3)
-        
+        segment_meta_copy['overlap_ratio'] = round(overlap_ratio, 3)
+
         return [segment_meta_copy]
     
     def _split_segment_by_speakers(self, segment_meta: Dict,
@@ -501,13 +553,16 @@ class SegmentReviewer:
         print(f"  - Segmentos a revisar: {len(segments)}")
         print(f"  - Pureza mínima requerida: {self.min_speaker_purity:.0%}")
         print(f"  - Máximo hablantes/segmento: {self.max_speakers_per_segment}")
-        
+        if self.overlap_detector:
+            print(f"  - Análisis de energía: ACTIVO (máx sobreposición: {self.max_overlap_ratio:.0%})")
+
         reviewed_segments = []
         segments_split = 0
         segments_discarded = 0
+        segments_overlap_discarded = 0
         segment_counter = 0
-        
-        for seg_tuple in tqdm(segments, desc="   Revisando pureza"):
+
+        for seg_tuple in tqdm(segments, desc="   Revisando pureza y sobreposición"):
             if len(seg_tuple) == 4:
                 seg_path, start, end, speaker = seg_tuple
             else:
@@ -551,17 +606,35 @@ class SegmentReviewer:
                 except:
                     pass
                 continue
-            
-            # Caso 3: Pureza OK - mantener con speaker dominante
+
+            # Caso 3: Verificar sobreposición con análisis de energía
+            if self.overlap_detector and os.path.exists(seg_path):
+                try:
+                    overlap_analysis = self.overlap_detector.analyze(seg_path)
+                    if overlap_analysis.has_overlap and overlap_analysis.overlap_ratio > self.max_overlap_ratio:
+                        segments_overlap_discarded += 1
+                        # Eliminar archivo con sobreposición excesiva
+                        try:
+                            os.remove(seg_path)
+                        except:
+                            pass
+                        continue
+                except Exception:
+                    # Si falla el análisis, continuar sin él
+                    pass
+
+            # Caso 4: Pureza OK y sin sobreposición - mantener con speaker dominante
             reviewed_segments.append((seg_path, start, end, dominant_speaker))
             segment_counter += 1
         
         print(f"\n   ✓ Revisión completada:")
         print(f"     - Segmentos originales: {len(segments)}")
         print(f"     - Segmentos divididos: {segments_split}")
-        print(f"     - Segmentos descartados: {segments_discarded}")
+        print(f"     - Descartados (pureza): {segments_discarded}")
+        if self.overlap_detector:
+            print(f"     - Descartados (sobreposición): {segments_overlap_discarded}")
         print(f"     - Segmentos finales: {len(reviewed_segments)}\n")
-        
+
         return reviewed_segments
     
     def _split_raw_segment(
@@ -639,4 +712,3 @@ class SegmentReviewer:
             new_segments = [(segment_path, segment_start, segment_end, 'SPEAKER_00')]
         
         return new_segments
-

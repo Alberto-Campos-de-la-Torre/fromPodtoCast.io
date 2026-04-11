@@ -46,15 +46,20 @@ class MetadataReprocessor:
     Re-procesa metadata aplicando correcciones LLM y verificación MCP.
     """
     
-    def __init__(self, config: Dict):
+    def __init__(self, config: Dict, progress_file: Optional[str] = None):
         """
         Inicializa el re-procesador de metadata.
         
         Args:
             config: Configuración del procesador
+            progress_file: Ruta al archivo de progreso para resume
         """
         self.config = config
         llm_config = config.get('llm_correction', {})
+        
+        # Progress tracking
+        self.progress_file = progress_file
+        self.progress = self._load_progress()
         
         # Inicializar corrector LLM
         self.llm_corrector = None
@@ -99,6 +104,75 @@ class MetadataReprocessor:
                 self.mcp_verifier = None
         else:
             print("⚠️  Verificador MCP deshabilitado o no disponible")
+    
+    def _load_progress(self) -> Dict:
+        """Carga el archivo de progreso si existe."""
+        if self.progress_file and os.path.exists(self.progress_file):
+            try:
+                with open(self.progress_file, 'r', encoding='utf-8') as f:
+                    progress = json.load(f)
+                print(f"✓ Progreso cargado: {len(progress.get('completed', []))} archivos ya procesados")
+                return progress
+            except Exception as e:
+                print(f"⚠️  Error cargando progreso: {e}")
+        return {'completed': [], 'failed': [], 'started_at': datetime.now().isoformat()}
+    
+    def _save_progress(self):
+        """Guarda el archivo de progreso."""
+        if not self.progress_file:
+            return
+        try:
+            self.progress['updated_at'] = datetime.now().isoformat()
+            with open(self.progress_file, 'w', encoding='utf-8') as f:
+                json.dump(self.progress, f, indent=2, ensure_ascii=False)
+        except Exception as e:
+            print(f"⚠️  Error guardando progreso: {e}")
+    
+    def _mark_completed(self, filepath: str, stats: Dict):
+        """Marca un archivo como completado en el progreso."""
+        self.progress['completed'].append({
+            'file': os.path.basename(filepath),
+            'path': filepath,
+            'timestamp': datetime.now().isoformat(),
+            'entries': stats.get('total_entries', 0),
+            'corrected': stats.get('llm_corrected', 0)
+        })
+        self._save_progress()
+    
+    def _mark_failed(self, filepath: str, error: str):
+        """Marca un archivo como fallido en el progreso."""
+        self.progress['failed'].append({
+            'file': os.path.basename(filepath),
+            'path': filepath,
+            'timestamp': datetime.now().isoformat(),
+            'error': error
+        })
+        self._save_progress()
+    
+    def is_completed(self, filepath: str) -> bool:
+        """Verifica si un archivo ya fue procesado exitosamente."""
+        basename = os.path.basename(filepath)
+        return any(c['file'] == basename for c in self.progress.get('completed', []))
+    
+    def _save_metadata_intermediate(self, metadata, entries, metadata_path: str):
+        """Guarda metadata intermediamente (después de LLM, antes de MCP) para no perder progreso."""
+        try:
+            if isinstance(metadata, dict) and not isinstance(metadata, list):
+                if 'entries' in metadata:
+                    metadata['entries'] = entries
+                elif 'segments' in metadata:
+                    metadata['segments'] = entries
+                else:
+                    metadata = entries[0] if len(entries) == 1 else entries
+                output_data = metadata
+            else:
+                output_data = entries
+            
+            with open(metadata_path, 'w', encoding='utf-8') as f:
+                json.dump(output_data, f, indent=2, ensure_ascii=False)
+            print(f"   💾 Guardado intermedio: {os.path.basename(metadata_path)}")
+        except Exception as e:
+            print(f"   ⚠️  Error en guardado intermedio: {e}")
     
     def backup_metadata(self, metadata_path: str) -> str:
         """
@@ -172,7 +246,8 @@ class MetadataReprocessor:
             'mcp_verified': 0,
             'mcp_reverted': 0,
             'cache_hits': 0,
-            'skipped_empty': 0
+            'skipped_empty': 0,
+            'skipped_already_done': 0
         }
         
         # Extraer textos originales y guardar los que tienen texto original
@@ -187,6 +262,12 @@ class MetadataReprocessor:
                 stats['skipped_empty'] += 1
                 continue
             
+            # ENTRY-LEVEL RESUME: Skip entries already reprocessed in this cycle
+            llm_corr = entry.get('llm_correction', {})
+            if llm_corr.get('reprocessed_at'):
+                stats['skipped_already_done'] += 1
+                continue
+            
             # Usar el texto original si existe (de correcciones previas)
             # De lo contrario, usar el texto actual
             original_text = text
@@ -199,84 +280,100 @@ class MetadataReprocessor:
             indices_to_reprocess.append(i)
         
         print(f"   ✓ {len(texts_to_reprocess)} textos para re-procesar")
+        if stats['skipped_already_done'] > 0:
+            print(f"   ⏭️  {stats['skipped_already_done']} entradas ya reprocesadas (saltadas)")
         print(f"   ⊘ {stats['skipped_empty']} entradas sin texto (saltadas)\n")
         
         if not texts_to_reprocess:
             print("⚠️  No hay textos para re-procesar")
             return stats
         
-        # Re-procesar con LLM
-        corrections = []
+        # Re-procesar con LLM en chunks con guardado intermedio
         if self.llm_corrector:
-            print("🤖 Aplicando correcciones LLM...")
-            try:
-                # Usar batch processing para eficiencia
-                corrections = self.llm_corrector.correct_batch_optimized(
-                    texts_to_reprocess,
-                    verify_corrections=False  # Verificación se hace después con MCP
-                )
+            print("🤖 Aplicando correcciones LLM (con guardado por batch)...")
+            
+            # Tamaño de chunk para guardado intermedio (= batch_size del LLM)
+            llm_config = self.config.get('llm_correction', {})
+            save_chunk_size = llm_config.get('batch_size', 8)
+            total_chunks = (len(texts_to_reprocess) + save_chunk_size - 1) // save_chunk_size
+            
+            print(f"   📦 Procesando {len(texts_to_reprocess)} textos en {total_chunks} chunks (guardado cada {save_chunk_size})")
+            
+            for chunk_idx in range(total_chunks):
+                chunk_start = chunk_idx * save_chunk_size
+                chunk_end = min(chunk_start + save_chunk_size, len(texts_to_reprocess))
+                chunk_texts = texts_to_reprocess[chunk_start:chunk_end]
+                chunk_indices = indices_to_reprocess[chunk_start:chunk_end]
                 
-                llm_stats = self.llm_corrector.get_stats()
-                print(f"   ✓ Procesados {len(corrections)} textos")
-                print(f"   ✓ Confianza promedio: {llm_stats.get('avg_confidence', 0):.2f}")
-                if llm_stats.get('batch_calls', 0) > 0:
-                    print(f"   ✓ Llamadas batch: {llm_stats.get('batch_calls', 0)}")
-                print()
-            except Exception as e:
-                print(f"✗ Error en corrección LLM: {e}")
-                import traceback
-                traceback.print_exc()
-                return {'error': 'llm_failed', 'message': str(e)}
-        else:
-            print("⚠️  Saltando corrección LLM (no disponible)\n")
-            # Crear correcciones vacías para mantener textos originales
-            corrections = [(text, {}) for text in texts_to_reprocess]
-        
-        # Aplicar correcciones LLM al metadata
-        print("💾 Aplicando correcciones LLM al metadata...")
-        for idx, (entry_idx, correction) in enumerate(zip(indices_to_reprocess, corrections)):
-            entry = entries[entry_idx]
+                try:
+                    # Procesar este chunk con LLM
+                    chunk_corrections = self.llm_corrector.correct_batch_optimized(
+                        chunk_texts,
+                        verify_corrections=False
+                    )
+                    
+                    # Aplicar correcciones de este chunk a los entries
+                    for local_idx, (entry_idx, correction) in enumerate(zip(chunk_indices, chunk_corrections)):
+                        entry = entries[entry_idx]
+                        
+                        if correction is None:
+                            stats['llm_failed'] += 1
+                            continue
+                        
+                        try:
+                            corrected_text, meta = correction
+                        except (TypeError, ValueError):
+                            stats['llm_failed'] += 1
+                            continue
+                        
+                        # Guardar texto original si no existe
+                        if 'text_original' not in entry and 'llm_correction' not in entry:
+                            entry['text_original'] = entry['text']
+                        
+                        if meta.get('from_cache'):
+                            stats['cache_hits'] += 1
+                        
+                        # Aplicar corrección si la confianza es suficiente
+                        confianza = meta.get('confianza', 0)
+                        original_for_chunk = texts_to_reprocess[chunk_start + local_idx]
+                        if 'error' not in meta and confianza >= self.llm_min_confidence:
+                            entry['text'] = corrected_text
+                            entry['llm_correction'] = {
+                                'original': original_for_chunk,
+                                'cambios': meta.get('cambios', []),
+                                'confianza': confianza,
+                                'reprocessed_at': datetime.now().isoformat()
+                            }
+                            if corrected_text != original_for_chunk:
+                                stats['llm_corrected'] += 1
+                        elif 'error' in meta:
+                            stats['llm_failed'] += 1
+                    
+                    # GUARDAR DESPUÉS DE CADA CHUNK → a prueba de interrupciones
+                    self._save_metadata_intermediate(metadata, entries, metadata_path)
+                    
+                    done = min(chunk_end, len(texts_to_reprocess))
+                    pct = done / len(texts_to_reprocess) * 100
+                    print(f"   💾 Chunk {chunk_idx+1}/{total_chunks} guardado ({done}/{len(texts_to_reprocess)}, {pct:.0f}%)")
+                    
+                except Exception as e:
+                    print(f"   ⚠️  Error en chunk {chunk_idx+1}: {e}")
+                    # Guardar lo que se tenga hasta ahora
+                    self._save_metadata_intermediate(metadata, entries, metadata_path)
+                    print(f"   💾 Progreso guardado hasta chunk {chunk_idx}")
+                    import traceback
+                    traceback.print_exc()
+                    break
             
-            if correction is None:
-                stats['llm_failed'] += 1
-                continue
-            
-            try:
-                corrected_text, meta = correction
-            except (TypeError, ValueError):
-                stats['llm_failed'] += 1
-                continue
-            
-            # Guardar texto original si no existe
-            if 'text_original' not in entry and 'llm_correction' not in entry:
-                entry['text_original'] = entry['text']
-            
-            # Verificar cache
-            if meta.get('from_cache'):
-                stats['cache_hits'] += 1
-            
-            # Aplicar corrección si la confianza es suficiente
-            confianza = meta.get('confianza', 0)
-            if 'error' not in meta and confianza >= self.llm_min_confidence:
-                entry['text'] = corrected_text
-                entry['llm_correction'] = {
-                    'original': texts_to_reprocess[idx],
-                    'cambios': meta.get('cambios', []),
-                    'confianza': confianza,
-                    'reprocessed_at': datetime.now().isoformat()
-                }
-                if corrected_text != texts_to_reprocess[idx]:
-                    stats['llm_corrected'] += 1
-            elif 'error' in meta:
-                stats['llm_failed'] += 1
-        
-        print(f"   ✓ Aplicadas {stats['llm_corrected']} correcciones")
-        if stats['cache_hits'] > 0:
-            print(f"   ✓ Cache hits: {stats['cache_hits']}")
-        if stats['llm_failed'] > 0:
-            print(f"   ⚠️  Fallaron {stats['llm_failed']} correcciones")
+            print(f"\n   ✓ Aplicadas {stats['llm_corrected']} correcciones")
+            if stats['cache_hits'] > 0:
+                print(f"   ✓ Cache hits: {stats['cache_hits']}")
+            if stats['llm_failed'] > 0:
+                print(f"   ⚠️  Fallaron {stats['llm_failed']} correcciones")
         print()
         
+
+
         # Re-procesar con MCP
         if self.mcp_verifier and self.llm_corrector:
             print("🔐 Verificando con MCP...")
@@ -404,18 +501,33 @@ class MetadataReprocessor:
         # Buscar en directorio raíz
         metadata_files.extend([f for f in data_path.glob(pattern) if f.is_file()])
         
-        # Eliminar duplicados
+        # Eliminar duplicados y filtrar backups
         metadata_files = list(set(metadata_files))
+        metadata_files = [f for f in metadata_files if '.backup_' not in str(f)]
         
-        print(f"📁 Encontrados {len(metadata_files)} archivos de metadata\n")
+        # Filtrar archivos ya completados
+        skipped = 0
+        pending_files = []
+        for f in metadata_files:
+            if self.is_completed(str(f)):
+                skipped += 1
+            else:
+                pending_files.append(f)
         
-        if not metadata_files:
-            print("⚠️  No se encontraron archivos de metadata")
-            return {'error': 'no_files_found'}
+        print(f"📁 Encontrados {len(metadata_files)} archivos de metadata")
+        if skipped > 0:
+            print(f"⏭️  Saltando {skipped} archivos ya procesados")
+        print(f"📋 Pendientes: {len(pending_files)} archivos\n")
+        
+        if not pending_files:
+            print("✅ Todos los archivos ya fueron procesados")
+            return {'error': 'all_completed', 'skipped': skipped}
         
         # Procesar cada archivo
         all_stats = {
             'total_files': len(metadata_files),
+            'pending_files': len(pending_files),
+            'skipped': skipped,
             'successful': 0,
             'failed': 0,
             'total_entries': 0,
@@ -424,7 +536,8 @@ class MetadataReprocessor:
             'mcp_reverted': 0
         }
         
-        for metadata_file in metadata_files:
+        for i, metadata_file in enumerate(pending_files):
+            print(f"\n[{i+1}/{len(pending_files)}] ", end="")
             try:
                 stats = self.reprocess_metadata(str(metadata_file))
                 
@@ -434,12 +547,17 @@ class MetadataReprocessor:
                     all_stats['llm_corrected'] += stats.get('llm_corrected', 0)
                     all_stats['mcp_verified'] += stats.get('mcp_verified', 0)
                     all_stats['mcp_reverted'] += stats.get('mcp_reverted', 0)
+                    self._mark_completed(str(metadata_file), stats)
                 else:
                     all_stats['failed'] += 1
+                    self._mark_failed(str(metadata_file), stats.get('error', 'unknown'))
             except Exception as e:
                 print(f"✗ Error procesando {metadata_file}: {e}")
                 all_stats['failed'] += 1
+                self._mark_failed(str(metadata_file), str(e))
         
+        # Guardar progreso final
+        self._save_progress()
         return all_stats
 
 
@@ -560,6 +678,11 @@ def main():
         action='store_true',
         help='No crear backup antes de modificar'
     )
+    parser.add_argument(
+        '--progress-file',
+        default='./data/reprocess_progress.json',
+        help='Archivo para tracking de progreso (default: ./data/reprocess_progress.json)'
+    )
     
     args = parser.parse_args()
     
@@ -572,7 +695,7 @@ def main():
     
     # Inicializar reprocessor
     print("\n🚀 Inicializando re-procesador...\n")
-    reprocessor = MetadataReprocessor(config)
+    reprocessor = MetadataReprocessor(config, progress_file=args.progress_file)
     
     # Verificar que al menos uno de los procesadores está disponible
     if not reprocessor.llm_corrector and not reprocessor.mcp_verifier:
